@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lumina — Douay-Rheims Bible</title>
+<meta name="description" content="Lumina: a contemplative reader for the Douay-Rheims Bible. Random verses, random chapters, and the full sacred text with Challoner's notes.">
+<meta name="theme-color" content="#f3ead8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f3ead8'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%238a6d1f' font-family='Georgia'%3E%E2%9C%A0%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3ead8; --bg2:#ece1c8; --panel:#faf5e8; --panel2:#f5eeda;
+  --ink:#2c2013; --ink-soft:#5a4a30; --ink-faint:#8a7a58;
+  --gold:#8a6d1f; --gold-bright:#a8842a; --gold-line:#c9b06a;
+  --rubric:#7a2c1f; --border:#d9c99f; --border-soft:#e6dab8;
+  --highlight:#f0e2b6; --shadow:0 1px 3px rgba(80,60,20,.10),0 6px 24px rgba(80,60,20,.08);
+}
+:root[data-theme="dark"]{
+  --bg:#161209; --bg2:#0f0c06; --panel:#211a0e; --panel2:#2a2213;
+  --ink:#e9dcba; --ink-soft:#c8b88e; --ink-faint:#94875f;
+  --gold:#c9a44a; --gold-bright:#e0bc5e; --gold-line:#7a6530;
+  --rubric:#d08a6a; --border:#453a1f; --border-soft:#352c17;
+  --highlight:#3a3016; --shadow:0 1px 3px rgba(0,0,0,.5),0 8px 30px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"EB Garamond",Georgia,"Times New Roman",serif;
+  font-size:19px; line-height:1.65; min-height:100vh;
+  background-image:radial-gradient(ellipse at 50% -10%, var(--panel) 0%, var(--bg) 55%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+.wrap{max-width:46rem; margin:0 auto; padding:1.2rem 1.1rem 6.5rem}
+@media(min-width:700px){.wrap{padding-bottom:3rem}}
+
+/* ---------- header ---------- */
+header{text-align:center; margin:0.6rem 0 0.2rem}
+.title{
+  font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
+  font-size:2.35rem; letter-spacing:.35em; text-indent:.35em; margin:0;
+  color:var(--ink); font-variant:small-caps;
+}
+.title .cross{color:var(--gold); font-size:1.6rem; vertical-align:.18em; letter-spacing:0; text-indent:0; margin:0 .35rem}
+.subtitle{
+  font-style:italic; color:var(--ink-soft); margin:.1rem 0 0; font-size:1.02rem; letter-spacing:.04em;
+}
+.rule{display:flex; align-items:center; gap:.8rem; margin:.9rem auto 1rem; max-width:30rem; color:var(--gold)}
+.rule::before,.rule::after{content:""; flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-line));}
+.rule::after{background:linear-gradient(90deg,var(--gold-line),transparent)}
+.rule span{font-size:1.05rem; line-height:1}
+
+/* ---------- controls ---------- */
+.controls{display:flex; justify-content:center; align-items:center; gap:.7rem; flex-wrap:wrap; margin-bottom:1.1rem}
+.focus-label{font-variant:small-caps; letter-spacing:.12em; color:var(--ink-soft); font-size:.95rem}
+select{
+  font-family:inherit; font-size:1rem; color:var(--ink);
+  background:var(--panel); border:1px solid var(--border); border-radius:.45rem;
+  padding:.34rem 2rem .34rem .7rem; appearance:none; -webkit-appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a6d1f'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right .6rem center;
+}
+select:focus{outline:2px solid var(--gold-line); outline-offset:1px}
+.theme-btn{
+  background:var(--panel); border:1px solid var(--border); color:var(--gold);
+  border-radius:50%; width:2.3rem; height:2.3rem; font-size:1.05rem; cursor:pointer; line-height:1;
+}
+.theme-btn:hover{border-color:var(--gold-line)}
+
+/* ---------- action bar ---------- */
+.actions{display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap; margin:0 0 1.3rem}
+.btn{
+  font-family:inherit; font-size:1.0rem; cursor:pointer;
+  background:var(--panel); color:var(--ink); border:1px solid var(--border);
+  border-radius:.5rem; padding:.5rem 1.05rem; letter-spacing:.06em;
+  font-variant:small-caps; box-shadow:0 1px 2px rgba(80,60,20,.08);
+  transition:border-color .15s, background .15s, transform .05s;
+}
+.btn:hover{border-color:var(--gold-line); background:var(--panel2)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{border-color:var(--gold-line); color:var(--gold); font-weight:600}
+.btn:disabled{opacity:.35; cursor:default}
+@media(max-width:699px){
+  .actions.main-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:20; margin:0;
+    padding:.6rem .8rem calc(.6rem + env(safe-area-inset-bottom));
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-top:1px solid var(--border-soft);
+  }
+  .actions.main-bar .btn{flex:1; max-width:11rem; padding:.55rem .4rem; font-size:.95rem}
+}
+
+/* ---------- panels & views ---------- */
+.view{animation:fade .3s ease}
+@keyframes fade{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+.card{
+  background:var(--panel); border:1px solid var(--border); border-radius:.7rem;
+  box-shadow:var(--shadow); padding:1.6rem 1.6rem 1.4rem; position:relative;
+}
+.card::before{
+  content:""; position:absolute; inset:.45rem; pointer-events:none;
+  border:1px solid var(--border-soft); border-radius:.45rem;
+}
+.ornament{text-align:center; color:var(--gold); font-size:1.2rem; margin-bottom:.5rem}
+.citation{
+  text-align:center; font-variant:small-caps; letter-spacing:.18em;
+  color:var(--gold); font-size:1.12rem; margin:.1rem 0 .9rem;
+  font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
+}
+.verse-text{font-size:1.42rem; line-height:1.75; text-align:left; margin:0; hyphens:none}
+.verse-text::first-letter{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  float:left; font-size:3.1em; line-height:.82; font-weight:600;
+  color:var(--rubric); padding:.06em .09em 0 0;
+}
+.verse-actions{display:flex; justify-content:center; align-items:center; gap:.55rem; margin-top:1.35rem; flex-wrap:wrap}
+.nav-arrow{font-variant:normal; letter-spacing:0; font-size:1.05rem; padding:.5rem .8rem}
+
+/* ---------- notes ---------- */
+details.note{margin-top:1.1rem; border-top:1px dashed var(--border); padding-top:.7rem}
+details.note summary{
+  cursor:pointer; color:var(--ink-faint); font-style:italic; font-size:.95rem;
+  list-style:none; text-align:center; letter-spacing:.05em;
+}
+details.note summary::-webkit-details-marker{display:none}
+details.note summary::after{content:" ▾"; font-style:normal}
+details.note[open] summary::after{content:" ▴"}
+details.note p{color:var(--ink-soft); font-size:1.0rem; margin:.5rem 0 0; font-style:italic}
+
+/* ---------- chapter view ---------- */
+.ch-head{text-align:center; margin-bottom:.4rem}
+.ch-book{
+  font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps;
+  letter-spacing:.2em; color:var(--gold); font-size:1.05rem; margin:0;
+}
+.ch-title{
+  font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
+  font-size:1.9rem; margin:.05rem 0 0; letter-spacing:.05em;
+}
+.ch-summary{
+  font-style:italic; color:var(--rubric); text-align:center;
+  font-size:1.02rem; margin:.55rem auto .2rem; max-width:36rem; line-height:1.5;
+}
+.ch-nav{display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin:1rem 0 .6rem}
+.ch-nav .mid{flex:1; text-align:center; color:var(--ink-faint); font-style:italic; font-size:.92rem}
+.verses{margin-top:.6rem}
+.v{
+  margin:0 0 .85em; text-indent:0; scroll-margin:6rem;
+  padding:.15em .4em; border-radius:.35rem;
+}
+.v sup.vn{
+  color:var(--gold-bright); font-size:.68em; font-weight:600; margin-right:.35em;
+  font-family:"Cormorant Garamond",Georgia,serif; letter-spacing:0;
+}
+.v.hl{background:var(--highlight); box-shadow:inset 0 0 0 1px var(--gold-line)}
+.notemark{
+  cursor:pointer; border:none; background:none; color:var(--gold);
+  font-size:.8em; padding:0 .15em; vertical-align:super; line-height:1;
+}
+.note-inline{
+  display:none; font-style:italic; color:var(--ink-soft); font-size:.92em;
+  border-left:2px solid var(--gold-line); margin:.35em 0 .2em .9em; padding:.1em 0 .1em .7em;
+}
+.note-inline.open{display:block}
+
+/* ---------- books view ---------- */
+.t-head{
+  font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps;
+  letter-spacing:.2em; color:var(--gold); text-align:center; font-size:1.15rem;
+  margin:1.1rem 0 .5rem;
+}
+.book-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:.45rem}
+@media(min-width:560px){.book-grid{grid-template-columns:repeat(3,1fr)}}
+.book-btn{
+  font-family:inherit; font-size:.98rem; cursor:pointer; text-align:center;
+  background:var(--panel); color:var(--ink); border:1px solid var(--border-soft);
+  border-radius:.45rem; padding:.5rem .3rem; transition:border-color .15s;
+}
+.book-btn:hover{border-color:var(--gold-line); color:var(--gold)}
+.chapter-grid{display:flex; flex-wrap:wrap; gap:.45rem; justify-content:center; margin-top:1rem}
+.chapter-grid .book-btn{min-width:2.9rem; padding:.5rem .2rem; font-variant-numeric:tabular-nums}
+.crumb{text-align:center; margin-bottom:.3rem}
+.crumb .btn{font-size:.9rem; padding:.3rem .8rem}
+
+footer{
+  text-align:center; color:var(--ink-faint); font-style:italic;
+  font-size:.88rem; margin-top:2.2rem; letter-spacing:.03em;
+}
+.kbd-hint{display:none}
+@media(min-width:700px){.kbd-hint{display:block; margin-top:.2rem; font-size:.8rem}}
+.toast{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:5.5rem; z-index:40;
+  background:var(--ink); color:var(--bg); padding:.45rem 1.1rem; border-radius:2rem;
+  font-size:.95rem; opacity:0; pointer-events:none; transition:opacity .25s;
+}
+@media(min-width:700px){.toast{bottom:2.5rem}}
+.toast.show{opacity:.93}
+noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="title"><span class="cross">✠</span>Lumina<span class="cross">✠</span></h1>
+    <p class="subtitle">The Holy Bible · Douay-Rheims Version</p>
+    <div class="rule"><span>❦</span></div>
+  </header>
+
+  <div class="controls">
+    <label class="focus-label" for="focus">Focus</label>
+    <select id="focus" title="Choose which part of Scripture random selections draw from"></select>
+    <button class="theme-btn" id="themeBtn" title="Toggle light / dark">☾</button>
+  </div>
+
+  <div class="actions main-bar">
+    <button class="btn primary" id="btnRandomVerse">Random Verse</button>
+    <button class="btn" id="btnRandomChapter">Random Chapter</button>
+    <button class="btn" id="btnBooks">Books</button>
+  </div>
+
+  <main id="view" aria-live="polite"></main>
+
+  <footer>
+    Douay-Rheims Bible, Challoner Revision · with Bishop Challoner's notes<br>
+    <span class="kbd-hint">Keys: <b>R</b> random verse · <b>C</b> random chapter · <b>←</b>/<b>→</b> previous &amp; next</span>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+<noscript>Lumina requires JavaScript to display the sacred text.</noscript>
+
+<script src="bible-data.js"></script>
+<script>
+/*CORE-START*/
+/* Pure logic — no DOM. Testable in isolation. */
+const LuminaCore = (function () {
+  const D = () => window.LUMINA_DATA;
+
+  function bookByIdx(i){ return D().books[i]; }
+  function bookIdxById(id){ return D().books.findIndex(b => b.id === id); }
+
+  /* verse display number for chapter object ch at array index i (0-based) */
+  function vnum(ch, i){ return ch.n ? ch.n[i] : i + 1; }
+  /* array index for display number; -1 if absent */
+  function vidx(ch, num){ return ch.n ? ch.n.indexOf(num) : (num >= 1 && num <= ch.v.length ? num - 1 : -1); }
+
+  /* flat chapter list: [{b, c}] in canonical order, plus global verse offsets */
+  let _flat = null;
+  function flat(){
+    if (_flat) return _flat;
+    _flat = []; let off = 0;
+    D().books.forEach((bk, b) => bk.ch.forEach((ch, c) => {
+      _flat.push({ b, c, start: off, len: ch.v.length }); off += ch.v.length;
+    }));
+    _flat.total = off;
+    return _flat;
+  }
+  function chapterEntry(b, c){ return flat().find(e => e.b === b && e.c === c); }
+
+  /* global verse index <-> reference */
+  function toGlobal(b, c, i){ return chapterEntry(b, c).start + i; }
+  function fromGlobal(g){
+    const f = flat();
+    if (g < 0 || g >= f.total) return null;
+    let lo = 0, hi = f.length - 1;
+    while (lo < hi){ const mid = (lo + hi + 1) >> 1; if (f[mid].start <= g) lo = mid; else hi = mid - 1; }
+    return { b: f[lo].b, c: f[lo].c, i: g - f[lo].start };
+  }
+  function nextVerse(b, c, i){ return fromGlobal(toGlobal(b, c, i) + 1); }
+  function prevVerse(b, c, i){ return fromGlobal(toGlobal(b, c, i) - 1); }
+  function nextChapter(b, c){
+    const f = flat(); const k = f.findIndex(e => e.b === b && e.c === c);
+    return k >= 0 && k + 1 < f.length ? { b: f[k+1].b, c: f[k+1].c } : null;
+  }
+  function prevChapter(b, c){
+    const f = flat(); const k = f.findIndex(e => e.b === b && e.c === c);
+    return k > 0 ? { b: f[k-1].b, c: f[k-1].c } : null;
+  }
+
+  /* focus pools */
+  const _pools = {};
+  function pool(sectionId){
+    if (_pools[sectionId]) return _pools[sectionId];
+    const sec = D().sections.find(s => s.id === sectionId) || D().sections[0];
+    const ids = new Set(sec.books);
+    const chapters = flat().filter(e => ids.has(D().books[e.b].id));
+    let total = 0;
+    const cum = chapters.map(e => { const s = total; total += e.len; return { ...e, fs: s }; });
+    return (_pools[sectionId] = { chapters: cum, totalVerses: total });
+  }
+  function randomVerse(sectionId, rng){
+    rng = rng || Math.random;
+    const p = pool(sectionId);
+    const r = Math.floor(rng() * p.totalVerses);
+    let lo = 0, hi = p.chapters.length - 1;
+    while (lo < hi){ const mid = (lo + hi + 1) >> 1; if (p.chapters[mid].fs <= r) lo = mid; else hi = mid - 1; }
+    const e = p.chapters[lo];
+    return { b: e.b, c: e.c, i: r - e.fs };
+  }
+  function randomChapter(sectionId, rng){
+    rng = rng || Math.random;
+    const p = pool(sectionId);
+    const e = p.chapters[Math.floor(rng() * p.chapters.length)];
+    return { b: e.b, c: e.c };
+  }
+
+  function chapterLabel(b, c){
+    const bk = bookByIdx(b);
+    if (bk.id === "psalms") return "Psalm " + (c + 1);
+    if (bk.ch.length === 1) return bk.name;
+    return bk.name + " " + (c + 1);
+  }
+  function citation(b, c, i){
+    const bk = bookByIdx(b); const ch = bk.ch[c];
+    return bk.name + " " + (c + 1) + ":" + vnum(ch, i);
+  }
+  function copyText(b, c, i){
+    const bk = bookByIdx(b); const ch = bk.ch[c];
+    return "“" + ch.v[i] + "” — " + citation(b, c, i) + " (Douay-Rheims)";
+  }
+  return { bookByIdx, bookIdxById, vnum, vidx, flat, toGlobal, fromGlobal,
+           nextVerse, prevVerse, nextChapter, prevChapter, pool,
+           randomVerse, randomChapter, chapterLabel, citation, copyText };
+})();
+/*CORE-END*/
+
+/* ---------------- UI ---------------- */
+(function () {
+  if (!window.LUMINA_DATA){ document.getElementById("view").textContent = "Could not load the Bible data file (bible-data.js)."; return; }
+  const C = LuminaCore, D = window.LUMINA_DATA;
+  const $ = id => document.getElementById(id);
+  const view = $("view"), toast = $("toast");
+  const KEY = "lumina.state.v1";
+
+  let state = { theme: null, focus: "all", last: null };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === "object") state = Object.assign(state, s); } catch(e){}
+
+  /* theme */
+  function applyTheme(){
+    const t = state.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.dataset.theme = t === "dark" ? "dark" : "";
+    $("themeBtn").textContent = t === "dark" ? "☀" : "☾";
+    document.querySelector('meta[name="theme-color"]').setAttribute("content", t === "dark" ? "#161209" : "#f3ead8");
+  }
+  $("themeBtn").onclick = () => { const cur = document.documentElement.dataset.theme === "dark" ? "dark" : "light"; state.theme = cur === "dark" ? "light" : "dark"; save(); applyTheme(); };
+
+  /* focus selector */
+  const focusSel = $("focus");
+  D.sections.forEach(s => { const o = document.createElement("option"); o.value = s.id; o.textContent = s.name; focusSel.appendChild(o); });
+  focusSel.value = state.focus && D.sections.some(s => s.id === state.focus) ? state.focus : "all";
+  focusSel.onchange = () => { state.focus = focusSel.value; save(); };
+
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+  function remember(kind, b, c, i){ state.last = { kind, book: D.books[b].id, c, i }; save(); }
+  function showToast(msg){ toast.textContent = msg; toast.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove("show"), 1600); }
+  function esc(t){ const d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+
+  /* ---------- verse view ---------- */
+  let cur = null; /* {kind:'verse'|'chapter', b, c, i} */
+  function renderVerse(b, c, i, opts){
+    const bk = C.bookByIdx(b), ch = bk.ch[c];
+    cur = { kind: "verse", b, c, i };
+    remember("verse", b, c, i);
+    const note = ch.notes && ch.notes[String(i)];
+    view.innerHTML =
+      '<div class="view"><div class="card">' +
+      '<div class="ornament">❦</div>' +
+      '<div class="citation">' + esc(C.citation(b, c, i)) + '</div>' +
+      '<p class="verse-text">' + esc(ch.v[i]) + '</p>' +
+      (note ? '<details class="note"><summary>Challoner’s note</summary><p>' + esc(note) + '</p></details>' : '') +
+      '<div class="verse-actions">' +
+        '<button class="btn nav-arrow" id="vPrev" title="Previous verse">←</button>' +
+        '<button class="btn" id="vChapter">Read Full Chapter</button>' +
+        '<button class="btn" id="vCopy">Copy</button>' +
+        '<button class="btn nav-arrow" id="vNext" title="Next verse">→</button>' +
+      '</div></div></div>';
+    const pv = C.prevVerse(b, c, i), nv = C.nextVerse(b, c, i);
+    $("vPrev").disabled = !pv; $("vNext").disabled = !nv;
+    $("vPrev").onclick = () => pv && renderVerse(pv.b, pv.c, pv.i);
+    $("vNext").onclick = () => nv && renderVerse(nv.b, nv.c, nv.i);
+    $("vChapter").onclick = () => renderChapter(b, c, i);
+    $("vCopy").onclick = () => copy(C.copyText(b, c, i));
+    if (!opts || !opts.keepScroll) scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function copy(text){
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(() => showToast("Copied ✓"), () => fallbackCopy(text));
+    } else fallbackCopy(text);
+  }
+  function fallbackCopy(text){
+    const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); showToast("Copied ✓"); } catch(e){ showToast("Copy failed"); }
+    ta.remove();
+  }
+
+  /* ---------- chapter view ---------- */
+  function renderChapter(b, c, highlightI){
+    const bk = C.bookByIdx(b), ch = bk.ch[c];
+    cur = { kind: "chapter", b, c, i: highlightI == null ? null : highlightI };
+    remember("chapter", b, c, cur.i);
+    const pc = C.prevChapter(b, c), nc = C.nextChapter(b, c);
+    let vs = "";
+    ch.v.forEach((t, i) => {
+      const note = ch.notes && ch.notes[String(i)];
+      vs += '<p class="v' + (i === highlightI ? " hl" : "") + '" id="v' + i + '">' +
+            '<sup class="vn">' + C.vnum(ch, i) + '</sup>' + esc(t) +
+            (note ? '<button class="notemark" data-n="' + i + '" title="Challoner’s note">✝</button>' +
+                    '<span class="note-inline" id="n' + i + '">' + esc(note) + '</span>' : '') +
+            '</p>';
+    });
+    view.innerHTML =
+      '<div class="view">' +
+      '<div class="ch-head">' +
+        '<p class="ch-book">' + esc(bk.name) + (bk.t === "OT" ? " · Old Testament" : " · New Testament") + '</p>' +
+        '<h2 class="ch-title">' + esc(C.chapterLabel(b, c)) + '</h2>' +
+        (ch.s ? '<p class="ch-summary">' + esc(ch.s) + '</p>' : '') +
+      '</div>' +
+      '<div class="ch-nav">' +
+        '<button class="btn nav-arrow" id="cPrev" ' + (pc ? "" : "disabled") + '>← ' + (pc ? esc(C.chapterLabel(pc.b, pc.c)) : "") + '</button>' +
+        '<span class="mid">' + ch.v.length + ' verses</span>' +
+        '<button class="btn nav-arrow" id="cNext" ' + (nc ? "" : "disabled") + '>' + (nc ? esc(C.chapterLabel(nc.b, nc.c)) : "") + ' →</button>' +
+      '</div>' +
+      '<div class="card"><div class="verses">' + vs + '</div></div>' +
+      '</div>';
+    if (pc) $("cPrev").onclick = () => renderChapter(pc.b, pc.c);
+    if (nc) $("cNext").onclick = () => renderChapter(nc.b, nc.c);
+    view.querySelectorAll(".notemark").forEach(btn => {
+      btn.onclick = () => $("n" + btn.dataset.n).classList.toggle("open");
+    });
+    view.querySelectorAll(".v").forEach(p => {
+      p.addEventListener("dblclick", () => {
+        const i = parseInt(p.id.slice(1), 10);
+        copy(C.copyText(b, c, i));
+      });
+    });
+    if (highlightI != null){
+      const el = $("v" + highlightI);
+      if (el) setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 60);
+    } else scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------- books view ---------- */
+  function renderBooks(){
+    cur = { kind: "books" };
+    let html = '<div class="view">';
+    ["OT", "NT"].forEach(t => {
+      html += '<h3 class="t-head">' + (t === "OT" ? "The Old Testament" : "The New Testament") + '</h3><div class="book-grid">';
+      D.books.forEach((bk, b) => { if (bk.t === t) html += '<button class="book-btn" data-b="' + b + '">' + esc(bk.name) + '</button>'; });
+      html += '</div>';
+    });
+    html += '</div>';
+    view.innerHTML = html;
+    view.querySelectorAll(".book-btn").forEach(btn => btn.onclick = () => renderChapterGrid(parseInt(btn.dataset.b, 10)));
+    scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function renderChapterGrid(b){
+    const bk = C.bookByIdx(b);
+    if (bk.ch.length === 1){ renderChapter(b, 0); return; }
+    cur = { kind: "grid", b };
+    let html = '<div class="view"><div class="crumb"><button class="btn" id="backBooks">← All Books</button></div>' +
+      '<div class="ch-head"><h2 class="ch-title">' + esc(bk.name) + '</h2>' +
+      '<p class="ch-book">' + bk.ch.length + (bk.id === "psalms" ? " psalms" : " chapters") + '</p></div>' +
+      '<div class="chapter-grid">';
+    bk.ch.forEach((_, c) => html += '<button class="book-btn" data-c="' + c + '">' + (c + 1) + '</button>');
+    html += '</div></div>';
+    view.innerHTML = html;
+    $("backBooks").onclick = renderBooks;
+    view.querySelectorAll("[data-c]").forEach(btn => btn.onclick = () => renderChapter(b, parseInt(btn.dataset.c, 10)));
+    scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------- random actions ---------- */
+  function doRandomVerse(){
+    let r = C.randomVerse(state.focus), guard = 0;
+    while (cur && cur.kind === "verse" && r.b === cur.b && r.c === cur.c && r.i === cur.i && guard++ < 4)
+      r = C.randomVerse(state.focus);
+    renderVerse(r.b, r.c, r.i);
+  }
+  function doRandomChapter(){
+    let r = C.randomChapter(state.focus), guard = 0;
+    while (cur && cur.kind === "chapter" && r.b === cur.b && r.c === cur.c && guard++ < 4)
+      r = C.randomChapter(state.focus);
+    renderChapter(r.b, r.c);
+  }
+  $("btnRandomVerse").onclick = doRandomVerse;
+  $("btnRandomChapter").onclick = doRandomChapter;
+  $("btnBooks").onclick = renderBooks;
+
+  /* keyboard */
+  addEventListener("keydown", e => {
+    if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "r" || e.key === "R") doRandomVerse();
+    else if (e.key === "c" || e.key === "C") doRandomChapter();
+    else if (e.key === "ArrowLeft" && cur){
+      if (cur.kind === "verse"){ const p = C.prevVerse(cur.b, cur.c, cur.i); if (p) renderVerse(p.b, p.c, p.i); }
+      else if (cur.kind === "chapter"){ const p = C.prevChapter(cur.b, cur.c); if (p) renderChapter(p.b, p.c); }
+    } else if (e.key === "ArrowRight" && cur){
+      if (cur.kind === "verse"){ const n = C.nextVerse(cur.b, cur.c, cur.i); if (n) renderVerse(n.b, n.c, n.i); }
+      else if (cur.kind === "chapter"){ const n = C.nextChapter(cur.b, cur.c); if (n) renderChapter(n.b, n.c); }
+    }
+  });
+
+  /* ---------- start ---------- */
+  applyTheme();
+  const last = state.last;
+  if (last && last.book != null){
+    const b = C.bookIdxById(last.book);
+    if (b >= 0 && last.c < D.books[b].ch.length){
+      if (last.kind === "chapter") renderChapter(b, last.c, last.i != null ? last.i : null);
+      else renderVerse(b, last.c, Math.min(last.i || 0, D.books[b].ch[last.c].v.length - 1));
+    } else doRandomVerse();
+  } else doRandomVerse();
+})();
+</script>
+</body>
+</html>
