@@ -249,7 +249,11 @@ He is at the head of the line. He is the brightest thing on the plain that you a
 
 *page_break
 
-And he opens what he has and holds it out — all of it, entire, the facts of it, with nothing kept back. It is the last time in the history of anything that he hands something over whole.
+And he opens what he has and holds it out.
+
+Not one word of it is twisted. Everything in his hands is exactly true and he has not bent any of it and he does not need to.
+
+What is not in his hands is the only thing that matters.
 
 "Come and look," he says. "Then decide. He is asking you to say yes to a thing He will not show you. I am asking less."
 
@@ -696,7 +700,13 @@ And where they were is not dark. It is worse than dark. It is a shape in the mid
 *page_break
 
 *if (rescued)
-  The one your angel went out and got is standing four feet away with no idea what to do with its hands. It is going to be given a woman in Tbilisi in 1931 and you are never going to hear one word about any of it.
+  The one your angel went out and got is standing four feet away, and he will not look at anybody, and you understand that he is going to be like this from now on. He is the one who took too long. That is in him permanently, the way everything decided today is in everybody permanently, and there is no undoing it and nobody is going to try.
+
+  In 1931 he is going to be given a woman in Tbilisi who takes too long about everything — who cannot make up her mind, who stands in doorways, who is still deciding at eighty-one what she should have said in 1949.
+
+  He is going to be exactly the right angel for her.
+
+  Nobody is ever going to tell either of them why.
   *page_break
 
 *comment ============================================================
