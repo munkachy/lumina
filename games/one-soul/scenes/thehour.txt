@@ -472,7 +472,7 @@ You have three things and you have had three things since a floor that was not a
     "Then what *good* —"
     *line_break
     *line_break
-    "Loretta," it says, and it has never used your name before, not once in forty-nine years. "Give me an order."
+    "${name}," it says, and it has never used your name before, not once in forty-nine years. "Give me an order."
     *set hope %-10
     *goto choose_verb
 

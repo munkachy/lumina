@@ -183,7 +183,7 @@ Nothing. Not one thing. Not that afternoon, not that week, not once in twenty-si
 
 *choice
   #"Then it's not his fault."
-    "Some of it is not. Some of it is entirely his and it is the part he feels best about." Your one does not soften it. "That is the shape of nearly everybody, Loretta. You are not looking at anything unusual. You are looking at a man."
+    "Some of it is not. Some of it is entirely his and it is the part he feels best about." Your one does not soften it. "That is the shape of nearly everybody, ${name}. You are not looking at anything unusual. You are looking at a man."
     *set severity %+15
     *set charity %+10
     *goto breakup_end

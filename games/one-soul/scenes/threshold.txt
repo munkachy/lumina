@@ -210,7 +210,7 @@ What you get is a location.
 *line_break
 "On the twenty-first of March, 1979, when you made up my name at that table, I was at your left shoulder, about as far as the salt.
 
-"When Walter went, I had my hand under your elbow on the way out of the room, and you thought that was the nurse.
+"When ${spouse} went, I had my hand under your elbow on the way out of the room, and you thought that was the nurse.
 
 "In 2019, in recovery, for eleven hours, and again on Thursday.
 
@@ -346,7 +346,7 @@ Nothing punishes you for this. Nobody says anything about it. Your one does not 
 
 *page_break
 
-You are seventy-one years old and you have been awake since four.
+You have been awake since four in the morning.
 
 *goto final
 

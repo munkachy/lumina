@@ -1,11 +1,11 @@
 *comment ============================================================
 *comment SCENE ZERO — THE WINDOWSILL
 *comment Tuesday 15 October 2024. Target 1,200 words, 4 choices.
-*comment Job: establish Loretta, break her, teach the whole mechanic
-*comment inside one joke, and end on the last four seconds of Adam.
+*comment Job: establish the player, break them, teach the whole
+*comment mechanic inside one joke, end on Adam's last four seconds.
 *comment ============================================================
 
-You are seventy-one years old and you have been awake since four.
+You have been awake since four in the morning.
 
 The room has a window in it, which the brochure made a great deal of. What the window looks at is the third level of a parking structure. If you angle yourself and it is early enough, you can see a piece of sky over the top of it, about the size of a bath towel.
 
@@ -17,15 +17,65 @@ They took the second leg on Thursday.
 
 *page_break
 
+By the door there is a whiteboard, and somebody has written on it in green marker: TODAY IS TUESDAY. THE WEATHER IS CLOUDY. YOUR NURSE IS DEVON.
+
+And above that, in the box that says PATIENT, there is your name.
+
+*choice
+  #Loretta.
+    *set name "Loretta"
+    *goto pickedname
+  #Bernadette.
+    *set name "Bernadette"
+    *goto pickedname
+  #Stanley.
+    *set name "Stanley"
+    *goto pickedname
+  #Curtis.
+    *set name "Curtis"
+    *goto pickedname
+  #That is not my name.
+    What is it?
+    *input_text name
+    *goto pickedname
+
+*label pickedname
+
+Somebody has spelled it right, which is not nothing.
+
+*page_break
+
+There is one photograph on the tray table, face down, because you turned it over on Friday and have not turned it back.
+
+*choice
+  #Your husband.
+    *set sex "female"
+    *set spouse "Walter"
+    *set spouse_he "he"
+    *set spouse_him "him"
+    *set parish_group "the sodality"
+    *goto picked
+  #Your wife.
+    *set sex "male"
+    *set spouse "Dolores"
+    *set spouse_he "she"
+    *set spouse_him "her"
+    *set parish_group "the Holy Name Society"
+    *goto picked
+
+*label picked
+
+*page_break
+
 On the windowsill there are fourteen porcelain angels.
 
 You asked for them. Your niece brought them in two shoeboxes with dish towels between the layers, and she set them up in a row while you watched, and she was so pleased about it that you said thank you twice.
 
 Every one of them is a woman in a nightgown.
 
-Six have harps. Two have their eyes closed in a way you did not use to mind. One is holding a lamb, and you have owned it for thirty-one years and you have never once worked out what the lamb is doing there. One is a raffle prize from the sodality in 1994 and is not, when you look at it honestly, very well made.
+Six have harps. Two have their eyes closed in a way you did not use to mind. One is holding a lamb, and you have owned it for thirty-one years and you have never once worked out what the lamb is doing there. One is a raffle prize from ${parish_group} in 1994 and is not, when you look at it honestly, very well made.
 
-And one is from Walter, the Christmas before he died, and it says GUARDIAN ANGEL WATCHING OVER ME on the base in gold, and he was not a man who bought that kind of thing, and he must have stood in a shop and picked it up and thought: yes. That one.
+And one is from ${spouse}, the Christmas before ${spouse_he} died, and it says GUARDIAN ANGEL WATCHING OVER ME on the base in gold, and ${spouse_he} was not somebody who bought that kind of thing, and ${spouse_he} must have stood in a shop and picked it up and thought: yes. That one.
 
 You have prayed to yours every day of your adult life. Out loud, most days. You made up a name for it in 1979 because nobody ever gave you one and it seemed rude to keep saying *hey*.
 
@@ -109,7 +159,7 @@ What do you say to it?
     *goto whereveryouwere
 
   #Nothing. You look at it and you wait.
-    You are good at this. You waited out a husband, two children and a county pension office.
+    You are good at this. You waited out ${spouse}, two children and a county pension office.
     *line_break
     *line_break
     It is better at it than you are. It is not even trying.
