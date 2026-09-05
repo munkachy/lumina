@@ -1,0 +1,519 @@
+*comment ============================================================
+*comment SCENE ELEVEN — THE HOUR
+*comment 2016 · 2018 · 2024. ~4,400 words, 26 choices.
+*comment Job: everything resolves. The drawer. Ninety seconds. Six
+*comment years. And a last fight that is not about lust.
+*comment ============================================================
+
+*comment ---- 11.1 : THE DRAWER. March 2016, age forty-one ----
+
+Stan Kowalczyk dies on the eleventh of March, 2016, at seventy-nine, of the thing that gets most men who worked on that river.
+
+It takes nine days in a hospital and he does not say very much, which surprises nobody.
+
+*page_break
+
+Adam clears the house in April. His mother has gone to his aunt's and cannot be in the building yet.
+
+He does it alone over two weekends, badly, in the way people do — three hours on a shelf of nothing and then a whole room in forty minutes.
+
+And in the second drawer of a bureau, under a box of screws, there is a spiral notebook that was bought at a drugstore on Liberty Avenue for fifty-nine cents.
+
+*page_break
+
+He opens it standing up.
+
+*page_break
+
+There is one word at the top of the first page, in pencil, and the word is his own name.
+
+And under it there is a date — 21.11.93 — and then another date, and another, in a column, in a hand that gets worse as it goes down the page and then worse again on the next page and worse again for two hundred and eighty-three pages, and the last date is the fourth of March, 2016, seven days before he died, in handwriting you can barely read.
+
+Twenty-three years. Every single day. And not one word of comment anywhere in it. Just the name at the top and the dates going down.
+
+*page_break
+
+*set_ward prayers 0
+
+The number goes to nothing.
+
+In the same second that you finally understand what it was.
+
+*page_break
+
+Adam Kowalczyk sits down on the floor of his father's bedroom with a notebook in his hands and does not get up for about twenty minutes.
+
+*page_break
+
+*choice
+  #Say nothing. Let him have it.
+    You say nothing. Neither does your one. There is a man on a floor in Polish Hill and there is nothing in this or any other world that needs to be added to it.
+    *set charity %+25
+    *set splendor %-20
+    *set hope %+15
+    *goto drawer_two
+
+  #"You knew. You knew for twenty-three years and you wouldn't tell me."
+    "You would have spent them differently," your one says.
+    *line_break
+    *line_break
+    "*Yes.* That's my — yes, I would have —"
+    *line_break
+    *line_break
+    "You would have spent them leaning on a seventy-year-old man to say something out loud that he was never going to say out loud, and he would have stopped writing it down."
+    *line_break
+    *line_break
+    You do not have an answer to that. You have not had an answer to that in the eight years since.
+    *set severity %+20
+    *set hope %+10
+    *goto drawer_two
+
+  #"Twenty-three years and he never said a word."
+    "No."
+    *line_break
+    *line_break
+    "Not one word. To his own son. He couldn't say nine words in a *car* —"
+    *line_break
+    *line_break
+    "He said this," your one says. "Two hundred and eighty-three pages of it. He said it every day for twenty-three years in the only language he was ever given, and his son is holding the whole of it, and it is going to work."
+    *set charity %+20
+    *set hope %+20
+    *goto drawer_two
+
+*label drawer_two
+
+*page_break
+
+This is the bottom.
+
+Not a catastrophe. Nothing has been taken from him that he was using. He has not been punished for anything and nothing has caught up with him and there is no bill.
+
+What has happened is that a man of forty-one has found out that he was loved, specifically and daily and at cost, for twenty-three years, by somebody who is now dead and cannot be told anything.
+
+*page_break
+
+*comment ---- 11.2 : EIGHTEEN MONTHS OF CHECKING. 2017–18 ----
+
+It does not begin as anything.
+
+In the autumn of 2016 he starts reading at night, mostly because he is not sleeping, and mostly things that are not about this at all. In February of 2017 he reads something that annoys him, and in looking up why it annoys him he finds something that annoys him more.
+
+He is not searching. He is a forty-two-year-old man who is *checking* — the way you check a bill you are fairly sure is right.
+
+*page_break
+
+He expects to find the flaw in about a week. He has known where it is since he was eighteen.
+
+It is not there.
+
+*page_break
+
+That is the whole of 2017. A man at a kitchen table at two in the morning, mildly irritated, going back a second time to a place where the flaw was definitely supposed to be.
+
+*page_break
+
+*comment ---- what she has been saving ----
+
+Everything you have ever done is available to you now, and this is the one place in forty-three years where a whole game of arranging is going to pay or not.
+
+*choice
+  #Curtis Hale.
+    You have kept a man in his life since 2001 for no reason you could have named at the time. Curtis is sixty-six now and retired to Penn Hills and they have lunch four times a year for no particular reason.
+    *line_break
+    *line_break
+    In June of 2017 Curtis says something at a table in a diner in Verona — not about any of this; about his wife, and about a stretch in the nineties when he was not a good man — and it is the first time in Adam Kowalczyk's adult life that somebody has told him a true thing about themselves without wanting anything.
+    *line_break
+    *line_break
+    It does more than the reading does.
+    *set charity %+25
+    *set hope %+20
+    *goto checking_two
+
+  #The book on the shelf.
+    *if (splendor < 45)
+      It is still there. It went from Dobson Street to Semple Street to Bloomfield in a box that was never unpacked properly, and it is on a shelf, and in October of 2017 at two in the morning a man takes it down because he has run out of other things.
+      *line_break
+      *line_break
+      Twenty-four years on a shelf. You felt like a fool for twenty-four years.
+      *set hope %+20
+      *set charity %+15
+      *goto checking_two
+    *else
+      There is no book. You did not put one there in 1993 and there is nothing on the shelf now but a box of screws he took from his father's house.
+      *line_break
+      *line_break
+      He gets there anyway, more slowly, from the library on Liberty.
+      *set hope %+5
+      *goto checking_two
+
+  #The miracles.
+    He is an evidential man. He always was; it is why the argument on the bus worked on him in four seconds. So you put in front of him the thing that is, at bottom, a report of an investigation — tissue, a laboratory, a date, a place, men who did not want the result they got.
+    *line_break
+    *line_break
+    It does not convert him. It is not that kind of thing and the game is not going to pretend it is. What it does is make him unable to hold the sentence *nobody has ever checked*, which he has been holding since 1993 without ever examining it.
+    *set severity %+15
+    *set hope %+15
+    *goto checking_two
+
+  #Renee.
+    She is in Columbus. She is married, three children, the eldest is twenty. He has not spoken to her since 1998.
+    *line_break
+    *line_break
+    You spend four months on it and in September of 2017 he writes to her. Four paragraphs. It is not about them and it does not ask for anything and it is the hardest thing he has done since the car in 1998.
+    *line_break
+    *line_break
+    She writes back in eleven days and it is longer than his and it is kind, and one line in the middle of it goes into him like a nail: *I always thought there was something you weren't telling me and I decided it was my fault for asking.*
+    *set charity %+25
+    *set hope %+15
+    *set_hidden renee_contact true
+    *goto checking_two
+
+  #Nothing. He is doing this himself.
+    You do not touch it. Not once, for eighteen months, and it is the hardest thing you have done in this entire business and there is no way to tell whether it was right.
+    *set valor %-30
+    *set charity %+25
+    *set hope %+10
+    *goto checking_two
+
+*label checking_two
+
+*page_break
+
+*comment ---- 11.3 : NINETY SECONDS. 2018, age forty-three ----
+
+The eighth of December, 2018, a Saturday, and the line at his own parish is out into the vestibule because it is Advent, and he stands in it for eleven minutes and then he leaves.
+
+He does not go home.
+
+He drives to a church in Swissvale that he has no connection to whatsoever, where there is no line at all, and sits in the back for twenty minutes, and then goes in.
+
+*page_break
+
+Father Emeka Nwosu is fifty-one, from Enugu, eleven years in this diocese, filling in because the pastor is at a funeral. He has a bad back and a completely unhurried manner and he has heard everything there is.
+
+*page_break
+
+"How long has it been?"
+
+"Twenty-five years."
+
+"All right," Father Nwosu says. Not warmly and not coldly. The way you would say it about a bus.
+
+*page_break
+
+It takes a while. It is not orderly. Somewhere in the middle of it Adam Kowalczyk says a sentence he has been carrying since he was fifteen, which is that he knows exactly what he is.
+
+And Father Nwosu says:
+
+*page_break
+
+*line_break
+"No. Somebody told you what to stop doing. That is a different sentence and you have had them mixed up for a long time.
+
+"Listen. This was never a rule. Rules are things we invent to keep people off the grass. This is a description — of what a person is, and therefore of what it costs to practise treating one as a thing. It is the same reason you do not put your hand in a fire. Nobody has ever thought the fire was oppressing them.
+
+"And one more thing, and then I am going to give you your penance because there are people outside.
+
+"He is not disgusted by you. He has never once in your life been disgusted by you. I want you to notice that you have believed that since you were fifteen years old and that nobody ever actually said it to you."
+*line_break
+
+*page_break
+
+Ninety seconds.
+
+Not one word of it is new information. Every part of it was available in 1990 and in 1993 and in 2001 and at four separate points where you got him within nine feet of somebody who could have said it.
+
+*page_break
+
+He sits in a car in Swissvale afterwards for about half an hour without turning the radio on.
+
+*if (splendor < 45)
+  *set_ward needle 4
+  And the needle moves. All the way, to the top, where it has never been.
+  *goto ninety_two
+*elseif (severity > 70)
+  *set_ward needle 3
+  And the needle does not move.
+  *line_break
+  *line_break
+  He heard it. He believed most of it. And forty-three years of being looked at severely has built something in him that hears *He is not disgusted by you* and files it under *that is what they have to say*, and the needle stays where it has been since 1993.
+  *line_break
+  *line_break
+  He goes back to Mass anyway, every week, out of something much closer to fear than to freedom. It holds. It is real. It is not the same thing.
+  *goto ninety_two
+*else
+  *set_ward needle 4
+  And the needle moves, most of the way, unevenly, the way a thing moves when it has been stuck for twenty-eight years.
+  *goto ninety_two
+
+*label ninety_two
+
+*page_break
+
+*choice
+  #"That's it? That's all it took?"
+    "Ninety seconds," your one says.
+    *line_break
+    *line_break
+    "*Ninety seconds.* I have been at this since — I have watched him — and a man in Swissvale with a bad back does it in *ninety seconds* —"
+    *line_break
+    *line_break
+    "Yes."
+    *line_break
+    *line_break
+    "Then what was I for?"
+    *line_break
+    *line_break
+    "You got him into the car," it says.
+    *set severity %+15
+    *set hope %+15
+    *goto reading
+
+  #"Does he know what he just did?"
+    "No. He has four people outside and a bad back and he will not think about this again after Tuesday."
+    *line_break
+    *line_break
+    "Will he ever know?"
+    *line_break
+    *line_break
+    "Yes," your one says. "Not here."
+    *set charity %+25
+    *set hope %+20
+    *goto reading
+
+  #Say nothing. Sit in the car with him.
+    You sit in the car with him for half an hour in a church lot in Swissvale in December. Nothing happens. He does not pray and he does not cry and at one point he checks his phone.
+    *set charity %+20
+    *set valor %-20
+    *set hope %+10
+    *goto reading
+
+*label reading
+
+*page_break
+
+*comment ---- 11.4 : reading him ----
+
+*if (heard_him_first)
+  There is one more thing and you have been carrying it since before the world had light in it.
+  *page_break
+  In the assembly, when he offered to show you, you looked.
+  *line_break
+  *line_break
+  It cost you nothing. It was not a sin and your one has told you so twice. What it did was put his reading of that room — of the girl on the bed, of what she was and what she was worth — into you first, before you had any of your own, and it has been sitting underneath every judgement you have made about a human being for forty-three years.
+  *page_break
+  "How much of it?" you say.
+  *line_break
+  *line_break
+  "I do not know. Some. Not all. You have thought worse of him than the evidence required, four or five times, and each of those times I obeyed you."
+  *page_break
+  *choice
+    #"Show me which ones."
+      It shows you. There are five. Two of them are 1998, one is 2005, and two of them are years you would have sworn nothing happened in.
+      *line_break
+      *line_break
+      You look at all five.
+      *set severity %-20
+      *set hope %+15
+      *goto six_years
+    #"Don't. I can't carry that today."
+      "No," your one says. "Then we will not."
+      *set hope %-5
+      *goto six_years
+    #"Was any of that his fault? The one in the assembly?"
+      "He handed you something true and you took it, and that was the whole of it, and it was the most successful thing he has ever done to you," your one says. "You have been checking his figures for forty-three years without ever noticing they were his."
+      *set severity %+15
+      *set hope %+10
+      *goto six_years
+*else
+  You have made every judgement in forty-three years out of your own head, with no help from anybody, and about five of them were badly wrong, and they were wrong in the ordinary way that people are wrong.
+  *line_break
+  *line_break
+  "That is the best available," your one says, when you say so. "It is what everybody has."
+
+*label six_years
+
+*page_break
+
+*comment ---- 11.5 : SIX YEARS. 2018–2024 ----
+
+He is not a different man.
+
+That is the thing this has to be honest about. He is the same man, facing a different direction, badly, most days.
+
+He is late to Mass constantly. He goes to the eleven because he cannot get up for the nine. He does not join anything. He would not be able to give you an account of what he believes if you put a gun to his head; he could give you an account of what he has stopped arguing with.
+
+*page_break
+
+He is kinder than he was. He could not tell you why and does not notice.
+
+He goes to see his mother twice a week instead of twice a month, and Ewa Kowalczyk, who is seventy-one and sharp as a tack, notices immediately and says nothing whatsoever about it for six years.
+
+*if (renee_contact)
+  He and Renee write about three times a year. It is not about them. In 2021 she sends a photograph of her middle one in a nursing uniform and he puts it on the refrigerator, where a man of forty-six with no children has a photograph of somebody else's daughter, and does not think this is strange.
+
+*page_break
+
+*set_ward prayers 3
+
+And the number, which has been at nothing since March of 2016, comes back — not to what it was in 1980, not close, but a woman in Wilkinsburg who has never met him has him on a list, and Curtis Hale prays for him in a car, and his mother has started again after forty years.
+
+*page_break
+
+*comment ---- 11.6 : THE BEDSIDE. 2024 ----
+
+The diagnosis is in June and it is not the kind you argue with.
+
+He is forty-nine. He does four months of it and does them without much complaint, which surprises everybody including him.
+
+*page_break
+
+By the middle of October he is at his mother's house on Dobson Street, in the front room, because that is where the hospital bed fits.
+
+*image dobson-room.webp A front room in the afternoon, a bed by the window, a chair beside it.
+
+And on the fifteenth, a Tuesday, at about four in the afternoon, the light in that room is the colour of weak tea, and there is a chair beside the bed with nobody in it, because Ewa has gone to the kitchen to do something she does not need to do.
+
+*page_break
+
+You have seen this room before.
+
+*page_break
+
+You saw it for four seconds, forty-nine years ago, from a doorway, and you looked at the chair and the jar on the nightstand and the strip of light on the floor, and by the time you thought to look at his face you were already going.
+
+You are looking at his face now.
+
+*page_break
+
+*comment ---- all three ----
+
+And all three of them are here.
+
+They are not pretending to be a crowd. There is no time left for that and they have not bothered. There is no Belphegor and no Asmodeus and no message being taken; there are three of them, standing in a front room in Polish Hill, and one of them is doing all the work as it has done since 1975.
+
+*page_break
+
+And it is not about lust. It has not been about lust for twenty-six years.
+
+*page_break
+
+What it puts to him is this, and it puts it in his own voice, which is the only voice he has ever been unable to argue with:
+
+*line_break
+*line_break
+*You wasted it.*
+
+*Twenty-five years. You had six. You have always known six was not enough and you knew it in the car in Swissvale and you went ahead anyway because it was better than nothing, and better than nothing is what you got.*
+
+*And you know exactly what you did to her, and it is far too late, and there is not one thing you can do about it from here.*
+*line_break
+*line_break
+
+*page_break
+
+Every word of that is true.
+
+They still cannot lie. Not on the last afternoon, not even now.
+
+*page_break
+
+*comment ---- three verbs, one last time ----
+
+*set_ward sight "clouded"
+
+You have three things and you have had three things since a floor that was not a floor, and there is a clock in this room, and the clock is a man's breathing.
+
+*choice
+  #STAND on it. Get between him and it.
+    You put your one on the thought itself — not on the man, on the suggestion, on the place where it arrives — and nothing else can act on it while he is there.
+    *line_break
+    *line_break
+    You cannot make Adam Kowalczyk believe one thing. You have never been able to. What you can do is keep it from arriving one more time, and then one more time, and there is a gap now, and in the gap he is just a man in a bed who is tired.
+    *set valor %+20
+    *set charity %+20
+    *goto last_beat
+
+  #PRESS. Get it out of the room.
+    You go at it. It costs you exactly what it costs the other, which has always been the trouble, and the clock in this room is not a clock, it is a man's chest going up and down at a rate you can hear.
+    *line_break
+    *line_break
+    You get four minutes. They are expensive and you get them.
+    *set valor %+25
+    *set severity %+15
+    *goto last_beat
+
+  #SHOW it something.
+    There is one thing in this room that it cannot bear to look at and it is not a doctrine and it is not you.
+    *line_break
+    *line_break
+    It is a fifty-nine-cent spiral notebook with two hundred and eighty-three pages of dates in it, which is on the nightstand next to the jar, because he brought it from Bloomfield in August and has not been able to explain to his mother why.
+    *line_break
+    *line_break
+    You show it that.
+    *line_break
+    *line_break
+    *A man wrote a name down every day for twenty-three years and said nothing and got nothing back and did it again the next day.*
+    *line_break
+    *line_break
+    They have never been able to do anything with that. Not in the whole history of the world.
+    *set splendor %+20
+    *set charity %+25
+    *set hope %+20
+    *goto last_beat
+
+  #Ask Adam to do something. Anything. Just once.
+    "Tell him. Tell him it's not true, tell him six years is —"
+    *line_break
+    *line_break
+    "I have no mouth," your one says. "I have never had one. Not in 1984 and not in 1990 and not now."
+    *line_break
+    *line_break
+    "Then what *good* —"
+    *line_break
+    *line_break
+    "Loretta," it says, and it has never used your name before, not once in forty-nine years. "Give me an order."
+    *set hope %-10
+    *goto choose_verb
+
+*label choose_verb
+
+*page_break
+
+*choice
+  #STAND.
+    *set valor %+15
+    *set charity %+20
+    *goto last_beat
+  #PRESS.
+    *set valor %+25
+    *goto last_beat
+  #SHOW him the notebook.
+    *set splendor %+20
+    *set charity %+25
+    *set hope %+20
+    *goto last_beat
+
+*label last_beat
+
+*page_break
+
+*set_ward sight "clear"
+
+At about twenty past four Ewa Kowalczyk comes back in from the kitchen and sits down in the chair.
+
+She takes his hand, which she has not done since he was eleven, and she says something to him in Polish that her mother-in-law used to say, which she has spent forty years pretending she did not remember.
+
+*page_break
+
+He says one thing. It is not much and it is not about God and it takes about four words, and what it is about is her, and it is the last thing he says.
+
+*page_break
+
+At six minutes past five on the fifteenth of October, 2024, in a front room on Dobson Street in Polish Hill, in the city of Pittsburgh, Adam Kowalczyk stops breathing.
+
+*page_break
+
+You are still standing exactly where you have been standing for forty-nine years.
+
+*finish
