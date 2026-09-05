@@ -1,0 +1,191 @@
+*comment ============================================================
+*comment SCENE SEVEN — LEGION
+*comment 1994, a corridor in Oakland. ~1,000 words, 8 choices.
+*comment Job: the one clean win, and it is a win by counting. Loretta
+*comment worked thirty years for the county. She knows a runaround.
+*comment ============================================================
+
+He is nineteen and at Pitt and living in a building on Semple Street with four other people and a shower that runs cold at seven.
+
+And you have a problem, and the problem is that you have been trying for four months to get your one to stand on one particular thing, and every time it gets there, there is already something there, and it is never the same something.
+
+*page_break
+
+In September one of them introduces itself as Belphegor.
+
+It is perfectly civil. It says that this is not really its area, that its area is more the long-term, and that what you want is probably the one who handles the immediate. It says it will pass it along.
+
+In October a different one says it never got any message from Belphegor, and asks whether you are sure you spoke to Belphegor and not to someone who was covering. It says it will look into it.
+
+In November one of them claims to be Asmodeus, which would be a very serious matter if it were true.
+
+In December Belphegor is back and does not appear to remember September.
+
+*page_break
+
+"They're stalling," you say.
+
+"Yes."
+
+"How long have they been doing this?"
+
+"Since 1975."
+
+*page_break
+
+"And every hour you spend on it —"
+
+"Is an hour I am not standing where I should be. Yes." Your one says this without any bitterness, which somehow makes it worse. "The paperwork is not in the way of the attack. The paperwork *is* the attack."
+
+*page_break
+
+*comment ---- the recognition ----
+
+And you start laughing, and you cannot stop, and your one waits.
+
+"What."
+
+"I worked twenty-nine years for Allegheny County," you say. "Twenty-nine years. Deeds, then assessments, then eleven years in the office where people came to complain about assessments."
+
+"Yes."
+
+"Do you know what this is? This is a *runaround.* This is the oldest, cheapest, stupidest thing in the world and I have watched it done four hundred times by men making eleven thousand dollars a year, and the entire trick of it is —"
+
+You stop.
+
+*page_break
+
+"The entire trick of it," you say slowly, "is that they want you to think there are more of them than there are."
+
+*page_break
+
+*comment ---- the count ----
+
+*choice
+  #Stand on the same thing twice, a week apart, and see who turns up.
+    You do it in January and again in the second week of February.
+    *line_break
+    *line_break
+    The same one turns up both times. It introduces itself differently the second time and it is the same one, and once you have seen it you cannot unsee it, the way you cannot unsee a bad wig.
+    *set severity %+20
+    *set_hidden caught_the_lie true
+    *goto counted
+
+  #Ask one of them, straight out, how many there are.
+    "How many of you are there?"
+    *line_break
+    *line_break
+    There is a pause that is a half-second too long, and in that half-second you have it, because a real number would not have needed a pause.
+    *line_break
+    *line_break
+    "Legion," it says. "For we are many."
+    *line_break
+    *line_break
+    "Oh," you say, "you're quoting. That's what you've got? You're *quoting.*"
+    *set splendor %+20
+    *set_hidden caught_the_lie true
+    *goto counted
+
+  #Have your one stop responding to any of them for a month.
+    Your one goes quiet in March and does not answer a single one of them.
+    *line_break
+    *line_break
+    By the third week they are turning up unprompted. By the fourth they are turning up *twice*, at the same object, an hour apart, with different names on, because they have nobody left to keep track of who has already been.
+    *set valor %-20
+    *set severity %+15
+    *set_hidden caught_the_lie true
+    *goto counted
+
+  #Ask your one to just tell you.
+    "You know, don't you."
+    *line_break
+    *line_break
+    "I have never counted."
+    *line_break
+    *line_break
+    "Why *not*?"
+    *line_break
+    *line_break
+    "Because it was never given to me as something to do," it says, "and because I have not been in the habit of asking questions on my own account. That has been the arrangement for a long time."
+    *line_break
+    *line_break
+    "Well, count them."
+    *line_break
+    *line_break
+    "Yes," it says, and there is something in the way it says it — you would swear there was something in the way it says it.
+    *set charity %+20
+    *goto counted
+
+*label counted
+
+*page_break
+
+There are three.
+
+*page_break
+
+One of them does nearly all the work. It has been on this boy since a delivery room in 1975 and it is patient and it is competent and it is not stupid at all. The other two are barely engaged; they turn up, say something in a different voice, and go away again, and their entire function is to make the first one look like an organisation.
+
+*achieve counted
+
+*page_break
+
+None of them is Asmodeus. None of them is Belphegor either. None of them has been entitled to any name for a very long time, which is why they keep borrowing the big ones.
+
+*page_break
+
+*choice
+  #"Three. Three of them. Against you."
+    "It is not a numbers problem," your one says. "It was never a numbers problem. I could have counted them in 1975 if I had thought to."
+    *line_break
+    *line_break
+    "Then what was it?"
+    *line_break
+    *line_break
+    "It was that I was impressed," it says.
+    *set severity %+15
+    *goto legion_end
+
+  #"Does knowing help?"
+    "No," it says. "Not directly. I cannot beat them with a number. They are still going to be standing on things I want and they are still going to be there first."
+    *line_break
+    *line_break
+    "Then what's the point?"
+    *line_break
+    *line_break
+    "I will stop being impressed," it says. "You would be surprised how much of it that was."
+    *set charity %+15
+    *set hope %+10
+    *goto legion_end
+
+  #Say it out loud to them. Let them know you know.
+    You have your one say it, once, plainly, to the air on Semple Street: *there are three of you.*
+    *line_break
+    *line_break
+    Nothing happens. Nobody answers. Nothing changes for about eleven years.
+    *line_break
+    *line_break
+    And in 2005, in a kitchen, on the worst afternoon of this whole business, one of them is going to be a fraction slower than it should be, and you will never be able to prove that this is why.
+    *set splendor %+25
+    *set valor %+15
+    *goto legion_end
+
+  #Nothing. Get back to the boy.
+    You have burned four months of a nineteen-year-old's life on a filing cabinet.
+    *set valor %-15
+    *set hope %-5
+    *goto legion_end
+
+*label legion_end
+
+*page_break
+
+"They make it complicated," you say. "That's all it is. That's the whole trade."
+
+"Yes."
+
+"And the true thing is always —"
+
+"Small," your one says. "The true thing is always small. It does not get bigger when they talk over it and it does not get smaller either. That is most of what you need to know about them and you have worked it out in four months, and I would like you to remember, in about two years, that you worked it out."
+
+*finish
