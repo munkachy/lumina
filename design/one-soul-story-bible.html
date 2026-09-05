@@ -318,629 +318,561 @@ figure.rose figcaption{
 }
 </style>
 
+<style>
+/* --- the needle --- */
+.ladder{margin:1.8rem 0 2.2rem;border:1px solid var(--rule);background:var(--surface)}
+.rung{display:grid;grid-template-columns:2.4rem 1fr;gap:1rem;padding:.85rem 1.1rem;border-top:1px solid var(--rule-soft);align-items:start}
+.rung:first-child{border-top:none}
+.rung-n{font-family:"IBM Plex Mono",monospace;font-size:1.1rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;line-height:1.3}
+.rung b{display:block;font-family:Spectral,Georgia,serif;font-size:1.05rem;font-weight:600;margin-bottom:.1rem}
+.rung span{font-size:.88rem;color:var(--ink-soft)}
+.rung em{
+  display:inline-block;margin-top:.4rem;font-style:normal;
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;
+  padding:.15rem .5rem;border:1px solid var(--rule);color:var(--ink-faint);
+}
+.rung.at{background:var(--surface-2)}
+.rung.at .rung-n{color:var(--ruby)}
+.unknown{
+  border:1px solid var(--ruby);padding:1rem 1.2rem;margin:1.6rem 0 2rem;
+  background:var(--surface);
+}
+.unknown b{
+  font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ruby);display:block;margin-bottom:.3rem;
+}
+.unknown p{margin:0;font-size:.92rem;color:var(--ink-soft);max-width:none}
+.unknown code{font-family:"IBM Plex Mono",monospace;color:var(--ink);font-size:.9em}
+.rule-box{border-left:3px solid var(--cobalt);padding:.2rem 0 .2rem 1.1rem;margin:1.5rem 0}
+.rule-box h4{margin:0 0 .3rem;font-size:.98rem;font-weight:600}
+.rule-box p{margin:0;font-size:.92rem;color:var(--ink-soft)}
+</style>
+
 <div class="wrap">
 
 <header class="mast">
-  <p class="series">Angelic Orders &nbsp;·&nbsp; Book One &nbsp;·&nbsp; Story Bible, draft 1</p>
+  <p class="series">Angelic Orders &nbsp;·&nbsp; Book One &nbsp;·&nbsp; Story Bible, draft 2</p>
   <h1>One Soul</h1>
   <p class="tagline">You are an angel, and one life is yours to keep.</p>
   <div class="mast-meta">
-    <span>Target <b>23,700 words</b></span>
-    <span>Choices <b>142</b></span>
+    <span>Target <b>24,400 words</b></span>
+    <span>Choices <b>154</b></span>
     <span>Scenes <b>12</b></span>
-    <span>Ward <b>Ruth Kowalczyk, 1953&ndash;2023</b></span>
+    <span>Ward <b>Adam Kowalczyk, 1975&ndash;2024</b></span>
   </div>
 </header>
 
-<p class="lede">This is the whole plan for the first game &mdash; the shape, the mechanics, the twelve scenes and every beat inside them. The prose is bracketed; nothing here is finished writing. It exists so the structure can be argued with before 24,000 words get built on top of it.</p>
+<p class="lede">Draft 2 replaces the ward and the whole middle of the story. It is now a man&rsquo;s life, and the trial is chastity &mdash; approached through scrupulosity, argued away at eighteen, and paid for over thirty years. Everything mechanical from draft 1 survives. The prose is still bracketed.</p>
 
-<h2><span class="num">01</span>The template, measured</h2>
+<h2><span class="num">00</span>The four rules that keep this from becoming a tract</h2>
 
-<p>Structure is copied from <em>Choice of the Dragon</em>, whose scene files Choice of Games leaves open on their server. These are its real numbers, counted, not estimated.</p>
+<p>This material wants to collapse into a testimony pamphlet &mdash; boy sins, boy rationalises, boy falls, boy returns &mdash; and a reader who is not already convinced will smell the moral coming three scenes out and stop trusting the narrator. Four structural rules stop that, and they are not negotiable once writing begins.</p>
 
-<dl class="strip">
-  <div><dt>Words</dt><dd>23,658</dd></div>
-  <div><dt>Choices</dt><dd>142</dd></div>
-  <div><dt>Options</dt><dd>399</dd></div>
-  <div><dt>Words / choice</dt><dd>167</dd></div>
-  <div><dt>Options / choice</dt><dd>2.8</dd></div>
-  <div><dt>Achievements</dt><dd>14</dd></div>
-</dl>
+<div class="unknown">
+<b>Rule one &middot; his guilt is never established</b>
+<p>Mortal sin needs grave matter, full knowledge, <em>and</em> deliberate consent (CCC 1857). Consent lives in the interior, and no creature can see in there &mdash; not the angel, not the demons, not the player. And CCC 2352, on this act specifically, says affective immaturity, force of habit, and conditions of anxiety can lessen culpability <em>or reduce it to a minimum</em>. So the ward&rsquo;s column carries a field that reads <code>culpability: unknown</code> from scene 2 to scene 12 and <b>never changes once, for seventy years.</b> The game explains it plainly, early, and then makes the player look at it for the rest of their life.</p>
+</div>
 
-<p>Two rules fall out of those numbers and both are load-bearing.</p>
+<div class="rule-box">
+<h4>Rule two &middot; the angel never touches the will</h4>
+<p>Not once, on any branch. Every tool the angel has works on <em>circumstances</em>: put a person in his path, put a book on a table, stand on a suggestion so it does not reach him, be somewhere. If a single beat is ever written where the angel moves Adam&rsquo;s choice from inside, the whole game becomes a puppet show and the theology is gone.</p>
+</div>
 
-<p><strong>Never more than about 170 words without a decision.</strong> That is the pace of the whole form. A page you only read is a page the player is losing interest on.</p>
+<div class="rule-box">
+<h4>Rule three &middot; no plot punishment</h4>
+<p>Nothing bad happens to Adam <em>because</em> he did something wrong. No accidents, no illnesses, no ruin arriving as a verdict. Every consequence in this game is <b>intrinsic</b> &mdash; the act doing what the act does, visible in how he treats one specific woman. That distinction is the entire thesis: the teaching is not a rule with a penalty attached from outside, it is a description of what a person is, and breaking it damages you the way walking into a wall damages you.</p>
+</div>
 
-<p><strong>The chapters never branch.</strong> Scene&nbsp;1 always leads to scene&nbsp;2. What your choices decide is not <em>where</em> you go but whether you <em>succeed</em> when you get there &mdash; the stats carry the memory forward. Branching the story itself is arithmetic suicide: a twenty-page story with two-way branches needs over a million pages written.</p>
+<div class="rule-box">
+<h4>Rule four &middot; the strongest version of every argument</h4>
+<p>Adam&rsquo;s question at eighteen &mdash; <em>why would God give me this and then forbid it?</em> &mdash; gets written at full strength, because a strawman is worth nothing. Nietzsche&rsquo;s critique gets written at full strength too. The game wins nothing by argument. It wins by showing what happens to one man over thirty years, and letting the reader do the rest.</p>
+</div>
+
+<h2><span class="num">01</span>The thesis, rendered as a needle</h2>
+
+<p>The game never says that the teaching exists for his flourishing. Instead there is a reading in his column with four positions, and the whole story is the angel trying to move it and mostly failing.</p>
+
+<div class="ladder">
+<div class="rung"><div class="rung-n">1</div><div><b>A rule.</b><span>It is forbidden. That is all he knows and it is all anyone has told him.</span><em>1982 &mdash; age 7</em></div></div>
+<div class="rung at"><div class="rung-n">2</div><div><b>A rule about dirt.</b><span>It is shameful, and therefore so is he. Arrives via one brusque confessor and one embarrassed father, neither of whom meant it.</span><em>1990 &mdash; age 15</em></div></div>
+<div class="rung at"><div class="rung-n">3</div><div><b>A rule against me.</b><span>God built this into me and then said no. He argues himself here at eighteen and stays for twenty-five years.</span><em>1993&ndash;2018 &mdash; ages 18 to 43</em></div></div>
+<div class="rung"><div class="rung-n">4</div><div><b>Not a rule at all.</b><span>A description of what a person is for &mdash; and therefore of what it costs to use one. Reachable only at the very end, partially, and not on every branch.</span><em>2018 &mdash; age 43, if at all</em></div></div>
+</div>
+
+<p><strong>Nobody in the game ever states position 4 as a thesis.</strong> A competent confessor says it once, badly compressed, in 2018, thirty years too late. The rest of the argument is made by watching one woman&rsquo;s face across a kitchen table in 1997.</p>
 
 <h2><span class="num">02</span>The stat sheet</h2>
 
-<p>Three opposed pairs, one free-standing virtue, and a second column that does not belong to you.</p>
+<p>Unchanged from draft 1 &mdash; three opposed pairs and one free-standing virtue. Severity and Mercy carry more weight in this version than in the last, because nearly every dilemma in the middle of the game is a question about how to stand next to somebody who is failing.</p>
 
 <div class="pairs">
   <div>
     <div class="pair-labels"><span style="color:var(--cobalt)">Valor</span><span>Patience</span></div>
     <div class="pair-bar"><span style="width:58%;background:var(--cobalt)"></span></div>
-    <p class="pair-note">Strike now, or keep the long watch. One slider, two names &mdash; high Valor <em>is</em> low Patience.</p>
+    <p class="pair-note">Move now, or keep the long watch. One slider, two names &mdash; high Valor <em>is</em> low Patience.</p>
   </div>
   <div>
     <div class="pair-labels"><span style="color:var(--ruby)">Severity</span><span>Mercy</span></div>
     <div class="pair-bar"><span style="width:40%;background:var(--ruby)"></span></div>
-    <p class="pair-note">How you meet her failure. Both are real virtues. Neither is the answer.</p>
+    <p class="pair-note">How you stand next to a failure. Both are real virtues. Neither is the answer, and in this game the wrong one at the wrong moment does thirty years of damage.</p>
   </div>
   <div>
     <div class="pair-labels"><span style="color:var(--amber)">Splendor</span><span>Hiddenness</span></div>
     <div class="pair-bar"><span style="width:30%;background:var(--amber)"></span></div>
-    <p class="pair-note">Manifest &mdash; light, dread, <em>do not be afraid</em> &mdash; or work entirely through ordinary means: a delayed bus, a friend who calls.</p>
+    <p class="pair-note">Manifest &mdash; light, dread, <em>do not be afraid</em> &mdash; or work entirely through ordinary means: a delayed bus, a friend who calls, a book left face up.</p>
   </div>
   <div>
     <div class="pair-labels"><span style="color:var(--verdigris)">Charity</span><span style="color:var(--ink-faint)">not opposed</span></div>
     <div class="pair-bar"><span style="width:66%;background:var(--verdigris)"></span></div>
-    <p class="pair-note">The only stat with nothing on the other end, because it isn&rsquo;t a trade-off. It is what all the rest is for.</p>
+    <p class="pair-note">The only stat with nothing on the other end, because it is not a trade-off. It is what the rest is for.</p>
   </div>
 </div>
 
-<figure class="rose">
-<svg viewBox="0 0 260 260" width="230" height="230" role="img" aria-label="Rose window stat display: six petals for three opposed pairs, with Charity at the centre">
-  <circle cx="130" cy="130" r="124" fill="none" stroke="currentColor" stroke-width="2" opacity=".28"/>
-  <circle cx="130" cy="130" r="112" fill="none" stroke="currentColor" stroke-width="1" opacity=".18"/>
-  <g stroke="currentColor" stroke-width="1.5" opacity=".3" fill="none">
-    <circle cx="130" cy="66" r="34"/><circle cx="185" cy="98" r="34"/>
-    <circle cx="185" cy="162" r="34"/><circle cx="130" cy="194" r="34"/>
-    <circle cx="75" cy="162" r="34"/><circle cx="75" cy="98" r="34"/>
-  </g>
-  <circle cx="130" cy="66" r="30" fill="#20438f" opacity=".72"/>
-  <circle cx="185" cy="98" r="30" fill="#20438f" opacity=".26"/>
-  <circle cx="185" cy="162" r="30" fill="#9c2233" opacity=".38"/>
-  <circle cx="130" cy="194" r="30" fill="#9c2233" opacity=".62"/>
-  <circle cx="75" cy="162" r="30" fill="#a86c14" opacity=".7"/>
-  <circle cx="75" cy="98" r="30" fill="#a86c14" opacity=".28"/>
-  <circle cx="130" cy="130" r="30" fill="#2b6350" opacity=".66"/>
-  <circle cx="130" cy="130" r="30" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".35"/>
-</svg>
-<figcaption>The stats screen: six petals, three pairs, Charity at the centre</figcaption>
-</figure>
-
-<h3>Her column &mdash; the one that matters</h3>
-
-<p>The dragon had Wounds, and three of them killed you. An angel cannot be wounded. So the health bar moves to the other side of the sheet:</p>
+<h3>His column</h3>
 
 <div class="tw">
 <table>
-<thead><tr><th>Reading</th><th>What it tracks</th><th>How it moves</th></tr></thead>
+<thead><tr><th>Reading</th><th>What it tracks</th><th>Behaviour</th></tr></thead>
 <tbody>
-<tr><td><b>State of soul</b></td><td>In grace &middot; Wounded &middot; Grave &middot; Estranged</td><td>Her acts, not yours. You can never set it directly.</td></tr>
-<tr><td><b>Prayers</b></td><td>How much intercession is actually reaching her</td><td>Starts high (Halina). Collapses in 3.8. Never fully recovers.</td></tr>
+<tr><td><b>The needle</b></td><td>What he thinks the rule is, 1&ndash;4</td><td>Moves perhaps four times in a lifetime. Mostly downward.</td></tr>
+<tr><td><b>Culpability</b></td><td>&mdash;</td><td class="n">unknown &mdash; always</td></tr>
+<tr><td><b>Prayers</b></td><td>Intercession actually reaching him</td><td>High under Halina. Collapses in 1986. <b>Then a small, steady, unexplained figure appears in 1993 that the player cannot account for until 2016.</b></td></tr>
 <tr><td><b>Consolation</b></td><td>Grace you are permitted to hand on</td><td>Spendable, replenished on request, never yours.</td></tr>
 </tbody>
 </table>
 </div>
 
-<p><strong>Your hit points are another person&rsquo;s soul.</strong> Every mechanic in the game takes its weight from that one substitution.</p>
+<h2><span class="num">03</span>Legion</h2>
 
-<h3>Hidden values</h3>
+<p>One named devil is cosy. This one is a committee, and the committee is a bluff.</p>
 
-<div class="tw">
-<table>
-<tbody>
-<tr><td class="n">overreach</td><td>0&ndash;10. Acting outside your commission. Not sin &mdash; a confirmed angel cannot sin. Zeal outrunning obedience.</td></tr>
-<tr><td class="n">heard_him_first</td><td>Set in 1.6 if you accepted Lucifer&rsquo;s reading of the vision before anyone else spoke. Surfaces once, in 11.</td></tr>
-<tr><td class="n">foreknowledge</td><td>Which of the four things you asked to know at the commission. Colours every reading in scene 3.</td></tr>
-<tr><td class="n">caught_the_lie</td><td>Set if you noticed, in 3.4, the one thing Rudy is wrong about. Pays off in 11.</td></tr>
-</tbody>
-</table>
-</div>
+<p>They present as many. Different names on different days, different voices, handoffs, <em>that&rsquo;s not my area, you want the other one.</em> They borrow big names &mdash; <b>Belphegor</b>, <b>Asmodeus</b>, <b>Mammon</b> &mdash; and none of them is entitled to any of them. The angel spends nineteen years unable to get a grip on what he is facing, which is exactly the intended effect.</p>
 
-<h2><span class="num">03</span>Combat: three verbs</h2>
+<blockquote>
+<p>&ldquo;My name is Legion: for we are many.&rdquo;</p>
+<cite>Mark 5:9 &mdash; a boast, and quite possibly a lie, right there in the Gospel</cite>
+</blockquote>
 
-<p>Daniel 10 settles what angelic conflict is. The messenger was not wounded and was not beaten &mdash; he was <em>withstood</em> for twenty-one days, and Michael had to come and relieve him. The loser is delayed, and delay is lethal, because your ward is deciding right now.</p>
+<p><strong>In 1994 the angel counts them. There are three.</strong> One does nearly all the work; the other two exist mostly to make it look like a crowd. And the discovery is not just a plot beat &mdash; it is the game&rsquo;s method in miniature. <b>Complication is the tactic. The truth stays the same size no matter how many voices are talking over it.</b></p>
 
-<div class="verbs">
-  <div class="verb"><h4>STAND</h4><p>Put yourself on a thing &mdash; a person, a place, an hour, a suggestion being offered. Nothing else can act on it while you are there.</p><span class="cost">Cost: you can stand on one thing only. An angel is where it acts.</span></div>
-  <div class="verb"><h4>PRESS</h4><p>Move against someone who is standing. You cannot damage him. You cost him time.</p><span class="cost">Cost: exactly the same time, out of your own clock.</span></div>
-  <div class="verb"><h4>SHOW</h4><p>Hand something over out of your own mind. Breaks a lock instantly &mdash; you show him a thing he cannot bear to look at.</p><span class="cost">Cost: whatever you show is true, and now permanently his.</span></div>
-</div>
+<p>It rhymes with what is happening to Adam: his justifications get more elaborate every decade, and the thing they are justifying never changes at all.</p>
 
-<p>No health bar. <strong>The resource is the clock</strong>, and the clock is Ruth walking toward the moment. It ticks on screen. Every action spends a segment. You lose by arriving late.</p>
-
-<p>Two angels contending over the same object are <em>locked</em>: neither can move, neither can be hurt, and nothing resolves it except a third party arriving or the decision being made somewhere else without either of them. That is Jacob at the ford. That is twenty-one days.</p>
-
-<h2><span class="num">04</span>Ruth</h2>
+<h2><span class="num">04</span>Adam</h2>
 
 <div class="tl">
-<div class="tl-row key"><div class="tl-yr">1953<b>age 0</b></div><div class="tl-txt">Born at Magee-Womens Hospital to <b>Dana Kowalczyk</b>, 19, unmarried. Home is her grandmother&rsquo;s house on <b>Dobson Street, Polish Hill</b>. Baptised at St. Casimir on Brereton Street.</div></div>
-<div class="tl-row"><div class="tl-yr">1957<b>age 4</b></div><div class="tl-txt">Her father, <b>Terry Vukovich</b>, stops coming. He comes back twice, years apart, and it is worse both times.</div></div>
-<div class="tl-row"><div class="tl-yr">1960<b>age 7</b></div><div class="tl-txt">First confession, first communion. <b>Halina</b> &mdash; grandmother, born 1898 in Galicia, over in 1920 &mdash; teaches her everything she will ever know about prayer.</div></div>
-<div class="tl-row key"><div class="tl-yr">1962<b>age 9</b></div><div class="tl-txt">Three days of silence. Scrupulosity takes hold and nobody names it. <b>It is never named for fifty-one years.</b></div></div>
-<div class="tl-row"><div class="tl-yr">1965&ndash;66<b>12&ndash;13</b></div><div class="tl-txt">Bernie Sobek. Amanda Pyle.</div></div>
-<div class="tl-row"><div class="tl-yr">1967<b>age 14</b></div><div class="tl-txt">The Mass changes. Halina, who has prayed in Latin and Polish for sixty years, is left holding nothing she recognises.</div></div>
-<div class="tl-row key"><div class="tl-yr">1968<b>age 15</b></div><div class="tl-txt"><b>Halina dies.</b> The only person who prayed for Ruth by name stops.</div></div>
-<div class="tl-row"><div class="tl-yr">1970<b>age 17</b></div><div class="tl-txt">A parking lot in Sharpsburg.</div></div>
-<div class="tl-row"><div class="tl-yr">1978<b>age 25</b></div><div class="tl-txt">Marries <b>Gary Dolan</b>, a hooker at J&amp;L on the South Side. A decent man, out of his depth, and he stays.</div></div>
-<div class="tl-row key"><div class="tl-yr">1981<b>age 28</b></div><div class="tl-txt"><b>Halina Dolan is stillborn.</b> Ruth, formed on the theology of 1960, believes her daughter is in Limbo and that this is her own fault. There are no other children.</div></div>
-<div class="tl-row"><div class="tl-yr">1985<b>age 32</b></div><div class="tl-txt">The mill closes. Half of Polish Hill leaves. Gary never works steady again.</div></div>
-<div class="tl-row"><div class="tl-yr">1986<b>age 33</b></div><div class="tl-txt">She decides her guardian angel is called Gabriel.</div></div>
-<div class="tl-row"><div class="tl-yr">1994<b>age 41</b></div><div class="tl-txt">St. Casimir is merged into a cluster and the building is sold. She does not go to the last Mass.</div></div>
-<div class="tl-row key"><div class="tl-yr">2005<b>age 52</b></div><div class="tl-txt">A pulmonary embolism, in the kitchen, on a Tuesday. You are permitted to act.</div></div>
-<div class="tl-row"><div class="tl-yr">2011<b>age 58</b></div><div class="tl-txt">Gary dies. Twelve years alone.</div></div>
-<div class="tl-row key"><div class="tl-yr">2013<b>age 60</b></div><div class="tl-txt">A substitute priest, in a parish she is not registered at, says one sentence. She does not believe him for two years.</div></div>
-<div class="tl-row key"><div class="tl-yr">2023<b>age 70</b></div><div class="tl-txt">She dies at home. You have been standing there for seventy years and she has never once known.</div></div>
+<div class="tl-row"><div class="tl-yr">1975<b>age 0</b></div><div class="tl-txt">Born at Magee-Womens Hospital. <b>Stan and Ewa Kowalczyk</b>, married, a house on Dobson Street, Polish Hill. Grandmother <b>Halina</b>, 77, born 1898 in Galicia, in the back room.</div></div>
+<div class="tl-row"><div class="tl-yr">1982<b>age 7</b></div><div class="tl-txt">First confession, first communion at St. Casimir. Halina teaches him everything he will ever know about prayer, in Polish and bad English, and it works.</div></div>
+<div class="tl-row key"><div class="tl-yr">1984<b>age 9</b></div><div class="tl-txt"><b>The compulsions.</b> His middle finger goes up by accident, reaching for a glass, and he has to reverse it &mdash; point it at the ground &mdash; or he has made the sign, and making the sign is a sin, and what if he forgets to confess it. Forty times a day. Nobody notices. <b>The angel notices and reads it as devotion.</b></div></div>
+<div class="tl-row"><div class="tl-yr">1985<b>age 10</b></div><div class="tl-txt">The mill closes. Stan goes to a hardware store, then to not much.</div></div>
+<div class="tl-row key"><div class="tl-yr">1986<b>age 11</b></div><div class="tl-txt"><b>Halina dies.</b> The only person praying for him by name stops.</div></div>
+<div class="tl-row key"><div class="tl-yr">1988<b>age 13</b></div><div class="tl-txt">A health class, a filmstrip, a teacher who would rather be anywhere. Something is described clinically, as a fact about bodies, with no moral frame at all. <b>He walks out knowing a new thing about himself, and the angel cannot see what changed.</b></div></div>
+<div class="tl-row"><div class="tl-yr">1989&ndash;92<b>14&ndash;17</b></div><div class="tl-txt">The trial. The confession loop. A brusque priest in a box on a Saturday. One sentence from his father, in a car, badly.</div></div>
+<div class="tl-row key"><div class="tl-yr">1993<b>age 18</b></div><div class="tl-txt">The argument crystallises and he stops going &mdash; not dramatically; he just doesn&rsquo;t go one Sunday and then doesn&rsquo;t the next. <b>Stan starts praying for him every day and never mentions it.</b> And <b>Renee Sobek</b>, whom he has known since they were nine, becomes something else.</div></div>
+<div class="tl-row"><div class="tl-yr">1994<b>age 19</b></div><div class="tl-txt">Pitt. The angel counts Legion and finds three.</div></div>
+<div class="tl-row key"><div class="tl-yr">1996<b>age 21</b></div><div class="tl-txt">The internet arrives and the scale of the thing changes overnight. <b>And Renee nearly finds out.</b> Tell her, or don&rsquo;t &mdash; the hinge of the whole game.</div></div>
+<div class="tl-row"><div class="tl-yr">1997<b>age 22</b></div><div class="tl-txt">He is already contemptuous. He goes looking for something that makes contempt look like courage, and finds it in about forty pages.</div></div>
+<div class="tl-row"><div class="tl-yr">1998<b>age 23</b></div><div class="tl-txt">He ends it with Renee, and describes this to himself as honesty.</div></div>
+<div class="tl-row"><div class="tl-yr">1999&ndash;2016<b>24&ndash;41</b></div><div class="tl-txt">Seventeen years. Jobs, apartments, two long relationships that end the same way. He can name the pattern by the second one and does nothing about it.</div></div>
+<div class="tl-row key"><div class="tl-yr">2016<b>age 41</b></div><div class="tl-txt"><b>Stan dies</b>, and in a drawer Adam finds a list in his father&rsquo;s handwriting with his own name on it, dated, going back twenty-three years. <b>The unexplained number in the stat panel resolves &mdash; in the same beat it falls to zero.</b></div></div>
+<div class="tl-row"><div class="tl-yr">2017&ndash;18<b>42&ndash;43</b></div><div class="tl-txt">Eighteen months of reading things at two in the morning. Not a conversion scene. A man checking.</div></div>
+<div class="tl-row key"><div class="tl-yr">2018<b>age 43</b></div><div class="tl-txt">Confession, after twenty-five years. The priest is competent, and says the thing Adam built his life against, correctly, thirty years late.</div></div>
+<div class="tl-row"><div class="tl-yr">2018&ndash;24<b>43&ndash;49</b></div><div class="tl-txt">Six years. Fragile, partial, real, and untested.</div></div>
+<div class="tl-row key"><div class="tl-yr">2024<b>age 49</b></div><div class="tl-txt">A diagnosis in June and about four months. <b>And at the end, a fight at the bedside, and you never find out how it came out.</b></div></div>
 </div>
 
-<h2><span class="num">05</span>Four threads</h2>
+<h2><span class="num">05</span>Five threads</h2>
 
 <div class="threads">
-  <span class="chip c1">Scrupulosity &mdash; 3.3 &rarr; 3.6 &rarr; 8 &rarr; 9 &rarr; 11</span>
-  <span class="chip c2">What you asked to know &mdash; 1.13 &rarr; all of 3 &rarr; 11</span>
-  <span class="chip c3">Rudy &mdash; 2.4 &rarr; 3.4 &rarr; 6 &rarr; 9 &rarr; 11</span>
-  <span class="chip c4">Halina&rsquo;s prayers &mdash; 2.5 &rarr; 3.2 &rarr; 3.8 &rarr; 12</span>
+  <span class="chip c1">Scrupulosity &mdash; 3.4 &rarr; 6.2 &rarr; 6.4 &rarr; 11.6</span>
+  <span class="chip c1">The needle &mdash; 3.3 &rarr; 6.3 &rarr; 6.6 &rarr; 11.4</span>
+  <span class="chip c2">Renee &mdash; 3.6 &rarr; 4 &rarr; 8 &rarr; 9.4 &rarr; 11.5</span>
+  <span class="chip c3">Legion &mdash; 2.4 &rarr; 7 &rarr; 10.3 &rarr; 11.6</span>
+  <span class="chip c4">Stan&rsquo;s list &mdash; 6.5 &rarr; 10.1 &rarr; 11.1</span>
 </div>
 
-<p><strong>The spine is scrupulosity, and it is what makes this a Catholic game rather than a game with Catholics in it.</strong> A genuinely holy, genuinely uneducated grandmother forms a nine-year-old well. Then the girl&rsquo;s own conscience turns on her, quietly, in 1962, and nobody in her world has the vocabulary for it. She spends fifty years experiencing God as a source of terror rather than mercy, and drifts &mdash; not out of unbelief, out of exhaustion.</p>
+<p><strong>Scrupulosity comes first and it is what makes the chastity trial land the way it does.</strong> A boy who at nine is pointing his finger at the ground forty times a day to undo an accident meets, at thirteen, a matter where the Church actually does say <em>grave</em>. His conscience was already a broken instrument. Now it has something real to work on, and it tears him apart over four years, and the tearing is what generates the argument &mdash; not the pleasure. <b>He does not argue his way out because he wants to. He argues his way out because he cannot live inside what he has been told, and nobody has told him the true version.</b></p>
 
-<p>It also gives Rudy a strategy that is worth writing. He never tempts her to anything gross. <strong>He tempts her to more religion, badly done.</strong> He is the voice that says <em>say it again, you got a word wrong.</em> And it is his mistake, because a scrupulous soul is a soul that will not stop looking at God, and he has spent seventy years keeping her eyes on the one thing he cannot stand. That lands in scene 11.</p>
+<p>And the machine is deaf in the other direction, exactly as it was in draft 1. In 1998 he does something to Renee that is genuinely cruel, deliberate, and defensible-sounding, and his conscience &mdash; the same conscience that put him in a confessional line every Saturday for four years &mdash; makes no sound at all.</p>
 
 <hr class="lead">
 
 <h2><span class="num">06</span>The twelve scenes</h2>
 
-<p class="lede">Each panel&rsquo;s left edge names the stat pair the scene mainly exercises &mdash; <span style="color:var(--cobalt)">Valor/Patience</span>, <span style="color:var(--ruby)">Severity/Mercy</span>, <span style="color:var(--amber)">Splendor/Hiddenness</span>, <span style="color:var(--verdigris)">Charity</span>. Read down the edges to check no pair is going unused.</p>
+<p class="lede">Each panel&rsquo;s left edge names the stat pair the scene mainly exercises &mdash; <span style="color:var(--cobalt)">Valor/Patience</span>, <span style="color:var(--ruby)">Severity/Mercy</span>, <span style="color:var(--amber)">Splendor/Hiddenness</span>, <span style="color:var(--verdigris)">Charity</span>. Reading down the edges: two, three, two, three. Balanced, which was not guaranteed &mdash; an earlier pass had five ruby scenes in a row and would have made Mercy the only stat that mattered.</p>
 
-<!-- SCENE 1 -->
 <section class="scene cobalt">
 <div class="scene-head">
-  <div class="scene-no">SCENE ONE</div>
-  <h3>The Assembly</h3>
+  <div class="scene-no">SCENE ONE</div><h3>The Assembly</h3>
   <div class="scene-when">Before there was anything to date it by</div>
   <div class="scene-budget"><span>Words <b>1,900</b></span><span>Choices <b>22</b></span><span>Images <b>2</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">Character creation disguised as the only decision that ever mattered. Nobody picks a stat; everybody makes a choice and finds out afterwards what they are.</p>
+<p class="scene-job">Unchanged from draft 1. Character creation disguised as the only decision that ever mattered.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">1.1</span><span class="beat-t">You are</span></div>
-<p>Creation, whole and instant. Three things known at once: what you are, what you are for, that you did not make yourself. <b>The retrospective frame is stated flatly here</b> &mdash; you are remembering this from the far end of a human life, which is why the story will keep reaching for human comparisons you do not have yet. Pittsburgh and Dobson Street named on page one.</p>
-<div class="mech"><b>No choice</b>Roughly 300 words before the first decision. The only place in the game that runs long without one.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.2</span><span class="beat-t">The throne</span></div>
-<p>One image, held: a throne, fire on it that burns nothing, a floor like ice with light coming up through it. Enough light to know exactly who that is and what He is owed &mdash; and not enough to make refusing impossible. The gap is deliberate and you understand that immediately.</p></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.3</span><span class="beat-t">The court</span></div>
-<p>Thousands, in ranks, no two the same kind of creature. Sparrows come in flocks; nothing here does. God made one of you and stopped. Then the speech rule, in plain words: <b>hand a thing over and the other knows it entire; nothing can be garbled and nothing can be faked. There are only two things you can ever do with what you know &mdash; keep it, or give it. And everyone can tell which you did.</b></p>
-<ul class="opts"><li>One orienting choice with almost no weight, to teach the interface before it matters.</li></ul></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">1.1&ndash;1.3</span><span class="beat-t">You are &middot; the throne &middot; the court</span></div>
+<p>Creation, whole and instant. The retrospective frame stated flatly on page one &mdash; you are remembering this from the far end of a human life, which is why the story keeps reaching for human comparisons you do not have yet. One image only: a throne, fire that burns nothing, a floor like ice with light coming up through it. Then the court, and the speech rule in plain words: <b>hand a thing over and the other knows it entire; nothing garbles, nothing can be faked. Keep it, or give it. And everyone can tell which you did.</b></p></div>
 
 <div class="beat"><div class="beat-h"><span class="beat-id">1.4</span><span class="beat-t">One of them shuts</span></div>
-<p class="dil">The first sin in the history of creation announces itself as a <em>silence</em>. Somewhere ahead of you a mind turns its back and stops letting anyone in, and every mind in the room feels the door close at once. Nothing like this has happened. There has not been enough time for anything to have happened.</p>
+<p class="dil">The first sin announces itself as a <em>silence</em>. A mind ahead of you turns its back and stops letting anyone in, and every mind in the room feels the door close at once.</p>
 <ul class="opts">
-<li><b>Go toward it, now, before it spreads.</b> <span class="dl">valor %+20</span></li>
+<li><b>Go toward it now, before it spreads.</b> <span class="dl">valor %+20</span></li>
 <li><b>Hold. You will not move until you know what you are moving against.</b> <span class="dl">valor %&minus;20 &middot; severity %+10</span></li>
-<li><b>Speak. Ask the court, out loud, what has happened.</b> <span class="dl">splendor %+20</span></li>
-<li><b>Turn back toward the throne and stay there.</b> <span class="dl">charity %+15 &middot; splendor %&minus;10</span></li>
+<li><b>Speak. Ask the court out loud what has happened.</b> <span class="dl">splendor %+20</span></li>
+<li><b>Turn back to the throne and stay there.</b> <span class="dl">charity %+15 &middot; splendor %&minus;10</span></li>
 </ul></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">1.5</span><span class="beat-t">The vision</span><span class="beat-yr">IMAGE 1</span></div>
-<p>Full bleed, no caption, no text on the page. A room, early, the light still grey. A girl on the edge of a bed with the covers shoved around, barefoot, hair not done. Standing in the corner is a light &mdash; not a lamp, upright, about as tall as a person. She is looking at it and is not afraid and her mouth is moving.</p>
-<p>Nobody explains it. Nobody in the room knows. <b>That is the test: you are shown one thing and asked to say yes to it without being told what it means.</b></p>
-<div class="mech"><b>Art reference</b>Henry Ossawa Tanner, <em>The Annunciation</em>, 1898, Philadelphia Museum of Art &mdash; a barefoot peasant girl on a rumpled bed, no halo, and Gabriel rendered as a column of gold light. Already on-model for the no-faces rule.</div></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">1.5&ndash;1.7</span><span class="beat-t">The vision &middot; his reading &middot; four words</span><span class="beat-yr">IMAGE 1</span></div>
+<p>Full bleed, no caption: a room, early, grey light, a girl on the edge of a bed with the covers shoved around, barefoot, hair not done, and a light standing upright in the corner that is not a lamp. Nobody explains it. <b>You are shown one thing and asked to say yes without being told what it means.</b> Then he turns around and explains it, and every word is true, and what he leaves out is the only thing that matters &mdash; <em>and that is good</em> &mdash; which he can leave out because it is not a fact but a judgement. Then, from nobody important: <b>&ldquo;Who is like God?&rdquo;</b> Three choices across the sequence, setting all three pairs.</p>
+<div class="mech"><b>Art</b>Henry Ossawa Tanner, <em>The Annunciation</em>, 1898, Philadelphia Museum of Art &mdash; barefoot girl, rumpled bed, no halo, Gabriel as a column of gold light. Already obeys the no-faces rule.</div>
+<div class="mech"><b>Delayed branch</b>Listening to him is not sin and costs nothing morally. It costs that the first reading you ever heard of that image was his. Surfaces once, in 11.4.</div></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">1.6</span><span class="beat-t">His reading of it</span></div>
-<p class="dil">He turns around and hands it to all of you at once: <em>that is not one of us; that is dirt with breath blown into it; it sleeps, it gets sick, it dies &mdash; and He is going down into that, all the way down, and when He does we will be asked to kneel.</em> Every word is true. He cannot lie. What he leaves out is the only thing that matters &mdash; <b>and that is good</b> &mdash; and he can leave it out because it is not a fact but a judgement, and judgement is the one thing that stays inside where nobody can reach it.</p>
+<div class="beat"><div class="beat-h"><span class="beat-id">1.8&ndash;1.10</span><span class="beat-t">The expulsion &middot; the orders</span><span class="beat-yr">TUTORIAL</span></div>
+<p>Ninety seconds, three choices, all three verbs: <b>STAND</b> on a mind that has not decided, get <b>PRESSED</b> and locked with something older and brighter that cannot hurt you and cannot be moved, <b>SHOW</b> it something to get free. Then the nine orders explained quickly and plainly for a player who has never heard any of this, and at the bottom &mdash; accurately, not as an insult &mdash; the ninth. Not to a nation, not to a Church, not to an army. <b>To one person. One. Each.</b></p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">1.11&ndash;1.13</span><span class="beat-t">The name &middot; the commission &middot; one question</span></div>
+<p>&ldquo;You have a name. You won&rsquo;t use it here and neither will I &mdash; it isn&rsquo;t a word, it&rsquo;s the thing you are. <b>But he is going to need to call you something.</b>&rdquo; Then: <em>Adam Kowalczyk, born in four hours, in Pittsburgh. That is the whole of your commission. Everything else you work out yourself.</em> Then one question, which is the entirety of character customisation:</p>
 <ul class="opts">
-<li><b>&ldquo;Be silent.&rdquo;</b> <span class="dl">severity %+25 &middot; valor %+10</span></li>
-<li><b>&ldquo;Show me, then. I will look, and I will answer you.&rdquo;</b> <span class="dl">mercy %+20 &middot; sets heard_him_first</span></li>
-<li><b>Say nothing to him. Say it to the ones nearest you: don&rsquo;t go over there.</b> <span class="dl">charity %+20 &middot; splendor %&minus;15</span></li>
-<li><b>Say nothing to anyone. Look at the throne.</b> <span class="dl">patience %+25 &middot; charity %+10</span></li>
-</ul>
-<div class="mech"><b>Delayed branch</b>Listening is not sin and costs nothing morally. What it costs is that the first interpretation you ever heard of that image was his. Surfaces once, in 11.2, when the game asks whether you are reading Ruth or reading her through him.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.7</span><span class="beat-t">Who is like God?</span></div>
-<p>Four words, from the middle of the room, from nobody important. It answers nothing he said. It walks out of the argument and stands somewhere else, and that turns out to be the only move there is &mdash; because the question was never whether she is better than you, it is whether He is God.</p>
-<ul class="opts">
-<li><b>Take up the cry so the whole court hears it from you.</b> <span class="dl">splendor %+25 &middot; valor %+15</span></li>
-<li><b>Take up the cry &mdash; and go stand with the ones still wavering.</b> <span class="dl">splendor %&minus;20 &middot; charity %+25 &middot; mercy %+15</span></li>
-<li><b>Go to him, whoever he is, and stand at his shoulder.</b> <span class="dl">valor %+25 &middot; splendor %+10</span></li>
-<li><b>Answer once, quietly, then look at nothing but the throne.</b> <span class="dl">patience %+25 &middot; splendor %&minus;25 &middot; charity %+15</span></li>
-</ul></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.8</span><span class="beat-t">The expulsion</span><span class="beat-yr">TUTORIAL</span></div>
-<p class="dil">They do not simply drop. They hold position, and the ones who have not chosen yet are behind them, and the line of light has to take the floor back a rank at a time. Ninety seconds, three choices, and you use all three verbs: you <b>STAND</b> on a mind that has not decided, something <b>PRESSES</b> you and you are locked with something older and brighter that cannot hurt you and cannot be moved, and the only way out is to <b>SHOW</b> it something.</p>
-<div class="mech"><b>Why it is here</b>Twelve thousand years later, in a parking lot in Sharpsburg, the player uses the identical three verbs on the identical problem &mdash; and recognises it. That recognition is the entire reason the fight is in scene 1.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.9</span><span class="beat-t">A third of the room</span></div>
-<p>Gone. Not thrown, exactly &mdash; they turned away from the only thing holding them up and kept turning, and there was nowhere else to go. Where they were is not dark. It is worse than dark: a shape in the middle of the light that the light does not enter.</p></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.10</span><span class="beat-t">The orders</span></div>
-<p>Nine of them, explained plainly and quickly for a player who has never heard any of this. Those who stand nearest the fire and do nothing but burn. Those given a nation. Those given a Church. Those who go where the fallen are and hold them off and consider that enough. And at the bottom &mdash; the word is not an insult, it is accurate &mdash; the last of the nine. Not to a nation, not to a Church, not to an army. <b>To one person. One. Each.</b></p>
-<div class="mech"><b>Tone</b>You do not feel cheated, and the narration says so, because later you will meet minds that assume you must. You have just watched a third of everything throw itself away over whether being <em>given</em> a thing is worse than taking it. You are not making that mistake in the first hour.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.11</span><span class="beat-t">The name</span></div>
-<p>&ldquo;You have a name. You won&rsquo;t use it here and neither will I &mdash; it isn&rsquo;t a word, it is the thing you are, and there is only one of you, so nobody with a mouth will ever pronounce it. <b>But she is going to need to call you something.</b>&rdquo;</p>
-<ul class="opts">
-<li><b>Tzuriel</b> <span class="dl">God is my rock</span></li>
-<li><b>Chesediel</b> <span class="dl">the mercy of God</span></li>
-<li><b>Nuriel</b> <span class="dl">the fire of God</span></li>
-<li><b>Shomriel</b> <span class="dl">God keeps watch</span></li>
-<li><b>Something else</b> <span class="dl">free text</span></li>
-</ul>
-<div class="mech"><b>Norm handled in fiction</b>The Directory on Popular Piety &sect;217 discourages assigning names to angels other than the three in Scripture. In-story, the name is not yours &mdash; it is only what she will one day call you, and she will not hear the true one until scene 12. Cosmetic everywhere except one line at the end.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.12</span><span class="beat-t">The commission</span></div>
-<p>&ldquo;Her name is Ruth Kowalczyk. She will be born in four hours, in Pittsburgh, to a mother who is nineteen and frightened. You will be there before the doctor is. That is the whole of your commission. Everything else you work out yourself.&rdquo; You wait for more. There is no more.</p></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">1.13</span><span class="beat-t">One question</span></div>
-<p class="dil">You are allowed to ask one thing about her before you go. <b>This is the whole of character customisation, and it is an act of character rather than a menu:</b> your first decision as a guardian is what you want to know in advance.</p>
-<ul class="opts">
-<li><b>&ldquo;What will she suffer?&rdquo;</b> <span class="dl">the shape, not the timing</span></li>
-<li><b>&ldquo;Whom will she love?&rdquo;</b> <span class="dl">the names, not the outcomes</span></li>
-<li><b>&ldquo;What will she be good at?&rdquo;</b> <span class="dl">her gift &mdash; and sixty years of watching her not use it</span></li>
+<li><b>&ldquo;What will he suffer?&rdquo;</b> <span class="dl">the shape, not the timing</span></li>
+<li><b>&ldquo;Whom will he love?&rdquo;</b> <span class="dl">the names, not the outcomes</span></li>
+<li><b>&ldquo;What will he be good at?&rdquo;</b> <span class="dl">his gift &mdash; and forty years of watching him not use it</span></li>
 <li><b>&ldquo;Nothing. I&rsquo;ll find out.&rdquo;</b> <span class="dl">charity %+25 &middot; real advantage in 11</span></li>
-</ul>
-<div class="mech"><b>Cost: one flag, zero forked prose</b>It changes how the player reads all of scene 3 without duplicating a line of it. The ward is never chosen &mdash; you do not shop for a charge. That is the premise.</div></div>
+</ul></div>
 </div>
 </section>
 
-<!-- SCENE 2 -->
 <section class="scene verdigris">
 <div class="scene-head">
-  <div class="scene-no">SCENE TWO</div>
-  <h3>Four Hours</h3>
-  <div class="scene-when">1953 &middot; Magee-Womens Hospital, and a house on Dobson Street</div>
-  <div class="scene-budget"><span>Words <b>1,050</b></span><span>Choices <b>4</b></span><span>Images <b>1</b></span></div>
+  <div class="scene-no">SCENE TWO</div><h3>Four Hours</h3>
+  <div class="scene-when">1975 &middot; Magee-Womens Hospital, and a house on Dobson Street</div>
+  <div class="scene-budget"><span>Words <b>900</b></span><span>Choices <b>4</b></span><span>Images <b>1</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">Teach the limits by making the player run into every one of them in ten minutes. You cannot touch her, cannot be seen, cannot be heard, cannot read her, and cannot leave.</p>
+<p class="scene-job">Teach every limit by making the player hit all of them in ten minutes.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">2.1</span><span class="beat-t">Before the doctor</span></div>
-<p>What an angel actually sees looking at a person for the first time &mdash; and, immediately, what it does not. Every fact about her outside; nothing at all about her inside. A player who has just spent a whole scene handing thoughts back and forth instantly feels the wall.</p></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">2.1&ndash;2.2</span><span class="beat-t">Before the doctor &middot; what you can do</span></div>
+<p class="dil">You see every fact about his outside and nothing whatsoever about his inside. A player who has just spent a whole scene handing thoughts back and forth feels that wall immediately. The toolkit, discovered by trying rather than by exposition: you can move small things a little, you can put a thought <em>in front of</em> a person &mdash; never <em>into</em> them &mdash; and you can be somewhere. <b>That is the whole toolkit for forty-nine years.</b></p></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">2.2</span><span class="beat-t">What you can do</span></div>
-<p class="dil">Discovered by trying, not by exposition. You can move small things a little. You can put a thought <em>in front of</em> a person &mdash; never <em>into</em> them. You can be somewhere. That is the toolkit for seventy years.</p>
-<ul class="opts"><li>First act. Whatever the player reaches for teaches them the size of the toolkit by failing at three-quarters of it.</li></ul></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">2.3</span><span class="beat-t">culpability: unknown</span></div>
+<p class="dil">The stat panel opens for the first time and there is a field on it that reads <code>unknown</code>. The game explains, once, in about sixty words, why it will never say anything else: <b>knowing whether a person is guilty requires seeing what they knew and what they consented to, and there is exactly one Person who can do that, and you are not Him.</b> Then it never mentions the field again, and the player looks at it for the rest of the game.</p></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">2.3</span><span class="beat-t">Dana, and the corridor</span></div>
-<p>Nineteen, unmarried, in 1953, in a Catholic hospital in a Polish neighbourhood. Terry is not there. Halina is in the corridor working a rosary and has not said a word to her daughter in four months. <b>Nobody in this building is happy, and a child is about to be born into it, and that is normal.</b></p></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">2.4</span><span class="beat-t">The others</span></div>
+<p class="dil">Across the room, something else is also here. Then you notice a second one. Then you are not sure whether the second one is a second one. <b>None of them speaks to you and you cannot get a count.</b> This is the first appearance of the only tactic they have and you will not understand it for nineteen years.</p></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">2.4</span><span class="beat-t">The other one</span></div>
-<p class="dil">Across the room, something else is also here. It does not speak. It looks at you, and looks away, and gets to work. <b>It will not say a word to you for eleven years.</b></p>
-<ul class="opts"><li>Whatever you do here, it does not respond. That is the point &mdash; and it makes 3.4 land.</li></ul></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">2.5</span><span class="beat-t">St. Casimir</span><span class="beat-yr">IMAGE 2</span></div>
-<p class="dil">Three weeks later. What actually happens at a baptism, told plainly and without sentiment &mdash; and what you watch happen that nobody in the building can see. Halina is the one holding her, because Dana&rsquo;s hands are shaking.</p>
-<ul class="opts"><li>Charity fork. The first time the player is offered the chance to make a good moment slightly more about themselves.</li></ul>
-<div class="mech"><b>Sets the Prayers resource</b>Halina starts praying for Ruth by name, daily, this week. She does not stop for fifteen years. The player will not notice this number until 3.8, which is exactly when they are supposed to.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">2.6</span><span class="beat-t">The first night</span></div>
-<p>The house on Dobson Street. Three generations, four rooms, one furnace. You have nothing to do and nowhere else to be, and you discover that both of those are permanent.</p></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">2.5&ndash;2.6</span><span class="beat-t">St. Casimir &middot; the first night</span><span class="beat-yr">IMAGE 2</span></div>
+<p>The baptism, told plainly and without sentiment, and what you watch happen that nobody in the building can see. Halina holds him. <b>She begins praying for him by name this week and does not stop for eleven years</b> &mdash; and that is where the Prayers number in the corner of the panel comes from, which the player will not think about at all until 1986.</p></div>
 </div>
 </section>
 
-<!-- SCENE 3 -->
 <section class="scene ruby">
 <div class="scene-head">
-  <div class="scene-no">SCENE THREE</div>
-  <h3>Ordinary Time</h3>
-  <div class="scene-when">1958&ndash;1970 &middot; ages five to seventeen</div>
-  <div class="scene-budget"><span>Words <b>6,500</b></span><span>Choices <b>33</b></span><span>Images <b>3</b></span></div>
+  <div class="scene-no">SCENE THREE</div><h3>Ordinary Time</h3>
+  <div class="scene-when">1980&ndash;1988 &middot; ages five to thirteen</div>
+  <div class="scene-budget"><span>Words <b>5,200</b></span><span>Choices <b>28</b></span><span>Images <b>2</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">The scene the whole game is decided by. Twelve years of an unremarkable childhood, no cosmic scenery, and the player has to stay gripped by <em>reading a girl</em>. If this works, the game works.</p>
+<p class="scene-job">Eight years of an unremarkable boyhood with no cosmic scenery, in which the player learns to read a child &mdash; and gets one crucial reading badly wrong.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.1</span><span class="beat-t">The first thing she chooses</span><span class="beat-yr">1958 &middot; 5</span></div>
-<p class="dil">She takes something small that is not hers, from a counter on Liberty Avenue, and she knows she is doing it. The first act you can call <em>chosen</em> rather than merely done. You have never wanted anything before and now you want her to put it back, and you find out what wanting is worth.</p>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.1</span><span class="beat-t">The first thing he chooses</span><span class="beat-yr">1980 &middot; 5</span></div>
+<p class="dil">He takes something small that is not his, off a counter on Liberty Avenue, knowing he is doing it. You want him to put it back, and you find out what wanting is worth.</p>
 <ul class="opts">
-<li><b>Put the shopkeeper&rsquo;s eyes on her.</b> <span class="dl">severity %+15</span></li>
-<li><b>Put Halina&rsquo;s face in her head.</b> <span class="dl">mercy %+10 &middot; charity %+10</span></li>
-<li><b>Nothing. Let it be hers.</b> <span class="dl">patience %+20</span></li>
+<li><b>Put the shopkeeper&rsquo;s eyes on him.</b> <span class="dl">severity %+15</span></li>
+<li><b>Put Halina&rsquo;s face in his head.</b> <span class="dl">mercy %+10 &middot; charity %+10</span></li>
+<li><b>Nothing. Let it be his.</b> <span class="dl">patience %+20</span></li>
 </ul>
-<div class="mech"><b>Teaches the ceiling</b>Whatever the player picks, she keeps it, because none of the three tools reaches inside. This is the lesson and it should sting a little.</div></div>
+<div class="mech"><b>Teaches the ceiling</b>He keeps it on every branch, because none of the three tools reaches inside. The lesson should sting.</div></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.2</span><span class="beat-t">Halina</span><span class="beat-yr">1960 &middot; 7</span></div>
-<p class="dil">First confession, first communion. Halina teaches her, in Polish and bad English, and the teaching is <em>working</em> &mdash; and it is also, in two specific places, wrong. Your temptation is to improve on it. <b>Every correction you make is one more thing that is yours instead of hers.</b></p>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.2</span><span class="beat-t">Halina</span><span class="beat-yr">1982 &middot; 7</span></div>
+<p class="dil">First confession and communion. Her teaching is <em>working</em> &mdash; and it is also, in two places, wrong. Your temptation is to improve it. <b>Every correction you make is one more thing that is yours instead of hers.</b></p>
 <ul class="opts">
-<li><b>Correct the theology. Arrange for a sister to say it properly.</b> <span class="dl">severity %+15 &middot; overreach +1</span></li>
-<li><b>Leave it. Halina is giving her something better than accuracy.</b> <span class="dl">patience %+20 &middot; charity %+15</span></li>
+<li><b>Correct the theology. Arrange for a sister to put it properly.</b> <span class="dl">severity %+15 &middot; overreach +1</span></li>
+<li><b>Leave it. She is giving him something better than accuracy.</b> <span class="dl">patience %+20 &middot; charity %+15</span></li>
 <li><b>Strengthen only what is already right.</b> <span class="dl">mercy %+15 &middot; splendor %&minus;10</span></li>
 </ul>
-<div class="mech"><b>Loaded gun</b>One of the two wrong things Halina teaches her is the fate of unbaptised infants. It goes off in 1981.</div></div>
+<div class="mech"><b>Loaded gun</b>One of the two wrong things she gives him is that sin is chiefly a matter of getting the procedure right. It goes off in 1984 and again, much worse, in 1990.</div></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.3</span><span class="beat-t">Three days</span><span class="beat-yr">1962 &middot; 9</span></div>
-<p class="dil">Tuesday, October, kitchen light on at four. She comes home and does not speak. Not sulking &mdash; she nods, eats, does her homework, goes to bed. Wednesday the same. Thursday the same. You have a perfect file on her outside and no access at all to her inside, and <b>she is nine and something is wrong and you are standing four feet away and there is no way to ask.</b></p>
-<p>What you have: eleven hand-washings on Tuesday night. The third row of the bus instead of the back, for the first time in two years. Bernie absent Monday and Tuesday. An 88 on a maths test buried in her bag. And, Tuesday night with the door shut, a prayer said alone for the first time in her life &mdash; four words, and then she stopped and could not finish it.</p>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.3</span><span class="beat-t">The needle, position 1</span><span class="beat-yr">1982</span></div>
+<p>He learns the rule as a rule. Nobody explains anything and there is nothing sinister about that &mdash; he is seven, and the people around him were taught the same way, and it is 1982 in a working parish with four hundred families and one priest.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">3.4</span><span class="beat-t">The finger</span><span class="beat-yr">1984 &middot; 9</span></div>
+<p class="dil">Reaching for a glass at the kitchen table, his hand opens wrong and his middle finger goes up on its own for about a quarter of a second. He puts the glass down. Then he points the finger at the floor, deliberately, to reverse it &mdash; because he made the sign, and making the sign is a sin, and if he does not undo it he will have to confess it, and what if he forgets, and what if he forgets and then receives.</p>
+<p>He does this <b>forty times a day</b> for four years. Nobody in the house notices. He is careful about that.</p>
+<p class="dil">And here is what you see: a nine-year-old boy who is <em>extremely serious about sin</em>. Which is the reading any angel would make, because it is the only reading available from outside. <b>You are watching an instrument break and calling it piety.</b></p>
 <ul class="opts">
-<li><b>Somebody did something to her. Find out who.</b> <span class="dl">valor %+15 &middot; severity %+10</span></li>
-<li><b>It&rsquo;s the test. She has decided she is stupid.</b> <span class="dl">mercy %+15 &middot; severity %&minus;10</span></li>
-<li><b>It&rsquo;s Bernie. She thinks her friend is gone.</b> <span class="dl">charity %+15</span></li>
-<li><b>You will not work this out. Stay. Be close. Wait until she comes to it.</b> <span class="dl">patience %+25 &middot; charity %+20 &middot; splendor %&minus;15</span></li>
+<li><b>Encourage it. This is a boy who cares about God.</b> <span class="dl">severity %+20 &mdash; and the needle moves toward 2</span></li>
+<li><b>Get an adult to notice.</b> <span class="dl">valor %+15 &middot; and in 1984, in that house, an adult who notices says &ldquo;stop being weird&rdquo;</span></li>
+<li><b>Try to make him careless about it and see what happens.</b> <span class="dl">mercy %+20 &middot; overreach +1</span></li>
+<li><b>You do not understand this. Do nothing until you do.</b> <span class="dl">patience %+25 &middot; charity %+15</span></li>
 </ul>
-<div class="mech"><b>What it actually is</b>Two Sundays ago a thought came into her head during the consecration that she believes is the worst thing anyone has ever thought. She believes she committed a mortal sin, that she cannot receive, and that she cannot tell anyone &mdash; <b>because saying it out loud would be saying it again.</b> So she has stopped talking. Literally. To keep it from coming out of her mouth.</div>
-<div class="mech"><b>Why the angel cannot see it</b>Every fact in the file reads as devotion. He watches a nine-year-old start praying alone for the first time in her life and scores it <em>good</em>. His perfect external data is not merely insufficient here &mdash; it is actively pointing the wrong way, and that is the cruellest and truest thing in the game.</div>
-<div class="mech"><b>Outcomes</b>Each branch gets a small, immediate, legible consequence. Hunt for it and she shuts down harder and stays shut through the weekend. Send her mother to the bag and she learns her bag is not private. Chase Bernie and you learn it was never Bernie, which is worth something. Stay, and on Thursday night, asleep, she rolls toward where you are &mdash; nothing in her knows, and something in her settles, and she sleeps until six. <b>The staying option is right and the game never says so.</b></div></div>
+<div class="mech"><b>The trap, restated</b>Every tool the angel has works on circumstances, and this problem is not in the circumstances. It is a loop running inside a head he cannot enter. <b>There is no good option here and the game must not pretend otherwise.</b> The best available is the fourth, and it looks like doing nothing, and it is scored as if it were wisdom because it is.</div></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.4</span><span class="beat-t">Rudy</span><span class="beat-yr">1964 &middot; 11</span></div>
-<p class="dil">Eleven years and it has never spoken. You pass each other the way two men pass in the same stairwell every morning for a decade without saying good morning. Then in November, outside the school, it comes and stands next to you, facing the same way you are facing, the way two men at a bar look at the bottles instead of at each other. <em>&ldquo;So how&rsquo;s it going.&rdquo;</em></p>
-<p>It is tired, chatty, professional, and not remotely threatening, which is worse. Its argument: <em>your job is harder than mine and nobody says so. I need one thing &mdash; I need her to do a thing she already wants to do, enough times that she stops noticing she is doing it. I am not building anything. You are building something.</em> Every word true, handed over openly, because it has correctly worked out that truth is the most discouraging thing it owns. It offers a name the way a man offers a business card. <b>Rudy.</b></p>
-<ul class="opts">
-<li><b>Say nothing. Not now, not in sixty years.</b> <span class="dl">patience %+20 &middot; splendor %&minus;20</span></li>
-<li><b>&ldquo;You&rsquo;re wrong about one thing.&rdquo;</b> <span class="dl">splendor %+20 &middot; valor %+10 &middot; sets caught_the_lie</span></li>
-<li><b>&ldquo;Go away from her.&rdquo;</b> <span class="dl">severity %+25 &middot; valor %+20</span></li>
-<li><b>Ask it a question.</b> <span class="dl">mercy %+10 &middot; opens scene 9</span></li>
-</ul>
-<div class="mech"><b>The crack in it</b>It says it is not building anything. It is. It is building a habit, and a habit is a structure, and it has been laying that brick for eleven years. It is not lying to you &mdash; it cannot &mdash; <b>it is lying to itself, which is the only kind of lying left to something that cannot lie to a spirit.</b> Catching that matters in 11.</div></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.5</span><span class="beat-t">The mill</span><span class="beat-yr">1985 &middot; 10</span></div>
+<p>It closes. Stan is thirty-eight and has been there since he was nineteen and will never have work like it again. Half the street goes. <b>Adam learns, at ten, that the thing that holds a life up can be taken away in a single announcement</b> &mdash; and that his father will not say one word about it, ever, to anyone.</p></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.5</span><span class="beat-t">Bernie</span><span class="beat-yr">1965 &middot; 12</span></div>
-<p class="dil">Bernadette Sobek. The friendship is the best thing in Ruth&rsquo;s life and it is quietly costing Bernie something, and neither girl can see it. You can. So can somebody else, standing on the other side of it, who is not your enemy.</p>
-<ul class="opts">
-<li>Three options, all of which are defensible, none of which is free. Sets up scene 4.</li>
-</ul></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.6</span><span class="beat-t">Renee</span><span class="beat-yr">1984&ndash;88</span></div>
+<p>Renee Sobek, three doors down, same age. They are nine and then they are twelve and then they are thirteen. There is nothing romantic about any of it yet and that matters enormously: <b>the game needs the player to like her, at length, as a person, before she is ever anything else.</b> Her angel is around and the two of you nod and that is all, for now.</p></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.6</span><span class="beat-t">What she did to Amanda Pyle</span><span class="beat-yr">1966 &middot; 13</span></div>
-<p class="dil">Deliberate, sustained, and inventive cruelty to a girl who could not defend herself. It works. She gets away with it. <b>She likes it.</b> And her conscience &mdash; the same conscience that put her in the ground for three days over a thought she did not choose &mdash; does not make one sound.</p>
-<ul class="opts">
-<li><b>Bring it down on her. Now, hard, while she can still feel it.</b> <span class="dl">severity %+25 &middot; valor %+15</span></li>
-<li><b>Put Amanda in front of her until she has to look.</b> <span class="dl">severity %+10 &middot; charity %+15</span></li>
-<li><b>Go to Amanda instead. She has her own, but two is not too many.</b> <span class="dl">charity %+25 &middot; splendor %&minus;15 &middot; overreach +1</span></li>
-<li><b>Wait. This one will come back on its own in thirty years.</b> <span class="dl">patience %+25</span></li>
-</ul>
-<div class="mech"><b>The diagnostic beat</b>Placed four beats after 3.3 so the contrast is unmissable: <b>scrupulosity is not a strong conscience, it is a broken instrument</b> &mdash; deafening about what is not there and silent about what is. The player works this out before the angel does, and that is the first time the player is ahead.</div></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.7</span><span class="beat-t">Halina</span><span class="beat-yr">1986 &middot; 11</span></div>
+<p class="dil">She dies in February, in the back room, over about a week. And <b>the Prayers number &mdash; sitting high and steady in the corner of the stat panel for eleven years, entirely unremarked &mdash; falls to almost nothing on screen while the player is reading the sentence about the funeral.</b></p>
+<div class="mech"><b>No text points at the number.</b>The player either notices or does not, and the ones who notice will remember it longer than anything written.</div></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">3.7</span><span class="beat-t">The Mass changes</span><span class="beat-yr">1967 &middot; 14</span></div>
-<p class="dil">The altar turns around. The Latin goes. Halina, who has prayed in Latin and Polish for sixty years and reads no English, is left standing in a building she no longer recognises, holding a rosary through a Mass she is not supposed to need it for. <b>You know the Church has the authority to do this. You know it is legitimate. You are watching it cost one specific old woman nearly everything, and you cannot explain either half to anybody.</b> Ruth watches her grandmother and draws a conclusion about God, and you cannot argue with a conclusion.</p>
-<ul class="opts"><li>Three options. No villain in this beat and no polemic in any direction &mdash; the reform is real, the loss is real, and both are allowed to be true.</li></ul></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">3.8</span><span class="beat-t">Halina</span><span class="beat-yr">1968 &middot; 15</span></div>
-<p class="dil">She dies in February, in the front room, quickly. And <b>the Prayers number &mdash; which has sat in the corner of the stat panel for fifteen years, high and steady and completely unremarked &mdash; falls to almost nothing on screen while the player is reading the sentence about the funeral.</b></p>
-<ul class="opts"><li>Three options, all of them small, because there is nothing large available.</li></ul>
-<div class="mech"><b>Grief delivered as a stat</b>No text points at the number. The player either notices or does not, and the ones who notice will remember it longer than anything written.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">3.9</span><span class="beat-t">The 54 Flyer</span><span class="beat-yr">1969 &middot; 16</span></div>
-<p class="dil">A stranger on a bus is kind to her for ninety seconds, for no reason, about nothing, and she cries at the window for four stops and gets off better than she got on. <b>You had nothing to do with any of it.</b> You did not arrange the stranger. You did not know it was coming. Grace has just operated in your ward at close range and completely around you, and you have to decide what you are.</p>
-<ul class="opts">
-<li><b>Find out who that was and thank them.</b> <span class="dl">charity %+15</span></li>
-<li><b>Note the method. Use it yourself next time.</b> <span class="dl">severity %+10 &middot; splendor %+10</span></li>
-<li><b>Nothing. It was not yours and it was not for you.</b> <span class="dl">charity %+25 &middot; patience %+15</span></li>
-</ul>
-<div class="mech"><b>Humility beat</b>The one place the game says outright: you are not the mechanism. It is placed immediately before the parking lot so the player enters the worst hour of the scene having just been told they are not in charge.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">3.10</span><span class="beat-t">The parking lot</span><span class="beat-yr">1970 &middot; 17</span></div>
-<p class="dil">Sharpsburg, behind a bar, two in the morning, and a boy, and a car, and a decision that is grave matter in a way nothing yet has been. You have three tools, all of them small, and about eleven minutes. <b>Scene ends on the knife.</b></p>
-<ul class="opts"><li>Three options, and every one of them is inadequate, and the player is meant to feel that clearly.</li></ul></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">3.8</span><span class="beat-t">The classroom door</span><span class="beat-yr">1988 &middot; 13</span></div>
+<p class="dil">A health class. A filmstrip. A teacher who would rather be anywhere else. Something is described clinically, as a fact about bodies, with no moral frame attached to it whatsoever &mdash; which is not malice, it is a public school in 1988.</p>
+<p>He comes out. He is quiet on the walk home. He is quiet at dinner. <b>That is everything you can see, because that is everything there is to see.</b></p>
+<p class="dil">The player, who is a human being and has been thirteen, knows precisely what has happened. <b>You do not.</b> And from this page to the end of the game, the player is ahead of you.</p>
+<div class="mech"><b>This solves the content problem completely</b>The narration cannot go inside, ever, because the narrator cannot. A door, a light, a boy who does not meet his mother&rsquo;s eye the next morning. That is the register for the rest of the game and it is not a euphemism &mdash; it is the actual epistemic situation of a guardian angel.</div>
+<div class="mech"><b>Scene ends here.</b>On a boy walking home, and an angel who does not know why.</div></div>
 </div>
 </section>
 
-<!-- SCENE 4 -->
 <section class="scene verdigris">
 <div class="scene-head">
-  <div class="scene-no">SCENE FOUR</div>
-  <h3>The Other Watch</h3>
-  <div class="scene-when">1970 &middot; the same week</div>
-  <div class="scene-budget"><span>Words <b>2,250</b></span><span>Choices <b>6</b></span></div>
+  <div class="scene-no">SCENE FOUR</div><h3>The Other Watch</h3>
+  <div class="scene-when">1988 &middot; the same autumn</div>
+  <div class="scene-budget"><span>Words <b>1,400</b></span><span>Choices <b>6</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">The first conversation you have had with your own kind since the court. And it is an argument, with somebody who is not wrong.</p>
+<p class="scene-job">Your first real conversation with your own kind since the court &mdash; and it is an argument with somebody who is not wrong.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">4.1</span><span class="beat-t">Bernie&rsquo;s</span></div>
-<p>Older than you, in the sense that matters, and it has been standing in the same rooms for five years without either of you saying anything. It opens by handing you something &mdash; instantly, entire, no preamble &mdash; and it is a fact about Bernie that you did not have and did not want.</p></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">4.2</span><span class="beat-t">Two goods</span></div>
-<p class="dil">What Bernie needs in order to survive the next four years requires Ruth to lose something she cannot replace. <b>Neither angel is wrong. Neither can be overruled. There is no arbitration available and no time to ask for any.</b> You are both under obedience and you are both obeying, and you are on opposite sides of one afternoon.</p>
-<ul class="opts"><li>Six choices across the scene. Every one is a negotiation between two beings who cannot lie to each other, which makes it a very strange and very clean kind of argument.</li></ul>
-<div class="mech"><b>What this scene is for</b>It is the only place in the game that shows the reader what the communion of the angels is actually like &mdash; and it is not harmony. It is thousands of separate commissions, all good, colliding constantly, resolved by nobody in particular, in a providence none of them can see the whole of. That is a truer picture than a choir.</div></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">4.1&ndash;4.2</span><span class="beat-t">Renee&rsquo;s</span></div>
+<p class="dil">Four years of standing in the same rooms without saying anything. It opens by handing you something &mdash; instantly, entire, no preamble &mdash; a fact about Renee that you did not have and did not want. And then the problem: <b>what Renee needs in order to get through the next four years requires Adam to lose something he cannot replace.</b> Neither of you is wrong. Neither can overrule the other. There is no arbitration and no time to ask for any.</p>
+<div class="mech"><b>What this scene is for</b>It is the only place that shows what the communion of angels is actually like, and it is not harmony. It is thousands of separate commissions, all good, colliding constantly, resolved by nobody in particular, inside a providence none of them can see the whole of. That is truer than a choir &mdash; and it is the first time the player understands that <b>&ldquo;good&rdquo; is not a single quantity everyone is maximising.</b></div></div>
 </div>
 </section>
 
-<!-- SCENE 5 -->
 <section class="scene">
 <div class="scene-head">
-  <div class="scene-no">SCENE FIVE</div>
-  <h3>Vigil</h3>
+  <div class="scene-no">SCENE FIVE</div><h3>Vigil</h3>
   <div class="scene-when">The checkpoint</div>
   <div class="scene-budget"><span>Words <b>15</b></span><span>Choices <b>0</b></span></div>
 </div>
+<div class="scene-body"><p class="scene-job">Fifteen words and a save, exactly as the dragon does it.</p></div>
+</section>
+
+<section class="scene ruby">
+<div class="scene-head">
+  <div class="scene-no">SCENE SIX</div><h3>What They Told Him</h3>
+  <div class="scene-when">1988&ndash;1993 &middot; ages thirteen to eighteen</div>
+  <div class="scene-budget"><span>Words <b>3,400</b></span><span>Choices <b>20</b></span><span>Images <b>1</b></span></div>
+</div>
 <div class="scene-body">
-<p class="scene-job">Fifteen words and a save, exactly as the dragon does it. The only mechanical concession to the fact that this is software.</p>
+<p class="scene-job">Four years of a boy being crushed between a true teaching and every bad version of it he is ever offered. <b>The scene must be fair to everyone in it, including the priest, including the father, including the boy.</b></p>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">6.1</span><span class="beat-t">A door, and a light</span><span class="beat-yr">1989 &middot; 14</span></div>
+<p>Rendered from outside and only from outside. A door. A light under it at an hour there is no reason for a light. And in the morning he does not look at his mother. <b>That is the entire beat and it is about ninety words long.</b></p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">6.2</span><span class="beat-t">The line on Saturday</span><span class="beat-yr">1989&ndash;92</span></div>
+<p class="dil">He goes. Of course he goes &mdash; he is the boy who pointed his finger at the floor forty times a day. And then, walking home, he is not certain he said it <em>properly</em>. So he goes back the following week and says it again. And again. <b>The scrupulosity and the chastity have found each other and they make a machine that runs for four years.</b></p>
+<ul class="opts">
+<li><b>Keep him going. Whatever else is wrong, he is going.</b> <span class="dl">valor %+15 &middot; severity %+10</span></li>
+<li><b>Get him to a different priest.</b> <span class="dl">mercy %+20 &middot; and this is the single highest-value arrangement available in the entire scene</span></li>
+<li><b>Work on the loop, not the sin.</b> <span class="dl">patience %+20 &middot; charity %+15</span></li>
+<li><b>Let him stop going for a while.</b> <span class="dl">mercy %+25 &middot; overreach +2 &middot; genuinely dangerous and genuinely defensible</span></li>
+</ul></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">6.3</span><span class="beat-t">Father Hala&ndash;, forty seconds</span><span class="beat-yr">1990 &middot; 15</span></div>
+<p class="dil">A tired man in a box on a Saturday afternoon with eleven people still in the line, who has heard this particular thing nine times today. He is not cruel. He is <b>brisk</b>. And what he says &mdash; four words, no explanation, no mercy visible through a screen &mdash; is heard by a fifteen-year-old with a broken conscience as: <em>you are a disgusting thing and everyone in this line knows it.</em></p>
+<p><b>The needle moves from 1 to 2.</b> It took forty seconds and the priest will never know he did it and would be horrified if he did.</p>
+<div class="mech"><b>Do not make him a villain</b>The game gets nothing from a bad priest and everything from an <em>overworked</em> one. The reader should recognise him, feel sorry for him, and understand exactly how the damage happened without anyone intending any of it. That is how it actually goes.</div></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">6.4</span><span class="beat-t">Stan, in a car</span><span class="beat-yr">1991 &middot; 16</span></div>
+<p class="dil">His father says one sentence about any of this in the entire boyhood. It happens in a Buick on the Bloomfield Bridge, it lasts nine words, and he gets it wrong &mdash; not viciously, just embarrassedly, in a way that closes the subject permanently for both of them.</p>
+<p><b>This is the wound.</b> Not a bad father. A silent one, who was raised by a silent one, and who will spend twenty-three years praying about the thing he could not say out loud once.</p>
+<ul class="opts"><li>Four choices, and the good one is to work on <em>Stan</em>, which most players will not think of because Stan is not the ward.</li></ul></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">6.5</span><span class="beat-t">The argument</span><span class="beat-yr">1993 &middot; 18</span></div>
+<p class="dil">It arrives fully formed, on a bus, and it is <b>good</b>: <em>Why would He build this into me at thirteen, with no say from me, and then tell me it is mortal? Either He is cruel or the rule is man-made, and I do not think He is cruel.</em></p>
+<p>Written at full strength. No strawman. It has convinced a very large number of people and it convinces Adam in about four seconds, because he has been looking for it for four years.</p>
+<p class="dil"><b>And you know the answer.</b> You have known it since before there were bodies. The answer is that <em>I am able to</em> was never an argument for <em>I should</em> &mdash; he is also able to lie, to eat until he is sick, to use a person and call it affection &mdash; and that the rule is not a fence around the body but a description of what a person is, and therefore of what it costs to treat one as a thing.</p>
+<p><b>And you cannot say it.</b> You have three tools and none of them is a mouth. And the only human being in Pittsburgh who could put it to him properly is a man he has already decided is disgusted by him.</p>
+<ul class="opts">
+<li><b>Find someone who can say it. Spend everything.</b> <span class="dl">valor %+25 &middot; overreach +2 &middot; low odds, enormous payoff</span></li>
+<li><b>Put a book in front of him.</b> <span class="dl">splendor %&minus;15 &middot; patience %+15 &middot; he will not read it for twenty-five years</span></li>
+<li><b>Work on Renee instead. She is about to matter.</b> <span class="dl">charity %+20</span></li>
+<li><b>Let the argument stand. Arguing back is not your office.</b> <span class="dl">patience %+30 &middot; severity %+10</span></li>
+</ul>
+<div class="mech"><b>The needle moves to 3 on every branch.</b>It has to. This is the fixed spine and the player cannot prevent it. What they can change is how long he stays there and what it costs on the way.</div></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">6.6</span><span class="beat-t">He stops going</span><span class="beat-yr">1993</span></div>
+<p>Not dramatically. There is no scene, no argument with his mother, no slammed door. He does not go one Sunday because he is tired, and then does not go the next because he did not go the last, and by November it is simply a thing he does not do. <b>Nobody in the house says anything.</b> And in a drawer upstairs, Stan starts writing a list.</p></div>
 </div>
 </section>
 
-<!-- SCENE 6 -->
+<section class="scene amber">
+<div class="scene-head">
+  <div class="scene-no">SCENE SEVEN</div><h3>Legion</h3>
+  <div class="scene-when">1994 &middot; a dorm corridor in Oakland</div>
+  <div class="scene-budget"><span>Words <b>900</b></span><span>Choices <b>8</b></span></div>
+</div>
+<div class="scene-body">
+<p class="scene-job">The one clean win in the game, and it is a win by <em>counting</em>.</p>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">7.1</span><span class="beat-t">The committee</span></div>
+<p class="dil">Nineteen years of this. One introduces itself as <b>Belphegor</b> and hands you off. Another says that is not its area. A third takes a message. One claims to be <b>Asmodeus</b>, which would be a serious matter if it were true. They are chatty, professional, faintly middle-managerial, and completely impossible to pin down, and <b>you have never once been able to work out how many of them there are.</b></p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">7.2</span><span class="beat-t">You count them</span></div>
+<p class="dil">Eight fast choices. Not a fight &mdash; a piece of arithmetic, done by STANDING on the same thing twice and seeing who turns up.</p>
+<p><b>There are three.</b> One does nearly all the work. The other two exist to make it look like a crowd. None of them is Asmodeus and none of them ever was.</p>
+<div class="mech"><b>The method of the whole game, in one scene</b>Complication is the tactic. The truth is always smaller than the noise around it &mdash; and it rhymes with what is happening to Adam, whose justifications get more elaborate every decade while the thing they are justifying never changes size at all.</div>
+<div class="mech"><b>What it costs</b>Knowing the count does not help you beat them. It helps you stop being impressed, which turns out to be different and better.</div></div>
+</div>
+</section>
+
+<section class="scene ruby">
+<div class="scene-head">
+  <div class="scene-no">SCENE EIGHT</div><h3>What He Doesn&rsquo;t Tell Her</h3>
+  <div class="scene-when">1996 &middot; age twenty-one</div>
+  <div class="scene-budget"><span>Words <b>2,200</b></span><span>Choices <b>14</b></span><span>Images <b>1</b></span></div>
+</div>
+<div class="scene-body">
+<p class="scene-job">The hinge of the entire game. Everything before it is setup and everything after it is consequence.</p>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">8.1</span><span class="beat-t">The scale changes</span></div>
+<p>A modem in a shared apartment on Semple Street. What used to require going somewhere and being seen now requires nothing at all. <b>Rendered entirely as hours and light</b> &mdash; when he sleeps, when he stops sleeping, what a room looks like at four in the morning.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">8.2</span><span class="beat-t">She nearly finds out</span></div>
+<p class="dil">She does not find out. She comes within about a foot of it and asks him a completely ordinary question, and there is a pause before he answers that is a quarter of a second too long, and she notices the pause and not the reason.</p>
+<p><b>Tell her, or don&rsquo;t.</b></p>
+<ul class="opts">
+<li><b>Arrange for him to tell her.</b> <span class="dl">charity %+25 &middot; valor %+15</span></li>
+<li><b>Arrange for her to find out.</b> <span class="dl">severity %+25 &middot; overreach +2</span></li>
+<li><b>Let him keep it.</b> <span class="dl">patience %+15 &middot; the needle stays at 3 and something else begins</span></li>
+<li><b>Work on Renee&rsquo;s angel. Ask what it wants.</b> <span class="dl">charity %+20 &middot; and it wants something you will not like</span></li>
+</ul>
+<div class="mech"><b>Telling her is not a magic fix and the game must not pretend it is</b>She does not understand. She is hurt, and confused, and she handles it imperfectly because she is twenty-one. It costs them badly and they may not survive it. <b>What it does is keep him a person to himself</b> &mdash; and that is the only thing on offer, and the game has to be honest that it is a small thing bought at a large price.</div></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">8.3</span><span class="beat-t">What concealment actually does</span></div>
+<p class="dil">If he keeps it, the damage is not the distance. <b>The damage is the hierarchy.</b></p>
+<p>He knows something she does not. He has looked at what people actually are and she has not. He is honest with himself; she lives in something comfortable. <b>He is free and she is naive</b> &mdash; and every week he does not tell her, that gap widens, and something moves in to fill it.</p>
+<p><b>The contempt arrives years before the philosophy does.</b> That is the most important sentence in this bible.</p>
+<div class="mech"><b>Rendered, never stated</b>He starts finishing her sentences. He starts explaining things to her she already knows. He becomes patient with her in a way that is not kindness. Nobody in the story ever uses the word contempt.</div></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">8.4</span><span class="beat-t">The kitchen table</span><span class="beat-yr">1997</span></div>
+<p class="dil">She asks him what is wrong. He says nothing is wrong. <b>And he is telling the truth as he understands it</b>, which is the loneliest thing in the game, and the player can see both sides of the table and neither of them can.</p>
+<p>Two angels in a small kitchen watching two people who have known each other since they were nine become strangers, four feet apart, over about eleven months.</p>
+<div class="mech"><b>This is the argument</b>Not a homily, not a priest, not a paragraph of explanation. One woman&rsquo;s face across a table. If the reader does not understand from this beat what the teaching is protecting, no amount of theology later will fix it &mdash; and if they do, no theology is needed.</div></div>
+</div>
+</section>
+
+<section class="scene amber">
+<div class="scene-head">
+  <div class="scene-no">SCENE NINE</div><h3>The Permission Slip</h3>
+  <div class="scene-when">1997&ndash;1998 &middot; ages twenty-two and twenty-three</div>
+  <div class="scene-budget"><span>Words <b>1,600</b></span><span>Choices <b>10</b></span></div>
+</div>
+<div class="scene-body">
+<p class="scene-job">He does not read his way into contempt. He is already contemptuous and goes looking for something that dignifies it.</p>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">9.1</span><span class="beat-t">Forty pages</span></div>
+<p class="dil">A course he is not enrolled in, a paperback somebody left, a conversation in a bar with a graduate student. The critique is written <b>at full strength</b>, because a strawman is worth nothing: that Christian morality is a revolt of the weak, that it takes an inability to act and renames it virtue, that pity and chastity and humility are what people call their limitations when they want to be admired for them.</p>
+<p>It is a serious argument. It has convinced serious people. <b>And Adam does not engage with a single word of it.</b> He reads about forty pages, takes away one sentence&rsquo;s worth of attitude, and never opens it again.</p>
+<div class="mech"><b>Why this is more damning than a refutation</b>The game does not need to beat Nietzsche. It needs to show that Adam was never argued into anything. He acquired a posture and then went shopping for a reason, and found one so good that he did not have to think again for twenty years.</div></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">9.2</span><span class="beat-t">What Legion does with it</span></div>
+<p class="dil">Almost nothing, and that is the point &mdash; the beat where the player realises how little the demons have had to do. They did not put the book there. They did not construct the argument. <b>They have spent twenty-two years doing essentially one thing, patiently, and letting him build all the rest himself.</b></p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">9.3</span><span class="beat-t">The breakup</span><span class="beat-yr">1998 &middot; 23</span></div>
+<p class="dil">He ends it. He does it cleanly, in a way he will describe to himself for years afterwards as <b>honest</b> and <b>brave</b> &mdash; not stringing her along, not pretending, respecting her enough to tell the truth.</p>
+<p>And his conscience &mdash; the same conscience that sent him back into a confessional line four Saturdays running over something he was not sure he had said properly &mdash; <b>makes no sound whatsoever.</b></p>
+<div class="mech"><b>The diagnostic beat</b>Placed nine years after the finger so the contrast is unmissable. <b>Scrupulosity is not a strong conscience. It is a broken instrument</b> &mdash; deafening about what is not there, silent about what is. The player works this out well before the angel does.</div></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">9.4</span><span class="beat-t">Her angel leaves</span></div>
+<p class="dil">Renee moves to Columbus. Her guardian goes with her, obviously &mdash; that is where she is &mdash; and it says one thing to you on the way out, and it is not accusatory, and you will think about it for twenty-six years.</p>
+<ul class="opts"><li>You get one thing to say back. Ten choices across the scene and this is the one players will remember.</li></ul></div>
+</div>
+</section>
+
 <section class="scene cobalt">
 <div class="scene-head">
-  <div class="scene-no">SCENE SIX</div>
-  <h3>Twenty-One Days</h3>
-  <div class="scene-when">1970 &middot; eleven minutes, in real time</div>
-  <div class="scene-budget"><span>Words <b>1,000</b></span><span>Choices <b>9</b></span></div>
+  <div class="scene-no">SCENE TEN</div><h3>The Long Middle</h3>
+  <div class="scene-when">1999&ndash;2016 &middot; seventeen years</div>
+  <div class="scene-budget"><span>Words <b>1,600</b></span><span>Choices <b>12</b></span><span>Images <b>1</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">The parking lot resolves, and the three verbs come back. The player recognises the shape from scene 1 and that recognition is the payoff of putting a battle in a creation story.</p>
+<p class="scene-job">Twelve fast choices across seventeen years. The pace itself should feel like a life going past &mdash; and this is the scene that tests whether the player has any Patience at all.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">6.1</span><span class="beat-t">What Rudy is standing on</span></div>
-<p class="dil">Not the boy. Not the car. Rudy is standing on <b>a sentence Ruth said to herself in 1962</b>, and everything in this parking lot is downstream of it. You have to get through to it, and Rudy is there, and neither of you can hurt the other.</p></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">10.1</span><span class="beat-t">The number that shouldn&rsquo;t be there</span></div>
+<p class="dil">Prayers has been at zero since 1986. Except it is not at zero. Since November 1993 there has been <b>a small, steady, completely unexplained figure</b> sitting in the corner of the panel, and the game never once refers to it, and the player has been looking at it for two scenes with no idea where it comes from.</p></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">6.2</span><span class="beat-t">The lock</span></div>
-<p class="dil">You PRESS and it costs you both. You are locked. <b>The clock on screen is Ruth walking across a parking lot, and it does not stop while you are locked.</b> This is Daniel 10 with the twenty-one days compressed into eleven minutes, and it is the only kind of urgency the theology actually permits.</p>
-<ul class="opts">
-<li><b>Keep pressing and hope somebody comes.</b> <span class="dl">valor &middot; costs clock</span></li>
-<li><b>SHOW it something.</b> <span class="dl">breaks the lock &middot; permanently arms it</span></li>
-<li><b>Let go. Get to her instead and be useless in the right place.</b> <span class="dl">charity &middot; patience</span></li>
-</ul>
-<div class="mech"><b>What SHOW costs here</b>The thing you would have to show it, to make it flinch, is something about yourself. It will still have that in 2005.</div></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">10.2</span><span class="beat-t">Two of them, the same way</span></div>
+<p class="dil">Two long relationships, 2001&ndash;05 and 2008&ndash;13. Both end the same way and he can name the pattern by the second one and does nothing about it &mdash; because naming a pattern feels enough like dealing with it to be going on with.</p>
+<p>Rendered entirely by implication: what happens to a face over fifteen years, when he stops calling people, what a Tuesday looks like at forty.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">10.3</span><span class="beat-t">2007</span></div>
+<p class="dil">The new atheists arrive and for about two years Adam feels genuinely lighter &mdash; not because they say anything he had not already decided, but because <b>a crowd has shown up to agree with him</b>, and it turns out that was the part he had been missing since 1993. That is the whole of the beat. It is about relief, not argument.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">10.4</span><span class="beat-t">Nothing to do</span></div>
+<p class="dil">Whole years where there is genuinely nothing available to you. The scene deliberately hands the player almost no leverage, and the players who find that unbearable are being taught the thing the scene exists to teach. <b>Most of this office is not intervention. It is attendance.</b></p></div>
 </div>
 </section>
 
-<!-- SCENE 7 -->
-<section class="scene amber">
-<div class="scene-head">
-  <div class="scene-no">SCENE SEVEN</div>
-  <h3>The Lesser Adversary</h3>
-  <div class="scene-when">1974 &middot; a rooming house in Bloomfield</div>
-  <div class="scene-budget"><span>Words <b>550</b></span><span>Choices <b>6</b></span></div>
-</div>
-<div class="scene-body">
-<p class="scene-job">One clean win. The player has been losing or drawing for six scenes and needs to beat something.</p>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">7.1</span><span class="beat-t">Not Rudy</span></div>
-<p class="dil">A different one, working the man in the next room, and it is <b>stupid</b> &mdash; vain, self-important, bureaucratic, convinced it is running an operation of some sophistication. The Kreeft register at full strength: petty, American, faintly middle-managerial, and beatable.</p>
-<ul class="opts"><li>Six fast choices. You take it apart in about four minutes and it never understands what happened.</li></ul>
-<div class="mech"><b>Not comic relief only</b>The scene quietly establishes the ceiling: <b>most of them are like this.</b> Rudy is not, and the player should notice the difference and be worried by it.</div></div>
-</div>
-</section>
-
-<!-- SCENE 8 -->
-<section class="scene ruby">
-<div class="scene-head">
-  <div class="scene-no">SCENE EIGHT</div>
-  <h3>What She Asks</h3>
-  <div class="scene-when">1981 &middot; and the eight years after</div>
-  <div class="scene-budget"><span>Words <b>1,900</b></span><span>Choices <b>7</b></span><span>Images <b>1</b></span></div>
-</div>
-<div class="scene-body">
-<p class="scene-job">The hardest scene to write and the one the game exists for. The gun Halina loaded in 1960 goes off.</p>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">8.1</span><span class="beat-t">Halina Dolan</span><span class="beat-yr">1981 &middot; 28</span></div>
-<p>Stillborn, at thirty-six weeks, named for her great-grandmother. No baptism. There are no other children afterwards, and no reason given for that either.</p></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">8.2</span><span class="beat-t">The other angel</span></div>
-<p class="dil">There is one, and it is standing in the room, and <b>its commission is already over.</b> It had a few months and it did them, and there is nothing further assigned to it, ever. It is not sad. You cannot work out what it is, and it will not hand it over, and you will think about that for forty years.</p>
-<div class="mech"><b>Handle with total restraint</b>No speech from it, no explanation, no consolation offered to the reader. It is present, its work is complete, and the scene moves on. Anything more turns a mystery into a doctrine we do not have.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">8.3</span><span class="beat-t">What she believes happened</span></div>
-<p class="dil">Ruth was formed on the catechesis of 1960 by a woman born in 1898. She believes her daughter is in Limbo, that she will never see her, and that it is her own fault. <b>None of that was ever the teaching of the Church.</b> Limbo was a theological opinion, never defined; the Church has never said where that child is and has always said we may hope. And you cannot tell her, because you are not a person, and the only way this gets fixed is if some human being who knows says it out loud to her face &mdash; and the ones around her do not know either.</p>
-<ul class="opts">
-<li><b>Arrange for someone to say it. Push hard. Spend everything.</b> <span class="dl">valor %+20 &middot; overreach +2</span></li>
-<li><b>Arrange it gently and let it fail if it fails.</b> <span class="dl">patience %+15 &middot; mercy %+15</span></li>
-<li><b>Leave the theology. Work only on the grief.</b> <span class="dl">mercy %+25 &middot; charity %+15</span></li>
-<li><b>Carry it to the child&rsquo;s angel and ask.</b> <span class="dl">charity %+20 &middot; humility &mdash; and no answer comes</span></li>
-</ul>
-<div class="mech"><b>Why this is the centre of the game</b>It is a real ethical dilemma with no clean answer, drawn entirely from real Catholic theology, and it is not propaganda in any direction &mdash; the woman is wrong, her teachers meant well, the Church never taught the thing that is destroying her, and no one available can tell her so. <b>That is a tragedy of catechesis, and it happened to a hundred thousand real women.</b></div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">8.4</span><span class="beat-t">The prayer</span></div>
-<p class="dil">She asks for something. You carry prayers &mdash; that is a real part of the office and this is the first time the game has said so. And what she is asking for, if she got it, would finish her. <b>Do you carry it as spoken?</b></p>
-<ul class="opts"><li>Three options. The correct answer is obvious and the game makes obeying it feel like a betrayal, which is the point.</li></ul></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">8.5</span><span class="beat-t">The dry years</span><span class="beat-yr">1982&ndash;89</span></div>
-<p>The mill closes. Gary stops being a man with a trade. Ruth prays every night, correctly, joylessly, for eight years, and feels nothing whatsoever, and does not stop. <b>Acedia rendered honestly:</b> not despair, not doubt, just the long grey middle of a life where the only virtue on offer is staying.</p>
-<div class="mech"><b>Your job in this beat</b>Also to stay. The scene deliberately gives the player almost nothing to do, and the ones who find that unbearable are being taught something.</div></div>
-</div>
-</section>
-
-<!-- SCENE 9 -->
-<section class="scene amber">
-<div class="scene-head">
-  <div class="scene-no">SCENE NINE</div>
-  <h3>The Offer</h3>
-  <div class="scene-when">1986 &middot; age 33</div>
-  <div class="scene-budget"><span>Words <b>1,200</b></span><span>Choices <b>5</b></span></div>
-</div>
-<div class="scene-body">
-<p class="scene-job">Two beats about wrong information concerning invisible things &mdash; one funny, one not.</p>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">9.1</span><span class="beat-t">What she calls you</span></div>
-<p class="dil">She reads something, and decides her guardian angel is called <b>Gabriel</b>, because it is the only angel name she has heard besides Michael and Michael sounded too intense. She starts saying it out loud, at night, alone. She will do this for thirty-seven years. <b>You are standing right there and there is nothing you can do about it.</b></p>
-<ul class="opts">
-<li><b>Correct her.</b> <span class="dl">a homily, a book, a friend at dinner &mdash; and if it works, the nightly habit the name was carrying stops with it</span></li>
-<li><b>Accommodate it.</b> <span class="dl">mercy %+20 &mdash; God does this constantly; accommodation still has a direction</span></li>
-<li><b>Do nothing and be unhappy about it.</b> <span class="dl">the game allows this and does not reward it</span></li>
-<li><b>Take it up the chain. Ask.</b> <span class="dl">charity %+15</span></li>
-</ul>
-<div class="mech"><b>What the real Gabriel does</b>He takes them. Not by pretending to be you &mdash; he receives them and carries them where they were going, because they were meant well and addressed to a real person who is standing in the presence of God and can hear them. Asked about it, he is neither annoyed nor amused: <em>&ldquo;She got the name wrong. She did not get the direction wrong. Do you have any idea how few of them get the direction right?&rdquo;</em></div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">9.2</span><span class="beat-t">The offer</span></div>
-<p class="dil">Rudy has been inside her circumstances for thirty-three years. It cannot read her either &mdash; nothing created can &mdash; but it has thirty-three years of the most patient behavioural observation in the history of the world, and its inferences are <b>better than yours</b>. It offers to tell you what it thinks she is going to do. It is not lying. It never has been.</p>
-<ul class="opts">
-<li><b>Take it.</b> <span class="dl">a real, lasting mechanical advantage &mdash; and every reading you make afterwards has his hand on it</span></li>
-<li><b>Refuse and say why.</b> <span class="dl">severity %+20</span></li>
-<li><b>Refuse and say nothing.</b> <span class="dl">patience %+20 &middot; splendor %&minus;15</span></li>
-</ul>
-<div class="mech"><b>Pairs with 1.6</b>If <code>heard_him_first</code> is set, the narration notices, once, quietly, that this is the second time.</div></div>
-</div>
-</section>
-
-<!-- SCENE 10 -->
 <section class="scene verdigris">
 <div class="scene-head">
-  <div class="scene-no">SCENE TEN</div>
-  <h3>The Second Soul</h3>
-  <div class="scene-when">1985&ndash;2011 &middot; a marriage under a collapse</div>
-  <div class="scene-budget"><span>Words <b>1,400</b></span><span>Choices <b>16</b></span><span>Images <b>1</b></span></div>
+  <div class="scene-no">SCENE ELEVEN</div><h3>The Hour</h3>
+  <div class="scene-when">2016 &middot; 2018 &middot; 2024</div>
+  <div class="scene-budget"><span>Words <b>4,400</b></span><span>Choices <b>26</b></span><span>Images <b>2</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">Sixteen small choices, fast, across twenty-six years &mdash; the dragon does the same thing in its marriage scene and it works because the pace itself feels like a life going by.</p>
+<p class="scene-job">Everything resolves. And the last fight is not about lust.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">10.1</span><span class="beat-t">Gary</span></div>
-<p>Decent, limited, out of his depth, and he stays &mdash; which in 1985 in that neighbourhood was not the common outcome. He is not a project and not a villain and the game must resist making him either.</p></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">11.1</span><span class="beat-t">The drawer</span><span class="beat-yr">2016 &middot; 41</span></div>
+<p class="dil">Stan dies in March. Clearing the house, Adam finds a spiral notebook with his own name at the top of every page and a date beside every entry, going back to November 1993. His father prayed for him every single day for twenty-three years and <b>never mentioned it once</b>, because he was the kind of man who could not say a thing like that out loud.</p>
+<p><b>The unexplained number in the panel resolves &mdash; in the same beat that it goes to zero.</b></p>
+<div class="mech"><b>This is rock bottom and it is not a punishment</b>Nothing bad happens to Adam here as a consequence of anything. What breaks him open is finding out he was loved the entire time and never knew. That is the opposite of a plot punishment and it is the only kind of bottom this game is allowed to use.</div></div>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">10.2</span><span class="beat-t">His angel</span></div>
-<p class="dil">In every room you are in, for thirty-three years. You are not adversaries and you are not colleagues. <b>Your good and its good are not the same good</b>, and the two of you have to work in a kitchen four feet apart every day for three decades without ever once being able to agree on what would be best.</p>
-<ul class="opts"><li>Recurring across the scene. Some beats you cooperate. Some you quietly work against each other, in charity, and both of you know it.</li></ul></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">10.3</span><span class="beat-t">1994</span></div>
-<p>St. Casimir is merged and the building sold. She does not go to the last Mass, and she cannot explain to Gary why not, and the real reason is that she has not been to communion since 1981 and cannot say that out loud either.</p></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">10.4</span><span class="beat-t">2011</span></div>
-<p class="dil">Gary dies over nine months. His angel finishes its commission in front of you and then it is gone, and the kitchen is very quiet in a way you did not expect and were not prepared for. <b>You have twelve years left and you now know exactly how they end for you.</b></p></div>
-</div>
-</section>
-
-<!-- SCENE 11 -->
-<section class="scene ruby">
-<div class="scene-head">
-  <div class="scene-no">SCENE ELEVEN</div>
-  <h3>The Hour</h3>
-  <div class="scene-when">2005 &middot; 2013 &middot; 2023</div>
-  <div class="scene-budget"><span>Words <b>5,500</b></span><span>Choices <b>33</b></span><span>Images <b>2</b></span></div>
-</div>
-<div class="scene-body">
-<p class="scene-job">Three movements. Every thread in the game resolves here, and every stat is finally cashed.</p>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">11.1</span><span class="beat-t">Tuesday</span><span class="beat-yr">2005 &middot; 52</span></div>
-<p class="dil">A pulmonary embolism, in the kitchen, at ten past four. <b>You are permitted to act</b> &mdash; the permission is explicit and it is the only time in seventy years you get one. You can see that acting buys her eighteen more years. You cannot see how those eighteen years end, because nobody can see a free act before it is made, and she is fifty-two and she has not received communion in twenty-four years.</p>
-<p>So the question the whole game has been walking toward: <b>is more life good for her?</b> You do not know. You are not permitted to know. And the permission is still open, and the clock is on screen, and it is running.</p>
+<div class="beat"><div class="beat-h"><span class="beat-id">11.2</span><span class="beat-t">Eighteen months of checking</span><span class="beat-yr">2017&ndash;18</span></div>
+<p class="dil">Not a conversion scene. A forty-one-year-old man reading things at two in the morning for a year and a half, mostly annoyed, looking for the flaw and not finding it in the place he expected. <b>Four to six choices here, and this is where a whole game of arranging finally pays.</b> Every book you put in front of him in 1993, every person you kept in his life, every number you have been saving.</p>
 <ul class="opts">
-<li><b>Act. Every time, always, without hesitating.</b> <span class="dl">valor %+25 &middot; charity %+15</span></li>
-<li><b>Act, and ask afterwards whether you should have.</b> <span class="dl">mercy %+15 &middot; overreach +1</span></li>
-<li><b>Do not act. It is not yours to weigh and you will not weigh it.</b> <span class="dl">patience %+30 &middot; severity %+15</span></li>
-<li><b>Ask for the answer first.</b> <span class="dl">charity %+20 &middot; costs clock &middot; no answer comes</span></li>
+<li><b>A friend.</b> <span class="dl">someone you have been keeping in his life since 2004 for no reason you could have named</span></li>
+<li><b>The Eucharistic miracles.</b> <span class="dl">works on him precisely because it is evidential and he is an evidential man &mdash; and the game presents them as what they are: reported, investigated, not required believing</span></li>
+<li><b>Renee.</b> <span class="dl">she is married in Columbus with three children and she answers the email &mdash; costs enormously and is not romantic</span></li>
+<li><b>Nothing. He is doing this himself.</b> <span class="dl">patience %+30 &middot; charity %+20</span></li>
+</ul></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">11.3</span><span class="beat-t">Twenty-five years</span><span class="beat-yr">2018 &middot; 43</span></div>
+<p class="dil">Confession. The priest is competent, unhurried, and has heard everything, and what he says is not clever and not a programme. <b>It is the thing Adam built his life against, said correctly, thirty years late</b> &mdash; and it takes about ninety seconds, and it is not new information, and Adam has to sit in a car afterwards for a while.</p>
+<p><b>The needle moves to 4.</b> Partially. Not on every branch. And thirty years is thirty years, and the game does not pretend otherwise.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">11.4</span><span class="beat-t">Reading him</span></div>
+<p class="dil">The question the game has been holding since the court: <b>after forty-nine years, are you reading him, or are you reading him through them?</b> If <code>heard_him_first</code> is set, a measurable share of the inferences you have been running on since 1988 came from a committee of three liars, and the game shows you exactly which ones and lets you keep them or drop them. Dropping them costs you real predictive accuracy for the last movement. Keeping them costs something else.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">11.5</span><span class="beat-t">Six years</span><span class="beat-yr">2018&ndash;24</span></div>
+<p>Fragile, partial, unspectacular, real. He is not a different man. He is the same man, facing a different direction, badly, most days. <b>He writes to Renee once and it is four paragraphs and it is not about them.</b> He is late to Mass constantly. He is kinder than he was and he would not be able to tell you why.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">11.6</span><span class="beat-t">The bedside</span><span class="beat-yr">2024 &middot; 49</span></div>
+<p class="dil">A diagnosis in June and about four months. And at the end, in a room in his mother&rsquo;s house, <b>all three of them turn up</b>, and for the first time in forty-nine years they are not pretending to be a crowd, because there is no time left for theatre.</p>
+<p class="dil">And the last temptation is not lust. It has not been about lust for twenty years. <b>It is despair</b>, and it is put to him in the only form that could still work: <em>you wasted it. Twenty-five years, and you have had six, and you know perfectly well that six is not enough, and you knew that when you started.</em></p>
+<ul class="opts">
+<li><b>STAND on it.</b> <span class="dl">you cannot make him believe anything &mdash; you can only keep the suggestion from arriving one more time</span></li>
+<li><b>PRESS.</b> <span class="dl">costs clock, and the clock is his breathing</span></li>
+<li><b>SHOW him something.</b> <span class="dl">the last use of the verb, and what you have to show is the notebook</span></li>
 </ul>
-<div class="mech"><b>She lives on every branch</b>The game does not let the player kill her by choosing wrong, because that would make the beat a puzzle. What differs is what the angel becomes in the four seconds it took to decide.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">11.2</span><span class="beat-t">Reading her</span></div>
-<p class="dil">Between the two deaths, the game asks the question it has been setting up since the court: <b>after seventy years, are you reading her, or are you reading her through him?</b> If <code>heard_him_first</code> is set, and if the offer was taken in 9.2, the accumulated inferences you have been running on are partly his, and the game shows you exactly which ones and lets you keep them or drop them.</p>
-<div class="mech"><b>Dropping them costs you</b>You lose real predictive accuracy for the last movement. Keeping them costs something else.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">11.3</span><span class="beat-t">The substitute</span><span class="beat-yr">2013 &middot; 60</span></div>
-<p class="dil">A parish she is not registered at, on a Saturday, because the line at her own was too long. The priest is filling in and has heard this a thousand times, and he says one sentence: <b>&ldquo;You have been confessing the same thing for fifty years and it was never a sin. Stop.&rdquo;</b></p>
-<p>She does not believe him. She does not believe him for two years. And then, on an ordinary morning in 2015, without anything happening, she does.</p>
-<div class="mech"><b>Did you arrange this?</b>If the player has spent the game building toward it &mdash; the specific arrangements are tracked from 3.3 onward &mdash; then yes, and the game says so plainly and without triumph: <b>fifty-one years of work for one sentence from a man who will never know he said anything.</b> If not, it happened anyway, and the game says that too, and that is worse and also true.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">11.4</span><span class="beat-t">Rudy&rsquo;s mistake</span></div>
-<p class="dil">He worked scrupulosity for seventy years because it was the fastest thing available and it never stopped working. <b>And a scrupulous soul is a soul that will not stop looking at God.</b> Terrified, wrong about nearly everything, and facing the right direction for seven decades without once turning away. He kept her eyes on the one thing he cannot stand to be near, and he was too busy being right about the mechanism to notice.</p>
-<div class="mech"><b>If caught_the_lie is set</b>You worked this out in 1964, when he told you he was not building anything. You have known for fifty-nine years and you never said. The scene lets you say it now, or not.</div></div>
-
-<div class="beat"><div class="beat-h"><span class="beat-id">11.5</span><span class="beat-t">The hour</span><span class="beat-yr">2023 &middot; 70</span></div>
-<p class="dil">At home, over about a day and a half. <b>And in the last hour she says one sentence that explains October 1962</b> &mdash; not to you, she has never known you are there; to nobody, to the ceiling &mdash; and sixty-one years of your reading resolves in eleven words.</p>
-<div class="mech"><b>The payoff of 3.3</b>Whatever the player guessed in 1962, they find out here. The ones who chose <em>stay and wait</em> get one extra line, and it is not a reward, it is a recognition.</div></div>
+<div class="mech"><b>The full circle</b>The identical three verbs from the ninety-second tutorial in scene 1, on a bed in Polish Hill, with a clock that is a man&rsquo;s breathing. Every player will recognise the shape and that recognition is what the tutorial was for.</div></div>
 </div>
 </section>
 
-<!-- SCENE 12 -->
 <section class="scene">
 <div class="scene-head">
-  <div class="scene-no">SCENE TWELVE</div>
-  <h3>The Threshold</h3>
-  <div class="scene-when">2023</div>
-  <div class="scene-budget"><span>Words <b>750</b></span><span>Choices <b>3</b></span></div>
+  <div class="scene-no">SCENE TWELVE</div><h3>The Threshold</h3>
+  <div class="scene-when">2024</div>
+  <div class="scene-budget"><span>Words <b>900</b></span><span>Choices <b>4</b></span></div>
 </div>
 <div class="scene-body">
-<p class="scene-job">You bring her, and you stop, and the game ends before the verdict.</p>
+<p class="scene-job">You bring him. You do not learn. And that is not a trick ending &mdash; it is the actual condition of the office.</p>
 
-<div class="beat"><div class="beat-h"><span class="beat-id">12.1</span><span class="beat-t">You bring her</span></div>
-<p>That is the office and it is the last thing in it. You do not judge. You have never judged anything, not once, not Amanda Pyle in 1966 and not the parking lot in 1970. You carry her the way you have carried every prayer she ever said, and you hand her over.</p></div>
+<div class="beat"><div class="beat-h"><span class="beat-id">12.1</span><span class="beat-t">You bring him</span></div>
+<p>That is the office and it is the last thing in it. You do not judge. You never have &mdash; not the finger in 1984, not the argument on the bus, not the kitchen table in 1997, not once in forty-nine years.</p></div>
 
 <div class="beat"><div class="beat-h"><span class="beat-id">12.2</span><span class="beat-t">The name</span></div>
-<p class="dil">She sees you. For the first time in seventy years and one day. And <b>she says your name</b> &mdash; the real one, the one that is not a word and that nobody with a mouth can pronounce &mdash; because she can, now, and because she has always known it, and because knowing it was never the problem.</p>
-<div class="mech"><b>The Gabriel payoff</b>Thirty-seven years of the wrong name resolve in one line, and the line is hers, not yours.</div></div>
+<p class="dil">He sees you. For the first time in forty-nine years. And he says your name &mdash; the real one, the one that is not a word and that nobody with a mouth can pronounce &mdash; because he can now, and because knowing it was never the problem.</p></div>
 
 <div class="beat"><div class="beat-h"><span class="beat-id">12.3</span><span class="beat-t">The window goes dark</span></div>
-<p class="dil">The game ends here, mid-breath, before anything is said. <b>God has no dialogue in this game and does not get any in the last scene either.</b> The angel&rsquo;s commission ends at the threshold and so does the story.</p>
-<div class="mech"><b>Then the accounting</b>The rose window, filled. Three pairs, Charity at the centre, and beside it her column: state of soul, prayers, the years. <b>That chart is the only verdict the player is ever given, and it is not a verdict on her.</b> It is a portrait of what kind of angel seventy years made.</div></div>
+<p class="dil"><b>The game ends before anything is said.</b> God has no dialogue in this game and does not get any in the last scene either. The commission ends at the threshold and so does the story.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">12.4</span><span class="beat-t">What you have to hope on</span></div>
+<p class="dil"><b>No ending of this game ever says that Adam was damned.</b> Not one, on any branch. The Church has never in two thousand years declared a single individual to be in hell &mdash; she canonises and has never once done the reverse &mdash; and this game is not going to be the first thing to do it.</p>
+<p>What the endings differ in is <b>how much there is to hope on</b>: where the needle finished, whether he asked for a priest, what the last thing he said was, how much wreckage he left and whether any of it got repaired, whether Renee ever heard from him again, and what kind of angel forty-nine years made of you &mdash; because the reading is <em>yours</em>, and you have never been the judge of anything.</p>
+<p class="dil">And the worst ending does not say he is lost. It says something considerably harder to sit with: <b>you do not know, you will not know until the resurrection, and you are going to hope anyway, for all of it.</b> Hope is a virtue, not a guess. That distinction is the last thing the game teaches and it does not explain it.</p>
+<div class="mech"><b>Then the accounting</b>The rose window, filled &mdash; three pairs and Charity at the centre &mdash; and beside it his column: the needle, the years, the prayers, and <code>culpability: unknown</code>, which has not changed since 1975 and does not change now. <b>That chart is the only verdict the player is ever given, and it is not a verdict on him.</b></div></div>
 </div>
 </section>
 
@@ -949,10 +881,10 @@ figure.rose figcaption{
 <h2><span class="num">07</span>Open questions</h2>
 
 <ol class="q">
-<li><b>Is the stillbirth too much?</b><span>It is the strongest material in the outline and it is also the one beat that could tip the game from &ldquo;serious&rdquo; to &ldquo;punishing.&rdquo; It earns its place because it is the payoff of Halina&rsquo;s catechesis in 3.2 and because the Limbo problem is a genuine, documented pastoral tragedy rather than an invented one. But it is your call, and the alternative &mdash; one surviving child, and Ruth&rsquo;s scrupulosity transferred onto him &mdash; is a different and gentler game.</span></li>
-<li><b>Does Ruth come back?</b><span>The outline has her arriving somewhere real by 2015, quietly, without a conversion scene, after fifty-one years of getting it wrong. That is honest and it is also a soft landing. The harder version leaves it genuinely open at the threshold. I would not make the game a tract, and I would also not make it a shrug.</span></li>
-<li><b>Scene 4 &mdash; is it worth 2,250 words?</b><span>It is the only scene with no ward in it and the only one that shows what the angels are to each other. It is also the most cuttable thing in the game if the budget gets tight.</span></li>
-<li><b>Fourteen achievements.</b><span>Not designed yet. The dragon&rsquo;s are all &ldquo;finish above 80 in X&rdquo; plus a few event flags &mdash; cheap to write, enormous for replay. Ours should mostly be built on the pairs, plus one for staying in 3.3, one for refusing the offer in 9.2, and one that is unwinnable and is meant to be.</span></li>
+<li><b>Is 1988 the right year for the classroom?</b><span>Born 1975 puts the early trial before the internet, which is better &mdash; effort makes a choice visible &mdash; and puts the arrival of broadband at exactly twenty-one, which is when it does the most damage. It also means he is the perfect age for the new atheists in 2007 and dies at forty-nine in 2024, so the whole life is in the past and the return is only six years old at the end. That six-year fragility is what makes the ending genuinely uncertain rather than a foregone conclusion. I would not move any of it.</span></li>
+<li><b>Renee&rsquo;s ending.</b><span>She is married in Columbus with three children, and Adam writes once in 2019 and it is four paragraphs and it is not about them. That is right. The alternative &mdash; she is never heard from again &mdash; is bleaker and arguably truer. Your call.</span></li>
+<li><b>Does the needle reach 4 on every branch?</b><span>Currently: no. A player who spent forty-nine years in Severity can get him back to the sacraments without ever getting him past position 3 &mdash; he returns out of fear, and it holds, and it is real, and it is not the same thing. That is uncomfortable and I think it should stay.</span></li>
+<li><b>Fourteen achievements, still undesigned.</b><span>Mostly built on the pairs. Plus one for the fourth option in 3.4, one for counting Legion without being told, one for arranging the 2018 confessor as far back as 1990, and one that is unwinnable and is meant to be.</span></li>
 </ol>
 
 </div>
