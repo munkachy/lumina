@@ -20,7 +20,7 @@ And there is a woman in the corridor too, seventy-seven years old, in a coat she
 
 And then there is a person in the room who was not there four seconds ago.
 
-You have seen a lot of babies. You have had two. You are not prepared for this at all, because what you are looking at is not a baby, or not only — you are seeing him the way your one sees him, which is all of him at once, from the outside, entirely.
+You have seen a lot of babies. You have had two. You are not prepared for this at all, because what you are looking at is not a baby, or not only — you are seeing him the way your angel sees him, which is all of him at once, from the outside, entirely.
 
 You know his weight. You know his temperature. You know the rate of his heart and that his left hand is a little slower to open than his right and that he will be right-handed and that this is already decided in him and nobody will know it for three years.
 
@@ -46,7 +46,7 @@ And there is a thing you can see now, off to the side, the way you can see your 
 
 There are numbers.
 
-Some of them are about your one — you do not understand them yet and you will spend forty-nine years learning to read them. Some of them are about the boy. And there is one that is not a number at all. It is a word, and the word is:
+Some of them are about your angel — you do not understand them yet and you will spend forty-nine years learning to read them. Some of them are about the boy. And there is one that is not a number at all. It is a word, and the word is:
 
 *line_break
 *line_break
@@ -85,7 +85,7 @@ It does not change.
     The curtain moves. It is not dramatic — it is about what a draught would do, and a nurse glances at the window and goes back to what she is doing.
     *line_break
     *line_break
-    "That is real," your one says. "That is a genuine thing I can do and it is not nothing. In 2005 something roughly that size is going to be the difference between eighteen more years and none."
+    "That is real," your angel says. "That is a genuine thing I can do and it is not nothing. In 2005 something roughly that size is going to be the difference between eighteen more years and none."
     *set valor %+10
     *goto tools
 
@@ -107,7 +107,7 @@ It does not change.
     You reach out. There is nothing there to reach with. You feel the shape of the refusal before you feel anything else, and it is not cruelty, it is more like reaching for a word in a language you were never taught.
     *line_break
     *line_break
-    "No," your one says. "Not once. Not in forty-nine years."
+    "No," your angel says. "Not once. Not in forty-nine years."
     *set severity %-10
     *set hope %-5
     *goto tools
@@ -116,7 +116,7 @@ It does not change.
     You watch him.
     *line_break
     *line_break
-    Your one does not say anything, and you understand, some hours later, that this was the correct answer and that it was not going to tell you so.
+    Your angel does not say anything, and you understand, some hours later, that this was the correct answer and that it was not going to tell you so.
     *set valor %-15
     *set charity %+20
     *goto tools

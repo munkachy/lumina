@@ -44,7 +44,7 @@ And the sentence fits — not into an argument, because he does not have one, bu
 
 "That's it? That's the whole conversion? A *pub*?"
 
-"He was not converted," your one says. "Nothing about him changed on the ninth of November. He has believed the substance of that sentence since he was twenty-one and could not say it out loud, because when you say it out loud without a philosopher behind it, it sounds like what it is."
+"He was not converted," your angel says. "Nothing about him changed on the ninth of November. He has believed the substance of that sentence since he was twenty-one and could not say it out loud, because when you say it out loud without a philosopher behind it, it sounds like what it is."
 
 *page_break
 
@@ -62,7 +62,7 @@ You think about that for a while, standing in a bar on Forbes Avenue in 1997.
 
 "He got the contempt first and the reason afterwards."
 
-"Two years afterwards," your one says. "Nearly to the week."
+"Two years afterwards," your angel says. "Nearly to the week."
 
 *page_break
 
@@ -74,7 +74,7 @@ You think about that for a while, standing in a bar on Forbes Avenue in 1997.
     Two years later a television programme says roughly the same thing, better, at nine o'clock on a Tuesday, to a man sitting alone on a sofa. And in 2003 a coworker says a cruder version of it in a break room. And in 2007 it comes at him from four directions in one year and by then it is simply the water.
     *line_break
     *line_break
-    "You cannot take him out of a country," your one says.
+    "You cannot take him out of a country," your angel says.
     *set valor %+20
     *set hope %-10
     *goto slip_two
@@ -94,7 +94,7 @@ You think about that for a while, standing in a bar on Forbes Avenue in 1997.
     You did not expect to ask that. It comes out anyway.
     *line_break
     *line_break
-    "Some of it describes something real," your one says, without any hesitation at all. "There are people who call their limits virtues. You have met several. One of them ran the September festival."
+    "Some of it describes something real," your angel says, without any hesitation at all. "There are people who call their limits virtues. You have met several. One of them ran the September festival."
     *line_break
     *line_break
     "So the man in the bar —"
@@ -129,7 +129,7 @@ What they have done, since 1975, is one thing, patiently, over and over, in the 
 
 "They're barely *doing* anything."
 
-"They have never had to do very much," your one says. "That is the thing about them that nobody believes until they have watched it for twenty years."
+"They have never had to do very much," your angel says. "That is the thing about them that nobody believes until they have watched it for twenty years."
 
 *page_break
 
@@ -171,7 +171,7 @@ Nothing. Not one thing. Not that afternoon, not that week, not once in twenty-si
 
 "After all that. After four years of grinding himself into powder over —"
 
-"Over something he did not choose and may not be answerable for," your one says. "And nothing at all over this, which he chose entirely, in a car, in the afternoon, awake."
+"Over something he did not choose and may not be answerable for," your angel says. "And nothing at all over this, which he chose entirely, in a car, in the afternoon, awake."
 
 *page_break
 
@@ -183,7 +183,7 @@ Nothing. Not one thing. Not that afternoon, not that week, not once in twenty-si
 
 *choice
   #"Then it's not his fault."
-    "Some of it is not. Some of it is entirely his and it is the part he feels best about." Your one does not soften it. "That is the shape of nearly everybody, ${name}. You are not looking at anything unusual. You are looking at a man."
+    "Some of it is not. Some of it is entirely his and it is the part he feels best about." Your angel does not soften it. "That is the shape of nearly everybody, ${name}. You are not looking at anything unusual. You are looking at a man."
     *set severity %+15
     *set charity %+10
     *goto breakup_end
@@ -245,25 +245,25 @@ It is not an accusation. That is what undoes you. There is nothing in it of blam
     *goto gone
 
   #"So would we."
-    Your one says it for you and the other one receives it and there is a moment there — you will never be sure of this and you will think about it for twenty-six years — where something passes between the two of them that is not information.
+    Your angel says it for you and the other angel receives it and there is a moment there — you will never be sure of this and you will think about it for twenty-six years — where something passes between the two of them that is not information.
     *set charity %+25
     *set hope %+10
     *goto gone
 
   #"Tell it I'm sorry."
-    "It knows," your one says. "It knew before you did. It cannot be lied to and it cannot be apologised to either, not usefully, because it already has the whole of it."
+    "It knows," your angel says. "It knew before you did. It cannot be lied to and it cannot be apologised to either, not usefully, because it already has the whole of it."
     *line_break
     *line_break
     "Tell it anyway."
     *line_break
     *line_break
-    Your one tells it anyway.
+    Your angel tells it anyway.
     *set charity %+20
     *set splendor %-10
     *goto gone
 
   #Say nothing.
-    You say nothing. The other one waits a moment, which it did not have to do, and then it goes.
+    You say nothing. The other angel waits a moment, which it did not have to do, and then it goes.
     *set valor %-20
     *set hope %-10
     *goto gone

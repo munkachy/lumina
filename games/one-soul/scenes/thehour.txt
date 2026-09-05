@@ -47,14 +47,14 @@ Adam Kowalczyk sits down on the floor of his father's bedroom with a notebook in
 
 *choice
   #Say nothing. Let him have it.
-    You say nothing. Neither does your one. There is a man on a floor in Polish Hill and there is nothing in this or any other world that needs to be added to it.
+    You say nothing. Neither does your angel. There is a man on a floor in Polish Hill and there is nothing in this or any other world that needs to be added to it.
     *set charity %+25
     *set splendor %-20
     *set hope %+15
     *goto drawer_two
 
   #"You knew. You knew for twenty-three years and you wouldn't tell me."
-    "You would have spent them differently," your one says.
+    "You would have spent them differently," your angel says.
     *line_break
     *line_break
     "*Yes.* That's my — yes, I would have —"
@@ -75,7 +75,7 @@ Adam Kowalczyk sits down on the floor of his father's bedroom with a notebook in
     "Not one word. To his own son. He couldn't say nine words in a *car* —"
     *line_break
     *line_break
-    "He said this," your one says. "Two hundred and eighty-three pages of it. He said it every day for twenty-three years in the only language he was ever given, and his son is holding the whole of it, and it is going to work."
+    "He said this," your angel says. "Two hundred and eighty-three pages of it. He said it every day for twenty-three years in the only language he was ever given, and his son is holding the whole of it, and it is going to work."
     *set charity %+20
     *set hope %+20
     *goto drawer_two
@@ -252,7 +252,7 @@ He sits in a car in Swissvale afterwards for about half an hour without turning 
 
 *choice
   #"That's it? That's all it took?"
-    "Ninety seconds," your one says.
+    "Ninety seconds," your angel says.
     *line_break
     *line_break
     "*Ninety seconds.* I have been at this since — I have watched him — and a man in Swissvale with a bad back does it in *ninety seconds* —"
@@ -276,7 +276,7 @@ He sits in a car in Swissvale afterwards for about half an hour without turning 
     "Will he ever know?"
     *line_break
     *line_break
-    "Yes," your one says. "Not here."
+    "Yes," your angel says. "Not here."
     *set charity %+25
     *set hope %+20
     *goto reading
@@ -300,7 +300,7 @@ He sits in a car in Swissvale afterwards for about half an hour without turning 
   In the assembly, when he offered to show you, you looked.
   *line_break
   *line_break
-  It cost you nothing. It was not a sin and your one has told you so twice. What it did was put his reading of that room — of the girl on the bed, of what she was and what she was worth — into you first, before you had any of your own, and it has been sitting underneath every judgement you have made about a human being for forty-three years.
+  It cost you nothing. It was not a sin and your angel has told you so twice. What it did was put his reading of that room — of the girl on the bed, of what she was and what she was worth — into you first, before you had any of your own, and it has been sitting underneath every judgement you have made about a human being for forty-three years.
   *page_break
   "How much of it?" you say.
   *line_break
@@ -317,11 +317,11 @@ He sits in a car in Swissvale afterwards for about half an hour without turning 
       *set hope %+15
       *goto six_years
     #"Don't. I can't carry that today."
-      "No," your one says. "Then we will not."
+      "No," your angel says. "Then we will not."
       *set hope %-5
       *goto six_years
     #"Was any of that his fault? The one in the assembly?"
-      "He handed you something true and you took it, and that was the whole of it, and it was the most successful thing he has ever done to you," your one says. "You have been checking his figures for forty-three years without ever noticing they were his."
+      "He handed you something true and you took it, and that was the whole of it, and it was the most successful thing he has ever done to you," your angel says. "You have been checking his figures for forty-three years without ever noticing they were his."
       *set severity %+15
       *set hope %+10
       *goto six_years
@@ -329,7 +329,7 @@ He sits in a car in Swissvale afterwards for about half an hour without turning 
   You have made every judgement in forty-three years out of your own head, with no help from anybody, and about five of them were badly wrong, and they were wrong in the ordinary way that people are wrong.
   *line_break
   *line_break
-  "That is the best available," your one says, when you say so. "It is what everybody has."
+  "That is the best available," your angel says, when you say so. "It is what everybody has."
 
 *label six_years
 
@@ -426,7 +426,7 @@ You have three things and you have had three things since a floor that was not a
 
 *choice
   #STAND on it. Get between him and it.
-    You put your one on the thought itself — not on the man, on the suggestion, on the place where it arrives — and nothing else can act on it while he is there.
+    You put your angel on the thought itself — not on the man, on the suggestion, on the place where it arrives — and nothing else can act on it while he is there.
     *line_break
     *line_break
     You cannot make Adam Kowalczyk believe one thing. You have never been able to. What you can do is keep it from arriving one more time, and then one more time, and there is a gap now, and in the gap he is just a man in a bed who is tired.
@@ -466,7 +466,7 @@ You have three things and you have had three things since a floor that was not a
     "Tell him. Tell him it's not true, tell him six years is —"
     *line_break
     *line_break
-    "I have no mouth," your one says. "I have never had one. Not in 1984 and not in 1990 and not now."
+    "I have no mouth," your angel says. "I have never had one. Not in 1984 and not in 1990 and not now."
     *line_break
     *line_break
     "Then what *good* —"

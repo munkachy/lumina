@@ -22,11 +22,6 @@
 *comment fixed — everything downstream depends on 1979 and 2024 — so the
 *comment age is implied and never stated. Nothing else about you is.
 *create name "Loretta"
-*create sex "female"
-*create spouse "Walter"
-*create spouse_he "he"
-*create spouse_him "him"
-*create parish_group "the sodality"
 
 *comment ---------------- THE ANGEL ----------------
 *comment Three opposed pairs. High valor IS low patience: one slider, two names.

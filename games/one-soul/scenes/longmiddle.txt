@@ -70,7 +70,7 @@ There is no asterisk on it. Nothing in the text remarks on it. It simply goes fr
     You wait for the rest of it, because you were raised in the 1950s in the Hill District and you are waiting for the rest of it.
     *line_break
     *line_break
-    "That is the rest of it," your one says.
+    "That is the rest of it," your angel says.
     *set charity %+20
     *set hope %+15
     *goto wilkinsburg
@@ -110,7 +110,7 @@ He does not go back. Curtis asks twice more and then stops asking, and they are 
 
 *choice
   #"Which of those two was right?"
-    "Neither of them said the true thing," your one says. "One of them said a true thing too loudly to a man who was already deaf in that ear. The other said a comfortable thing that was not true."
+    "Neither of them said the true thing," your angel says. "One of them said a true thing too loudly to a man who was already deaf in that ear. The other said a comfortable thing that was not true."
     *line_break
     *line_break
     "So what was the difference between that room and St. Casimir?"
@@ -165,7 +165,7 @@ And then he does nothing about it, because naming a pattern feels enough like de
     "So how does he —"
     *line_break
     *line_break
-    "Knowing has never been the difficult part," your one says. "You have known about a stairlift since 2019."
+    "Knowing has never been the difficult part," your angel says. "You have known about a stairlift since 2019."
     *line_break
     *line_break
     You do not speak to it for about a week.
@@ -182,7 +182,7 @@ And then he does nothing about it, because naming a pattern feels enough like de
     You spend two years on a woman who is not your commission and about whom you know almost nothing, because she is in the room and she is going to be hurt and nobody else appears to be doing anything.
     *line_break
     *line_break
-    "She has her own," your one reminds you.
+    "She has her own," your angel reminds you.
     *line_break
     *line_break
     "Then it can have the night off."
@@ -212,7 +212,7 @@ What is new is that there are *other people*, in numbers, saying it out loud, in
 
 "He was lonely," you say.
 
-"He was lonely," your one agrees.
+"He was lonely," your angel agrees.
 
 "That's all it was. Fourteen years of it and it was just —"
 
@@ -226,7 +226,7 @@ And then there are the years where there is nothing.
 
 *page_break
 
-2009. 2010. 2011. Whole years where you go looking for something to spend your one on and there is not one thing. He gets up, he goes to a job he does not mind, he comes home, he watches something, he goes to bed. He is not in danger. He is not in grace either, particularly. He is thirty-five years old and nothing is happening to him at all.
+2009. 2010. 2011. Whole years where you go looking for something to spend your angel on and there is not one thing. He gets up, he goes to a job he does not mind, he comes home, he watches something, he goes to bed. He is not in danger. He is not in grace either, particularly. He is thirty-five years old and nothing is happening to him at all.
 
 *page_break
 
@@ -237,7 +237,7 @@ You find this much harder than 1989.
     There is not. You spend eleven months looking for a lever in a life that does not have one, and at the end of it a man is thirty-six instead of thirty-five.
     *line_break
     *line_break
-    "You are not failing," your one says, eventually. "There is a difference between failing and attending and you are going to have to learn it, because most of this office is the second one."
+    "You are not failing," your angel says, eventually. "There is a difference between failing and attending and you are going to have to learn it, because most of this office is the second one."
     *set valor %+20
     *set hope %-15
     *goto middle_end
@@ -252,7 +252,7 @@ You find this much harder than 1989.
     "That's not a job."
     *line_break
     *line_break
-    "It is the entire job," your one says. "Everything else is occasional."
+    "It is the entire job," your angel says. "Everything else is occasional."
     *set patience_note true
     *set valor %-25
     *set charity %+20
@@ -265,7 +265,7 @@ You find this much harder than 1989.
     *goto middle_end
 
   #Go and look at the number again.
-    One. Still one. Six, now seven, now eight, now seventeen years of it, and nothing in the world to account for it, and your one will not say.
+    One. Still one. Six, now seven, now eight, now seventeen years of it, and nothing in the world to account for it, and your angel will not say.
     *set severity %+10
     *set hope %+5
     *goto middle_end

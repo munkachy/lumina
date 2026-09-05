@@ -34,7 +34,7 @@ Then he puts the candy in his pocket.
 
 "Oh, for heaven's sake," you say. "It's four cents."
 
-Your one does not answer.
+Your angel does not answer.
 
 You look at it. It is not looking at the candy. It is looking at the boy the way a man looks at a crack in a foundation wall.
 
@@ -82,7 +82,7 @@ He is five, and he has four cents of stolen candy in his pocket, and there is a 
     You let him have it.
     *line_break
     *line_break
-    Your one does not object and does not approve. Nothing visible happens for eighteen years.
+    Your angel does not object and does not approve. Nothing visible happens for eighteen years.
     *set valor %-20
     *goto knob_end
 
@@ -132,7 +132,7 @@ He is seven. He makes his first confession in three weeks.
     And Adam, who is seven, files it under *school*, along with the times tables, and files what his grandmother said under *true*.
     *line_break
     *line_break
-    "That is the difficulty," your one says. "She has his heart and the sister has forty minutes."
+    "That is the difficulty," your angel says. "She has his heart and the sister has forty minutes."
     *set severity %+15
     *set_hidden overreach 1
     *goto halina_end
@@ -187,7 +187,7 @@ Then he picks the glass back up.
 
 "What was that?" you say.
 
-Your one does not answer, because your one is watching, and you have learned by now that when it goes quiet it is because it is seeing all of a thing at once and there is nothing to add.
+Your angel does not answer, because your angel is watching, and you have learned by now that when it goes quiet it is because it is seeing all of a thing at once and there is nothing to add.
 
 So you watch too.
 
@@ -285,7 +285,7 @@ So. A boy who points at the floor forty times a day.
     And you look at a nine-year-old grinding himself to powder over a hand gesture, and you make a judgement, and the judgement is that *this* is the deeper injury and that they are making a mistake.
     *line_break
     *line_break
-    So you tell your one to stand aside. Not to help them — never that. To decline to be in the way.
+    So you tell your angel to stand aside. Not to help them — never that. To decline to be in the way.
     *line_break
     *line_break
     "You understand what you are asking," it says.
@@ -359,7 +359,7 @@ And that is all he says. That is the entire ceremony. A man who cannot tell his 
 
 Here is what you find out over the next three years, and it is the single funniest thing that happens in forty-nine years.
 
-Your one can move a bird.
+Your angel can move a bird.
 
 Not *nudge*. Not *arrange circumstances*. A pigeon has no free will — there is no door in the middle of it — and so the whole of an angelic will can be applied to a pigeon and the pigeon does what it is told, completely, at four hundred miles.
 
@@ -389,7 +389,7 @@ At eleven o'clock there is weather over eastern Ohio.
 
 *choice
   #Bring her home.
-    You do not know what you are doing and you do it anyway. You put your one on a bird in a crosswind over Cambridge, Ohio, and you hold her there, and it takes most of the afternoon and it costs nothing and helps nobody and is not part of anybody's commission.
+    You do not know what you are doing and you do it anyway. You put your angel on a bird in a crosswind over Cambridge, Ohio, and you hold her there, and it takes most of the afternoon and it costs nothing and helps nobody and is not part of anybody's commission.
     *line_break
     *line_break
     She comes in at 4:40 with her flights ragged and drops onto the board like a thrown shoe.
@@ -423,7 +423,7 @@ At eleven o'clock there is weather over eastern Ohio.
     *set hope %-10
     *goto birds_end
 
-  #Ask your one whether this is allowed.
+  #Ask your angel whether this is allowed.
     "Is this allowed? Am I allowed to spend you on a *pigeon*?"
     *line_break
     *line_break
@@ -524,7 +524,7 @@ The number goes to nothing.
     "So that's it. That's all of it. She kept every rule and she was right about Ewa and she was right the whole time."
     *line_break
     *line_break
-    "She was right the whole time," your one agrees.
+    "She was right the whole time," your angel agrees.
     *line_break
     *line_break
     And it does not say anything else, and after a while you realise it is not going to, and that the silence is not evasion. It is the answer.
@@ -581,7 +581,7 @@ Because that is everything there is to see.
 
 "I do not know."
 
-You look at your one for a long moment, and then you look at the boy, thirteen years old, going up the stairs with a glass of water.
+You look at your angel for a long moment, and then you look at the boy, thirteen years old, going up the stairs with a glass of water.
 
 *page_break
 
