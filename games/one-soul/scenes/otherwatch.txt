@@ -1,0 +1,192 @@
+*comment ============================================================
+*comment SCENE FOUR — THE OTHER WATCH
+*comment 1988, the same autumn. ~1,400 words, 6 choices.
+*comment Job: two goods that do not fit, and no arbitration.
+*comment ============================================================
+
+Eleven days after the classroom door, Renee Sobek's guardian speaks to yours for the first time in thirteen years.
+
+It happens in a doorway on Dobson Street at about four in the afternoon. There is nothing ceremonious about it. It simply hands something over — instantly, entire, no preamble, the way they do — and your one receives it, and then stands there holding it.
+
+"What," you say. "What was that."
+
+"A fact about the girl."
+
+"What fact?"
+
+"Her father drinks," it says. "Not visibly. Not yet. It has been getting worse since June and there is a particular kind of evening in that house now, about twice a week, and she has begun to be able to tell in the first ten seconds which kind of evening it is going to be."
+
+*page_break
+
+You look at the other one.
+
+It is not like yours. That is the first thing. It is not *unlike* yours either — you cannot say it is bigger or smaller or older, because none of those are things it has — but it is a different kind of creature entirely, and the word that keeps coming to you is one you would be embarrassed to say out loud, and the word is *severe.*
+
+"Ask it what it wants," you say.
+
+*page_break
+
+What it wants is this.
+
+Renee should pull back from Adam. Not cruelly and not all at once. Over the next year she should find other people, and take up the things she is good at, and stop spending four afternoons a week on a roof three doors down.
+
+Because it has been watching him too. It can see, from outside, exactly what you can see: a boy who has been closing since October. And a thirteen-year-old girl who attaches herself to a boy who is closing will spend the next ten years of her life waiting for a door to open.
+
+Her good is that she should not spend her adolescence waiting.
+
+*page_break
+
+And Adam's good is that Renee Sobek is the only thing currently keeping him in the world.
+
+Since October he has stopped talking to two other boys, stopped going to the club on Saturdays, and started spending an unusual amount of time on a roof by himself. There is exactly one person he still says whole sentences to, and she is thirteen years old, and she does not know she is doing it, and if she goes he will not follow her.
+
+*page_break
+
+Neither of them is wrong.
+
+That is the thing you are going to have to sit with, and it takes you about a minute and a half, and you do not like it at the end of the minute and a half either.
+
+There is no arbitration. Nobody is coming to decide between them. The two of them are under the same obedience and they are obeying it, and they are on opposite sides of one afternoon on Dobson Street.
+
+*page_break
+
+*choice
+  #"Tell it no. Tell it to leave her where she is."
+    Your one says it. There is no argument, because there cannot be an argument — everything either of them knows is already in the open, and they are not disagreeing about a fact, they are simply pointed at different people.
+    *line_break
+    *line_break
+    The other one says something back, and your one relays it, and it is: *understood, and I am not going to.*
+    *line_break
+    *line_break
+    "It can *do* that?"
+    *line_break
+    *line_break
+    "It has its own commission," your one says. "You are not its abbot. You are mine."
+    *set severity %+20
+    *set valor %+15
+    *goto watch_two
+
+  #"Tell it we'll help. Help her pull back."
+    Your one says it, and the other one accepts, and the two of them are briefly working together on the removal of the one good thing in your boy's life, and it is horrible, and it is also probably correct.
+    *line_break
+    *line_break
+    "Say something," you tell your one.
+    *line_break
+    *line_break
+    "You have said it."
+    *set charity %+20
+    *set severity %+10
+    *set hope %-10
+    *goto watch_two
+
+  #"Ask it what happens to her if she stays."
+    The other one hands it over without hesitating.
+    *line_break
+    *line_break
+    You get eleven years in about a second: a girl who is very good at looking after somebody who will not say what is wrong, and who gets so good at it that by twenty-three it is the only shape she knows how to be, and who goes on being that shape for two more men afterwards, one of whom is worse.
+    *line_break
+    *line_break
+    "Show me the other one," you say. "Show me what happens if she goes."
+    *line_break
+    *line_break
+    "It cannot," your one says. "Neither can I. That has not happened and it depends on what she chooses, and nothing made can see a thing like that in advance."
+    *set charity %+15
+    *set hope %-5
+    *goto watch_two
+
+  #Say nothing. Let the two of them work it out.
+    They do not work it out. They stand in a doorway on Dobson Street for a while, entirely open to each other, in complete agreement about every fact in the case, and then the other one goes back to the girl and yours stays with the boy.
+    *line_break
+    *line_break
+    That is what working it out looks like.
+    *set valor %-20
+    *goto watch_two
+
+*label watch_two
+
+*page_break
+
+*comment ---- the question she actually wants to ask ----
+
+"Can I ask it something?"
+
+"You can ask me and I will ask it."
+
+"Ask it how it gets told."
+
+*page_break
+
+The answer comes back and it is short, and your one gives it to you flat, without softening:
+
+*line_break
+*line_break
+*It knows.*
+*line_break
+*line_break
+
+"That's it? It just — knows? It doesn't have somebody in a *bed* telling it —"
+
+"No."
+
+"How long does it take?"
+
+"There is no time in it," your one says. "It is not told and then it decides. It is told, and that is the whole of it, and then it acts."
+
+*page_break
+
+You sit with that. Or you would sit with it, if there were anything here to sit on.
+
+Somewhere in the last thirteen years you have started to think of this arrangement as an honour. You would not have said so out loud. But you had begun, quietly, to think that being handed an angel to direct was a thing that had been given to you because of something about you.
+
+And here is another one, doing the same job, being told directly by God, instantly, with no woman in a bed in Pittsburgh in the way.
+
+*page_break
+
+*choice
+  #"Why doesn't mine get that?"
+    "I did," your one says. "Until October of 2024. And I will again."
+    *line_break
+    *line_break
+    "So this is — what, a demotion? For you?"
+    *line_break
+    *line_break
+    "It is an arrangement," it says. "I do not have opinions about it. I have told you that."
+    *line_break
+    *line_break
+    "You keep saying that and I keep not believing you."
+    *set severity %+15
+    *goto watch_end
+
+  #"I'm slowing you down."
+    "Yes."
+    *line_break
+    *line_break
+    You wait.
+    *line_break
+    *line_break
+    "You wanted me to soften that," it says.
+    *line_break
+    *line_break
+    "A little bit, yes."
+    *line_break
+    *line_break
+    "You are slowing me down," it says, "and it is not a defect in you, it is what a creature in time is. And He knew that before He arranged it, and He arranged it anyway, and I would rather you thought about why than about whether."
+    *set charity %+15
+    *set hope %+10
+    *goto watch_end
+
+  #Nothing. Go back to the boy.
+    You go back to the boy. He is on the roof. It is getting dark early now.
+    *set valor %-15
+    *set splendor %-15
+    *goto watch_end
+
+*label watch_end
+
+*page_break
+
+Renee Sobek stays.
+
+She stays for eight more years, in fact, on a roof and in a kitchen and eventually in a car and an apartment on Semple Street, and her angel never once stops working on getting her out, and never once succeeds, and never once resents it.
+
+*finish

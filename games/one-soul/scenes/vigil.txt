@@ -1,0 +1,10 @@
+*comment SCENE FIVE — VIGIL. The checkpoint. Fifteen words.
+
+*if choice_user_restored
+  *goto_scene whattheytoldhim
+
+You may save here. He is thirteen. Nothing has happened yet.
+
+*save_game whattheytoldhim
+
+*goto_scene whattheytoldhim
