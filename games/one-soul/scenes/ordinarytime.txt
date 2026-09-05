@@ -1,0 +1,613 @@
+*comment ============================================================
+*comment SCENE THREE — ORDINARY TIME
+*comment 1980–1988, ages five to thirteen. ~5,200 words, 28 choices.
+*comment Job: eight years of an unremarkable boyhood with no cosmic
+*comment scenery, in which the player learns to read a child and gets
+*comment one crucial reading badly wrong.
+*comment ============================================================
+
+*comment ---- 3.1 : THE VOLUME KNOB. 1980, age five ----
+
+Liberty Avenue, a Saturday in March, and the bakery smells the way bakeries smelled before anybody thought about it.
+
+Ewa is at the counter arguing pleasantly about a bill. Adam is five and is standing at hip height in front of a tray of paczki, and there is a wire rack, and the rack has a gap in it, and on the other side of the gap there is a small paper twist of hard candy that costs four cents and belongs to a man named Mr. Rzepka.
+
+You watch him look at it.
+
+You watch him look at his mother.
+
+*page_break
+
+And then you see something that you are not going to forget, and it takes about a second and a half.
+
+He hears it. That is the part. There is something in him that says *no* — quietly, without drama, the ordinary domestic no that everybody has — and you can see it arrive, and you can see him register it.
+
+And then you watch him turn it down.
+
+Not argue with it. Not overrule it. He does the thing you do with a radio in another room: he simply makes it quieter, on purpose, because he wants the candy more than he wants the noise.
+
+It works. He notices that it works.
+
+*page_break
+
+Then he puts the candy in his pocket.
+
+"Oh, for heaven's sake," you say. "It's four cents."
+
+Your one does not answer.
+
+You look at it. It is not looking at the candy. It is looking at the boy the way a man looks at a crack in a foundation wall.
+
+"What," you say.
+
+"He has just learned the most useful thing he will ever learn," it says. "In about a second and a half. And nobody in this building saw it happen, and it will still be working in 1998, and there is no tool I have that touches it."
+
+*page_break
+
+*comment ---- choice 1 ----
+
+He is five, and he has four cents of stolen candy in his pocket, and there is a man behind a counter who has known his grandmother for thirty years.
+
+*choice
+  #Put Mr. Rzepka's eyes on him.
+    The old man turns around at exactly the wrong moment for a five-year-old, and looks straight at the pocket, and does not say anything, and goes back to the bill.
+    *line_break
+    *line_break
+    Adam eats the candy that night under a blanket and it is the best thing he has ever tasted, and part of why it is the best thing he has ever tasted is that he got away with it while being looked at.
+    *line_break
+    *line_break
+    "That went wrong," you say.
+    *line_break
+    *line_break
+    "Most of them do."
+    *set severity %+15
+    *goto knob_end
+
+  #Put his grandmother's face in his head.
+    You do not put it *in.* You put it in front of him — the smell of her coat, which is in the shop because she was in the shop yesterday, and it is enough to make him think of her, and thinking of her makes him think of a thing she said about hands.
+    *line_break
+    *line_break
+    He puts the candy back.
+    *line_break
+    *line_break
+    And then, forty seconds later, at the door, he takes it again.
+    *line_break
+    *line_break
+    "You have to be joking," you say.
+    *set charity %+15
+    *set severity %-10
+    *goto knob_end
+
+  #Nothing. Let him have it.
+    You let him have it.
+    *line_break
+    *line_break
+    Your one does not object and does not approve. Nothing visible happens for eighteen years.
+    *set valor %-20
+    *goto knob_end
+
+*label knob_end
+
+*page_break
+
+*comment ---- 3.2 : HALINA. 1982, age seven ----
+
+Two years later, and the thing you notice first about Halina Kowalczyk is that she is funny on purpose.
+
+Not warm, exactly. Warm is not the word. She is eighty-four, she has buried a husband and a country, she has opinions about the Pope, the new priest, her daughter-in-law's soup, and a neighbour called Mrs. Duda who she says has been dying since 1961 and is very good at it.
+
+She says all this in front of Adam, in Polish and in English, and he thinks she is the funniest person alive, which she is.
+
+*page_break
+
+And she is teaching him to pray.
+
+She does it badly, in the sense that she has no idea what she is doing and no training whatsoever. She does it well, in the sense that it is working.
+
+She kneels him down beside the bed at seven o'clock. She makes him say the words out loud because *God is not a mind reader*, which is theologically wrong and which she believes with her whole chest. She tells him that when you cannot think of anything to say you say the same thing again, and that this is not cheating.
+
+*page_break
+
+She also tells him two things that are not true.
+
+The first is small and you will forget about it.
+
+The second she tells him in October, sitting on the edge of the bed with her hand flat on the blanket, and it is this: that God is keeping a list, and that the list is very detailed, and that the whole business of confession is getting the list right.
+
+She does not say it to frighten him. She says it the way you would explain a bus timetable. She is eighty-four years old and this is what somebody told her in 1908 in a village that does not exist any more, and it has held her up through two wars, and she is handing it on because it is the best thing she has.
+
+*page_break
+
+*comment ---- choice 2 : the temptation to improve on her ----
+
+*set_ward needle 1
+
+He is seven. He makes his first confession in three weeks.
+
+*choice
+  #Correct it. Arrange for a sister at the school to put it properly.
+    It half works. Sister Anne Marie is thirty-one and reasonably well trained and she says something clear and true about mercy to a room of twenty-two children on a Tuesday.
+    *line_break
+    *line_break
+    And Adam, who is seven, files it under *school*, along with the times tables, and files what his grandmother said under *true*.
+    *line_break
+    *line_break
+    "That is the difficulty," your one says. "She has his heart and the sister has forty minutes."
+    *set severity %+15
+    *set_hidden overreach 1
+    *goto halina_end
+
+  #Leave it. She is giving him something better than accuracy.
+    You leave it.
+    *line_break
+    *line_break
+    What she gives him instead is a habit, which is a thing you cannot get from a correct explanation, and which will still be operating faintly in 2018 when everything else has been gone for twenty-five years.
+    *line_break
+    *line_break
+    And the list stays in.
+    *set valor %-20
+    *set charity %+15
+    *goto halina_end
+
+  #Strengthen the parts that are right and let the rest alone.
+    You work on the habit and not the content. You make the seven o'clock easier — a night she is tired, a night he is not — and you leave her theology entirely alone, and you feel like a coward about it for eleven years.
+    *line_break
+    *line_break
+    You were not being a coward.
+    *set severity %-15
+    *set splendor %-10
+    *set charity %+15
+    *goto halina_end
+
+*label halina_end
+
+*page_break
+
+He makes his first confession on a Saturday and comes out and his grandmother is waiting at the back and gives him a look he will remember when he is forty.
+
+He makes his first communion in a suit that does not fit.
+
+*set_ward prayers 6
+
+*page_break
+
+*comment ---- 3.3 : THE FINGER. 1984, age nine ----
+
+You are going to want to pay attention to this one.
+
+It is a Thursday in February and the kitchen on Dobson Street is too warm because the radiator has one setting. Adam is nine. He is reaching across the table for a glass of milk, and his hand opens wrong — the way anybody's hand opens wrong, a hundred times a day — and for about a quarter of a second his middle finger is up on its own.
+
+He puts the glass down.
+
+Then, deliberately, he points the same finger at the floor and holds it there for a moment.
+
+Then he picks the glass back up.
+
+*page_break
+
+"What was that?" you say.
+
+Your one does not answer, because your one is watching, and you have learned by now that when it goes quiet it is because it is seeing all of a thing at once and there is nothing to add.
+
+So you watch too.
+
+He does it again at four o'clock, reaching for a book. He does it at twenty past five with a fork. He does it at bedtime, twice, once because of a real one and once because he is not sure whether the first one counted.
+
+*page_break
+
+Here is what is happening, and neither of you can see it, because it is behind the door.
+
+He made the sign. He did not mean to. It does not matter that he did not mean to, because he is nine and nobody has explained to him that meaning to is the whole of it, and what he was told at seven was that there is a list and the business is getting the list right.
+
+So: he made the sign. That is on the list. If he does not undo it he will have to confess it. If he forgets to confess it, then next time he goes up for communion he will be going up with it still on him.
+
+Pointing at the floor undoes it. He worked this out himself. Nobody taught him this and nobody could talk him out of it because nobody knows.
+
+*page_break
+
+He does it forty times a day.
+
+He does it for four years.
+
+His mother never notices, because he is careful, and because she is working, and because he is a quiet boy and quiet boys are the ones you stop looking at.
+
+*page_break
+
+*comment ---- what she sees, and what it means ----
+
+And this is what you see, from where you are standing:
+
+A nine-year-old boy who is *extremely serious about sin.*
+
+That is not a misreading. That is the only reading there is from outside. Every single fact in front of you says the same thing — a child who is scrupulously careful, who is thinking about God at the table, who is more attentive to this than any adult in the house.
+
+You have prayed for forty-five years for grandchildren who would take it half this seriously.
+
+*page_break
+
+*if (asked_for = 1)
+  You were told what he would suffer. You were not told when. You have been waiting for something that looks like suffering and this does not look like it.
+  *page_break
+
+*comment ---- the number nobody mentions ----
+
+Also, somewhere in 1984, one of the numbers starts going down.
+
+Not the boy's. Hers. Prayers.
+
+It has been going up every night for nine years and now, in the spring, it turns and starts to slide, slowly, and there is nothing in the room to explain it. Halina is not ill. She is not praying less. She kneels down every night at seven and gets up again with difficulty.
+
+*set_ward prayers 5
+
+Nothing in the text is going to tell you what that is.
+
+*page_break
+
+*comment ---- 3.3 choice : the beat the game turns on ----
+
+So. A boy who points at the floor forty times a day.
+
+*choice
+  #Encourage it. This is a child who cares about God.
+    You lean on it. You make the seven o'clock stick harder. You put the missal where he will find it. You make him feel, in the small ways available to you, that this carefulness is the right road and that he is on it.
+    *line_break
+    *line_break
+    It works beautifully. He gets more careful. He starts making a list before Saturday so he does not forget anything.
+    *line_break
+    *line_break
+    *set_ward needle 2
+    Something in him moves, quietly, from *this is forbidden* to *this is filthy, and so am I* — and neither of you sees it move, because it happens behind the door.
+    *set severity %+20
+    *goto finger_end
+
+  #Get an adult to notice.
+    You spend three weeks on it and you finally get his mother to see him do it, at the table, in front of her.
+    *line_break
+    *line_break
+    Ewa Kowalczyk is thirty-one years old, works six days, and loves her son. She looks at him pointing at the floor and she says, not unkindly, "Adam. Stop being weird."
+    *line_break
+    *line_break
+    He stops doing it in front of her.
+    *line_break
+    *line_break
+    That is the entire result. He does not stop. He goes underground, which is worse, and now it is a secret as well as a compulsion.
+    *set valor %+15
+    *set hope %-10
+    *goto finger_end
+
+  #They are working on him. Let them.
+    You can see them at it — the shapeless ones, at the edges, all week, and what they are pushing at is not the boy's carefulness. They are pushing at whether any of it matters at all.
+    *line_break
+    *line_break
+    They are trying to make him careless.
+    *line_break
+    *line_break
+    And you look at a nine-year-old grinding himself to powder over a hand gesture, and you make a judgement, and the judgement is that *this* is the deeper injury and that they are making a mistake.
+    *line_break
+    *line_break
+    So you tell your one to stand aside. Not to help them — never that. To decline to be in the way.
+    *line_break
+    *line_break
+    "You understand what you are asking," it says.
+    *line_break
+    *line_break
+    "I understand that he is nine and he is pointing at the floor."
+    *line_break
+    *line_break
+    "Yes," it says, and it stands aside.
+    *line_break
+    *line_break
+    You will not find out whether that was right for thirty-four years.
+    *set valor %-20
+    *set severity %-15
+    *set hope %-5
+    *set_hidden overreach 1
+    *achieve stood_aside
+    *goto finger_end
+
+  #You do not understand this. Do nothing until you do.
+    "I don't know what I'm looking at," you say.
+    *line_break
+    *line_break
+    "No."
+    *line_break
+    *line_break
+    "Do you?"
+    *line_break
+    *line_break
+    "No."
+    *line_break
+    *line_break
+    So you do nothing, which feels like failing, and which you will go on feeling like for years, and which is the best available answer and gets no credit at all.
+    *set valor %-25
+    *set charity %+20
+    *goto finger_end
+
+*label finger_end
+
+*page_break
+
+*comment ---- 3.4 : THE MILL AND THE LOFT. 1985, age ten ----
+
+In 1985 the mill on the South Side closes.
+
+Stan Kowalczyk is forty-eight and has been there since he was nineteen and there is not going to be work like that again, not for him, not on that river, not ever. Half of Dobson Street goes over the next four years. The bakery on Liberty holds on until 1991.
+
+He does not say anything about it.
+
+That is the thing you have to understand about this man and you will be understanding it for another thirty-one years. He is not cold. He is not absent. He is a man who was raised by a man who did not speak, and the machinery for saying a thing out loud was never installed, and there is nothing to be done about it now.
+
+*page_break
+
+So instead, on the second Saturday after, he goes up onto the roof.
+
+There is a structure up there that has been shut since 1971. It was his father's. It is a pigeon loft — a proper one, cedar, with a landing board and a trap and forty-eight nest boxes — and half of Polish Hill had one and most of them are gone now.
+
+He cleans it out. It takes him two weekends. He does not explain what he is doing and nobody asks.
+
+*page_break
+
+Then he brings Adam up the ladder and stands there with his hands in his pockets and says:
+
+"It's yours."
+
+And that is all he says. That is the entire ceremony. A man who cannot tell his son one true thing about the world has just handed him a roof full of birds instead, and it is the largest thing he will ever say to anybody.
+
+*page_break
+
+*comment ---- the birds : the angel's one competence ----
+
+Here is what you find out over the next three years, and it is the single funniest thing that happens in forty-nine years.
+
+Your one can move a bird.
+
+Not *nudge*. Not *arrange circumstances*. A pigeon has no free will — there is no door in the middle of it — and so the whole of an angelic will can be applied to a pigeon and the pigeon does what it is told, completely, at four hundred miles.
+
+*set_hidden birds 1
+
+"So let me get this straight," you say, in May of 1985, on a roof, watching a hen come in off the Ohio like she is on a wire. "You can't stop a child from pointing at the floor."
+
+"No."
+
+"But you can drive a *bird*."
+
+"Yes."
+
+"Across three states."
+
+"If necessary."
+
+*page_break
+
+*comment ---- Josie ----
+
+Her ring number is 1985-AU-4471 and Adam calls her Josie because he is ten.
+
+He puts her in a basket in a truck in Springfield, Ohio, in the last week of August, with fourteen other birds and a man from the club who charges two dollars a head, and she is liberated at 7:15 in the morning three hundred and forty miles from a roof she has never flown from before.
+
+At eleven o'clock there is weather over eastern Ohio.
+
+*choice
+  #Bring her home.
+    You do not know what you are doing and you do it anyway. You put your one on a bird in a crosswind over Cambridge, Ohio, and you hold her there, and it takes most of the afternoon and it costs nothing and helps nobody and is not part of anybody's commission.
+    *line_break
+    *line_break
+    She comes in at 4:40 with her flights ragged and drops onto the board like a thrown shoe.
+    *line_break
+    *line_break
+    Adam is on the roof. He has been on the roof since noon. He picks her up with both hands and holds her against his chest and says, out loud, to nobody:
+    *line_break
+    *line_break
+    "*There* she is."
+    *line_break
+    *line_break
+    And down in the yard his father hears it through the window and does not come up.
+    *set valor %+20
+    *set charity %+15
+    *set_hidden birds 2
+    *achieve storm
+    *goto birds_end
+
+  #Leave her. She is a bird.
+    She is a bird. Four hundred birds go down every year in weather and nobody writes to the paper about it.
+    *line_break
+    *line_break
+    Adam waits on the roof until dark and then until nine, and then his mother makes him come in, and he does not eat anything.
+    *line_break
+    *line_break
+    He gets over it. Children do. He is on the roof again in a week.
+    *line_break
+    *line_break
+    You do not entirely get over it.
+    *set severity %+15
+    *set hope %-10
+    *goto birds_end
+
+  #Ask your one whether this is allowed.
+    "Is this allowed? Am I allowed to spend you on a *pigeon*?"
+    *line_break
+    *line_break
+    "There is nothing else I am required to be doing this afternoon," it says. "He is on a roof. Nothing is happening to him. And if you are asking whether it is beneath the office —"
+    *line_break
+    *line_break
+    "That's what I'm asking."
+    *line_break
+    *line_break
+    "The office," it says, "is one boy on one roof. I do not think you have understood how small it is."
+    *line_break
+    *line_break
+    Then it brings the bird home without being asked twice.
+    *set charity %+25
+    *set splendor %-15
+    *set_hidden birds 2
+    *achieve storm
+    *goto birds_end
+
+*label birds_end
+
+*page_break
+
+*comment ---- 3.5 : RENEE. 1984–88 ----
+
+Three doors down there is a girl called Renee Sobek who is exactly his age and who is, from about the age of nine, the most alarming person he knows.
+
+She is louder than he is. She is better at everything than he is, including the things he is good at, and she is cheerfully aware of this and says so. She wants to be a nurse and announces it at nine and it never changes.
+
+*if (asked_for = 2)
+  You were given the names. You have known this one since before he was born, and you have been waiting five years for a girl to walk past a window, and here she is on a bicycle, and you do not know one single thing about how it ends.
+  *page_break
+
+They are not sweethearts. That is important. For nine years they are simply the two children on that stretch of Dobson Street who are the same age, and they are in and out of each other's kitchens, and she is on the roof with the birds more often than he would strictly like, and there is a photograph from 1986 of the two of them holding a hen and neither of them looking at the camera.
+
+*page_break
+
+And her angel is around.
+
+You see it in a doorway in 1985 and you both nod, and that is all, and that goes on for four years and neither of you says a word.
+
+"Why don't you talk to it?"
+
+"There is nothing to discuss yet."
+
+"You could just say hello."
+
+"That is not what we are for."
+
+*page_break
+
+*comment ---- 3.6 : HALINA. 1986, age eleven ----
+
+She dies in February, in the back room, over about a week, at eighty-eight.
+
+She is lucid until the Thursday. Adam is eleven and is brought in twice and the second time she says something to him in Polish that his mother does not translate and that he will still be turning over when he is forty.
+
+*page_break
+
+And here is the thing you have been not-noticing for two years.
+
+The number.
+
+You have not thought about it since 1984 because there has been no reason to. It has been sliding, quietly, in the corner, all that time — from six to five to four — while an old woman knelt down every night and got up again with difficulty and said the same name.
+
+And what you find out, if you go and look, is that from about April of 1984 there is something she will not put down.
+
+It is about Ewa. It is old — it goes back to 1974 and something that was said in a kitchen about a wedding — and it is small, and Halina has been right about it for twelve years, and she is right about it now, and being right about it has been quietly eating something.
+
+She does not forgive it. Not in 1984, not on the Thursday, not on the Sunday.
+
+*page_break
+
+She dies having kept every rule in the book.
+
+*set_ward prayers 0
+
+The number goes to nothing.
+
+*page_break
+
+*choice
+  #"Where is she?"
+    "That is not given."
+    *line_break
+    *line_break
+    "Don't do that. Don't do the — take me. You've taken me everywhere else. Take me and *show me.*"
+    *line_break
+    *line_break
+    "That is not given," it says again, in exactly the same voice, and you understand that this is not a refusal it is going to soften and not one it is going to explain.
+    *set hope %-15
+    *goto halina_dead
+
+  #"She kept every rule she was ever given."
+    "Yes."
+    *line_break
+    *line_break
+    "So that's it. That's all of it. She kept every rule and she was right about Ewa and she was right the whole time."
+    *line_break
+    *line_break
+    "She was right the whole time," your one agrees.
+    *line_break
+    *line_break
+    And it does not say anything else, and after a while you realise it is not going to, and that the silence is not evasion. It is the answer.
+    *set severity %-15
+    *set charity %+15
+    *goto halina_dead
+
+  #Say nothing. Look at the number.
+    Six, five, four, three, one, nothing.
+    *line_break
+    *line_break
+    Eleven years of an old woman on a cold floor at seven o'clock, and you did not once look at it while it was working, and now it is a zero and you are looking at it very hard indeed.
+    *set charity %+20
+    *set hope %-5
+    *goto halina_dead
+
+*label halina_dead
+
+*page_break
+
+At the funeral Mrs. Duda, who has been dying since 1961, tells Ewa that Halina was a saint, and Ewa says thank you, and goes out to the car, and sits in it for a while.
+
+*page_break
+
+*comment ---- 3.7 : THE CLASSROOM DOOR. 1988, age thirteen ----
+
+And then it is 1988 and he is thirteen.
+
+It is a Tuesday in the second week of October. Fourth period. A health class in a public school in the city of Pittsburgh, taught by a man of fifty-six who would rather be anywhere else in the world and who reads most of it off the sheet.
+
+There is a filmstrip.
+
+Something is described. It is described clinically, correctly, as a fact about bodies, with no moral frame attached to it whatsoever, because it is 1988 and it is a public school and that is not the job.
+
+*page_break
+
+The bell goes at ten past.
+
+He comes out into the corridor with everybody else. He is quiet on the walk home, which is eleven minutes. He is quiet at dinner. He does his homework at the kitchen table with his feet hooked round the chair legs and he goes to bed at ten.
+
+*page_break
+
+That is everything you can see.
+
+Because that is everything there is to see.
+
+*page_break
+
+"Something happened," you say.
+
+"Yes."
+
+"What?"
+
+"I do not know."
+
+You look at your one for a long moment, and then you look at the boy, thirteen years old, going up the stairs with a glass of water.
+
+*page_break
+
+*if (asked_for = 1)
+  You were told what he would suffer. You have been waiting since 1975 to see it start.
+  *line_break
+  *line_break
+  You have just watched it start and you did not recognise it, because it looked like a boy being quiet on a Tuesday.
+  *page_break
+
+*comment ---- and she does know ----
+
+You know what happened.
+
+Of course you know. You are seventy-one years old and you raised a son. You have known since he came through the door with his face like that. There is not one thing about this that is a mystery to you and you could write it down on the back of an envelope.
+
+And the thing standing next to you — which was present at the creation of the world, which watched a third of everything fall, which can drive a bird four hundred miles through weather — has no idea at all.
+
+*page_break
+
+"You really don't know," you say.
+
+"No."
+
+"I do."
+
+"Yes," it says. "From here on, you will often know before I do. It is not going to help as much as you think."
+
+*finish
