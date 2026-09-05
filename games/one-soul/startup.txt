@@ -17,9 +17,20 @@
   thehour
   threshold
 
+*comment ---------------- YOU ----------------
+*comment Set in scene zero, off a whiteboard by the door. The year is
+*comment fixed — everything downstream depends on 1979 and 2024 — so the
+*comment age is implied and never stated. Nothing else about you is.
+*create name "Loretta"
+*create sex "female"
+*create spouse "Walter"
+*create spouse_he "he"
+*create spouse_him "him"
+*create parish_group "the sodality"
+
 *comment ---------------- THE ANGEL ----------------
 *comment Three opposed pairs. High valor IS low patience: one slider, two names.
-*comment Loretta's choices do not merely track these. They form them, and what
+*comment Your choices do not merely track these. They form them, and what
 *comment they form is permanent, because he is not the kind of thing that changes.
 *create valor 50
 *create severity 50
@@ -46,6 +57,8 @@
 *create heard_him_first false
 *create caught_the_lie false
 *create asked_for 0
+*create tactic 0
+*create rescued false
 *create glimpsed false
 *create tried_to_make_him_sin false
 *create birds 0
