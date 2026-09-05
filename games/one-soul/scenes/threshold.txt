@@ -1,0 +1,379 @@
+*comment ============================================================
+*comment SCENE TWELVE — THE THRESHOLD
+*comment 2024. ~1,600 words, 6 choices.
+*comment Job: he brings him and does not learn. Then Loretta, sent
+*comment back with nothing changed, and a corridor.
+*comment NO ENDING SAYS ADAM WAS DAMNED. Not one, on any branch.
+*comment ============================================================
+
+Your one picks him up.
+
+That is not a figure of speech and there is no better way to say it. There is nothing to pick up with and no weight to it, and what happens is that the whole attention of a creature that has stood beside one man for forty-nine years is now applied to carrying him, and that is what carrying is.
+
+*page_break
+
+It does not judge him.
+
+It has never judged anything. Not the candy on Liberty Avenue in 1980, not the finger, not the car outside Renee's mother's house in June of 1998, not one time in forty-nine years. It is not equipped for it and it has never wanted to be.
+
+It carries him the way it has carried every prayer he ever said, including the four words he could not finish when he was nine.
+
+*page_break
+
+*comment ---- the name ----
+
+And Adam Kowalczyk sees you.
+
+Not you — you are not there any more, or you are there and are not the point. He sees *it*. For the first time in forty-nine years and about one hour.
+
+*page_break
+
+And he says its name.
+
+*page_break
+
+Not the one you have been using since 1979, which was never anything, which you made up at a kitchen table in the Hill District because it seemed rude to keep saying *hey.*
+
+The real one. The one that is not a word, that has no sound in it, that nobody with a mouth was ever going to manage — and he says it perfectly, first time, without effort, the way you would say your own address.
+
+Because he can now.
+
+Because knowing it was never the problem.
+
+*page_break
+
+*comment ---- and it stops ----
+
+And then there is a threshold, and your one goes to it, and stops.
+
+*page_break
+
+That is the office. That is the whole of it and that is the end of it. It carries and it hands over and it does not go in, and nothing is said to it, and nothing is explained.
+
+The light does not go out. It is more that you are outside of it, suddenly, the way you are outside a house.
+
+*page_break
+
+You do not hear anything.
+
+Nobody is going to tell you.
+
+*page_break
+
+*comment ---- the reading ----
+
+"What happened?" you say. "What just — is he —"
+
+"I do not know."
+
+"You *carried* him —"
+
+"To the door," it says. "I have carried a great many to the door. I have never once been told."
+
+*page_break
+
+*if ((needle >= 4) and (hope >= 65))
+  *goto homing
+*elseif (hope >= 50)
+  *goto latehour
+*elseif (hope >= 30)
+  *goto unfinished
+*else
+  *goto longhope
+
+*label homing
+*comment ---- ENDING A : THE HOMING ----
+
+But you can look at what there is, and there is a great deal of it, and none of it is nothing.
+
+He asked for a priest himself, in June, before he was frightened — while the thing was still a word on a scan and not a fact in a room. He went to Mass on the twelfth of October badly and late, three days before, in a coat over pyjamas, and his mother drove.
+
+*if (renee_contact)
+  There is a photograph of somebody else's daughter on a refrigerator in Bloomfield.
+The notebook is on the nightstand next to the jar. He carried it from one house to another in August and could not say why.
+
+And the last thing he said in the world was four words about his mother.
+
+*page_break
+
+"That is a good deal to be going on with," your one says.
+
+"It's not a verdict."
+
+"No. There is no verdict here for you and there was never going to be. But you asked me what there is, and there is that, and I would not trade it."
+
+*achieve charity
+*goto whereyou
+
+*label latehour
+*comment ---- ENDING B : THE LATE HOUR ----
+
+But you can look at what there is.
+
+He came back frightened rather than free — you know that, you were in the car in Swissvale, you watched the needle not move all the way. And it held. Six years of getting up for the eleven o'clock because he could not manage the nine, and never being able to say why it helped, and going anyway.
+
+Holding is not nothing. A great deal of the world is held rather than believed.
+
+*page_break
+
+"It's thin," you say.
+
+"It is thin," your one agrees. "And it is six years long, and he did it while nobody was watching, and I would rather have it than not have it."
+
+*goto whereyou
+
+*label unfinished
+*comment ---- ENDING C : UNFINISHED ----
+
+But you can look at what there is, and there is not very much, and what there is has no shape.
+
+He got back inside the door in 2018 and then ran out of time before he got anywhere else. Nothing was mended. Nobody was written to. The last four months were mostly about pain, and about which chair, and about whether his mother had eaten.
+
+*page_break
+
+You can point at three things. None of the three settles anything.
+
+"That's it?" you say.
+
+"That is what there is."
+
+"Then what am I supposed to *do* with —"
+
+"You are supposed to hope," your one says. "It is not a guess and it is not a feeling. It is a thing you do, on purpose, with a will, about somebody you cannot see."
+
+*goto whereyou
+
+*label longhope
+*comment ---- ENDING D : THE LONG HOPE ----
+
+And there is very little here.
+
+*page_break
+
+The needle never moved off three. He came back the way a man comes back to a dentist. He wrote to nobody, mended nothing, and said the last four words to a woman who had been sitting in the chair for eleven minutes.
+
+*page_break
+
+You want to say the other thing. You have wanted to say it since about 2005 and you have got very good at not saying it, and here at the end of everything you nearly say it.
+
+"Do not," your one says.
+
+"I didn't —"
+
+"You were going to say that he is lost."
+
+*page_break
+
+"Listen to me, because this is the last thing I am going to be able to tell you and it is the only one that matters. **Nobody has ever said that about anybody.** Not once. Not in two thousand years, not about the worst of them, not about the one everybody thinks of. She has never done it and she is not going to start with a man from Polish Hill who died on a Tuesday.
+
+"You do not know.
+
+"You will not know until the resurrection.
+
+"And you are going to hope anyway, for all of it, for as long as that takes. That is not optimism and it is not a prediction. It is a virtue, and it is the one you were short of when you knocked those statues off that windowsill, and it is the reason you were sent."
+
+*page_break
+
+You do not say anything for a while.
+
+"How long is that?" you say. "The waiting?"
+
+"I have no idea," it says. "I have never once minded."
+
+*goto whereyou
+
+*label whereyou
+
+*page_break
+
+*comment ---- "Where were you?" ----
+
+There is one more thing and it is yours, and you have been carrying it since 1979, and harder since 2019, and hardest since last Thursday.
+
+*page_break
+
+"Where were you?" you say.
+
+*page_break
+
+You are not asking about Adam.
+
+*page_break
+
+And it does not explain anything. There is no explanation and it is not going to invent one for you and neither is anybody else, in this world or the next, and you have known that for about forty-nine years now.
+
+*page_break
+
+What you get is a location.
+
+*line_break
+*line_break
+"On the twenty-first of March, 1979, when you made up my name at that table, I was at your left shoulder, about as far as the salt.
+
+"When Walter went, I had my hand under your elbow on the way out of the room, and you thought that was the nurse.
+
+"In 2019, in recovery, for eleven hours, and again on Thursday.
+
+"And when the statues went off the windowsill I was standing exactly where I am standing now, which is where I have been standing since the twelfth of August, 1953, which is the day you were born."
+*line_break
+*line_break
+
+*page_break
+
+That is the whole answer. There is not one word of consolation in it and no suggestion whatever that it should have been enough.
+
+*page_break
+
+*choice
+  #"That's not an answer."
+    "No," it agrees. "It is a location. It is the only true thing I have and I have given it to you."
+    *set hope %+15
+    *goto sentback
+  #"Was it enough? For any of them?"
+    "I do not know," it says. "Nobody has ever told me that either."
+    *set hope %+10
+    *goto sentback
+  #Say nothing.
+    You say nothing, and neither does it, and that goes on for a while and is not uncomfortable.
+    *set hope %+10
+    *goto sentback
+
+*label sentback
+
+*page_break
+
+*comment ---- sent back ----
+
+And then there is a window, and a parking structure, and a cup of apple juice that has been on a tray since last night.
+
+*page_break
+
+Nothing has changed.
+
+*page_break
+
+There is porcelain all over the floor. The nurse has not come in yet, because no time has passed at all — not four minutes, not one. There are fourteen broken angels around your chair and your arm is still out.
+
+You do not have your legs. You are not going to get them. Nothing has been fixed, nothing has been explained, and the therapist is still coming at ten.
+
+*page_break
+
+"At least," your one says, "you were not made a pope."
+
+You turn your head.
+
+"I beg your pardon?"
+
+"You were given one," it says. "One man, for forty-nine years, and you have found it almost more than you could carry. Some of them are given a diocese. There is a woman in Manila with nine grandchildren who is answerable for rather more than you are, and a priest in this city who is answerable for four hundred, and none of them will be shown any of it beforehand."
+
+*achieve pope
+
+*page_break
+
+"Was I any good at it?"
+
+"You will find out," it says, "at the same time I do."
+
+*page_break
+
+*comment ---- the corridor ----
+
+And then, last of all, it tells you the one thing it did not show you.
+
+*page_break
+
+Four doors down this corridor, in room 314, there is a man of forty-nine who has about nine hours left.
+
+Nobody is with him. His mother went home at six because she is seventy-one and she has to sleep sometime, and she will not get back before it happens, and she is going to carry that for the rest of her life.
+
+*page_break
+
+You have no legs.
+
+Going down that corridor means ringing the bell for a nurse you have been short with all week. It means being got into a chair, which takes two people and eleven minutes and hurts. It means being wheeled into the room of a man you have never met, to sit with him, for no reason you could give anybody who asked.
+
+*page_break
+
+*choice
+  #Ring the bell.
+    You ring the bell.
+    *achieve corridor
+    *goto went
+
+  #Don't.
+    You do not ring the bell.
+    *goto stayed
+
+*label went
+
+*page_break
+
+It takes fourteen minutes, not eleven, because the first nurse is with somebody else.
+
+*page_break
+
+Room 314 has a window in it too, and the same view, and the light is off.
+
+You cannot see your one. There is nothing in this room at all. Forty-nine years you have stood next to it and now you are in the same eight feet of air as it and there is nothing there, nothing, not a shimmer, not a shape.
+
+*page_break
+
+And you know exactly where it is standing.
+
+Because it is where it always stands.
+
+*page_break
+
+You do not say anything to him. You would not know what to say and he is past it anyway.
+
+You put your hand on the bed.
+
+*page_break
+
+*goto final
+
+*label stayed
+
+*page_break
+
+You do not ring the bell.
+
+You sit in a chair by a window with fourteen broken angels on the floor around you, and down the hall a machine is going off, and it is going to go off for another eleven minutes before anybody comes.
+
+*page_break
+
+Nothing punishes you for this. Nobody says anything about it. Your one does not leave and does not reproach you and is still standing where it always stands, and will be standing there in 2029 and in 2034 and on whatever afternoon your own turns out to be.
+
+*page_break
+
+You are seventy-one years old and you have been awake since four.
+
+*goto final
+
+*label final
+
+*page_break
+
+*stat_chart
+  opposed_pair Valor
+    Valor
+    Patience
+  opposed_pair Severity
+    Severity
+    Mercy
+  opposed_pair Splendor
+    Splendor
+    Hiddenness
+  percent Charity
+  percent Hope
+  text needle What he came to think it was
+  text prayers Prayers, at the end
+  text culpability Culpability
+
+*page_break
+
+That is the angel you made.
+
+He is that now, permanently, and he will be that in four hundred years, and somewhere there is a child being born tonight who is going to have him.
+
+*ending
