@@ -70,7 +70,7 @@ And she notices the pause and not the reason for it, and she files it, the way p
     "That was terrible," you say. "That was worse than not telling her."
     *line_break
     *line_break
-    "No," your one says.
+    "No," your angel says.
     *set charity %+25
     *set valor %+15
     *set hope %+10
@@ -188,7 +188,7 @@ And every week he does not tell her, that gap gets a little wider, and something
 
 "That's not the worst part, though," you say. "Whatever else — that's not the *worst* part. He's twenty-one. Half the men I ever knew were doing something like that at twenty-one and most of them turned out fine."
 
-Your one does not say anything.
+Your angel does not say anything.
 
 "What."
 
@@ -208,7 +208,7 @@ Your one does not say anything.
 
 "It's just *not telling her something.*"
 
-"It is deciding, once a week for two years, that a person he loves is a lesser kind of creature than he is," your one says. "There is a word for that and it is not one of the words you were watching for. You were watching for the one they warn girls about in 1965."
+"It is deciding, once a week for two years, that a person he loves is a lesser kind of creature than he is," your angel says. "There is a word for that and it is not one of the words you were watching for. You were watching for the one they warn girls about in 1965."
 
 *page_break
 
@@ -229,7 +229,7 @@ Your one does not say anything.
     *goto contempt
 
   #"I've been getting this wrong the whole time."
-    "You have been getting one half of it right with great vigilance," your one says, "which is what most people do, and which is why the other half gets so much room."
+    "You have been getting one half of it right with great vigilance," your angel says, "which is what most people do, and which is why the other half gets so much room."
     *set charity %+20
     *set hope %-5
     *goto contempt
@@ -308,7 +308,7 @@ There are two angels in this kitchen. They have been within eleven feet of each 
     *goto table_end
 
   #"Is this it? Is this the important part?"
-    "Yes," your one says.
+    "Yes," your angel says.
     *line_break
     *line_break
     "This? A kitchen? *This* is the —"

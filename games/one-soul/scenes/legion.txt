@@ -7,7 +7,7 @@
 
 He is nineteen and at Pitt and living in a building on Semple Street with four other people and a shower that runs cold at seven.
 
-And you have a problem, and the problem is that you have been trying for four months to get your one to stand on one particular thing, and every time it gets there, there is already something there, and it is never the same something.
+And you have a problem, and the problem is that you have been trying for four months to get your angel to stand on one particular thing, and every time it gets there, there is already something there, and it is never the same something.
 
 *page_break
 
@@ -35,13 +35,13 @@ In December Belphegor is back and does not appear to remember September.
 
 "And every hour you spend on it —"
 
-"Is an hour I am not standing where I should be. Yes." Your one says this without any bitterness, which somehow makes it worse. "The paperwork is not in the way of the attack. The paperwork *is* the attack."
+"Is an hour I am not standing where I should be. Yes." Your angel says this without any bitterness, which somehow makes it worse. "The paperwork is not in the way of the attack. The paperwork *is* the attack."
 
 *page_break
 
 *comment ---- the recognition ----
 
-And you start laughing, and you cannot stop, and your one waits.
+And you start laughing, and you cannot stop, and your angel waits.
 
 "What."
 
@@ -86,8 +86,8 @@ You stop.
     *set_hidden caught_the_lie true
     *goto counted
 
-  #Have your one stop responding to any of them for a month.
-    Your one goes quiet in March and does not answer a single one of them.
+  #Have your angel stop responding to any of them for a month.
+    Your angel goes quiet in March and does not answer a single one of them.
     *line_break
     *line_break
     By the third week they are turning up unprompted. By the fourth they are turning up *twice*, at the same object, an hour apart, with different names on, because they have nobody left to keep track of who has already been.
@@ -96,7 +96,7 @@ You stop.
     *set_hidden caught_the_lie true
     *goto counted
 
-  #Ask your one to just tell you.
+  #Ask your angel to just tell you.
     "You know, don't you."
     *line_break
     *line_break
@@ -136,7 +136,7 @@ None of them is Asmodeus. None of them is Belphegor either. None of them has bee
 
 *choice
   #"Three. Three of them. Against you."
-    "It is not a numbers problem," your one says. "It was never a numbers problem. I could have counted them in 1975 if I had thought to."
+    "It is not a numbers problem," your angel says. "It was never a numbers problem. I could have counted them in 1975 if I had thought to."
     *line_break
     *line_break
     "Then what was it?"
@@ -159,7 +159,7 @@ None of them is Asmodeus. None of them is Belphegor either. None of them has bee
     *goto legion_end
 
   #Say it out loud to them. Let them know you know.
-    You have your one say it, once, plainly, to the air on Semple Street: *there are three of you.*
+    You have your angel say it, once, plainly, to the air on Semple Street: *there are three of you.*
     *line_break
     *line_break
     Nothing happens. Nobody answers. Nothing changes for about eleven years.
@@ -186,6 +186,6 @@ None of them is Asmodeus. None of them is Belphegor either. None of them has bee
 
 "And the true thing is always —"
 
-"Small," your one says. "The true thing is always small. It does not get bigger when they talk over it and it does not get smaller either. That is most of what you need to know about them and you have worked it out in four months, and I would like you to remember, in about two years, that you worked it out."
+"Small," your angel says. "The true thing is always small. It does not get bigger when they talk over it and it does not get smaller either. That is most of what you need to know about them and you have worked it out in four months, and I would like you to remember, in about two years, that you worked it out."
 
 *finish
