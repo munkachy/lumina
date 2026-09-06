@@ -156,7 +156,7 @@ Nobody would ever hear the difference. No instrument in the Concord could hear t
 
     It is the right answer and you have delivered it in the worst available way, and it will cost you eleven weeks of goodwill from four people who deserved better.
     *set rel_med %-8
-    *goto ossa_after
+    *goto ossa_name
   #Put it to the ship. Anybody who wants to argue, argue.
     *set rule %-16
     *set candor %+10
@@ -256,7 +256,7 @@ It comes down to you, in a cabin three metres by four, as everything does.
 
     Forty years from now some other ship will come here and hear exactly what you heard, at exactly the pitch you heard it, and will not know why that is true.
     *set standing %-4
-    *goto ossa_end
+    *goto ossa_name
   #Bore it. This is what a survey ship is for.
     *set rule %+10
     *set nerve %+10
@@ -268,7 +268,7 @@ It comes down to you, in a cabin three metres by four, as everything does.
     ${engname} can measure it. ${engThey} measures it once, and enters the figure, and does not mention it again.
     *set quiet_named false
     *set rel_eng %-6
-    *goto ossa_end
+    *goto ossa_name
   #Bore it — and log the damping figure, in full, in the catalogue entry.
     *set rule %+8
     *set candor %+14
@@ -279,7 +279,7 @@ It comes down to you, in a cabin three metres by four, as everything does.
 
     Forty years from now somebody will read that and know exactly what was traded and by whom, which is the entire difference between a decision and an accident.
     *set quiet_named false
-    *goto ossa_end
+    *goto ossa_name
   #No bore. And write down why, where the Survey will see it.
     *set rule %+6
     *set candor %+14
@@ -297,7 +297,10 @@ It comes down to you, in a cabin three metres by four, as everything does.
       "Somebody at Central is going to read this out loud," Ferreo says, "and about a third of them are going to think you have lost your mind, and the other two thirds are going to remember your name, and I genuinely cannot tell you which is better."
     *if (xo = "tanaka")
       "Twenty-one per cent," Tanaka-Osei says. "That's the honest bit. Most people would've written it up as though there was nothing lost." She hands it back. "Sign it."
-    *goto ossa_end
+    *goto ossa_name
+
+*label ossa_name
+*page_break
 
 *comment ---- added choice: what goes in the catalogue name field ----
 The catalogue entry has a field the Survey almost never fills, because it is for bodies with features worth naming and Ossa was a rock.
