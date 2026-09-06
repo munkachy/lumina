@@ -89,7 +89,7 @@ It is not a formality. It is a *safety instruction.*
 
 You look at eleven feet of armed creature with four wings and a face you cannot hold in your head.
 
-"I made up a name for you," you say.
+"I have been calling you ${angelname}," you say.
 
 "I know."
 
