@@ -21,7 +21,8 @@ scenes['__order__'] = ' '.join(order)
 shell = io.open('app-shell.html', encoding='utf-8').read()
 blob = 'const SCENES = ' + json.dumps(scenes, ensure_ascii=False) + ';'
 out = shell.replace('__SCENES__', blob)
-io.open('one-soul.html', 'w', encoding='utf-8').write(out)
+for fn in ('one-soul.html', 'index.html'):
+    io.open(fn, 'w', encoding='utf-8').write(out)
 
 words = sum(len([w for w in re.sub(r'(?m)^\*.*$', '', scenes[n]).split()]) for n in order)
 print('scenes:', len(order), '| words:', words, '| file:', len(out) // 1024, 'KB')
