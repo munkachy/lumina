@@ -107,6 +107,39 @@ He wants to fight the fire. He wants to put every person he has into the separat
     *set standing %+8
     *goto kem_plan
 
+*comment ---- added choice: the arithmetic, said out loud ----
+Four hundred and eleven people. Two hundred and forty berths, if you vent the laboratory decks and put people in corridors.
+
+Everybody on both ships can do that sum. The question is whether anybody says it.
+
+*choice
+  #Say it. On the open channel, now, before anybody makes a plan around a lie.
+    *set candor %+14
+    *set crew %+8
+    "Kem Station, *Perpetua*. Understand my capacity. Two hundred and forty in an emergency lift, and that is with my laboratory decks vented and people standing in corridors. There are four hundred and eleven of you. I am telling you that now so that nobody spends the next hour planning around a number I do not have."
+
+    There is a silence on the channel of about four seconds, and then Rask's fire chief says, "Understood, *Perpetua*," in the voice of a man who has just had a weight taken off him, because he had already done the sum and had been waiting for somebody to make it real.
+    *set standing %+8
+    *goto kem_plan2
+  #Say it to Rask alone.
+    *set rule %+10
+    *set candor %-4
+    You put it to the station chief privately: two hundred and forty, four hundred and eleven, and what that means.
+
+    Rask absorbs it. "Then we are not evacuating," he says, "and now you know why I said it before you got here."
+    *goto kem_plan2
+  #Say nothing. Get people moving; the sum solves itself if we are fast.
+    *set candor %-14
+    *set nerve %+12
+    *set rule %+8
+    You do not put the number on any channel. You start the lift, and you work the problem, and the arithmetic changes every eleven minutes as the fire does, and by the third hour it is not two hundred and forty against four hundred and eleven any more, because by then the answer is different.
+
+    That is a real judgement and it is defensible and it also means that for three hours four hundred and eleven people were being managed by somebody who knew something they did not.
+    *goto kem_plan2
+
+*label kem_plan2
+*page_break
+
 *label kem_plan
 *page_break
 
@@ -381,6 +414,44 @@ Three hundred and forty refugees on a ship built for a hundred and twelve is not
       It works perfectly. ${xoname} finds it deeply irregular and says so twice and then stops saying it.
       *set standing %+4
     *goto kem_end
+
+*comment ---- added choice: the two ratings ----
+*if (strain >= 45)
+  Two ratings were burned when the coolant loop let go. Their names are Sim Achebe, nineteen, and Poul Rand, thirty-four, and they are in sickbay for eleven days.
+
+  A master writes to the family of an injured rating. There is a form. Nobody has to use the form.
+
+  *choice
+    #Write to both families myself. In my own words.
+      *set crew %+12
+      *set candor %+10
+      Two letters, in your own hand, and you throw away four attempts at the first one before you understand that the reason it will not come is that you are trying to explain why the loop failed, and their mother does not want to know why the loop failed.
+
+      The second attempt at the second letter is nine lines and you send it.
+      *set rel_med %+8
+      *goto kem_end2
+    #Use the form. It exists because it works.
+      *set rule %+10
+      *set candor %-6
+      You use the form. It is a good form, written by somebody who understood the job, and it says the true things in the right order and it does not pretend to be from a friend.
+
+      ${medname} countersigns both without comment.
+      *goto kem_end2
+    #Have ${medname} write them, and countersign.
+      *set rule %-8
+      *set crew %+6
+      *set rel_med %+10
+      ${medname} writes both, because ${medthey} was there and had ${medtheir} hands on them and you did not.
+      *if (med = "sorrel")
+        Sorrel's letters are four pages each and contain, in both cases, something the rating said in sickbay that the family will keep for thirty years.
+      *if (med = "nour")
+        Nour's letters are eleven lines each and are the most exact things you have ever read, and there is not one soft word in either of them, and both families write back.
+      *if (med = "vasi")
+        Vasi's letters are clinically complete and entirely correct and you rewrite both of them yourself at 0200 without telling him, and he finds out, and does not mind, and asks why.
+      *goto kem_end2
+
+  *label kem_end2
+  *page_break
 
 *label kem_end
 *page_break

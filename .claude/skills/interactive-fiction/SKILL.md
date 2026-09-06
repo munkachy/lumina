@@ -42,6 +42,30 @@ scene files are public. Numbers below are measured, not remembered.
   Vampire 9,438. A 100,000-word game is ~15 scenes of ~6,500 words, not 40
   small ones.
 
+## Two different words-per-choice numbers
+
+The corpus table above measures **authored** words per choice: every branch of
+every conditional counted once. That number rises with conditional density, so
+compare like with like.
+
+- **Authored** — total prose ÷ total choices. Corpus 165–452.
+- **Played** — words a single playthrough actually shows ÷ choices it reaches.
+
+*Perpetua*, measured by robot playthrough: 58,800 authored words, 87 choices,
+**676 authored** — outside the corpus band. But a playthrough sees 25,000 words
+and reaches every choice, so **288 played**, which is comfortably inside it.
+
+The gap is the diagnosis. It says the variation is in *conditional prose* — five
+officers reacting three different ways — rather than in *divergent paths*. That
+is a legitimate design and it is not what Choice of Games does: Vampire runs 978
+tests over 198,000 words, one per 203 words, while *Perpetua* runs one per 570.
+Their readers see 20% of the text; a *Perpetua* reader sees 45%.
+
+So measure both. Authored words per choice tells you whether the reader has
+enough agency for the length; played words per choice tells you the rhythm at
+the keyboard. A game can pass one and fail the other, and the fix differs: more
+decision points for the first, shorter beats between them for the second.
+
 ## The arc
 
 All three long games do the same thing:

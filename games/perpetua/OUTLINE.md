@@ -85,9 +85,22 @@ you arrive, not where.
 | 11 | `nadire` | 4,200 | 15 | **Climax.** The same shape as Ceyla, and it is yours now. Crew's moment of glory. |
 | 12 | `wrapup` | 2,400 | **0** | Reports consequences. No choices, per the corpus: all three long CoG games end this way. |
 
-**Total: ~40,800 words, 151 choices, ~450 options.**
-Words per choice ≈ 270 (corpus 165–450). Words per screen target 325–400.
-One `*page_break` per `*choice`, alternating.
+**Planned: ~40,800 words, 151 choices.**
+
+**Delivered: 58,791 words, 87 choices, 279 options, 103 stat tests.**
+330 authored words per screen (corpus 324–514, on target). 676 authored words
+per choice, against a corpus band of 165–452 — **off target, and the main thing
+a second pass should fix.** A robot playthrough sees 25,000 words and reaches
+every choice, so the *played* rhythm is 288 words per decision, which is fine;
+the shortfall is in decision points per authored word, not in pacing.
+
+Where the choices are thin, worst first: `nadire` 865 words/choice ·
+`quietworld` 864 · `leastthatanswers` 789 · `salvage` 780 · `halloran` 760 ·
+`coldreach` 753. `orders` (430) and `theboard` (494) are the models.
+
+Tests came in at 103 against a budget of 96, with every one of the four pairs
+tested 10–14 times and a spread of 1.4× — inside the rule of no core stat
+tested more than 3× another.
 
 ---
 

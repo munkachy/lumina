@@ -350,6 +350,42 @@ Whatever you have decided, it goes down in the *Tern*, and somebody has to be in
       Mott goes down, and the Fold has never seen a Karsk, and by the middle of the afternoon there are nine children following her at a distance of exactly four metres, and she has named all of them.
     *goto sedge_after
 
+*comment ---- added choice: Cassa Doon ----
+Cassa Doon is at the field when the *Tern* comes back up for the last time.
+
+She has walked two days again. She does not have a folder this time.
+
+*choice
+  #Tell her exactly what you did and why, before she hears it from anybody else.
+    *set candor %+12
+    *set crew %+6
+    You tell her, standing on grass, with the shuttle ticking behind you.
+
+    She listens to all of it without interrupting, which she did not do the first time.
+
+    "Right," she says at the end. And then: "I'd have done it different." And then, after a moment, "I'd have done it different and I'd have been guessing, same as you." She puts out her hand. "Two days' walk each way, Commander. Don't make me do it a third time for something you could have said on a radio."
+    *set standing %+4
+    *goto sedge_after2
+  #Ask her what happens to the Fold now.
+    *set rule %-6
+    *set candor %+8
+    *set crew %+8
+    She tells you, standing on grass, in about four minutes, and it is not what you expected: not seed and water but a vote, in the spring, on whether to rejoin the Landing, which will be close, and which she will lose or win depending on exactly what your ship did this week and on nothing else.
+
+    "That's what you were deciding," she says. "I don't think anybody told you that."
+    *goto sedge_after2
+  #Say what needs saying and get in the shuttle.
+    *set candor %-10
+    *set rule %+8
+    You say the correct things, which are true and which cost nothing, and you get in the shuttle, and she watches it go up.
+
+    *if (nerve <= 45)
+      From four hundred metres she is a figure on grass at the edge of a field, and you keep her in the port viewport until the curve takes her, which is longer than you meant to.
+    *goto sedge_after2
+
+*label sedge_after2
+*page_break
+
 *label sedge_after
 *page_break
 

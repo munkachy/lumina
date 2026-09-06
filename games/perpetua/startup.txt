@@ -109,6 +109,11 @@
 *create halloran_regard 50
 *create nadire "none"
 *create nadire_close false
+*create nadire_silence false
+*create nadire_survey false
+*create nadire_honest false
+*create nadire_track false
+*create nadire_vote false
 *create nadire_saved 0
 *create plaque false
 *create tern_lost false
