@@ -1,3 +1,401 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER EIGHT — THE BOARD ====================
+*comment Candour's moment of glory. Chapters three, five and seven come due.
+*comment The chapter answers promise #3: why this commander got this ship.
+*comment Budget: 14 choices, 13 tests. Assessor Ruth Ivanescu, 60s, fair, good.
+
+Marl Colony has a Survey office with a real door and a corridor with real carpet, and after eight months you find that you dislike both.
+
+The Board sits in a room with eleven chairs in it and three people in the chairs. The Assessor is **Ruth Ivanescu**, sixty-something, who has been doing this for twenty-two years and who has, according to ${xoname}, never once been reversed on appeal.
+
+She is not hostile. That is the first thing you have to adjust to. She is not hostile in a way that removes every defence you had prepared.
+
+"Commander. Sit down. This is not a trial, it is an inquiry, and the difference is that at a trial somebody has already decided what the question is." She squares a folder. "Sedge, first."
+
+*page_break
+
+*comment ---------------- Sedge ----------------
+
+*if (sedge = "held")
+  "You declined assistance to six thousand two hundred people on the ground that the recognised government of Sedge had not asked. Three hundred and eighty-one of them are dead." She looks up. "Was that the correct decision?"
+*if (sedge = "water")
+  "You landed a water plant at the Fold and withheld seed stock, and you wrote in the log that this was *the least that answers.*" She looks up. "What did you mean by that phrase?"
+*if (sedge = "gave")
+  "You landed Concord stores with a faction on an independent world in defiance of the recognised government, and you wrote the words *in contravention of Standing Order Four* into your own log in your own hand." She looks up. "Why did you write that sentence?"
+*if (sedge = "council")
+  "You made the assistance conditional on Survey witness of the distribution, and Speaker Vane accepted, and every sack was counted in front of the Fold." She looks up. "Whose plan was that, in the end — yours or his?"
+
+*choice
+  #Answer it straight. All of it, including what I got wrong.
+    *set candor %+14
+    *set standing %-4
+    You answer for eleven minutes and you do not leave out the part where you were not certain, or the part where you thought about the Board, or the two hours you spent alone in a cabin three metres by four talking yourself into something.
+
+    Ivanescu writes almost nothing down. At the end she says: "Thank you. That is the first useful account of a Standing Order Four decision I have had in four years, and I have had nine."
+    *set board_candid true
+    *goto board_fold
+  #Answer it correctly. Facts, order, and no interior.
+    *set candor %-10
+    *set rule %+8
+    *set standing %+6
+    You give her the sequence: signal received, meeting held, order given, stores disposed, outcome recorded. It is complete, accurate, and airless, and it takes four minutes and it is unimpeachable.
+
+    "Yes," Ivanescu says. "I have your log. I was asking you something else." She does not press it. She writes one word.
+    *goto board_fold
+  #"Assessor, before I answer — what is the Board's finding going to turn on?"
+    *set rule %+10
+    *set candor %+6
+    "That is a very good question and I am going to answer it, because I am not trying to catch you." Ivanescu folds her hands. "It turns on whether you can say what you did and why, in a way that another master could use. The Survey does not need you to have been right, Commander. It needs the next one to be able to learn something."
+    *set standing %+4
+    *goto board_fold
+
+*label board_fold
+*page_break
+
+"Second question. The Fold. Six thousand two hundred people, a settlement of eleven years' standing, with a speaker who walked two days to stand at your fence."
+
+She turns a page.
+
+"Standing Order Four says *a world that has not asked.* Commander — in your judgement, is the Fold part of Sedge, or is the Fold a world?"
+
+*choice
+  #"The Fold is part of Sedge. That is the whole point of the rule."
+    *set rule %+12
+    *set standing %+8
+    "If the Survey gets to decide which part of a world is really the world," you say, "then every faction on forty settlements learns in one year that the way to win an argument is to ask a Concord ship. The rule is not there to protect governments. It is there so that six thousand people cannot be turned into a reason."
+
+    Ivanescu writes for some time. "That is the orthodox answer," she says, "and it is orthodox because it is good."
+    *goto board_kem
+  #"Six thousand two hundred people asked. I do not know what else a world is."
+    *set candor %+12
+    *set crew %+10
+    *set standing %-6
+    "Assessor, a world is not a chair in a hall. Cassa Doon walked two days. Nobody in the Landing walked anywhere. If the rule cannot tell the difference between a government that has considered a question and a government that has simply not been asked it, then the rule is not doing the work we think it is."
+
+    Ivanescu looks at you over the folder for a long moment.
+
+    "You are aware," she says, "that that is very nearly word for word what Ivo Halloran said to me fourteen months ago."
+    *set ceyla_known 3
+    *goto board_kem
+  #"I do not know. I decided anyway, because I had to, and that is the report."
+    *set candor %+16
+    *set rule %-8
+    "I do not know, Assessor. I did not know at 0300 on the fifth day and I do not know now. I made a decision because a decision was going to be made by somebody and the somebody was me, and I would rather stand behind a decision I cannot fully justify than pretend I found an answer in the text."
+
+    The junior member of the Board looks up sharply. Ivanescu does not.
+
+    "Write that down," she says to him, without turning her head.
+    *set standing %+6
+    *goto board_kem
+
+*label board_kem
+*page_break
+
+*comment ---------------- Kem ----------------
+
+"Kem Station."
+
+*if (kem_burn)
+  "You ordered a Concord member colony's refinery abandoned against the express objection of the senior official present. Four hundred and eleven people are alive. Two hundred and forty people on the moon below are dead of a cold winter and a hydrogen shortage." She turns a page. "Chief Rask has submitted a statement. It runs to nine pages and it is not intemperate, which is worse for you."
+*if (kem_pc)
+  "The master of a Concord Survey vessel entered a burning separator gallery through a maintenance crawlway to reach a manual isolator." She looks up. "There is no provision in the Survey's regulations for that, Commander, because it did not occur to anyone that it would be necessary to forbid it."
+*if (kem_eng)
+  "Your chief engineer went into a maintenance crawlway under a burning gallery on your authority and came out with a hand that will not close properly for six weeks, and eleven thousand tonnes of refinery is still in orbit over Kem." She turns a page. "Nobody is complaining. I want to know how you chose."
+*if (kem_vol)
+  "You put the odds on an open channel and asked for volunteers, and a station pipe fitter named Ines Halloway went into the crawl because, and I quote your own log, *she knew where the wheel was and you did not.*" She looks up. "Was that command, Commander, or was that an auction?"
+
+*choice
+  #Defend it. Line by line, without an inch.
+    *set nerve %+10
+    *set rule %+10
+    *set standing %+6
+    You take her through it: the timings, the suit ratings, the alternative that was not available, the ninety thousand people below and the forty-one in the hall. You do not concede a single point, because there is not a single point you think is wrong.
+
+    It works. Not because it is eloquent — because it is arithmetic, and Ivanescu has spent twenty-two years listening to people who could not produce any.
+    *goto board_ossa
+  #Concede the part that was wrong and defend the rest.
+    *set candor %+14
+    *set rule %+4
+    You give her one thing before she asks for it — the fourteen minutes, or the flank run, or the thing you have known was wrong since the day after — and you defend everything else.
+
+    "Thank you," says Ivanescu. "Do you know how rarely that happens? An officer who concedes exactly one thing is either very honest or extremely good at this. I have not decided which you are and I am not going to today."
+    *set standing %+8
+    *goto board_ossa
+  #"Assessor, four hundred and eleven people are alive. Ask me the next question."
+    *set nerve %+12
+    *set candor %-8
+    *set rule %+8
+    You say it politely and you stop talking, and the silence goes on for eleven seconds, which at a Board is a geological era.
+
+    "No," Ivanescu says at last. "Four hundred and eleven people being alive is the reason you are sitting in a chair and not standing. It is not an answer and you know it is not an answer, and I will ask the next question when I have had this one."
+
+    You give it to her. It takes four minutes and it is worse for the delay.
+    *set standing %-6
+    *goto board_ossa
+
+*label board_ossa
+*page_break
+
+*comment ---------------- The thing she was not expected to raise ----------------
+
+"Ossa," says Ivanescu.
+
+You had not prepared for Ossa. Nobody prepares for Ossa. It is a catalogue entry.
+
+*if (quiet_named)
+  "You declined to instrument a resonant body of primary scientific interest, and you wrote your reasons into the catalogue in a document that contains nothing but instrument readings." She reads it out, all of it, in a flat voice, in a room with carpet. *This judgement was mine and is not a precedent.*
+
+  "Commander. Everything is a precedent."
+*if (quiet_named = false)
+  "You instrumented a resonant body and permanently altered it by one part in nine thousand."
+  *if (candor > 60)
+    "And then you wrote the damping figure into the catalogue entry, which nobody has done in the Survey's history, because nobody has ever been obliged to." She reads it out, all of it, flatly, in a room with carpet.
+  *if (candor <= 60)
+    "The damping is in your ship's data and not in the catalogue entry. It is not concealment; nobody would look. I found it because I read the ship's data, which I do, which is why I have never been reversed."
+
+*choice
+  #"It was a rock, Assessor. It is still a rock."
+    *set rule %+10
+    *set standing %+4
+    "It has no rights, nobody to ask, and no future that anyone will ever check on. That is precisely why I wrote down what I did to it. A thing with nobody to complain on its behalf is the only kind of thing where the record is the whole of the accountability."
+
+    Ivanescu puts her pen down for the first time.
+
+    "Commander," she says, "I am going to use that at a conference and I am not going to attribute it, and I am telling you now so that it is not a theft."
+    *set standing %+8
+    *goto board_other
+  #"A rating found it. A rating did the arithmetic. Put her name in the finding."
+    *set crew %+14
+    *set rule %-6
+    *set candor %+10
+    You spend your time at a Board of Inquiry getting a twenty-two-year-old comms rating's name into a Survey document.
+
+    Ivanescu hears you out completely. Then: "I will put it in the finding. I will also tell you, because you are going to hear it from somebody less kind: an officer who does this at their own inquiry is either a very good commander or is managing me. Both work. Neither is free."
+    *set rel_sec %+14
+    *set standing %+4
+    *goto board_other
+  #"I would rather talk about Sedge."
+    *set candor %-12
+    *set rule %+6
+    "I am sure you would," Ivanescu says, and moves on, and writes one word, and you spend the next four minutes trying to work out which one.
+    *set standing %-4
+    *goto board_other
+
+*label board_other
+*page_break
+
+*comment ---------------- Such other matters ----------------
+*comment The hinge. Candour's moment of glory sits in this choice.
+
+"*And such other matters as the Board shall determine*," Ivanescu says. "That line is in every convening order. It is not a threat. It is there because inquiries find things."
+
+She closes the Sedge folder and does not open another one.
+
+"Commander. Is there anything you wish to bring to this Board yourself?"
+
+*if (kept_secret)
+  *comment The player is carrying Beye, or the letter, or the false finding.
+  There is a book on your ship with a sentence in it that is true and not honest, and you wrote it.
+
+  *choice
+    #Tell her. All of it, unprompted, before she asks.
+      *set candor %+20
+      *set rule %+6
+      *set standing %-10
+      *set board_verdict "referred"
+      *achieve candour
+      You tell a Survey Board of Inquiry, without being asked, that you concealed a hundred and nineteen counts of Article Nine aboard your own ship.
+
+      It takes six minutes. Nobody interrupts you. The junior member stops writing halfway through and does not start again.
+
+      When you finish, Ivanescu sits back.
+
+      "Do you know," she says, "that I have been an assessor for twenty-two years and that has happened four times." She looks at the ceiling for a moment. "Three of the four are still serving. All three of them are better officers than the ones who did not."
+      *set kept_secret false
+      *goto board_finding
+    #"No, Assessor."
+      *set candor %-16
+      *set rule %+10
+      *set board_verdict "clean"
+      "No, Assessor."
+
+      It is two words and it is a lie and it costs you nothing at all today, and Ivanescu accepts it and closes the folder, and the inquiry moves to its finding.
+
+      You will carry that for a very long time. Not the concealment — the two words, said out loud, in a room with carpet, to a woman who told you at the start that she was not trying to catch you.
+      *goto board_finding
+    #"There is. And I am not going to tell you what it is."
+      *set candor %+8
+      *set rule %+14
+      *set standing %-8
+      *set board_verdict "referred"
+      "There is a matter, Assessor. It is aboard my ship, it is disposed of, it is within a master's authority, and I am not bringing it to this Board."
+
+      A very long silence.
+
+      "That," says Ivanescu slowly, "is the most dangerous sentence anybody has said in this room in four years, and it is not a lie, and I cannot compel you." She writes for some time. "I will note that you were asked and answered. Commander — if this ever comes to me a second time, that note is the whole of the case."
+      *goto board_finding
+*if (kept_secret = false)
+  *choice
+    #"No, Assessor. Everything I have done is in the log."
+      *set candor %+10
+      *set standing %+6
+      *set board_verdict "clean"
+      "No, Assessor. It is all in the log, including the parts I would rather were not."
+
+      "Yes," she says. "I noticed. That is not a common quality and it is not a comfortable one and I would not lose it if I were you."
+      *goto board_finding
+    #Ask her the question instead. "Assessor — why was I given this ship?"
+      *set candor %+12
+      *set rule %-6
+      *set board_verdict "clean"
+      *set board_asked true
+      She stops.
+
+      "You have not been told." It is not a question. She looks at the junior member and then at the folder she has not opened. "No. Of course you have not."
+      *goto board_finding
+    #"Yes. Sub-Lieutenant Beye."
+      *set candor %+14
+      *set crew %+6
+      *set board_verdict "clean"
+      *if (article_nine = "charged")
+        "You have already sent this Board a twenty-four-year-old and it took us forty minutes," you say. "I would like the finding to record that the transmissions contained no operational intelligence beyond the ship's daily position, that he had no answer from Tessine Station in four months, and that he flew the *Tern* through a nine-metre lane at the *Corvine* eleven weeks before I charged him."
+
+        Ivanescu reads it back to you and enters it. "It will not restore him," she says. "It will be in the file for a hundred years. Sometimes that is the only thing on offer."
+        *set rel_sec %+10
+      *if (article_nine = "inquiry")
+        "A ship's inquiry heard it and I bound myself to the finding in advance," you say. "I would like the Board to note that I did not overrule three officers who were sitting in judgement on a man I had already decided about."
+
+        "That is noted," says Ivanescu, "and it is more unusual than you appear to think."
+      *goto board_finding
+
+*label board_finding
+*page_break
+
+*comment ---------------- The finding ----------------
+
+The Board sits for two days and delivers in eleven minutes.
+
+*if (board_verdict = "referred")
+  The finding refers the conduct of the master of CS *Perpetua* to the Survey's disciplinary authority for consideration, notes that the master brought the matter forward voluntarily, and — in one sentence that will matter more than the rest of the document combined — *records that the vessel remains under the master's command pending that consideration.*
+
+  You keep your ship. That is what it means. You keep your ship and there is a file open on Marl Colony with your name on it and no date on it.
+  *set standing %-10
+*if (board_verdict = "clean") and (standing > 62)
+  The finding commends the master of CS *Perpetua* for conduct at Kem Station, records the Sedge decision without criticism, and — in a paragraph nobody expected — recommends that the Survey issue guidance on the second sentence of Standing Order Four, *the present text having been shown by this inquiry to be capable of four defensible readings.*
+
+  You have not been exonerated. You have been used, which is better.
+  *set standing %+10
+*if (board_verdict = "clean") and (standing <= 62)
+  The finding records the events at Sedge and Kem Station, makes no criticism, offers no commendation, and closes the inquiry.
+
+  Four pages. Nothing in them about you at all. ${xoname} says that is the best possible outcome and ${xothey} is right, and it is still like being handed back a coat.
+
+*page_break
+
+*comment ---------------- Why you were given this ship ----------------
+*comment Promise #3, paid.
+
+Afterwards, in the corridor with the real carpet, Ivanescu catches you up.
+
+"You will not have been told this," she says, "because the Survey does not tell people this, and I have decided that not telling you would be a small piece of cowardice that I am too old for."
+
+She has the folder she never opened.
+
+"When a master is relieved, the Survey asks the outgoing officer to name three officers he believes could take the command. It is a courtesy. Nobody honours it. The names go in a file and the file is closed and the appointment is made by a committee on Ilium."
+
+She hands you one page.
+
+"Ivo Halloran did not name three. He named one."
+
+*page_break
+
+The page is a Survey form with two lines filled in. The handwriting is short and plain and you have seen it before, on one hundred and nineteen mornings, quoted back at you by a twenty-four-year-old.
+
+**RECOMMENDED FOR COMMAND, CS PERPETUA, COLD REACH:**
+**Lt. Cdr. ${name}.**
+
+And under it, where the form asks for grounds, one sentence:
+
+***She will not do what I did.***
+
+*if (pcthey = "he")
+  *comment the form uses the officer's own pronoun
+  ***He will not do what I did.***
+*if (pcthey = "they")
+  ***They will not do what I did.***
+
+*choice
+  #"Assessor — is that a compliment?"
+    *set candor %+12
+    Ivanescu takes a long time.
+
+    "I have read that sentence perhaps forty times," she says, "and I have never once been able to decide. I think that is deliberate. I think he knew exactly what he was writing and I think he knew it would reach you eventually and I think he wanted you to have to work it out." She takes the page back. "I am sorry. That is the honest answer and it is not much of a gift."
+    *set standing %+4
+    *goto board_end
+  #"Where is he?"
+    *set nerve %+10
+    *set crew %+8
+    "Tessine Station. Harbour pilot, third grade, on a contract he renews every six months." Ivanescu looks at you steadily. "It is nine days from here on your patrol track and you are going that way in the spring, and I am telling you that because I am not required to and because somebody should."
+    *set halloran_regard %+8
+    *goto board_end
+  #Say nothing. Hand the page back.
+    *set candor %-14
+    *set rule %+10
+    You read it once, hand it back, thank her for her time, and walk down a corridor with real carpet at exactly your normal pace.
+
+    You get eleven metres. Then you stop, in an empty corridor on Marl Colony, for about forty seconds, and then you go on.
+    *goto board_end
+
+*label board_end
+*page_break
+
+${xoname} is waiting at the dock with the ship's readiness board.
+
+*if (strain >= 45)
+  Eleven items amber. The yard at Marl has done what a colony yard can do, which is not a great deal, and the number two coolant loop has been replaced with a part that was manufactured for a different class of ship and has been persuaded.
+*if (strain < 45)
+  Nine items green, two amber, and the number two coolant loop, which the Marl yard has now also failed to stop whistling, which brings the total number of yards in the Concord that have failed to stop it whistling to eleven.
+
+*choice
+  #Tell ${xoname} about the page.
+    *set candor %+14
+    *set rel_xo %+14
+    You tell your first officer, at a dock, on a colony, that the man whose ship this was named you and wrote one sentence about it.
+
+    *if (xo = "marand")
+      Marand does not react for four seconds. Then: "*She will not do what I did.*" She turns it over. "Captain — I have served under eleven masters and I have never heard one of them give another one a weapon that good and call it a recommendation." A pause. "He meant it kindly. I am nearly certain he meant it kindly."
+    *if (xo = "ferreo")
+      Ferreo goes very quiet, which by now you know is the real Ferreo. "My father has been a delegate for thirty years," he says at last, "and no one has ever written a sentence about me that I would not want read out. That is not a boast. I have just worked out that it is the opposite."
+    *if (xo = "tanaka")
+      Tanaka-Osei eats the rest of what she is holding. "Right," she says. "So he's been reading your log for four months through a kid at 0410, and eight months ago he put your name on a form and said you wouldn't do what he did." She looks at you. "Captain, has it occurred to you that he might have been checking?"
+    *goto board_last
+  #Tell nobody. Take the readiness board and go aboard.
+    *set candor %-14
+    *set rule %+10
+    You take the board, sign it, and walk up the ramp of a twenty-six-year-old survey ship with one sentence in your head that you are not going to say out loud to anybody for a very long time.
+
+    It is yours. That is a real thing and it is worth something and it is also, you notice, exactly what Halloran did with Ceyla.
+    *set rel_xo %-4
+    *goto board_last
+  *if (chap != "none")
+    #Tell ${chapname}, and nobody else.
+      *set candor %+8
+      *set rule %-4
+      *set rel_chap %+16
+      You tell one person on the ship, and it is not the first officer.
+
+      *if (chap = "wren")
+        Wren listens to the whole thing and then says: "*She will not do what I did.*" He turns it over the way Marand would. "Captain, I have been given that sentence before, in a different form, by a man who was leaving a parish. It is not a compliment and it is not a warning. It is a bequest, and the reason it is unbearable is that you cannot give it back."
+      *if (chap = "onu")
+        Onu keeps folding for a while. "He gave you the ship and the reason in the same breath," she says, "and then he did not write to you for eight months. That is a man being careful with somebody. I have seen it done badly. That was not badly."
+      *if (chap = "serat")
+        "He is managing you at a distance of four hundred light years, eight months after leaving," Serat says, "and it is working, and I want you to notice that it is working, and then decide separately whether he is right."
+      *goto board_last
+
+*label board_last
+*page_break
+
+The *Perpetua* leaves Marl Colony on the fourth of Concord with a repaired loop, a full hold, and a patrol track that runs spinward for eleven weeks and then turns.
+
+Nine days along the turn, on the track, there is a station called Tessine.
+
 *finish
