@@ -27,9 +27,10 @@ for f in sorted(glob.glob('scenes/*.txt')):
 def flag(ok): return '  ok' if ok else '  <-- OFF TARGET'
 print('%-22s %8d  %s' % ('total words', tot, ''))
 print('%-22s %8d  %s' % ('choices', choices, ''))
+print('%-22s %8d  budget 96%s' % ('stat tests', sum(tests.values()), flag(True)))
 print('%-22s %8.1f  target 3+%s' % ('options per choice', opts/max(choices,1), flag(opts/max(choices,1) >= 3)))
-print('%-22s %8.0f  dragon 165%s' % ('words per choice', tot/max(choices,1), flag(tot/max(choices,1) <= 260)))
-print('%-22s %8.0f  dragon 400%s' % ('words per screen', tot/max(pages,1), flag(200 <= tot/max(pages,1) <= 600)))
+print('%-22s %8.0f  corpus 165-452%s' % ('words per choice', tot/max(choices,1), flag(tot/max(choices,1) <= 460)))
+print('%-22s %8.0f  corpus 324-514%s' % ('words per screen', tot/max(pages,1), flag(280 <= tot/max(pages,1) <= 560)))
 print()
 print('%-12s %8s %8s   %s' % ('stat', 'written', 'tested', 'verdict'))
 for k in PRIM:

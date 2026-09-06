@@ -1,3 +1,535 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER TWO — THE COLD REACH ====================
+*comment First tests. Every officer speaks. Halloran is raised out loud for the
+*comment first time by somebody who is not aboard. Budget: 8 tests.
+*comment Ledger: Halbard's Rest, independent, pop. 340, ice mine, nine days from Sarn.
+*comment Administrator Wesse Ambrit, 19 years in post. The child is Ondra Vek, nine.
+
+Nine days out, and the ship has stopped being a place you are visiting.
+
+You know now that the number two coolant loop whistles at exactly the pitch of a kettle, and that after four days you stop hearing it and after seven you start hearing it again, worse. You know that the aft corridor rings dead underfoot and that nobody can tell you why. You know that the third watch smells of burnt coffee because somebody on the third watch cannot make coffee, and that finding out who would be a misuse of your authority.
+
+You have walked the ship at 0300 twice. Both times somebody was already awake and doing something reasonable, which is either an excellent sign or evidence that word travels.
+
+Ahead, at the end of the leg, is Halbard: a grey moon around a gas giant nobody has bothered to name properly, with three hundred and forty people living in an ice mine on the terminator, and a mail bag for them in your hold.
+
+*page_break
+
+*comment ---------------- The wardroom ----------------
+
+On the eighth night you eat with your officers.
+
+The *Perpetua*'s wardroom seats ten and there are six of you, and the table is bolted down and slightly too small, so everybody's elbows are in the conversation whether they want to be or not.
+
+*if (eng = "osimo")
+  Osimo has come up from the engine spaces in a clean shirt and looks wrong in it. He eats fast and says nothing for twenty minutes.
+*if (eng = "kallas")
+  Kallas is nineteen minutes late and arrives mid-sentence, already explaining something about a valve to nobody in particular.
+*if (eng = "dorr")
+  Dorr sits down last, which you will learn is deliberate: he wants to know where everybody else is before he chooses.
+
+*if (med = "nour")
+  Nour eats like a soldier, quickly and completely, and then sits back and watches the table.
+*if (med = "sorrel")
+  Sorrel has brought something. It turns out to be a cake, badly made, for the yeoman, whose birthday it is, and which nobody else knew.
+*if (med = "vasi")
+  Vasi has brought a sample jar to the table and set it down beside the salt without appearing to notice that he has done it.
+
+*if (sec = "oyelaran")
+  Oyelaran stands when you come in. Everyone else is already halfway up and now has to commit.
+*if (sec = "whitlow")
+  Whitlow is already there, at the far end, back to the bulkhead, and has been for a while.
+*if (sec = "mott")
+  Mott has taken the deck at the end of the table instead of a chair, because the chairs were not built for a Karsk, and she does this without a word and with enormous dignity.
+
+*if (chap = "none")
+  There is an empty chair. Nobody has moved it. On a Meridian the chaplain sits at the foot of the table opposite the master, and the chair is at the foot of the table, and it is empty, and everybody has noticed, and nobody is going to mention it on the first night.
+*if (chap != "none")
+  ${chapname} sits at the foot of the table, opposite you, which is where the chaplain sits on a Meridian and has since before either of you was born.
+
+*page_break
+
+The talk is about nothing: the food, the whistle, a rating who has taught a hull-inspection drone to follow him down corridors. ${xoname} keeps it moving.
+
+Then, over the second course, somebody says the name.
+
+*if (xo = "ferreo")
+  It is Ferreo, of course, because Ferreo has decided that the sooner it is said the sooner it stops being a thing, and he says it lightly and on purpose. "Halbard's Rest. Captain Halloran had a standing arrangement there, apparently. They send him ice wine. There are four bottles in the number three locker addressed to him."
+*if (xo = "marand")
+  It is Marand, flatly, off a list. "Halbard's Rest. Note that Captain Halloran had a standing arrangement there. There are four bottles of ice wine in the number three locker addressed to him, and I require a decision on them."
+*if (xo = "tanaka")
+  It is Tanaka-Osei, with her fork in the air. "So nobody's going to say it. There's four bottles of ice wine in the number three locker with Halloran's name on them and we make orbit in twenty hours."
+
+The table goes quiet in the particular way a table goes quiet when everyone has been thinking about the same thing for eight days.
+
+*choice
+  #"Then we deliver them to him. Log them, hold them. They are not ours."
+    *set candor %+8
+    *set crew %+6
+    *set rel_xo %+5
+    "They were sent to a man, not to a berth. Log them, hold them, and they go to Tessine Station on the next mail leg."
+
+    *if (xo = "marand")
+      Marand writes it down: time, order, and a small mark in the margin that you do not understand and are not shown.
+    *if (xo = "ferreo")
+      "That," says Ferreo, "will be repeated in the mess by 2300, and it will do you a great deal of good, and I want it on the record that I am saying so out loud instead of letting you think it was an accident."
+    *if (xo = "tanaka")
+      Tanaka-Osei nods once and goes back to her plate. "Right answer. Cheap, too." She says the second part with her mouth full and it is not a criticism.
+    *goto halbard_approach
+  #"We drink them. He is not coming back for them."
+    *set nerve %+10
+    *set candor %+6
+    *set crew %+8
+    *set rel_xo %-4
+    "Open one tonight and put the other three in the mess for the ratings. He is not coming back for them, and a ship that keeps a dead man's wine in a locker is a ship that is waiting for something."
+
+    Somebody exhales. Somebody else looks at the table. But the bottle is opened, and it is genuinely very good, and by 2300 there are three bottles on the mess deck and a hundred and twelve people arguing about whether you did that because you are clever or because you meant it.
+
+    Both, probably. You are not certain yourself.
+    *goto halbard_approach
+  #"They stay in the locker. Next item."
+    *set candor %-12
+    *set rule %+8
+    *set rel_xo %-3
+    "They stay in the locker. Next item."
+
+    ${xoname} moves on smoothly. The conversation restarts. It is a perfectly correct decision and it costs you nothing at all, except that for the rest of the year there will be four bottles of ice wine in the number three locker with another man's name on them, and every single person aboard will know exactly where they are.
+    *goto halbard_approach
+  #Put it to the table.
+    *set rule %-12
+    *set crew %+6
+    You put it to the table.
+
+    It takes eleven minutes and it is not tidy. ${engname} wants them delivered. ${medname} wants them opened. ${secname} points out, correctly, that four bottles of ice wine from an independent settlement to a serving officer were probably not strictly legal in the first place.
+    *if (chap != "none")
+      ${chapname} says nothing at all until asked directly, and then says: "Whatever you do with them, do it where the ship can see."
+      *set rel_chap %+8
+    In the end you hold them for delivery, which is where you would have arrived alone in one minute, and the eleven minutes were the point.
+    *set rel_xo %+4
+    *goto halbard_approach
+
+*label halbard_approach
+*page_break
+
+*comment ---------------- Halbard's Rest ----------------
+
+Halbard from orbit is a dirty white marble with one lit scratch along the terminator, and the scratch is three hundred and forty people.
+
+The Rest is an ice mine. They cut water out of the moon, crack it, sell the oxygen to passing traders and the hydrogen to anybody at all, and they have done it for sixty years without asking the Concord for a thing. They are not members. They have an arrangement, four pages long, which is why you are here: mail, the annual register, and any emergency medical case they care to declare.
+
+You take the *Tern* down with ${medname} and two ratings.
+*if (sec = "mott")
+  Mott has written *KITTIWAKE* on the *Tern*'s inspection log and *TERN* on the *Kittiwake*'s, six weeks ago, for reasons she has not explained and will not.
+
+The landing field is swept ice with a mast on it. Waiting at the mast in a coat that has been repaired more often than it has been washed is the settlement's administrator, **Wesse Ambrit**, sixty-something, nineteen years in post, who looks at your ship the way you looked at it in the dock.
+
+She shakes your hand. Then she says: "Where's Ivo?"
+
+*page_break
+
+*choice
+  #Tell her the truth, as far as you know it.
+    *set candor %+14
+    *set standing %-4
+    "Captain Halloran was relieved of this command fourteen months ago, after the Ceyla evacuation. There was an inquiry. It published nothing. He retired at his own request and he is on Tessine Station."
+
+    Ambrit stands very still in the cold.
+
+    "Nine hundred people," she says at last. "He took nine hundred people off a rock in front of the Vaunt, and your lot put him on a station." She turns and starts walking towards the settlement, so that you have to follow, and over her shoulder she says: "Well. That tells me what sort of year I'm going to have."
+    *if (ceyla_known >= 1)
+      You do not correct her, though you could. Adjo told you the rest of it — the eleven weeks, the forty-one thousand — and you look at her back in the cold and decide it is not yours to hand her.
+      *set candor %-5
+      *set rule %+4
+    *goto register
+  #"He is on Tessine Station and he is well. That is all I am able to say."
+    *set candor %-10
+    *set rule %+6
+    Ambrit takes it the way she would take a delivery three crates short.
+
+    "That is all you are *able* to say," she repeats, and starts walking. "Nineteen years I have had a Survey ship on this field twice a year, Commander, and every one of them was able to say a good deal more than that."
+
+    It is not a good beginning. It is also not a disaster: by the end of the day she will have decided that you are careful rather than cold, which from a distance is nearly the same thing.
+    *goto register
+  #"I do not know. I have been aboard nine days and nobody will tell me either."
+    *set candor %+10
+    *set rule %-8
+    *set crew %+4
+    *set standing %-3
+    You say it in the cold, on the ice, to a woman you have known for forty seconds.
+
+    Ambrit looks at you properly for the first time.
+
+    "Huh," she says. And then: "All right." And then she picks up one end of the mail crate, which is not her job, and carries it with you as far as the shed, and does not mention it again for two days.
+    *goto register
+
+*label register
+*page_break
+
+*comment ---------------- The register, and the child ----------------
+
+The annual register is a book. An actual book, cloth spine, because sixty years ago somebody decided that this settlement's population would be recorded in a form that could not be edited from orbit, and nobody has since seen a reason to change it.
+
+Three hundred and forty-one names. Ambrit reads them and you make the marks. Births since the last visit: four. Deaths: six. Under *departures* there is a line in nineteen-year-old handwriting that says *Halloran, I. — hon.*, because the Rest makes visiting masters honorary residents and then never takes them off the roll.
+
+"You'll be in there by tonight," Ambrit says. "It isn't an honour. It means if you die here we're obliged to bury you."
+
+*page_break
+
+The medical case is a girl of nine named Ondra Vek, who broke her arm eleven weeks ago, whose bone is now infected, and who is sitting on a table in the settlement's two-bed clinic being extremely brave.
+
+*if (med = "nour")
+  Nour asks her name. Ondra tells her. Nour repeats it back, and then works for six minutes without speaking.
+*if (med = "sorrel")
+  Sorrel gets down on his heels so that his eyes are lower than hers and asks what the arm's name is. She says it does not have one. He says that is the problem, then.
+*if (med = "vasi")
+  Vasi looks at the arm for four seconds. "Osteomyelitis, eleven weeks, poor culture medium, and I want the sample." He says this to you, not to her; and then to her, in precisely the same voice: "This will take three days and it will not hurt."
+
+It is nothing. Three days of a Concord antibiotic and the arm is saved, and the Rest's arrangement covers it in the second paragraph.
+
+You give the order. It takes four seconds and it is the easiest thing you will do all year.
+
+*page_break
+
+Then Ambrit says: "While you're at it."
+
+She has three more. Grey lung, from sixty years of ice dust, in three miners aged forty-one, fifty, and fifty-eight. It is not an emergency. It will kill all three of them somewhere between four and eleven years from now. It is treatable — not cured, pushed back a decade — with a course of a Concord immunomodulator that your ship carries eleven doses of and cannot replace for nine days.
+
+Three courses is six doses. More than half.
+
+*if (med = "nour")
+  Nour says it quietly, so Ambrit will not hear. "Captain. We are nine days from a hospital and I have eleven. If this ship burns and I have five, some of us walk. If I have five and a burn ward, some of us do not."
+*if (med = "sorrel")
+  Sorrel says nothing at all, which from Sorrel is a speech.
+*if (med = "vasi")
+  Vasi says, at conversational volume, in front of Ambrit: "Six of eleven, chronic, non-member population, outside the arrangement. The answer is no, and I would like it recorded that I gave it."
+
+The Rest did not ask for this. They asked for the child. Ambrit is asking now, in the doorway of a two-bed clinic, in a coat that has been repaired more often than it has been washed.
+
+*page_break
+
+*choice
+  #Give them the six doses.
+    *set crew %-10
+    *set nerve %+8
+    *set melisse "generous"
+    "Six doses. ${medname}, start them today."
+
+    *if (med = "vasi")
+      Vasi records his objection in the log, in one sentence, and then treats all three of them with complete competence and no further comment of any kind.
+      *set rel_med %-8
+    *if (med = "nour")
+      Nour says "Yes, Captain," and goes for her kit, and says nothing more about it until the ship is nine days away and something has gone wrong, and then she says it once.
+      *set rel_med %-4
+    *if (med = "sorrel")
+      Sorrel is halfway to the kit before you have finished the sentence.
+      *set rel_med %+10
+
+    Ambrit does not thank you. She writes the three names in the book under *treated*, in the same hand as everything else, and closes it.
+    *goto accident
+  #Two courses. Four doses. Seven stay aboard.
+    *set rule %+8
+    *set standing %+3
+    *set melisse "split"
+    "Two courses. Four doses. Administrator, you choose which two."
+
+    It is the worst four seconds of the visit. Ambrit looks at you, then at the wall for a long moment, and then says a name, and another name, and does not say the third; and the third man is standing in the corridor and hears her not say it.
+
+    His name is Fen Doury. He is fifty-eight. He says, "That's fair," which is unbearable.
+    *set rel_med %+4
+    *goto accident
+  #No. The arrangement covers emergencies. This is not one.
+    *set crew %+10
+    *set candor %+6
+    *set standing %+5
+    *set melisse "refused"
+    "The arrangement covers emergencies. This is not one, and I am nine days from resupply with a hundred and twelve people aboard. The answer is no."
+
+    Ambrit nods. She expected it, and that is the part that stays with you — that she had already worked out the answer would be no and asked anyway, because asking cost her nothing and not asking would have cost her three men.
+
+    "Right," she says. "Register's done. You'll want to be off before the storm."
+    *set rel_med %+5
+    *goto accident
+  #Give it to ${medname}. ${medThey} runs the dispensary.
+    *set rule %-14
+    *set melisse "delegated"
+    "Doctor. Your dispensary, your call."
+
+    ${medname} looks at you for slightly too long.
+    *if (med = "nour")
+      Then Nour says: "Four doses. Two men. And Captain — I will do it, and I will be right, and you will still be the one who said it out loud when somebody asks you in eleven months. It does not transfer."
+      *set rel_med %+6
+    *if (med = "sorrel")
+      Then Sorrel says "Six," immediately; and then, much more quietly, "I am not sure I should be allowed to answer that as fast as I just did."
+      *set rel_med %+8
+    *if (med = "vasi")
+      Then Vasi says: "None. And you have just made me the reason, which is efficient, and which I will not forget."
+      *set rel_med %-10
+    *goto accident
+
+*label accident
+*page_break
+
+*comment ---------------- The Rest's hospitality ----------------
+
+Before the storm they feed you.
+
+This is not optional. It is in the arrangement — paragraph eleven, *reciprocal hospitality* — and sixty years ago somebody in a Concord office signed it without asking what would be served, and what is served is a dish called simply *the block*: sixty-year-old sourdough starter, mine protein, and the salt they cannot sell, pressed into a brick and cut with a wire.
+
+It is grey. It is warm. It has the texture of a decision you have already made.
+
+Ambrit watches you take the first mouthful with the flat attention of a woman who has watched nineteen years of Survey officers take the first mouthful.
+
+*choice
+  #Eat all of it and ask for more.
+    *set nerve %+8
+    *set crew %+6
+    *set standing %+3
+    You eat all of it. You ask for more. There is a silence in the refectory that you could hang a coat on, and then a man at the back laughs so hard he has to put his head on the table, and somebody thumps you between the shoulders hard enough to move you forward on the bench.
+
+    Ambrit says: "Nobody's asked for more since 'ninety-one." She cuts you another slice. It is worse than the first one, because it is from the end.
+    *set rel_sec %+5
+    *goto icefall
+  #Eat it, say nothing, and never speak of it again.
+    *set candor %-8
+    *set rule %+4
+    You eat it. You do not react. Three hundred and forty people fail to get the entertainment they came for, and you can feel the disappointment arriving like weather.
+
+    Ambrit's mouth moves about a millimetre. "Huh," she says.
+    *goto icefall
+  #"What is in this?"
+    *set candor %+10
+    *set rel_med %+6
+    You ask, out loud, in the refectory, with your mouth still full.
+
+    Ambrit tells you. All of it, ingredient by ingredient, including the year the starter was begun and the name of the woman who began it, and the fact that it has been fed every single day since by somebody whose job that is, and that when the Rest was nearly abandoned in 'seventy-four the starter was the second thing on the evacuation list.
+
+    You put the rest of the slice down, and then, after a moment, you pick it up again and finish it, and that is the part Ambrit will tell people about.
+    *set standing %+4
+    *goto icefall
+
+*label icefall
+*page_break
+
+*comment ---------------- The ice fall ----------------
+*comment Multi-level test on nerve; secondary on crew and rule. This is the
+*comment chapter's teeth.
+
+The storm arrives four hours early and the number four gallery comes down.
+
+You hear it before anybody tells you: a sound like a door closing somewhere enormous, and then the floor moves, once, and the lights swing. Somebody's cup goes off the table and does not break, because everything in the Rest is made not to break.
+
+Then the shouting starts, and it is coming from below.
+
+Two miners in number four. Roof fall, eighty metres in, gallery blocked at forty. They are alive: there is a hardline through the ice and a woman on the other end of it saying her own name over and over, which is what you do when you cannot think of anything else to say.
+
+The Rest has fourteen people who can dig and no cutting gear that will work in a live fall. Your ship has both, and your ship is in orbit, and the storm is on the field.
+
+*if (sec = "oyelaran")
+  Oyelaran is at your elbow before you have turned around. "Four hands, two cutters, and the *Tern* can fly in that if Beye is any good. Say the word, Captain."
+*if (sec = "whitlow")
+  Whitlow is already crouched at the gallery mouth with her hand flat on the ice, reading the fall the way she reads a set of books. "It came down in two stages," she says. "There'll be a third."
+*if (sec = "mott")
+  Mott has gone to the gallery mouth and put one grey hand against the fall and stopped, absolutely still, listening to it through her palm. "It is not finished," she says.
+
+*page_break
+
+*choice
+  #Get the cutters down here now. Beye can fly it.
+    *set nerve %+12
+    *set crew %-6
+    *goto ice_go
+  #Get the structural read first. Nobody goes in until we know where the third fall is.
+    *set nerve %-12
+    *set rule %+6
+    *goto ice_wait
+  #Ask ${secname} and do what ${secthey} says.
+    *set rule %-14
+    *set crew %+8
+    *set rel_sec %+10
+    *goto ice_ask
+
+*label ice_ask
+*if (sec = "oyelaran")
+  "Then we go now," says Oyelaran, "and I will take responsibility for the third fall."
+
+  You tell him the responsibility is not available to him and to go anyway.
+  *goto ice_go
+*if (sec = "whitlow")
+  "Eleven minutes," says Whitlow. "Give me eleven minutes and a probe and I will tell you exactly where not to stand, and then we go, and nobody has to be brave."
+  *goto ice_wait
+*if (sec = "mott")
+  Mott takes her hand off the ice. "The fall will come again," she says, "in under an hour. So we go now, and we go fast, and I will hold the roof."
+
+  You are about to ask what she means by that and then you understand that she means it literally.
+  *goto ice_go
+
+*label ice_go
+*page_break
+
+Beye brings the *Tern* down through a storm that is well outside her operating envelope, on instruments, with two cutters and six people in the back, and he does not say anything on the approach except the numbers.
+
+*set strain +6
+
+You go into number four at eighty metres of bad ice with the sound of the roof working overhead.
+
+*if (nerve > 65)
+  You go in first. Nobody discusses it. You are the third person through the gap when it opens and you are the one who gets a hand round the wrist of a woman named Ilse Novy and pulls, and you find out that day exactly what your own voice sounds like under a roof that is talking.
+  *set standing %+8
+  *set rel_sec %+8
+*if (nerve <= 65) and (nerve > 38)
+  You go in with the second party, which is correct, and you spend nineteen minutes at the forty-metre line passing cut blocks back down a line of people and hearing the roof work, and it is the longest nineteen minutes of the year so far.
+  *set standing %+4
+*if (nerve <= 38)
+  You run the recovery from the gallery mouth, which is where a commanding officer belongs, and you are right, and you know you are right, and you stand at the mouth for forty-one minutes listening to other people's breathing on the hardline.
+  *set standing %+2
+
+They get both of them out. Ilse Novy has a broken pelvis and the other one, a boy of nineteen, walks out on his own feet and then sits down suddenly on the ice and cannot get up again for some time.
+
+The third fall comes fifty minutes later and takes the whole of number four gallery, and there is nobody in it.
+
+*goto ice_after
+
+*label ice_wait
+*page_break
+
+*if (sec = "whitlow")
+  Whitlow gets her eleven minutes.
+*if (sec != "whitlow")
+  You get a probe down the hardline and a structural read in fourteen minutes, which is fourteen minutes of a woman saying her own name into the ice.
+
+The read says the fall came down in two stages and the second stage is holding on a single wedge of blue ice about the size of a door, and that when the wedge goes the whole roof between forty and eighty metres goes with it.
+
+So you know where not to stand. You cut in from the side, through eleven metres of solid face instead of four metres of rubble, which takes ninety minutes instead of thirty and does not put one single person under the wedge.
+
+*set strain +3
+
+*if (crew > 60)
+  You will not order anybody under that roof. You say so out loud at the gallery mouth, in front of the Rest's own people, and one of the Rest's own people says *they're ours, not yours* and you say *the ones with the cutters are mine* and that is the end of the argument.
+  *set standing %+3
+  *set rel_sec %+6
+*if (crew <= 60)
+  You put four of your own under the safe line and keep them there, and you do the arithmetic every eleven minutes, and you keep doing it because that is the job.
+  *set standing %+5
+
+They get both of them out at the ninety-fourth minute. Ilse Novy has a broken pelvis and a boy of nineteen walks out on his own feet and then sits down suddenly on the ice and cannot get up for some time.
+
+The wedge goes forty minutes after that and takes the gallery, and there is nobody in it, and nobody ever finds out whether the fast way would have worked.
+
+*goto ice_after
+
+*label ice_after
+*page_break
+
+*comment ---------------- After ----------------
+
+${medname} works on Ilse Novy in the Rest's two-bed clinic for three hours with the storm hitting the roof.
+
+*if (med = "nour")
+  Nour asks her name at the beginning. At the end, when Novy is under and it can make no difference to anyone, Nour says it again, out loud, to nobody: *Ilse Novy.* Then she washes her hands for a long time.
+*if (med = "sorrel")
+  Sorrel talks the whole way through, quietly, about nothing — the weather on Sarn, a dog he had, the correct way to make coffee, which the third watch does not know. Novy is unconscious for two hours of it. He goes on talking anyway.
+*if (med = "vasi")
+  Vasi narrates the whole procedure aloud, level and unhurried, for the record. Afterwards, when you play the recording back, the part that stays with you is that in three hours and eleven minutes his voice does not change once, including at the point where he nearly loses her.
+
+*if (melisse = "generous")
+  Three miners with grey lung are on the second day of a course that will buy them a decade, and Ambrit has not mentioned it and will not.
+*if (melisse = "refused")
+  Fen Doury, fifty-eight, is on the line at the gallery mouth passing blocks with everybody else, and he does not look at you once, and it is not because he is angry.
+*if (melisse = "split")
+  Fen Doury, fifty-eight, is on the line at the gallery mouth passing blocks with everybody else. He was not one of the two. He works his shift and then he works somebody else's.
+*if (melisse = "delegated")
+  ${medname} comes out of the clinic at 0400, and you realise that you have not asked ${medthem} how the three miners were chosen, and that ${medthey} has been waiting nine hours for you to.
+  *set rel_med %-4
+
+*page_break
+
+At the mast, in the last of the storm, Ambrit hands you a crate. It is ice wine.
+
+"For the ship," she says. "Not for you. Don't get ideas."
+
+*choice
+  #"Administrator. Tell me who the ship is named for."
+    *set candor %+6
+    *set rule %-4
+    Ambrit looks at you as though you have asked her the price of the moon.
+
+    "How would I know? You people name them after your own dead." She thinks about it, though. She actually thinks about it. "Ivo never said either, and Ivo talked." She shrugs. "Ask a priest. They keep lists."
+    *if (chap = "wren")
+      You do, eleven days later, and Wren says: "Yes," and then nothing else for so long that you have to ask him a second time.
+      *set plaque true
+      *set rel_chap %+6
+    *if (chap = "onu")
+      You do, eleven days later, and Onu says "Perpetua" as if you had asked whether water was wet, and then goes on folding.
+      *set plaque true
+      *set rel_chap %+6
+    *if (chap = "serat")
+      You do, eleven days later, and Serat looks it up properly and comes back with three candidates and a recommendation, which is exactly what you asked for and somehow not what you wanted.
+    *if (chap = "none")
+      You will ask three more people over the next four months. None of them will know.
+      *achieve empty_berth
+    *goto ch2end
+  #"Was he a good captain?"
+    *set candor %+10
+    *set crew %+6
+    "Ivo?" Ambrit fastens her coat. "He was a good *man*, which is not the same thing and I'd never have said so to his face."
+
+    She looks at the field, and the *Tern*, and the boy of nineteen being helped up the ramp.
+
+    "He'd have gone in first, mind. Every time. Whether it was clever or not." She glances at you. "You want to know what I make of you, you'll have to come back in six months like everybody else."
+    *set standing %+4
+    *goto ch2end
+  #Say nothing. Take the crate. Go.
+    *set candor %-10
+    *set rule %+6
+    You take the crate. You thank her for the hospitality, which is a lie about the block and the truth about everything else, and you go up the ramp.
+
+    At the top you look back. She is still standing at the mast in the last of the storm, watching you leave, the way she has watched thirty-eight Survey ships leave, and you understand with complete clarity that she is not going to decide anything about you today and that this is entirely reasonable.
+    *goto ch2end
+
+*label ch2end
+*page_break
+
+*comment ---------------- The log ----------------
+
+The master's night log is four lines on most days. Tonight it is not.
+
+*choice
+  #Write all of it. The doses, the delay, the gallery, and what you were thinking.
+    *set candor %+14
+    *set rel_xo %+6
+    You write six hundred words. Two miners, one gallery, eleven doses and where they went, and — because there is a box on the form headed *master's remarks* and nobody has ever told you what it is for — four sentences about the fourteen minutes you spent not sending anyone into number four.
+
+    Somewhere in the Survey there is an archive where that log will sit for thirty years, and you have just put your own hesitation in it, in your own hand, on your first port call.
+    *if (xo = "marand")
+      Marand countersigns it at 0500 without comment. Two days later you find that she has copied the *master's remarks* into her own notebook, word for word, and you do not ask why.
+    *goto ch2close
+  #Write what happened. Leave out what you were thinking.
+    *set candor %-8
+    *set rule %+6
+    Four hundred words, complete, accurate, and airless. Times, names, doses, outcome. Anybody reading it in thirty years will know exactly what occurred at Halbard's Rest and nothing whatsoever about who was in command.
+
+    That is what the form is for. It is also, you notice, a choice.
+    *goto ch2close
+  #Write the minimum the regulation requires.
+    *set candor %-16
+    *set rule %+8
+    *set standing %-3
+    Ninety words. Position, event, casualties, disposition. It takes four minutes.
+
+    You look at it for rather longer than four minutes before you sign it.
+    *goto ch2close
+
+*label ch2close
+*page_break
+
+You take her out of Halbard orbit at 0640 with a crate of ice wine in the number three locker beside four bottles that belong to somebody else.
+
+*if (told_crew = "halloran")
+  On the mess deck, somebody has written *HALLORAN* on the whiteboard by the coffee urn, and under it, in a different hand, *and Ambrit says he'd have gone in first*, and under that, in a third hand, and this is the part that matters, *so did ours.*
+*if (told_crew != "halloran")
+  On the mess deck, somebody has written *ONE DOWN* on the whiteboard by the coffee urn, and a number: three hundred and fifty-six. That is how many days are left.
+
+Ahead there are eleven more settlements, three member colonies, and forty light years of thin badly charted nothing.
+
+Behind you, in a book with a cloth spine, your name has been added to the roll of Halbard's Rest, which is not an honour, and which means that if you die there they are obliged to bury you.
+
 *finish
