@@ -1,3 +1,312 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER SIX — THE QUIET WORLD ====================
+*comment Wonder, warmth, and Counsel's moment of glory: the youngest person
+*comment aboard is right and the player lets her be. Budget: 12 tests, 13 choices.
+*comment Ledger: Ossa, catalogued 41 years ago as sterile. Rings once every
+*comment eleven days for sixty hours. Tey Abara, comms rating, 22, hears it first
+*comment at 0410. The probe would damp the resonance permanently.
+
+Ossa is a rock.
+
+That is the entire catalogue entry, forty-one years old, written by a Survey lieutenant who spent nine hours in orbit and had somewhere else to be: *OSSA. Terrestrial, 0.81 standard. Atmosphere thin, inert. Surface ice and basalt. No biology. No resources of interest. Recommend no further visit.*
+
+You are here because the Survey updates its catalogue every forty years whether anybody wants it or not, and because after Sedge and the *Corvine* and Article Nine, a fortnight in orbit around a rock is the best thing that could possibly happen to this ship.
+
+For nine days nothing happens. It is wonderful. ${engname} strips the number two coolant loop for the fourth time and fails to stop it whistling. ${medname} runs the annual physicals and finds that eleven people have gained weight and nobody has lost any, which ${medthey} reports to you as *the single most encouraging medical finding of my career.*
+
+On the tenth day, at 0410, Tey Abara calls the bridge.
+
+*page_break
+
+*comment ---------------- The note ----------------
+
+Abara is twenty-two. She talked a sixteen-year-old about Sarn for two hours at the *Corvine* and did not hand over. She has been on the graveyard comms watch for five months and she is, by an enormous margin, the most bored person on this ship.
+
+"Captain," she says, "there's something on the hull."
+
+It is not on the hull. It is coming *through* it: a sound at the very bottom of hearing, so low that half the bridge cannot hear it at all and the other half can feel it in the teeth. It is not machinery. ${engname} shuts down every rotating component on the ship in eleven minutes to prove it, and the sound goes on.
+
+It is the planet.
+
+*page_break
+
+Ossa rings.
+
+Every eleven days, when the gas giant it orbits pulls it into its longest stretch, the whole crust flexes; and forty kilometres down, in a network of ice caverns that runs the entire circumference of the world, the flex drives a column of air, and the world sounds a single note and holds it for sixty hours.
+
+It is B flat, three octaves below the bottom of a piano. It has been going for somewhere between two hundred and four hundred million years. Nobody has ever heard it, because the Survey lieutenant who catalogued Ossa was here on day four of an eleven-day cycle and had somewhere else to be.
+
+*choice
+  #Put it on the ship's address system. All decks. Now.
+    *set candor %+10
+    *set crew %+12
+    *set nerve %+6
+    You pipe a rock's heartbeat through a hundred and twelve people's compartments at four in the morning.
+
+    Nobody complains. That is what you remember: not one complaint, from a crew you woke at 0410 on a Tuesday, and by 0500 there are eleven people in the observation blister who are supposed to be asleep, and by 0600 there are thirty.
+    *set rel_med %+6
+    *set rel_sec %+6
+    *goto ossa_science
+  #Record it. Wake nobody. It will still be here at 0800.
+    *set rule %+8
+    *set nerve %-6
+    You have it recorded at full spectrum and you go back to bed, and at 0800 you play it in the wardroom to five officers with cups of coffee, which is the correct way to introduce a scientific finding and is, you will realise later, the single largest failure of imagination of your entire command.
+    *set rel_eng %+4
+    *goto ossa_science
+  #Send for Abara. She found it; she gets to say what happens next.
+    *set rule %-14
+    *set crew %+10
+    *set rel_sec %+8
+    A rating on the graveyard watch is sent for by the master of the ship at 0420 and arrives convinced she is in trouble.
+
+    "Miss Abara," you say. "You found it. What do we do?"
+
+    She stares at you for four seconds. Then: "Put it on the address system, Captain. All decks. Everybody should get to hear a thing like that once."
+
+    You do. By 0600 there are thirty people in the observation blister who are supposed to be asleep, and Abara is off watch and asleep at the back of them with her boots on.
+    *goto ossa_science
+
+*label ossa_science
+*page_break
+
+*comment ---------------- The probe ----------------
+
+Within three days the *Perpetua* has become a research vessel, which she was designed to be and has not been for fourteen months, and it is the happiest the ship has been.
+
+The science party wants to put a probe down.
+
+It is a good proposal. Forty kilometres of ice, a bore of eleven centimetres, an instrument package into the cavern network itself: pressure, temperature, gas composition, the geometry of a resonant chamber the size of a continent. Nobody has ever measured anything like it. It would be the most significant thing the *Perpetua* has done in twenty-six years and it would carry your name on it.
+
+*if (eng = "osimo")
+  Osimo, who has not volunteered an opinion on a scientific matter in nineteen years aboard, says: "It'd be a shame to put a hole in it." Then he goes back below and will not be drawn.
+*if (eng = "kallas")
+  Kallas has the bore package half-built by the second afternoon and is talking at nine syllables a second about differential melt rates, and it is not until you ask her a direct question that you realise she has not slept.
+*if (eng = "dorr")
+  "I am sorry," says Dorr. "I can build the bore. I would like it noted that in the Vaunt this would be authorised in one hour by a clerk, and that this is one of the four or five things I actually left over."
+
+*if (med = "vasi")
+  Vasi wants it. He does not pretend otherwise and he is not embarrassed. "Captain, there are eleven resonant bodies known and none of them are reachable. This is a career. Somebody's career. I would prefer it to be mine but I will take yours."
+*if (med = "nour")
+  "It is a rock that makes a noise," says Nour, "and I have three people with vitamin deficiencies and a ship that has been cheerful for a week. I have no view on your hole. I have a view on the week."
+*if (med = "sorrel")
+  Sorrel asks, apparently seriously, whether the planet would mind, and then apologises for asking, and then, after a moment, says he is not actually sure he was joking.
+
+*page_break
+
+And then, on the fifth day, the science party finds the problem and reports it honestly, which is to their enormous credit.
+
+An eleven-centimetre bore into a resonant chamber vents. Not much: a fraction of a per cent of the column, forever, because ice at that depth does not re-seal. The note would not stop. It would go flat — by something on the order of one part in nine thousand, permanently, for the remaining life of the planet.
+
+Nobody would ever hear the difference. No instrument in the Concord could hear the difference without the *before* recording, which only this ship has, which you made at 0410 on a Tuesday.
+
+*choice
+  #"One part in nine thousand. Build the probe."
+    *set rule %+10
+    *set nerve %+8
+    *set standing %+8
+    *set quiet_named false
+    You say it out loud in the wardroom, because it is the right answer and you are not going to whisper it: that Ossa is a rock, that it is not owed anything, that the Concord has eleven worlds and forty light years of ignorance, and that a fraction of a per cent of a column of air is not a moral object.
+
+    ${xoname} logs it. Kallas — or whoever is building it — has the bore ready in six days.
+    *goto ossa_abara
+  #"No. Not for one part in nine thousand."
+    *set rule %+8
+    *set nerve %-6
+    *set standing %-6
+    *set quiet_named true
+    You say no, on the fifth day, before anybody has argued, and you say it in one sentence and do not explain, and the science party takes it the way a science party takes a no from somebody who has not shown their working.
+
+    It is the right answer and you have delivered it in the worst available way, and it will cost you eleven weeks of goodwill from four people who deserved better.
+    *set rel_med %-8
+    *goto ossa_after
+  #Put it to the ship. Anybody who wants to argue, argue.
+    *set rule %-16
+    *set candor %+10
+    *set crew %+8
+    You post the proposal, the bore specification, and the damping figure on the mess board, unedited, and you announce that anybody aboard who has a view may put it in writing to the first officer by Friday.
+
+    ${xoname} receives forty-one written submissions from a crew of a hundred and twelve, which is a number you will quote for the rest of your career, usually to people who do not believe you.
+    *set rel_xo %+10
+    *goto ossa_abara
+
+*label ossa_abara
+*page_break
+
+*comment ---------------- Counsel's moment of glory ----------------
+
+The forty-first submission — or, if there were no submissions, a request to see the master, made properly through the first officer, and waited out for two days — is from Tey Abara, comms rating, twenty-two, who has no scientific qualification whatsoever.
+
+It is one page. It is not sentimental. It does not use the word *beautiful* and it does not ask you to spare anything.
+
+What it says is this. The Survey has forty-one years of archived gravitational data on Ossa, taken from four passing ships, and Ossa's flex cycle is recorded in all four. The note's frequency is a function of the cavern geometry. The cavern geometry is a function of the flex. Therefore the drift in the note across forty-one years is already in the archive, and from the drift you can solve the geometry, and you can have almost everything the probe would give you for the price of a fortnight's arithmetic and no hole at all.
+
+She has done nine pages of the arithmetic in the back. Three of the nine pages are wrong.
+
+Six of them are not.
+
+*page_break
+
+*if (sec = "whitlow")
+  Whitlow read it before you did, because everything on this ship goes past her, and her note in the margin says: *This is either the best piece of work done aboard this year or a coincidence. I have checked it twice and it is not a coincidence.*
+*if (sec = "oyelaran")
+  Oyelaran hands it to you with the observation that a rating has gone round her own department, her own division officer, and two lieutenants to put a paper on the master's desk, and that he would like that noted before anybody starts calling her brilliant.
+*if (sec = "mott")
+  Mott says: "The small one at the board has done a thing." She holds up the page in one grey hand, which makes it look like a receipt. "I do not understand it. I understand that she did it at night."
+
+*choice
+  #Send for her. In the wardroom, in front of the officers, and let her present it.
+    *set rule %-18
+    *set candor %+12
+    *set crew %+10
+    *set standing %+6
+    *set quiet_named true
+    *achieve counsel
+    A comms rating stands at the foot of the wardroom table of a Concord Survey vessel with nine pages of her own arithmetic and presents to five commissioned officers, three of whom outrank her by more than she can count.
+
+    She is terrified for ninety seconds. Then she stops being terrified, because the third page has a question in it that ${engname} asks and that she has already answered on the seventh, and after that it is not a rating presenting to officers, it is six people at a table doing a piece of work.
+
+    Two hours later ${engname} says, "The three bad pages are bad. The other six are right." And that is that.
+    *set rel_eng %+10
+    *set rel_sec %+10
+    *goto ossa_decide
+  #Have ${engname} check it and tell me if it holds.
+    *set rule %+8
+    *set standing %+4
+    ${engname} takes it away for two days and comes back and says that three pages are wrong and six are right, and that the six are enough.
+
+    You thank ${engthem}. It does not occur to you until much later that you thanked the wrong person, and that a comms rating heard the outcome of her own paper from her division officer, secondhand, in a corridor.
+    *set rel_sec %-6
+    *set quiet_named true
+    *goto ossa_decide
+  #She is a comms rating. Put it in the file with the others.
+    *set rule %+14
+    *set crew %-10
+    *set candor %-6
+    You file it. There are forty-one submissions and yours is a research vessel with a science party of nine qualified people, and a master who reorganises a scientific programme around a twenty-two-year-old's homework is a master who will be reorganising it around everybody's homework by Friday.
+
+    That reasoning is sound. It is also, as it happens, wrong, and you will find out how wrong in eleven days when the science party independently derives four of her six pages and presents it to you as a novel result.
+
+    *if (rel_sec > 60)
+      ${secname} does not say *I gave you that in writing on the fifth day.* You can see ${secthem} not saying it from across the wardroom.
+      *set rel_sec %-8
+    *goto ossa_decide
+
+*label ossa_decide
+*page_break
+
+*comment ---------------- The hole ----------------
+
+It comes down to you, in a cabin three metres by four, as everything does.
+
+*if (quiet_named)
+  You have on the desk: nine pages of arithmetic by a twenty-two-year-old, six of which are right; a bore package that is built and ready; and a recording, made at 0410 on a Tuesday, of a sound that has been going for three hundred million years and has never been heard.
+*if (quiet_named = false)
+  You have on the desk: a bore package that is built and ready, and a recording made at 0410 on a Tuesday.
+
+*if (plaque)
+  Twenty centimetres from your face, in brass: *THE LEAST THAT ANSWERS.*
+
+*choice
+  #No bore. Take the forty-one years of archive and do the arithmetic.
+    *set rule %+4
+    *set nerve %-8
+    *set crew %+8
+    *set quiet_named true
+    You cancel the bore.
+
+    It takes the science party a fortnight and they get eleven of the fourteen things they wanted, and the three they do not get are the three that mattered least, and one of them writes in the report — over your name, because that is how reports work — that the result was obtained *without instrumentation of the resonant body.*
+
+    Forty years from now some other ship will come here and hear exactly what you heard, at exactly the pitch you heard it, and will not know why that is true.
+    *set standing %-4
+    *goto ossa_end
+  #Bore it. This is what a survey ship is for.
+    *set rule %+10
+    *set nerve %+10
+    *set standing %+10
+    You authorise the bore and it goes down on the ninth day, and it is a superb piece of engineering, and the data is extraordinary and will be cited for eighty years.
+
+    On the twenty-second day the cycle comes round again and the ship listens, and the note is one part in nine thousand flat, and there is not a person aboard who can hear it.
+
+    ${engname} can measure it. ${engThey} measures it once, and enters the figure, and does not mention it again.
+    *set quiet_named false
+    *set rel_eng %-6
+    *goto ossa_end
+  #Bore it — and log the damping figure, in full, in the catalogue entry.
+    *set rule %+8
+    *set candor %+14
+    *set standing %+6
+    You authorise the bore, and then you do the thing that nobody in the Survey does: you write the cost into the catalogue.
+
+    *OSSA. Resonant body. Fundamental 28.7 millihertz, sixty-hour sustain, eleven-day cycle. Instrumented by CS Perpetua, master Cdr ${name}. Note: instrumentation permanently damped the fundamental by 1.1 x 10^-4. This entry records that the damping was known, was authorised by me, and was judged worth it.*
+
+    Forty years from now somebody will read that and know exactly what was traded and by whom, which is the entire difference between a decision and an accident.
+    *set quiet_named false
+    *goto ossa_end
+  #No bore. And write down why, where the Survey will see it.
+    *set rule %+6
+    *set candor %+14
+    *set crew %+8
+    *set standing %-8
+    *set quiet_named true
+    You cancel the bore, and you write the reason into the catalogue entry, which is worse than cancelling it, because it puts a sentence with no instrument reading behind it into a document that is nothing but instrument readings:
+
+    *Instrumentation declined. The body has sounded for approximately 3 x 10^8 years and would have been permanently altered. The scientific yield was obtainable, at 79 per cent, from archive. The remaining 21 per cent was not judged worth the alteration. This judgement was mine and is not a precedent.*
+
+    ${xoname} reads it twice before countersigning.
+    *if (xo = "marand")
+      "*Is not a precedent*," Marand says. "Captain, everything is a precedent. That is what a record is." She signs it anyway.
+    *if (xo = "ferreo")
+      "Somebody at Central is going to read this out loud," Ferreo says, "and about a third of them are going to think you have lost your mind, and the other two thirds are going to remember your name, and I genuinely cannot tell you which is better."
+    *if (xo = "tanaka")
+      "Twenty-one per cent," Tanaka-Osei says. "That's the honest bit. Most people would've written it up as though there was nothing lost." She hands it back. "Sign it."
+    *goto ossa_end
+
+*label ossa_end
+*page_break
+
+*comment ---------------- What the ship keeps ----------------
+
+The *Perpetua* leaves Ossa on the twenty-ninth day.
+
+*if (quiet_named)
+  Somewhere in the fortnight, the ship names the note.
+
+  It is not official and it never becomes official. It happens on the mess deck, the way these things do, and by the time it reaches you it is settled and unarguable and nobody can tell you who started it. They call it **the Long Note**, and the recording lives on the ship's general library where anyone can get at it, and by the end of the year eleven people are using it to sleep to.
+
+  *if (sec = "mott")
+    Mott names it something else, in Karsk, and will not translate it, and says only that it is what her people call a sound that was there before anyone was listening. Two of the ratings learn to say it. They say it wrong. She lets them.
+*if (quiet_named = false)
+  The recording goes into the ship's library and the data goes into the Survey's archive, and eleven months from now a paper is published with your name third on it, and it is genuinely excellent work.
+
+  Nobody on the mess deck ever gives the note a name.
+
+*if (chap = "wren")
+  On the last night Wren asks you to come aft to the old scanner bay and play the recording in it, because, he says, the compartment has eighteen seats and hard walls and he would like to know what it does in there. It does something. The two of you sit in it for the whole sixty seconds you have of it and neither of you says a word, and afterwards he says, "Thank you, Captain," and nothing else at all.
+  *set rel_chap %+12
+*if (chap = "onu")
+  Onu listens to it once, all the way through, with her hands still for the only time you have ever seen. Then she says, "Well," and picks up the folding again. "That is an argument, that is," and does not say what for.
+  *set rel_chap %+10
+*if (chap = "serat")
+  Serat has the recording playing quietly in his compartment for the rest of the year, and eleven people find excuses to come and sit in there, and he never once mentions this to you, and you find out from the yeoman.
+  *set rel_chap %+8
+*if (chap = "none")
+  On the last night somebody moves eighteen chairs into the old scanner bay, aft of the laboratory, and plays the recording in it, because the compartment has hard walls and somebody worked out that it would sound good in there.
+
+  Thirty-one people go. Nobody organises it. Nobody says anything. It lasts four minutes and then everybody goes back to work, and it is the closest thing to a service that this ship has had in fourteen months, and it happened without you and without anybody's permission.
+  *achieve empty_berth
+  *set crew %+6
+
+*page_break
+
+*if (rel_sec > 65)
+  At 0410 on the last night you go up to the comms board, because that is a thing you do now, and Abara is there, and she says: "Captain — do you think anybody will ever come back and listen to it?"
+*if (rel_sec <= 65)
+  At 0410 on the last night the comms board is manned by Tey Abara, twenty-two, who found it, and who says nothing at all when you come up, because she has learned in six months that you do not particularly want to be spoken to at 0410.
+
+*if (quiet_named)
+  Ossa rings behind you for another forty-eight hours and then stops, and starts again eleven days later, at exactly the pitch it has held for three hundred million years, with nobody in the system at all.
+*if (quiet_named = false)
+  Ossa rings behind you for another forty-eight hours and then stops, and starts again eleven days later, one part in nine thousand flat, with nobody in the system at all.
+
+Ahead, four days out, there is a distress call on the automatic band, and this one is not a rock.
+
 *finish

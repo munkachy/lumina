@@ -91,6 +91,11 @@
 *create sedge "none"
 *create sedge_dead 0
 *create sedge_open false
+*create kem_pc false
+*create kem_eng false
+*create kem_vol false
+*create kem_burn false
+*create kem_dead 0
 *create gave_cure false
 *create article_nine "none"
 *create kept_secret false
