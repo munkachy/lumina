@@ -102,6 +102,8 @@
 *create quiet_named false
 *create salvage_saved 0
 *create board_verdict "open"
+*create board_candid false
+*create board_asked false
 *create ceyla_known 0
 *create met_halloran false
 *create halloran_regard 50
