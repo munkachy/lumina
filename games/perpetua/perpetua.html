@@ -1,0 +1,756 @@
+<title>Perpetua</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --lead:#05080d; --lead2:#0a0f16;
+  --glass:#0d141d; --glass2:#141d29;
+  --ink:#dce6ee; --ink2:#8ea2b4; --ink3:#5a6c7d;
+  --amber:#e8a33d; --cobalt:#54bfd6; --ruby:#d9584f; --verd:#6fbf83; --violet:#9b8ade;
+  --came:#01040a; --rule:#1c2733;
+  --fs:19px; --col:34rem;
+}
+:root[data-theme="light"]{
+  --lead:#dfe4e8; --lead2:#eaeef1;
+  --glass:#f7f9fb; --glass2:#eaeff4;
+  --ink:#10161d; --ink2:#465360; --ink3:#7e8b98;
+  --amber:#8a5a08; --cobalt:#0f5a6b; --ruby:#8f2119; --verd:#215c31; --violet:#4d3f8a;
+  --came:#141b23; --rule:#c3ccd4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--lead); color:var(--ink);
+  font-family:Spectral,Georgia,serif; font-size:var(--fs); line-height:1.75;
+  -webkit-font-smoothing:antialiased; padding-bottom:5.4rem;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(84,191,214,.075), transparent 72%),
+    radial-gradient(ellipse 50% 38% at 8% 42%, rgba(232,163,61,.045), transparent 70%),
+    radial-gradient(ellipse 50% 38% at 92% 74%, rgba(155,138,222,.04), transparent 70%);
+  background-attachment:fixed;
+}
+/* ---------- the bulkhead frame ---------- */
+.frame{position:fixed;inset:0;z-index:45;pointer-events:none}
+.frame::before{content:"";position:absolute;inset:0;
+  border:7px solid var(--came);
+  box-shadow:inset 0 0 0 1px rgba(84,191,214,.16), inset 0 0 70px rgba(0,0,0,.6)}
+.frame::after{content:"";position:absolute;inset:7px;pointer-events:none;
+  border-top:1px solid rgba(232,163,61,.13); border-bottom:1px solid rgba(232,163,61,.13)}
+
+main{max-width:var(--col);margin:0 auto;padding:5.6rem 1.5rem 2rem;position:relative;z-index:1}
+
+/* ---------- prose ---------- */
+p{margin:0 0 1.2rem;text-wrap:pretty}
+strong{font-weight:600;color:var(--amber)}
+em{font-style:italic}
+.hr{height:.55rem}
+figure{margin:1.8rem 0}
+figure img{width:100%;display:block}
+.glazed{position:relative;border:1px solid var(--came);
+  box-shadow:0 0 0 1px rgba(84,191,214,.20), 0 8px 30px rgba(0,0,0,.55)}
+figure figcaption{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.16em;
+  color:var(--ink3);margin-top:.6rem;text-transform:uppercase;text-align:center}
+.imgph{aspect-ratio:3/2;background:
+    linear-gradient(150deg,rgba(84,191,214,.13),rgba(232,163,61,.08) 45%,rgba(155,138,222,.11));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;
+  padding:1.6rem;text-align:center;font-family:"IBM Plex Mono",monospace;
+  font-size:.68rem;color:var(--ink2);line-height:1.8}
+.imgph button{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.16em;
+  text-transform:uppercase;background:rgba(0,0,0,.45);border:1px solid var(--amber);
+  color:var(--amber);padding:.5rem 1rem;cursor:pointer}
+
+/* ---------- choices : lit panels ---------- */
+.choices{margin:2.4rem 0 1rem;display:flex;flex-direction:column;gap:.55rem}
+button.opt{
+  font-family:Spectral,Georgia,serif;font-size:1rem;line-height:1.55;text-align:left;
+  color:var(--ink);border:1px solid var(--came);border-left:4px solid var(--cobalt);
+  background:linear-gradient(100deg, rgba(84,191,214,.13), rgba(84,191,214,.03) 60%, transparent);
+  padding:.9rem 1.15rem;cursor:pointer;position:relative;overflow:hidden;
+  transition:box-shadow .18s, border-left-color .18s, transform .12s;
+}
+button.opt:nth-child(2){border-left-color:var(--ruby);
+  background:linear-gradient(100deg, rgba(217,88,79,.13), rgba(217,88,79,.03) 60%, transparent)}
+button.opt:nth-child(3){border-left-color:var(--amber);
+  background:linear-gradient(100deg, rgba(232,163,61,.13), rgba(232,163,61,.03) 60%, transparent)}
+button.opt:nth-child(4){border-left-color:var(--verd);
+  background:linear-gradient(100deg, rgba(111,191,131,.13), rgba(111,191,131,.03) 60%, transparent)}
+button.opt:nth-child(5){border-left-color:var(--violet);
+  background:linear-gradient(100deg, rgba(155,138,222,.13), rgba(155,138,222,.03) 60%, transparent)}
+button.opt:hover,button.opt:focus-visible{
+  box-shadow:inset 0 0 42px -6px currentColor, 0 0 26px -10px var(--amber);
+  outline:none;transform:translateX(2px)}
+button.opt .delta{display:block;font-family:"IBM Plex Mono",monospace;font-size:.63rem;
+  letter-spacing:.1em;color:var(--ink3);margin-top:.4rem}
+button.cont{display:block;margin:2.4rem auto 0;font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  background:none;border:1px solid var(--rule);color:var(--ink2);
+  padding:.68rem 2rem;cursor:pointer;transition:.18s}
+button.cont:hover{border-color:var(--amber);color:var(--amber);
+  box-shadow:0 0 24px -10px var(--amber)}
+
+/* ---------- chrome ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:46;background:var(--lead);
+  border-top:1px solid var(--came);box-shadow:0 -1px 0 rgba(84,191,214,.18);
+  display:flex;gap:.1rem;padding:.45rem .6rem;justify-content:center;flex-wrap:wrap}
+.bar button{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.16em;
+  text-transform:uppercase;background:none;border:1px solid transparent;color:var(--ink3);
+  padding:.5rem .72rem;cursor:pointer;transition:.15s}
+.bar button:hover{color:var(--amber)}
+.bar button.on{color:var(--amber);border-color:var(--amber)}
+.crumb{position:fixed;top:0;left:0;right:0;z-index:46;background:var(--lead);
+  border-bottom:1px solid var(--came);box-shadow:0 1px 0 rgba(84,191,214,.18);
+  padding:.5rem 1.1rem;font-family:"IBM Plex Mono",monospace;font-size:.6rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);
+  display:flex;justify-content:space-between;gap:1rem}
+.crumb b{color:var(--amber);font-weight:500}
+.crumb .ed{color:var(--ruby)}
+
+/* ---------- panels ---------- */
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(27rem,100%);z-index:60;
+  background:var(--lead2);border-left:1px solid var(--came);
+  box-shadow:-1px 0 0 rgba(84,191,214,.2), -20px 0 60px rgba(0,0,0,.6);
+  overflow-y:auto;padding:1.5rem 1.35rem 4rem;transform:translateX(101%);
+  transition:transform .22s;font-family:"IBM Plex Sans",sans-serif;font-size:.9rem}
+.panel.open{transform:none}
+.panel h3{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink3);margin:1.7rem 0 .7rem;font-weight:400}
+.panel h3:first-child{margin-top:0}
+.panel .x{position:absolute;top:.7rem;right:1rem;background:none;border:none;
+  color:var(--ink3);font-size:1.4rem;cursor:pointer;line-height:1}
+.kv{display:flex;justify-content:space-between;padding:.42rem 0;border-bottom:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink2)}
+.kv span:last-child{color:var(--amber)}
+.panel textarea{width:100%;min-height:8rem;background:var(--glass);color:var(--ink);
+  border:1px solid var(--rule);padding:.65rem;font-family:Spectral,Georgia,serif;
+  font-size:.95rem;line-height:1.6;resize:vertical}
+.panel textarea.note{font-family:"IBM Plex Sans",sans-serif;font-size:.88rem;min-height:5.5rem}
+.panel button.act{width:100%;padding:.62rem;margin-top:.5rem;background:var(--glass);
+  border:1px solid var(--rule);color:var(--ink2);font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+.panel button.act:hover{border-color:var(--amber);color:var(--amber)}
+.panel button.act.prim{border-color:var(--amber);color:var(--amber)}
+.jumps{display:flex;flex-direction:column;gap:1px}
+.jumps button{text-align:left;background:var(--glass);border:none;border-left:3px solid var(--rule);
+  color:var(--ink2);padding:.5rem .7rem;cursor:pointer;font-family:"IBM Plex Sans",sans-serif;
+  font-size:.82rem;display:flex;justify-content:space-between;gap:.6rem}
+.jumps button:hover{color:var(--amber);border-left-color:var(--amber)}
+.jumps button b{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3);font-weight:400}
+.noteitem{background:var(--glass);border-left:3px solid var(--ruby);padding:.55rem .75rem;
+  font-size:.82rem;margin-bottom:.5rem;color:var(--ink2)}
+.noteitem em{display:block;color:var(--ink3);font-size:.68rem;font-family:"IBM Plex Mono",monospace;
+  margin-bottom:.28rem;font-style:normal;letter-spacing:.1em}
+
+/* ---------- stat flash ---------- */
+.flash{position:fixed;left:50%;top:2.7rem;transform:translateX(-50%);z-index:70;
+  display:flex;flex-direction:row;flex-wrap:wrap;gap:.35rem;justify-content:center;
+  pointer-events:none;opacity:0;transition:opacity .3s}
+.flash.show{opacity:1}
+.flash div{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.14em;
+  text-transform:uppercase;padding:.32rem .8rem;background:var(--lead);
+  border:1px solid currentColor;box-shadow:0 4px 18px rgba(0,0,0,.7);
+  animation:rise .45s ease-out}
+@keyframes rise{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.toast{position:fixed;bottom:4.6rem;left:50%;transform:translateX(-50%);z-index:70;
+  background:var(--glass2);border:1px solid var(--amber);color:var(--amber);
+  padding:.5rem 1rem;font-family:"IBM Plex Mono",monospace;font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* ---------- edit affordances ---------- */
+body.editing p{cursor:text;transition:box-shadow .12s}
+body.editing p:hover{box-shadow:-.7rem 0 0 rgba(227,171,72,.10), .7rem 0 0 rgba(227,171,72,.10),
+  0 0 0 .7rem rgba(227,171,72,.10)}
+p.hasnote{border-right:2px solid var(--ruby);padding-right:.55rem}
+p.edited{border-right:2px solid var(--verd);padding-right:.55rem}
+p.stalenote{border-right:2px dashed var(--amber);padding-right:.55rem}
+.backbtn{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.16em;
+  text-transform:uppercase;background:none;border:1px solid var(--rule);color:var(--ink3);
+  padding:.35rem .75rem;cursor:pointer;margin-bottom:1.5rem}
+.backbtn:hover{color:var(--amber);border-color:var(--amber)}
+
+/* ---------- title ---------- */
+.title{text-align:center;padding:2.5rem 0 1rem}
+.title h1{font-size:clamp(3rem,13vw,5.2rem);margin:.6rem 0 0;font-weight:600;
+  letter-spacing:-.025em;line-height:.92;
+  background:linear-gradient(175deg,var(--amber),#f3d9a0 40%,var(--amber));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.title .sub{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ink3);margin-top:1.3rem}
+.title .tag{font-style:italic;color:var(--ink2);margin-top:1.5rem;font-size:1.05rem}
+.rose{display:block;margin:0 auto}
+@media(max-width:32rem){ main{padding-top:4.6rem} .arch{height:3.4rem} }
+</style>
+
+<div class="frame">
+</div>
+<div class="crumb"><span id="cwhere">—</span><span><span id="csync"></span> <span id="cedit"></span></span></div>
+<main id="stage"></main>
+<div class="bar" id="bar"></div>
+<div class="panel" id="panel"><button class="x" onclick="closePanel()">&times;</button><div id="panelBody"></div></div>
+<div class="toast" id="toast"></div>
+<div class="flash" id="flash"></div>
+<input type="file" id="pick" accept="image/*" style="display:none">
+
+<script>
+/* =================================================================
+   Scriptorium engine — Perpetua
+   ================================================================= */
+const SCENES = {"__startup__": "*title Perpetua\n*subtitle A first command\n*author Scriptorium\n\n*scene_list\n  orders\n  coldreach\n  leastthatanswers\n  ashaya\n  articlenine\n  quietworld\n  salvage\n  theboard\n  halloran\n  theweighing\n  nadire\n  wrapup\n\n*comment ---------------- YOU ----------------\n*create name \"Rell\"\n*create pcthey \"she\"\n*create pcthem \"her\"\n*create pctheir \"her\"\n*create pcThey \"She\"\n*create background \"science\"\n*create why \"earned\"\n*create commissioned false\n\n*comment ---------------- THE FOUR LINES ----------------\n*comment Opposed pairs. High is the first name, low is the second. Neither end\n*comment is the good end; the Survey reads all four off your log either way.\n*comment nerve  : Nerve / Restraint  — you move, or you wait\n*comment candor : Candour / Guard    — you say it, or you keep it\n*comment crew   : Crew / Mission     — you protect your people, or you finish the job\n*comment rule   : Rule / Counsel     — you decide, or the room decides\n*create nerve 50\n*create candor 50\n*create crew 50\n*create rule 50\n\n*comment ---------------- THE WORLD ----------------\n*create standing 40\n*create strain 12\n*create oleyo 50\n*create met_oleyo false\n\n*comment ---------------- YOUR OFFICERS ----------------\n*create xo \"\"\n*create xoname \"—\"\n*create xothey \"she\"\n*create xothem \"her\"\n*create xotheir \"her\"\n*create xoThey \"She\"\n*create rel_xo 50\n\n*create eng \"\"\n*create engname \"—\"\n*create engthey \"she\"\n*create engthem \"her\"\n*create engtheir \"her\"\n*create engThey \"She\"\n*create rel_eng 50\n\n*create med \"\"\n*create medname \"—\"\n*create medthey \"she\"\n*create medthem \"her\"\n*create medtheir \"her\"\n*create medThey \"She\"\n*create rel_med 50\n\n*create sec \"\"\n*create secname \"—\"\n*create secthey \"she\"\n*create secthem \"her\"\n*create sectheir \"her\"\n*create secThey \"She\"\n*create rel_sec 50\n\n*create chap \"none\"\n*create chapname \"—\"\n*create chapthey \"he\"\n*create chapthem \"him\"\n*create chaptheir \"his\"\n*create chapThey \"He\"\n*create rel_chap 50\n\n*comment ---------------- WHAT HAS HAPPENED ----------------\n*create told_crew \"nothing\"\n*create melisse \"none\"\n*create melisse_dead 0\n*create gave_cure false\n*create article_nine \"none\"\n*create kept_secret false\n*create quiet_named false\n*create salvage_saved 0\n*create board_verdict \"open\"\n*create ceyla_known 0\n*create met_halloran false\n*create halloran_regard 50\n*create nadire \"none\"\n*create nadire_saved 0\n*create plaque false\n*create tern_lost false\n*create beye_alive true\n\n*comment ---------------- ACHIEVEMENTS ----------------\n*achievement plaque visible 25 Who She Was\n  Find out who the ship is named for.\n  Found out who she was, and that nobody had asked in twenty-six years.\n\n*achievement empty_berth visible 25 The Empty Berth\n  Sail without a chaplain, and be asked about it.\n  Sailed without one, and was asked, twice, by people who did not agree with each other.\n\n*achievement least visible 50 The Least That Answers\n  Give exactly what Standing Order Four permits, and no more.\n  Gave the least that answers. It answered.\n\n*achievement more visible 50 More Than Answers\n  Break Standing Order Four in front of a witness.\n  Broke it, in front of a witness, and wrote it in the log yourself.\n\n*achievement oleyo_respect visible 50 Sar Vehn Oleyo\n  Finish with the Vaunt captain's regard at 80 or above.\n  Was thanked, at the end, by a man who takes no pleasure in lying.\n\n*achievement whole_crew visible 100 All Hands\n  Reach the last chapter with every officer above 60.\n  Brought all five of them the whole way, and not one of them agreed with you throughout.\n\n*achievement nerve visible 50 Nerve\n  Finish with Nerve at 80 or above.\n  Finished a commander who moves first. It cost what it costs.\n\n*achievement restraint visible 50 Restraint\n  Finish with Restraint at 80 or above.\n  Finished a commander who waits. That cost something too.\n\n*achievement candour visible 50 Candour\n  Finish with Candour at 80 or above.\n  Never once said the useful thing instead of the true one.\n\n*achievement guard visible 50 Guard\n  Finish with Guard at 80 or above.\n  Carried what could not be shared, and did not put it down.\n\n*achievement crewfirst visible 50 Crew\n  Finish with Crew at 80 or above.\n  Brought them home. That was the whole job, in the end.\n\n*achievement missionfirst visible 50 Mission\n  Finish with Mission at 80 or above.\n  Finished the work. Someone always has to.\n\n*achievement ruler visible 50 Rule\n  Finish with Rule at 80 or above.\n  Decided. Alone, and on time, and in the dark.\n\n*achievement counsel visible 50 Counsel\n  Finish with Counsel at 80 or above.\n  Listened to the youngest person in the room, and was right to.\n\n*achievement halloran visible 100 Ivo Halloran\n  Reach the end knowing everything about Ceyla.\n  Learned all of it, including the part he does not say out loud.\n\n*achievement noone_lost hidden 100 Not One\n  ---\n  Some commanders come back with everybody.\n\n*goto_scene orders\n", "orders": "*comment ==================== CHAPTER ONE — ORDERS ====================\n*comment Establishing only. Nothing here is tested; everything here is set.\n*comment Ledger: Sarn Basin, third watch, four degrees. Halloran's name in\n*comment pencil on the particulars board. The ship is 26 years old, 112 berths.\n\nThe graving dock at Sarn Basin is kept at four degrees to save power, and your breath is going out in front of you in the gallery lights.\n\nThrough the glass she is eighty metres of scuffed grey and one long welded seam where somebody, years ago, put a hole in her and somebody else closed it. Two of her hull letters have been repainted and do not match. There is a scaffold up against her dorsal sensor block with nobody on it, because it is the third watch and the yard is asleep.\n\nCS *Perpetua*. Meridian class. Twenty-six years old. A hundred and twelve berths. Yours in nine hours.\n\nA dock hand goes past behind you pushing a cart with one bad wheel and does not look up. On the gallery wall there is a board with the ship's particulars stencilled on it, and a line at the bottom that reads MASTER: VACANT, and somebody has written a name over the blank in pencil and then rubbed most of it out again.\n\nYou can still read it. It says Halloran.\n\nFourteen months ago Ivo Halloran took this ship into the Ceyla system, disobeyed an order to hold and observe, and came out with nine hundred and six colonists in his cargo bays. The Survey held an inquiry. The inquiry did not publish a finding. Halloran retired at his own request, and the *Perpetua* has been in dock ever since, and now she is being given to you.\n\nYou have nine hours. You could spend them asleep in the transit hostel, like a sensible officer.\n\n*page_break\n\n*choice\n  #I want to walk her before there is anybody aboard to watch me do it.\n    *set rule %+12\n    *set candor %-8\n    You take the yard's freight lift down and go aboard through the cargo hatch, which is open because nothing on this ship is worth stealing.\n\n    She is dark and she smells of cold metal and old coffee. You go the length of her twice, forward and back, with a hand light. In the aft corridor the deck plating rings differently underfoot than everywhere else — a dead note, like knocking on a full box — and you stop and do it again, and then a third time, and you decide you will find out why later and you never quite do.\n\n    By the time the yard wakes up you know where every hatch is and which ones stick. Nobody knows you were aboard. You prefer it that way and you notice that you prefer it.\n    *goto named\n  #I want to read the last two years of her log tonight. All of it.\n    *set nerve %-12\n    *set crew %-8\n    The yard office gives you a reader and a chair in a room with a broken heater. Two years is four thousand pages and you do not finish, but you get far enough.\n\n    What you find is a ship that was run well. Halloran wrote short entries in a plain hand. Fuel, weather, repairs, a birthday. Twice a year he recorded that he had heard a grievance and settled it, and did not say what it was. The entries stop being short exactly once, in the Ceyla system, and then there are eleven pages, and then a gap of six days where nothing is written at all, and then the handwriting starts again and it is the same handwriting and it is not the same man.\n\n    At 0500 you put the reader down and rub your eyes and think: whatever else is true, he was not careless.\n    *goto named\n  #I want to find whoever is still awake in this yard and ask them what they make of her.\n    *set rule %-12\n    *set crew %+10\n    You find three of them in a heated shed at the foot of the dock, eating out of tins.\n\n    They are wary for about ninety seconds and then they are not, because you sit down on a crate and let them talk. What they tell you is this: the coolant loops are original and the number two loop whistles, and every yard in the Concord has tried to stop it whistling, and the correct thing to do is nothing. Her hull is thicker than the newer ships because they built her in a bad decade. And she has been sitting here fourteen months with her power off, which is worse for a ship than a war.\n\n    One of them, an old woman with burn scars up one forearm, says: \"You her new master?\" You say yes. She looks at you for a while and says, \"Well,\" and goes back to her tin, and you cannot tell whether that was a blessing.\n    *goto named\n\n*label named\n*page_break\n\nAt 0800 a Concord courier finds you and asks for your name to check against the commissioning order.\n\n*input_text name\n\nCommander ${name}. Thirty-four days ago you were a lieutenant commander with a competent record and no ship. There are two hundred and fourteen ships in the Survey and eleven worlds who argue about them, and one of the two hundred and fourteen is now yours.\n\n*choice\n  #She. That is how the record reads and how the crew will say it.\n    *set pcthey \"she\"\n    *set pcthem \"her\"\n    *set pctheir \"her\"\n    *set pcThey \"She\"\n    *goto adjo\n  #He. That is how the record reads and how the crew will say it.\n    *set pcthey \"he\"\n    *set pcthem \"him\"\n    *set pctheir \"his\"\n    *set pcThey \"He\"\n    *goto adjo\n  #They. The Survey has carried the form on its rolls for sixty years.\n    *set pcthey \"they\"\n    *set pcthem \"them\"\n    *set pctheir \"their\"\n    *set pcThey \"They\"\n    *goto adjo\n\n*label adjo\n*page_break\n\nCeron Adjo is the Concord's Delegate for the Cold Reach and he has come up from the surface in person, which is either an honour or a warning.\n\nHe is sixty, tired, beautifully dressed, and he does not sit down. He gives you a folder with a real paper cover because the Concord still does that for a first command, and inside it is one page.\n\n**CS PERPETUA. STANDING ORDERS.**\n**Patrol the Cold Reach. Three member colonies, eleven independent settlements, forty light years, no other Survey vessel within nine days of any of them. Chart what is uncharted. Answer what asks. Observe Standing Order Four.**\n**You are relieved of the requirement to seek confirmation before acting. There is nobody out there to confirm you.**\n\n\"That last line,\" Adjo says, \"is not a compliment. It is a description of the budget.\"\n\nHe looks through the gallery glass at your ship the way a man looks at a bill.\n\n*page_break\n\nThere is a thing you want to ask him and about nine hours until you stop being able to.\n\n*choice\n  #\"What actually happened at Ceyla?\"\n    *set candor %+15\n    *set standing %-4\n    Adjo does not blink. \"Nine hundred and six people are alive on Tessine Station who would otherwise be dead. Eleven weeks later the Vaunt annexed the Ceyla system, including forty-one thousand people on the second world, because Captain Halloran's ship was seen where it was not supposed to be and the Vaunt learned that the Concord had nothing out there.\"\n\n    \"And the inquiry?\"\n\n    \"The inquiry established the facts and published none of them.\" He straightens his cuff. \"Commander, I have been asked that question by better-connected people than you and I have given them a worse answer. Take the compliment.\"\n    *set ceyla_known 1\n    *goto why\n  #\"Why is the Reach unguarded? Really.\"\n    *set candor %+8\n    *set rule %-6\n    \"Because eleven worlds vote on where the ships go,\" Adjo says, \"and the Reach has one delegate, and that is me, and I am not very good at it.\"\n\n    He says it without self-pity, which is worse.\n\n    \"Ilium wants ships at Ilium. Sarn wants ships at Sarn. Every world in the Concord will tell you with total sincerity that it is defending the whole, and every one of them is defending itself, and the arithmetic of that is the Cold Reach. You are the arithmetic, Commander. Try not to take it personally.\"\n    *set standing %+3\n    *goto why\n  #\"What am I not being told?\"\n    *set candor %-6\n    *set rule %+8\n    Adjo turns and looks at you properly for the first time.\n\n    \"That is a better question than the one I expected.\" He thinks about it. \"You are not being told why you were chosen. You are not being told what the inquiry found. And you are not being told that the Vaunt have moved a cruiser into the Reach in the last five weeks, because that is in your folder on page two, which you have not read yet, because there is no page two.\" He almost smiles. \"There will be by the time you sail. Read it.\"\n    *set standing %+2\n    *goto why\n  #Nothing. I will find out in my own time.\n    *set candor %-14\n    *set nerve %-6\n    You say nothing, and Adjo waits three seconds longer than is comfortable, and then nods as though you have told him something.\n\n    \"Good,\" he says. \"The ones who ask everything at the dock stop asking in the field.\"\n\n    You cannot tell whether he means it or whether it is a thing he says.\n    *goto why\n\n*label why\n*page_break\n\nBefore he goes he says: \"You will be asked, at some point, why you were given this ship. It is worth deciding what you believe about that before somebody else decides for you.\"\n\n*choice\n  #Because I earned it.\n    *set why \"earned\"\n    *set standing %+6\n    *set nerve %+6\n    You have a good record. You have never lost anyone. You sat the board twice and the second time you were better than the man who passed. That is not arrogance; it is the file.\n    *goto background\n  #Because somebody owed somebody a favour.\n    *set why \"favour\"\n    *set standing %+3\n    *set candor %-8\n    You are not naive about how the Survey works. Eleven worlds, two hundred and fourteen ships, and every posting in the service is a sentence in a conversation between people who have known each other for forty years. You are somewhere in that sentence. You would like to know where.\n    *goto background\n  #Because nobody else wanted the Cold Reach.\n    *set why \"nobody\"\n    *set standing %-6\n    *set crew %+8\n    Nine days from help. A twenty-six-year-old hull. A crew that has been sitting in dock for over a year watching their careers go cold. If this posting were desirable it would not be yours, and you find that you do not much mind, and you file that away as something to watch in yourself.\n    *goto background\n  #Because they needed somebody who would not do what Halloran did.\n    *set why \"halloran\"\n    *set rule %+8\n    *set crew %-8\n    Somebody in the Survey looked at your file and saw an officer who follows orders. That is why the ship is yours. It is not flattering and it is probably true, and the crew of the *Perpetua* will work it out in about a week.\n    *goto background\n\n*label background\n*page_break\n\nAdjo goes. The dock begins to wake. At 1100 you will read yourself in on the quarterdeck in front of a hundred and twelve people, most of whom served under another master for nine years.\n\nBefore that, there is the small matter of who you are.\n\n*choice\n  #I came up through the science branch. I have never commanded in a fight.\n    *set background \"science\"\n    *set nerve %-14\n    *set rule %-10\n    *set candor %+6\n    Eleven years of survey work: spectrography, xenobiology, two seasons on an ice moon so cold the sampling rig had to be thawed with your hands. You have written forty-one papers and been shot at twice, both times by accident.\n\n    What you have is patience and a habit of not concluding early. What you do not have is the thing that happens to a person the first time they give an order that kills somebody.\n    *goto motive\n  #I was a line officer in the Border Patrol. I have.\n    *set background \"line\"\n    *set nerve %+16\n    *set rule %+10\n    *set crew %+4\n    Six years on the Sarn frontier in ships smaller than this one. You have boarded, been boarded, and buried four people, and you know exactly what your voice sounds like when you are frightened, because you have heard the recordings.\n\n    What you have is the ability to decide in the four seconds available. What you do not have is much practice at the other thing, the long thing, where nobody is shooting and you have to be right anyway.\n    *goto motive\n  #I was seconded to the Concord's diplomatic service for six years.\n    *set background \"diplomatic\"\n    *set candor %-16\n    *set rule %-6\n    *set standing %+5\n    Six years in rooms where nothing was said and everything was decided. You have sat at four treaty tables and drafted the language for two of them, and you know that a sentence can be a weapon and that the most dangerous person present is usually the one being pleasant.\n\n    What you have is the ear for it. What you do not have is any illusion left about how the Concord actually holds together, which is: barely, and by people agreeing to pretend.\n    *goto motive\n\n*label motive\n*page_break\n\n*comment ---------------- Halloran's cabin ----------------\n\nThe master's cabin is three metres by four with a bunk, a desk bolted to the deck, and a viewport. Halloran left it clean. He also left it not quite empty.\n\nOn the shelf above the desk there is a row of paper books, worn, none of them regulations. In the desk drawer there is a folded chart of the Ceyla system with pencil on it. And screwed to the bulkhead over the bunk, where you cannot miss it lying down, there is a small brass plate that says: *THE LEAST THAT ANSWERS.*\n\nSomebody was supposed to clear this out fourteen months ago and did not.\n\n*choice\n  #Box it all up and send it on to him. It is his.\n    *set crew %+10\n    *set candor %+6\n    You find a crate. It takes eleven minutes. You write the shipping label yourself — *I. Halloran, Tessine Station* — and when you carry it down to the cargo hatch three separate people see you doing it and nobody says a word, and by 1030 the whole ship knows.\n\n    You have no idea yet whether that was good or bad. You will find out.\n    *set rel_xo %+6\n    *goto crewpick\n  #Leave the books. Take down the brass plate.\n    *set rule %+12\n    *set nerve %+6\n    The books can stay; a ship should have books. The plate comes off with a coin.\n\n    You hold it a moment. *The least that answers.* It is the second sentence of Standing Order Four and it is the sentence that ended his career, and he screwed it to the wall where he would read it every night of nine years.\n\n    You put it in the drawer, face down, and you shut the drawer, and you do not throw it away.\n    *goto crewpick\n  #Leave everything exactly where it is.\n    *set nerve %-10\n    *set candor %-8\n    You leave the books. You leave the chart. You leave the plate on the bulkhead.\n\n    That night, and for a long time afterwards, the last thing you see before the lights go down is four words in brass, twenty centimetres from your face.\n    *set plaque true\n    *goto crewpick\n\n*label crewpick\n*page_break\n\n*comment ---------------- The senior staff ----------------\n\nAt 0900 the ship's yeoman brings you the personnel slate on a reader and then stands there, because nobody has told her whether she is supposed to leave.\n\nA Meridian carries five senior posts. All five are vacant: when a master goes, the Survey scatters the wardroom, partly for good reasons and partly because it is easier than deciding which of them agreed with him. What you have instead is a candidate list — officers available in this yard, this week, who can be aboard by 1400.\n\nYou get to choose them. Almost nobody in the Survey gets to choose them.\n\n\"Yeoman,\" you say. \"Sit down. You are going to be here a while.\"\n\n*page_break\n\n**FIRST OFFICER.** Three names.\n\n*choice\n  #Lieutenant Commander Elu Marand. Fifty-one. Passed over three times.\n    *set xo \"marand\"\n    *set xoname \"Marand\"\n    *set xothey \"she\"\n    *set xothem \"her\"\n    *set xotheir \"her\"\n    *set xoThey \"She\"\n    *set rel_xo 42\n    *set rule %-6\n    Her record is faultless and she has never been given a ship, and one of the three boards that turned her down was chaired by a man she had reported for falsifying a fuel return. She wanted the *Perpetua*. She was not offered it. She has accepted the first officer's berth within forty minutes of being asked.\n\n    When she comes aboard at 1350 she is carrying a paper notebook, and for the next year every order you give her will go into it in her own handwriting, with the time.\n    *goto engpick\n  #Lieutenant Ilya Ferreo. Thirty-four. The Survey's favourite.\n    *set xo \"ferreo\"\n    *set xoname \"Ferreo\"\n    *set xothey \"he\"\n    *set xothem \"him\"\n    *set xotheir \"his\"\n    *set xoThey \"He\"\n    *set rel_xo 62\n    *set standing %+8\n    *set candor %-6\n    Son of a Concord delegate, top of his year, and genuinely charming in the way that is not a trick — he likes people and they can tell. Every commodore in the Survey knows his first name. He has turned down two better postings to come out to the Reach, which either means he is serious or means somebody told him it would look good.\n\n    Within a day of coming aboard he knows the name of every rating on the ship, and their mothers' names, and he is not pretending.\n    *goto engpick\n  #Lieutenant Commander Bel Tanaka-Osei. Forty-three. Twelve years hauling cargo before the Survey took her.\n    *set xo \"tanaka\"\n    *set xoname \"Tanaka-Osei\"\n    *set xothey \"she\"\n    *set xothem \"her\"\n    *set xotheir \"her\"\n    *set xoThey \"She\"\n    *set rel_xo 55\n    *set crew %+8\n    *set standing %-4\n    She came into the Survey at thirty-one from the independent trade, which the Survey does not often do and does not often admit works. Her efficiency reports are a war between two kinds of officer: the ones who write *outstanding* and the ones who write *does not appear to have read the regulation.*\n\n    She eats standing up, always, at any hour, and she will offer you half of whatever it is, and it is rude to refuse.\n    *goto engpick\n\n*label engpick\n*page_break\n\n**CHIEF ENGINEER.** The number two coolant loop whistles. Somebody is going to have to live with that.\n\n*choice\n  #Warrant Officer Wen Osimo. Sixty-three. Nineteen years aboard this ship.\n    *set eng \"osimo\"\n    *set engname \"Osimo\"\n    *set engthey \"he\"\n    *set engthem \"him\"\n    *set engtheir \"his\"\n    *set engThey \"He\"\n    *set rel_eng 58\n    *set crew %+6\n    He has been aboard the *Perpetua* longer than anyone alive, through three masters, and he spent the fourteen months of the layup coming up to the dock on his own time to run her generators for an hour a week so her lines would not seize. Nobody asked him to. Nobody paid him.\n\n    He calls the ship *she* and the crew *the passengers*. He is not joking and it is not entirely a joke.\n    *goto medpick\n  #Lieutenant Priya Kallas. Twenty-nine. Brilliant, and knows the number.\n    *set eng \"kallas\"\n    *set engname \"Kallas\"\n    *set engthey \"she\"\n    *set engthem \"her\"\n    *set engtheir \"her\"\n    *set engThey \"She\"\n    *set rel_eng 50\n    *set nerve %+8\n    Two commendations and one formal reprimand, all three for the same incident. She will get you a miracle at 0300 and then explain to you, at length, in front of witnesses, the seven decisions that made the miracle necessary.\n\n    She talks faster when she is frightened. By the end of the year you will be able to tell how bad it is by her syllables per second and nothing else.\n    *goto medpick\n  #Lieutenant Anselm Dorr. Forty-four. Eight years in the Concord. Born in the Vaunt.\n    *set eng \"dorr\"\n    *set engname \"Dorr\"\n    *set engthey \"he\"\n    *set engthem \"him\"\n    *set engtheir \"his\"\n    *set engThey \"He\"\n    *set rel_eng 48\n    *set oleyo %-8\n    He is the best engineer on the list and it is not close. He is also a Vaunt defector with a Concord passport, and the Vaunt do not recognise the concept, and every conversation you ever have with a Vaunt officer will be conducted across the fact of him.\n\n    He apologises before he disagrees with you. *I am sorry — no.* You will come to hate the apology and rely absolutely on the *no*.\n    *goto medpick\n\n*label medpick\n*page_break\n\n**SHIP'S SURGEON.** Nine beds and no hospital inside nine days.\n\n*choice\n  #Surgeon Commander Hadiya Nour. Fifty-eight. Ilium famine relief.\n    *set med \"nour\"\n    *set medname \"Nour\"\n    *set medthey \"she\"\n    *set medthem \"her\"\n    *set medtheir \"her\"\n    *set medThey \"She\"\n    *set rel_med 52\n    *set crew %-4\n    *set standing %+4\n    Four years of field surgery in the Ilium camps, where at the worst of it she was signing off on who got treated by walking down a line of people and pointing. She does not talk about it and she does not pretend it did not happen.\n\n    She asks a patient's name twice — once at the start and once at the end. Ask her why and she will tell you it is a check on the anaesthetic. It is not.\n    *goto secpick\n  #Lieutenant Kip Sorrel. Thirty-one. Everybody's confessor.\n    *set med \"sorrel\"\n    *set medname \"Sorrel\"\n    *set medthey \"he\"\n    *set medthem \"him\"\n    *set medtheir \"his\"\n    *set medThey \"He\"\n    *set rel_med 66\n    *set crew %+8\n    Competent, not exceptional, and the best-liked officer you will ever have. People tell him things. Within a month he will know more about the state of your ship than you do, and he will not tell you any of it, and he will be right not to.\n\n    He remembers birthdays. The whole ship knows he remembers birthdays, which ruins the surprise and does not reduce the effect at all.\n    *goto secpick\n  #Surgeon Lieutenant Commander Teodor Vasi. Forty-nine. A researcher.\n    *set med \"vasi\"\n    *set medname \"Vasi\"\n    *set medthey \"he\"\n    *set medthem \"him\"\n    *set medtheir \"his\"\n    *set medThey \"He\"\n    *set rel_med 44\n    *set standing %+6\n    *set crew %-8\n    He took the berth for the samples. He says so in the interview, unprompted, as though it would be strange to pretend otherwise. Fifty-one published papers, two of which changed how the Concord treats burns.\n\n    He narrates his own work aloud while he does it, for the record, in a level voice. In an emergency this is the calmest sound on the ship, and afterwards, when you play the recording back, it is the worst.\n    *goto secpick\n\n*label secpick\n*page_break\n\n**SECURITY AND TACTICAL.** A survey ship is not a warship. It has four guns.\n\n*choice\n  #Lieutenant Rennick Oyelaran. Forty. Concord Marines, eleven years.\n    *set sec \"oyelaran\"\n    *set secname \"Oyelaran\"\n    *set secthey \"he\"\n    *set secthem \"him\"\n    *set sectheir \"his\"\n    *set secThey \"He\"\n    *set rel_sec 50\n    *set nerve %+6\n    He left the Marines for the Survey and he has an argument about it that he will make to anyone: that the Survey is a navy which lies to itself about what it is, and that the lie gets people killed at a rate the Concord does not publish. He is not bitter. He thinks he is being useful.\n\n    He stands when you enter a compartment. Every time. You will ask him to stop and he will say *ma'am* or *sir* or *Captain* and go on doing it.\n    *goto chappick\n  #Lieutenant Sena Whitlow. Thirty-seven. A civil investigator, not a soldier.\n    *set sec \"whitlow\"\n    *set secname \"Whitlow\"\n    *set secthey \"she\"\n    *set secthem \"her\"\n    *set sectheir \"her\"\n    *set secThey \"She\"\n    *set rel_sec 50\n    *set nerve %-8\n    *set rule %-6\n    Nine years in the Sarn magistracy investigating fraud and two homicides, then the Survey, because the Survey needed somebody who could tell whether a settlement's books were honest. She can shoot. She would rather establish what happened.\n\n    She writes nothing down while you are talking. She waits until you have completely finished, including the part you add after you think you have finished, and then she writes.\n    *goto chappick\n  #Master-at-Arms Mott. A Karsk. She will not end a life.\n    *set sec \"mott\"\n    *set secname \"Mott\"\n    *set secthey \"she\"\n    *set secthem \"her\"\n    *set sectheir \"her\"\n    *set secThey \"She\"\n    *set rel_sec 54\n    *set crew %+6\n    *set nerve %-4\n    Two and a half metres, grey, and slow to speak in any of the four languages she has. The Karsk have been in the Concord for sixty years and there are fewer than nine hundred of them in the Survey, and every one of them is under a vow that they do not explain and do not break: they will not end a life.\n\n    She names things. The corridors have names on her deck plan. The shuttles have names she gave them that are not the names painted on them. You will find out what she calls you and it will take you a week to decide how you feel about it.\n    *goto chappick\n\n*label chappick\n*page_break\n\n**CHAPLAIN.** A Meridian carries the berth. It does not require you to fill it.\n\nThe compartment is on the second deck, aft of the laboratory, and it was a scanner bay until somebody cut a door in the other side of it. There are eighteen seats. Halloran filled the berth for nine years. Roughly a third of the Survey's masters do not fill it at all, and the Concord does not ask why, because on four of the eleven worlds the question would start an argument that took a generation to finish.\n\n*choice\n  #Father Tobias Wren. Forty-seven. Mass at 0600 in the old scanner bay.\n    *set chap \"wren\"\n    *set chapname \"Wren\"\n    *set chapthey \"he\"\n    *set chapthem \"him\"\n    *set chaptheir \"his\"\n    *set chapThey \"He\"\n    *set rel_chap 50\n    A parish on Sarn for eleven years and then the Survey, which he asked for twice. He is not what you expected. He is quiet, badly shaved, and interested in the ship's water reclamation to a degree that seems excessive until you understand that he is going to be aboard for a year and intends to be useful.\n\n    He will not tell you what to do. You will discover this the hard way, at about the worst possible moment, when you ask him what to do and he says nothing for eleven seconds and then asks you a question instead.\n    *goto readin\n  #Sister Adaeze Onu. Fifty-five. A nursing order. Not a priest.\n    *set chap \"onu\"\n    *set chapname \"Onu\"\n    *set chapthey \"she\"\n    *set chapthem \"her\"\n    *set chaptheir \"her\"\n    *set chapThey \"She\"\n    *set rel_chap 50\n    *set crew %+6\n    Thirty years in her order's hospitals, the last nine of them on ships. She holds a Concord medical qualification and will stand a watch in sickbay, which makes her the only officer on the list who is two people for the price of one.\n\n    She works while she talks, always — folding, sorting, checking a line, moving. She will never sit down before you do, and she will never fail to notice that you have not eaten.\n    *goto readin\n  #Counsellor Loman Serat. Thirty-eight. Survey psychological corps.\n    *set chap \"serat\"\n    *set chapname \"Serat\"\n    *set chapthey \"he\"\n    *set chapthem \"him\"\n    *set chaptheir \"his\"\n    *set chapThey \"He\"\n    *set rel_chap 50\n    *set standing %+4\n    The modern answer, and a good one: fourteen years of shipboard practice, a specialism in isolated postings, and hard numbers behind him — crews with a counsellor aboard lose fewer people to the long dark than crews without.\n\n    He has a habit of saying back to you what you just said, slightly improved. It is disarming for a month. After that you will start listening for the improvement.\n    *goto readin\n  #Nobody. The berth stays empty and the compartment stays a scanner bay.\n    *set chap \"none\"\n    *set chapname \"—\"\n    *set rule %+8\n    *set standing %-3\n    You have a hundred and twelve berths and forty light years and a ship that has been cold for fourteen months, and you would rather have another sensor technician.\n\n    The yeoman does not react. She enters it, and then she says, without looking up: \"Captain Halloran kept it filled,\" and then she keeps typing, and you understand that this is the first thing anyone aboard has said to you about Halloran and it will not be the last.\n    *goto readin\n\n*label readin\n*page_break\n\n*comment ---------------- Reading in ----------------\n\nAt 1100 you stand on the quarterdeck of your own ship and read the commissioning order aloud to a hundred and twelve people who are standing very straight and have been at sea longer than you have.\n\nIt takes ninety seconds. The words are two hundred years old and most of them are about the Concord and none of them are about you. At the end you say *I relieve you* to a duty officer you have never met, and she says *I stand relieved*, and that is all there is to it. There is no music. Nobody claps. Somebody at the back coughs.\n\nThen a hundred and twelve people look at you, and it is 1101, and the rest is yours.\n\n*page_break\n\nBehind you, on the bulkhead in the corridor outside the bridge, there is a brass plaque the size of a book. Every Survey ship has one. It carries the name and one line about the person the name belongs to.\n\n**PERPETUA** — *She would not be moved, and she was not consoled, and she did not stop.*\n\n*choice\n  #Ask, right now, in front of everyone, who she was.\n    *set candor %+10\n    *set rule %-6\n    You turn around and ask.\n\n    A hundred and twelve people look at each other. Nobody knows. The ship has been in commission for twenty-six years and it turns out that this is not the kind of thing anybody asks, and now that you have asked it, everyone would like to know, and it is going to be a while before anybody finds out.\n    *if (chap != \"none\")\n      In the second rank, ${chapname} opens ${chaptheir} mouth and then closes it again. Not here. Not in front of the ship.\n      *set rel_chap %+6\n    *goto firstorder\n  #Read it, and say nothing, and find out later.\n    *set candor %-8\n    *set rule %+4\n    You read it twice and go on to the bridge.\n\n    It stays with you the way a line of verse stays with you, coming back at bad hours in the wrong order. *She did not stop.* You do not know who she was. There is no reason a ship's name should mean anything at all, and yet.\n    *goto firstorder\n  #It is a plaque. There is a ship to take out.\n    *set nerve %+8\n    *set candor %-6\n    Two hundred and fourteen ships, two hundred and fourteen plaques, most of them commemorating somebody who died in the Fracture for a reason that made sense at the time. You have a coolant loop that whistles and a Vaunt cruiser somewhere in your patrol area.\n\n    You go to the bridge.\n    *goto firstorder\n\n*label firstorder\n*page_break\n\n*comment ---------------- The first order ----------------\n\nThe bridge of a Meridian is nine metres across and everyone in it can hear everything anybody says, which is the single most important fact about commanding one.\n\nYour helmsman is a Sub-Lieutenant named Toma Beye, twenty-four, four years aboard, and he is the only officer on the bridge who served with Halloran. He has the departure plot up and he is waiting.\n\n${xoname} is at your left shoulder with the readiness board. Eleven items green. One amber: the number two coolant loop, which whistles, and which every yard in the Concord has failed to fix, and which the correct procedure is to ignore.\n\n\"Yard control has us in the window for another twenty-two minutes,\" ${xoname} says. \"After that we wait six hours for the next one.\"\n\n*choice\n  #Take her out now. The loop whistles. Let it whistle.\n    *set nerve %+12\n    *set rule %+6\n    \"Now, Mister Beye.\"\n\n    Beye takes her out of the graving dock at Sarn Basin at eleven minutes past noon, and he does it beautifully, and the number two coolant loop whistles all the way, a thin clean note somewhere under the deck, exactly the pitch of a kettle. Half the bridge hears it. Nobody says anything.\n    *if (eng = \"osimo\")\n      Two decks down, Osimo puts his hand flat on the housing the way you would put your hand on a horse.\n      *set rel_eng %+5\n    *goto address\n  #Hold the window. I want the loop looked at before we are nine days from a yard.\n    *set nerve %-12\n    *set rule %-4\n    *set strain -4\n    \"We will take the six hours.\"\n\n    You watch ${xoname} decide what to write. Beye's shoulders come down half a centimetre. In the six hours ${engname} pulls the housing, finds nothing, replaces two seals that did not need replacing, and reports that the loop is in better condition than it has any right to be and will go on whistling until the ship is broken up.\n\n    You take her out at 1815 and it whistles.\n    *set rel_eng %+8\n    *goto address\n  #Ask ${xoname} what ${xothey} would do.\n    *set rule %-14\n    *set crew %+6\n    You ask. On your first day, on your own bridge, in front of the helmsman.\n\n    ${xoname} does not hesitate. \"Take the window, Captain. The loop has whistled for twenty-six years, and a ship that misses her first departure window gets a name for it inside a week.\"\n\n    \"Then take the window, Mister Beye.\"\n    *set rel_xo %+10\n    *if (xo = \"marand\")\n      Marand writes it down. The time, the question, and the answer. You will see the page a year from now and it will not say what you expect.\n    *goto address\n\n*label address\n*page_break\n\n*comment ---------------- The address ----------------\n\nThree hours out from Sarn Basin, with the world gone to a blue thumbprint astern and forty light years of thin badly charted nothing ahead, you take the intercom.\n\nA hundred and twelve people stop what they are doing. This is the one they will remember. Halloran's, nine years ago, is still quoted on the mess deck; you have heard it twice already today, and it was four sentences long and one of them was a joke.\n\n*choice\n  #Tell them the truth about where they are going and how little help there is.\n    *set candor %+15\n    *set crew %+6\n    \"This is the Captain. We are going to the Cold Reach. There are three member colonies and eleven independent settlements out there and no other Survey ship within nine days of any of them, which means that when somebody out there is in trouble, the answer is this ship or there is no answer.\n\n    \"I am not going to tell you that is an honour. It is arithmetic. Eleven worlds voted and this is what was left over.\n\n    \"But it does mean that everything we do for the next year, we do because we did it, and not because somebody signed it. I have never had that before. Neither have most of you. Carry on.\"\n    *set told_crew \"truth\"\n    *goto endch1\n  #Tell them about Halloran.\n    *set candor %+10\n    *set crew %+10\n    *set standing %-5\n    \"This is the Captain. There is a name on this ship that nobody has said out loud since I came aboard, so I am going to say it. Ivo Halloran had this bridge for nine years. Some of you would follow him through a wall. Some of you would not. Both of those are allowed on my ship.\n\n    \"What is not allowed is pretending he never existed. Fourteen months of that is enough. Say his name in the mess if you want to. I have nothing to prove against a man who is not here.\n\n    \"Carry on.\"\n\n    Later, ${xoname} tells you that the mess deck was completely silent for four seconds and then somebody laughed, once, with relief, and that you will never know who or why, and that it was the best thing that could have happened.\n    *set told_crew \"halloran\"\n    *set rel_xo %+8\n    *goto endch1\n  #Keep it short, correct, and about the work.\n    *set candor %-12\n    *set rule %+6\n    \"This is the Captain. We are bound for the Cold Reach on a twelve-month patrol. Watch bill is posted. Departmental readiness reports to the first officer by 2000 daily. I will walk the ship at irregular hours and I would rather find things wrong than be told they are right.\n\n    \"Carry on.\"\n\n    Forty seconds. On the mess deck somebody says, *Well, that's that,* and gets back to work, which is exactly the effect you wanted and slightly less than you hoped.\n    *set told_crew \"short\"\n    *goto endch1\n  #Say nothing yet. Let them wonder for a week.\n    *set candor %-18\n    *set nerve %-6\n    *set rule %+10\n    You put the handset back in its clip.\n\n    ${xoname} looks at you. You look at the plot. Forty light years of thin badly charted nothing.\n\n    On the mess deck, at 1900, a hundred and twelve people work out that there is not going to be an address, and begin — without malice, and with enormous energy — to make one up.\n    *set told_crew \"silence\"\n    *set standing %-4\n    *goto endch1\n\n*label endch1\n*page_break\n\n*set commissioned true\n\nAt 2200 you are in the master's cabin, three metres by four, with a viewport and a desk bolted to the deck.\n\n*if (plaque)\n  Above the bunk there is a small brass plate that says *THE LEAST THAT ANSWERS*, twenty centimetres from your face.\n*if (chap != \"none\")\n  Somewhere aft, on the second deck, in a compartment that used to be a scanner bay, ${chapname} is finding out where the light switches are.\n*if (chap = \"none\")\n  Somewhere aft, on the second deck, there is a compartment with eighteen seats in it and nobody's name on the door.\n\nUnder the deck, faintly, the number two coolant loop is whistling.\n\nYou have a ship.\n\n*finish\n", "coldreach": "*comment placeholder\nChapter placeholder.\n*finish\n", "leastthatanswers": "*comment placeholder\nChapter placeholder.\n*finish\n", "ashaya": "*comment placeholder\nChapter placeholder.\n*finish\n", "articlenine": "*comment placeholder\nChapter placeholder.\n*finish\n", "quietworld": "*comment placeholder\nChapter placeholder.\n*finish\n", "salvage": "*comment placeholder\nChapter placeholder.\n*finish\n", "theboard": "*comment placeholder\nChapter placeholder.\n*finish\n", "halloran": "*comment placeholder\nChapter placeholder.\n*finish\n", "theweighing": "*comment placeholder\nChapter placeholder.\n*finish\n", "nadire": "*comment placeholder\nChapter placeholder.\n*finish\n", "wrapup": "*comment placeholder\nChapter placeholder.\n*finish\n", "__order__": "orders coldreach leastthatanswers ashaya articlenine quietworld salvage theboard halloran theweighing nadire wrapup"};
+
+const S={vars:{},scene:null,pc:0,page:[],choices:null,stack:[],notes:{},imgs:{},edit:false,started:false};
+const $=id=>document.getElementById(id);
+const GATED=[];   /* nothing is hidden from a commanding officer */
+
+/* ---------- parse ---------- */
+function parse(src){
+  const out=[];
+  src.split(/\r?\n/).forEach((raw,i)=>{
+    const t=raw.replace(/\t/g,'  ');
+    const ind=t.length-t.replace(/^ +/,'').length, s=t.trim();
+    if(!s){out.push({ind,k:'blank',line:i});return;}
+    const cm = s[0]==='*' ? s.match(/^\*([a-z_]+)\s?(.*)$/) : null;
+    if(cm){out.push({ind,k:'cmd',c:cm[1],a:cm[2],line:i});}
+    else if(s[0]==='#'){out.push({ind,k:'opt',a:s.slice(1).trim(),line:i});}
+    else out.push({ind,k:'text',a:s,line:i});
+  });
+  return out;
+}
+const P={}; for(const k in SCENES) P[k]=parse(SCENES[k]);
+const ORDER=(SCENES.__order__||'').split(/\s+/).filter(Boolean);
+
+/* ---------- expressions ---------- */
+function val(t){t=t.trim();
+  if(/^-?\d+$/.test(t))return +t;
+  if(/^".*"$/.test(t))return t.slice(1,-1);
+  if(t==='true')return true; if(t==='false')return false;
+  return (t in S.vars)?S.vars[t]:0;}
+function evalExpr(e){
+  e=e.trim().replace(/^\((.*)\)$/s,'$1').trim();
+  for(const op of [' and ',' or ']){let d=0;
+    for(let i=0;i<e.length;i++){
+      if(e[i]==='(')d++;else if(e[i]===')')d--;
+      else if(d===0&&e.substr(i,op.length)===op)
+        return op===' and '?(evalExpr(e.slice(0,i))&&evalExpr(e.slice(i+op.length)))
+                           :(evalExpr(e.slice(0,i))||evalExpr(e.slice(i+op.length)));}}
+  e=e.replace(/^\((.*)\)$/s,'$1').trim();
+  const m=e.match(/^(.+?)\s*(>=|<=|!=|=|>|<)\s*(.+)$/); if(!m)return !!val(e);
+  const a=val(m[1]),b=val(m[3]);
+  return {'>=':a>=b,'<=':a<=b,'!=':a!=b,'=':a==b,'>':a>b,'<':a<b}[m[2]];}
+function fair(c,n){n=+n;const v=n>=0?c+(100-c)*n/100:c+c*n/100;return Math.max(1,Math.min(99,Math.round(v)));}
+function doSet(arg){
+  const m=arg.match(/^(\S+)\s+(.*)$/); if(!m)return;
+  const k=m[1]; let r=m[2].trim();
+  if(GATED.includes(k) && !S.vars.formed) return;      /* not hers to shape yet */
+  const fm=r.match(/^%\s*([+-])\s*(\d+)$/);
+  if(fm){S.vars[k]=fair(+S.vars[k]||50,(fm[1]==='-'?-1:1)*(+fm[2]));return;}
+  const rl=r.match(/^([+-])\s*(\d+)$/);
+  if(rl){S.vars[k]=(+S.vars[k]||0)+(rl[1]==='-'?-1:1)*(+rl[2]);return;}
+  S.vars[k]=val(r);}
+
+/* ---------- text ---------- */
+const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const subst=t=>t.replace(/\$\{(\w+)\}/g,(_,k)=>(k in S.vars?S.vars[k]:''));
+function inline(t){return esc(subst(t))
+  .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+  .replace(/(^|[\s(“"—-])\*([^*\n]+)\*/g,'$1<em>$2</em>')
+  .replace(/_(.+?)_/g,'<em>$1</em>');}
+
+/* ---------- run ---------- */
+function gotoScene(n){if(!P[n])return false;S.scene=n;S.pc=0;return true;}
+function findLabel(sc,l){const a=P[sc];for(let i=0;i<a.length;i++)
+  if(a[i].k==='cmd'&&a[i].c==='label'&&a[i].a.trim()===l.trim())return i;return -1;}
+function skipBlock(a,i,ind){let j=i+1;while(j<a.length&&(a[j].k==='blank'||a[j].ind>ind))j++;return j;}
+
+function step(pushHistory){
+  if(pushHistory!==false) S.stack.push({vars:JSON.parse(JSON.stringify(S.vars)),scene:S.scene,pc:S.pc});
+  if(S.stack.length>500) S.stack.shift();
+  S.page=[];S.choices=null;
+  let g=0;
+  while(S.scene&&g++<20000){
+    const a=P[S.scene];
+    if(S.pc>=a.length){advanceScene();continue;}
+    const n=a[S.pc];
+    if(n.k==='blank'){S.pc++;continue;}
+    if(n.k==='text'){S.page.push({t:'text',v:n.a,scene:S.scene,line:n.line});S.pc++;continue;}
+    if(n.k==='opt'){S.pc=skipBlock(a,S.pc,n.ind);continue;}
+    const c=n.c,arg=n.a;
+    if(['comment','label','title','subtitle','author','scene_list','achievement','save_game'].includes(c)){S.pc++;continue;}
+    if(['create','set','set_hidden','temp','set_ward'].includes(c)){doSet(arg);S.pc++;continue;}
+    if(c==='achieve'){S.vars['ach_'+arg.trim()]=true;S.pc++;continue;}
+    if(c==='line_break'){S.page.push({t:'br'});S.pc++;continue;}
+    if(c==='page_break'){S.pc++;return render();}
+    if(c==='image'){const m=arg.match(/^(\S+)\s*(.*)$/)||[];S.page.push({t:'img',src:m[1]||'',alt:m[2]||''});S.pc++;continue;}
+    if(c==='goto'){const i=findLabel(S.scene,arg);S.pc=i<0?S.pc+1:i+1;continue;}
+    if(c==='goto_scene'){const p=arg.trim().split(/\s+/);if(gotoScene(p[0])&&p[1]){const i=findLabel(S.scene,p[1]);if(i>=0)S.pc=i+1;}continue;}
+    if(c==='finish'){advanceScene();continue;}
+    if(c==='ending'){S.page.push({t:'end'});S.scene=null;return render();}
+    if(c==='stat_chart'){S.page.push({t:'chart'});S.pc=skipBlock(a,S.pc,n.ind);continue;}
+    if(c==='input_text'){S.page.push({t:'input',v:arg.trim()});S.pc++;return render();}
+    if(c==='if'||c==='elseif'||c==='else'){
+      if(c==='else'||evalExpr(arg)){S.pc++;}
+      else{let j=skipBlock(a,S.pc,n.ind);
+        while(j<a.length&&a[j].k==='cmd'&&(a[j].c==='elseif'||a[j].c==='else')&&a[j].ind===n.ind){
+          if(a[j].c==='else'||evalExpr(a[j].a)){S.pc=j+1;j=-1;break;}
+          j=skipBlock(a,j,n.ind);}
+        if(j>=0)S.pc=j;}
+      continue;}
+    if(c==='choice'||c==='fake_choice'){
+      /* Options may be nested inside *if / *elseif / *else at any depth: only the
+         branch that is true contributes its options to the menu. */
+      const opts=[];
+      const scan=(start,ind)=>{
+        let j=start;
+        while(j<a.length){const m=a[j];
+          if(m.k==='blank'){j++;continue;}
+          if(m.ind<=ind)break;
+          if(m.k==='opt'){opts.push({label:m.a,body:j+1,line:m.line,scene:S.scene});
+            j=skipBlock(a,j,m.ind);continue;}
+          if(m.k==='cmd'&&m.c==='if'){
+            let k=j,done=false;
+            while(k<a.length&&a[k].k==='cmd'&&['if','elseif','else'].includes(a[k].c)&&a[k].ind===m.ind){
+              if(!done&&(a[k].c==='else'||evalExpr(a[k].a))){scan(k+1,a[k].ind);done=true;}
+              k=skipBlock(a,k,m.ind);}
+            j=k;continue;}
+          j++;}
+        return j;};
+      const after=scan(S.pc+1,n.ind);
+      if(!opts.length){S.pc=after;continue;}
+      S.choices={opts,after};return render();}
+    S.pc++;
+  }
+  render();
+}
+function advanceScene(){const i=ORDER.indexOf(S.scene);
+  if(i>=0&&i+1<ORDER.length)gotoScene(ORDER[i+1]);
+  else{S.page.push({t:'end'});S.scene=null;}}
+
+/* ---------- render ---------- */
+function deltaText(b){const a=P[S.scene],o=[];
+  for(let j=b;j<a.length&&j<b+70;j++){const n=a[j];if(n.k!=='cmd')continue;
+    if(n.c==='set'||n.c==='set_hidden')o.push(n.a);
+    if(n.c==='goto'||n.c==='goto_scene')break;}
+  return o.join(' · ');}
+const NICE={valor:['Valor','Patience'],severity:['Severity','Mercy'],splendor:['Splendor','Hiddenness'],
+  charity:['Charity',null],hope:['Hope',null]};
+function flashDeltas(before){
+  const rows=[];
+  for(const k in NICE){
+    const a=+before[k]||0,b=+S.vars[k]||0,d=b-a;
+    if(!d)continue;
+    const nm=NICE[k], lab=(d>0||!nm[1])?nm[0]:nm[1], amt=Math.abs(d);
+    const col={valor:'var(--cobalt)',severity:'var(--ruby)',splendor:'var(--amber)',
+      charity:'var(--verd)',hope:'var(--violet)'}[k];
+    rows.push('<div style="color:'+col+'">'+(d>0?'+':'−')+amt+' '+lab+'</div>');
+  }
+  if(!rows.length)return;
+  const f=$('flash'); f.innerHTML=rows.join(''); f.classList.add('show');
+  setTimeout(()=>f.classList.remove('show'),2600);
+}
+function keyOf(n){return n.scene+':'+n.line;}
+function textFor(n){const e=S.notes[keyOf(n)];
+  if(!e||!e.replacement) return n.v;
+  if(e.original && e.original!==n.v) return n.v;   /* stale — never overwrite the wrong line */
+  return e.replacement;}
+function render(){
+  const st=$('stage'); st.innerHTML='';
+  if(S.edit&&S.stack.length>1){
+    const b=document.createElement('button');b.className='backbtn';b.textContent='◂ previous screen';
+    b.onclick=goBack;st.appendChild(b);}
+  let lastWasBr=false;
+  S.page.forEach(n=>{
+    if(n.t!=='br') lastWasBr=false;
+    if(n.t==='text'){
+      const p=document.createElement('p'), k=keyOf(n), e=S.notes[k];
+      p.innerHTML=inline(textFor(n));
+      if(e&&e.stale)p.classList.add('stalenote');
+      else if(e&&e.replacement)p.classList.add('edited');
+      else if(e)p.classList.add('hasnote');
+      if(S.edit)p.onclick=()=>openNote(k,n.v);
+      st.appendChild(p);
+    } else if(n.t==='br'){
+      if(!lastWasBr){const d=document.createElement('div');d.className='hr';st.appendChild(d);}
+      lastWasBr=true; return;
+    } else if(n.t==='img'){ st.appendChild(imageEl(n));
+    } else if(n.t==='chart'){ st.appendChild(chartEl());
+    } else if(n.t==='input'){
+      const w=document.createElement('div');w.className='choices';
+      w.innerHTML='<input id="tin" style="font-family:Spectral,serif;font-size:1rem;padding:.75rem;background:var(--glass);border:1px solid var(--came);color:var(--ink)">';
+      const b=document.createElement('button');b.className='opt';b.textContent='That is it.';
+      b.onclick=()=>{const v=$('tin').value.trim();if(v)S.vars[n.v]=v;S.pc++;save();step();};
+      w.appendChild(b);st.appendChild(w);
+    } else if(n.t==='end'){
+      const d=document.createElement('p');d.style.cssText=
+        'text-align:center;color:var(--ink3);font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.3em';
+      d.textContent='END';st.appendChild(d);}
+  });
+  if(S.choices){
+    const w=document.createElement('div');w.className='choices';
+    S.choices.opts.forEach(o=>{
+      const k=o.scene+':'+o.line, ov=S.notes[k];
+      const lab=(ov&&ov.replacement)?ov.replacement:o.label;
+      const row=document.createElement('div');row.style.cssText='display:flex;gap:.4rem;align-items:stretch';
+      const b=document.createElement('button');b.className='opt';b.style.flex='1';
+      b.innerHTML=inline(lab)+(S.edit?'<span class="delta">'+esc(deltaText(o.body)||'—')+'</span>':'');
+      b.onclick=()=>pick(o);
+      row.appendChild(b);
+      if(S.edit){
+        const e=document.createElement('button');e.className='opt';e.style.cssText='flex:0 0 2.6rem;text-align:center;border-left-color:var(--ink3)';
+        e.innerHTML='&#9998;'; e.title='edit this option\'s wording';
+        e.onclick=ev=>{ev.stopPropagation();openNote(k,o.label);};
+        row.appendChild(e);
+      }
+      w.appendChild(row);});
+    st.appendChild(w);
+  } else if(S.scene){
+    const b=document.createElement('button');b.className='cont';b.textContent='continue';
+    b.onclick=()=>{save();step();};st.appendChild(b);}
+  $('cwhere').innerHTML=S.scene?'<b>'+esc(S.scene)+'</b>':'end';
+  $('cedit').innerHTML=S.edit?'<span class="ed">edit</span>':'';
+  window.scrollTo(0,0); save();
+}
+function redraw(){ const sc=S.choices, pg=S.page; S.page=pg; S.choices=sc; render(); }
+function pick(o){ const before=JSON.parse(JSON.stringify(S.vars)); S.pc=o.body; step();
+  flashDeltas(before); save(); }
+function goBack(){ S.stack.pop(); const h=S.stack.pop(); if(!h)return;
+  S.vars=h.vars;S.scene=h.scene;S.pc=h.pc; step(); }
+
+/* ---------- images ---------- */
+function imageEl(n){
+  const f=document.createElement('figure');
+  const got=S.imgs[n.src];
+  if(got){
+    f.innerHTML='<img class="glazed" src="'+got+'" alt="'+esc(n.alt)+'">'+
+      (S.edit?'<figcaption>'+esc(n.src)+' — click to replace</figcaption>':'');
+    if(S.edit) f.querySelector('img').onclick=()=>chooseImage(n.src);
+  } else {
+    f.innerHTML='<div class="imgph glazed">'+esc(n.alt)+
+      (S.edit?'<button type="button">add image</button>':'')+'</div>'+
+      '<figcaption>'+esc(n.src)+'</figcaption>';
+    const b=f.querySelector('button'); if(b) b.onclick=()=>chooseImage(n.src);
+  }
+  return f;
+}
+let imgSlot=null;
+function chooseImage(slot){ imgSlot=slot; $('pick').value=''; $('pick').click(); }
+$('pick').onchange=e=>{
+  const file=e.target.files[0]; if(!file||!imgSlot) return;
+  const r=new FileReader();
+  r.onload=()=>{ const im=new Image();
+    im.onload=()=>{
+      const max=1200, sc=Math.min(1,max/Math.max(im.width,im.height));
+      const cv=document.createElement('canvas');
+      cv.width=Math.round(im.width*sc); cv.height=Math.round(im.height*sc);
+      cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
+      const url=cv.toDataURL('image/jpeg',0.8);
+      S.imgs[imgSlot]=url; save(); redraw(); pushImage(imgSlot,url);
+    };
+    im.src=r.result; };
+  r.readAsDataURL(file);
+};
+async function pushImage(slot,url){
+  const db=await claude.use('db');
+  if(!db){ toast('image saved on this device only'); return; }
+  try{ await db.doc('images/'+slot.replace(/[^\w]/g,'_')).set({slot,dataUrl:url,at:new Date().toISOString()});
+    toast('image saved for Claude'); }
+  catch(err){ toast('image too large — saved locally'); }
+}
+
+/* ---------- the repeater: a ship's instrument ---------- */
+function pol(cx,cy,r,deg){const a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+function arcPath(cx,cy,r,a0,a1){
+  const [x0,y0]=pol(cx,cy,r,a0),[x1,y1]=pol(cx,cy,r,a1);
+  return 'M'+x0.toFixed(2)+' '+y0.toFixed(2)+'A'+r+' '+r+' 0 '+(a1-a0>180?1:0)+' 1 '+x1.toFixed(2)+' '+y1.toFixed(2);
+}
+function gauge(cx,cy,r,a0,a1,frac,col){
+  const mid=a0+(a1-a0)*frac, half=a0+(a1-a0)/2;
+  const [tx0,ty0]=pol(cx,cy,r-7,half),[tx1,ty1]=pol(cx,cy,r+7,half);
+  return '<path d="'+arcPath(cx,cy,r,a0,a1)+'" fill="none" stroke="#01040a" stroke-width="11" opacity=".55"/>'+
+         '<path d="'+arcPath(cx,cy,r,a0,a1)+'" fill="none" stroke="'+col+'" stroke-width="9" opacity=".16"/>'+
+         (frac>0.005?'<path d="'+arcPath(cx,cy,r,a0,mid)+'" fill="none" stroke="'+col+'" stroke-width="9" opacity=".92"/>':'')+
+         '<line x1="'+tx0.toFixed(1)+'" y1="'+ty0.toFixed(1)+'" x2="'+tx1.toFixed(1)+'" y2="'+ty1.toFixed(1)+'" stroke="#dce6ee" stroke-width="1" opacity=".45"/>';
+}
+function repeaterSVG(){
+  const v=S.vars,
+    N=(+v.nerve||50)/100, C=(+v.candor||50)/100, W=(+v.crew||50)/100, R=(+v.rule||50)/100,
+    St=(+v.standing||40)/100, Sr=Math.min(+v.strain||0,100)/100;
+  return '<svg class="rose" viewBox="0 0 240 240" width="222" height="222" role="img" aria-label="command repeater">'+
+    '<circle cx="120" cy="120" r="117" fill="none" stroke="#01040a" stroke-width="5"/>'+
+    '<circle cx="120" cy="120" r="113" fill="none" stroke="#54bfd6" stroke-width=".8" opacity=".35"/>'+
+    '<path d="'+arcPath(120,120,105,0.01,359.98)+'" fill="none" stroke="#54bfd6" stroke-width="2" opacity=".10"/>'+
+    (Sr>0.005?'<path d="'+arcPath(120,120,105,0,Math.max(1,359*Sr))+'" fill="none" stroke="#d9584f" stroke-width="2.6" opacity=".8"/>':'')+
+    gauge(120,120,88,  8, 82, N,'#54bfd6')+
+    gauge(120,120,88, 98,172, C,'#e8a33d')+
+    gauge(120,120,88,188,262, W,'#6fbf83')+
+    gauge(120,120,88,278,352, R,'#9b8ade')+
+    '<circle cx="120" cy="120" r="42" fill="none" stroke="#01040a" stroke-width="3"/>'+
+    '<circle cx="120" cy="120" r="40" fill="#54bfd6" opacity="'+(0.07+0.30*St).toFixed(3)+'"/>'+
+    '<circle cx="120" cy="120" r="'+(11+26*St).toFixed(1)+'" fill="#e8a33d" opacity="'+(0.14+0.44*St).toFixed(3)+'"/>'+
+    '<circle cx="120" cy="120" r="40" fill="none" stroke="#54bfd6" stroke-width=".8" opacity=".55"/>'+
+    '<text x="120" y="19" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="7" letter-spacing="2" fill="#5a6c7d">HULL</text>'+
+  '</svg>';
+}
+function bar(l,r,v,c){return '<div class="kv"><span>'+l+(r?' / '+r:'')+'</span><span>'+v+'%</span></div>';}
+function officerRow(post,namek,relk){
+  const n=S.vars[namek];
+  if(!n||n==='—') return '<div class="kv"><span style="color:var(--ink3)">'+post+'</span><span style="color:var(--ink3)">berth empty</span></div>';
+  return '<div class="kv"><span>'+esc(n)+'<span style="color:var(--ink3);font-size:.72em"> · '+post+'</span></span><span>'+(+S.vars[relk]||0)+'%</span></div>';
+}
+function chartEl(){const d=document.createElement('div'),v=S.vars;
+  d.innerHTML=repeaterSVG()+
+    bar('Nerve','Restraint',+v.nerve||50)+bar('Candour','Guard',+v.candor||50)+
+    bar('Crew','Mission',+v.crew||50)+bar('Rule','Counsel',+v.rule||50)+
+    '<div class="hr"></div>'+
+    bar('Standing in the Survey','',+v.standing||40)+
+    '<div class="kv"><span>Hull strain</span><span>'+(+v.strain||0)+'%</span></div>'+
+    (v.met_oleyo?'<div class="kv"><span>Oleyo of the <i>Ashaya</i></span><span>'+(+v.oleyo||50)+'%</span></div>':'')+
+    '<div class="hr"></div>'+
+    officerRow('first officer','xoname','rel_xo')+
+    officerRow('chief engineer','engname','rel_eng')+
+    officerRow('surgeon','medname','rel_med')+
+    officerRow('security','secname','rel_sec')+
+    officerRow('chaplain','chapname','rel_chap');
+  return d;}
+
+/* ---------- panels ---------- */
+let noteTarget=null;
+const openPanel=h=>{$('panelBody').innerHTML=h;$('panel').classList.add('open');};
+const closePanel=()=>$('panel').classList.remove('open');
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1900);}
+function showStats(){ openPanel('<h3>Service record</h3>'+chartEl().innerHTML+
+  (S.vars.commissioned?'<p style="color:var(--ink3);font-size:.8rem;margin-top:1rem">Neither end of a pair is the good end. A commander sits somewhere on each of the four lines, and the Survey reads all four off your log whether you meant them or not.</p>':'<p style="color:var(--ink3);font-size:.82rem;margin-top:1rem">Nothing is written here yet. You have not taken her out.</p>')); }
+function showJump(){let h='<h3>Jump to scene</h3><div class="jumps">';
+  ORDER.forEach((s,i)=>h+='<button onclick="jump(\''+s+'\')">'+esc(s)+'<b>'+i+'</b></button>');
+  openPanel(h+'</div><p style="color:var(--ink3);font-size:.8rem;margin-top:1rem">Jumping keeps your current stats and does not replay what is in between.</p>');}
+function jump(s){gotoScene(s);closePanel();step();}
+function openNote(key,original){
+  noteTarget={key,original};
+  const e=S.notes[key]||{};
+  openPanel('<h3>This passage</h3>'+
+    '<textarea id="rtxt">'+esc(e.replacement||original)+'</textarea>'+
+    '<button class="act prim" onclick="saveNote(\'edit\')">Save my rewrite</button>'+
+    (e.replacement?'<button class="act" onclick="revert()">Revert to Claude\'s text</button>':'')+
+    '<h3>Or tell Claude what to change</h3>'+
+    '<textarea class="note" id="ntxt" placeholder="What is wrong with this?">'+esc(e.note||'')+'</textarea>'+
+    '<button class="act" onclick="saveNote(\'rewrite\')">Ask Claude to rewrite</button>'+
+    ((e.note||e.replacement)?'<button class="act" onclick="delNote()">Delete this note</button>':''));
+  setTimeout(()=>{const t=$('rtxt');
+    if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);t.addEventListener('input',draftSave);}
+    const nt=$('ntxt'); if(nt) nt.addEventListener('input',draftSave);},60);
+}
+function draftRecord(kind){
+  const repl=(($('rtxt')||{}).value||'').trim(), note=(($('ntxt')||{}).value||'').trim();
+  const rec={kind,scene:noteTarget.key.split(':')[0],line:+noteTarget.key.split(':')[1],
+    original:noteTarget.original,note,at:new Date().toISOString(),synced:false};
+  if(repl&&repl!==noteTarget.original) rec.replacement=repl;
+  return rec;}
+let draftTimer=null;
+function draftSave(){
+  if(!noteTarget)return;
+  clearTimeout(draftTimer);
+  draftTimer=setTimeout(()=>{ S.notes[noteTarget.key]=draftRecord('edit');
+    save(); updateSyncPill(); pushOne(noteTarget.key); },700);}
+async function pushOne(key){
+  const r=S.notes[key]; if(!r)return;
+  const db=await getDB(); if(!db){updateSyncPill();return;}
+  try{ const body=Object.assign({},r); delete body.synced;
+    await db.doc('notes/'+key.replace(/[^A-Za-z0-9]/g,'_')).set(body);
+    r.synced=true; save(); updateSyncPill(); }
+  catch(e){ dbState='error'; updateSyncPill(); }}
+async function saveNote(kind){
+  if(!noteTarget)return;
+  const key=noteTarget.key; clearTimeout(draftTimer);
+  S.notes[key]=draftRecord(kind); save(); closePanel(); redraw();
+  const db=await getDB();
+  if(!db){toast('SAVED ON THIS DEVICE ONLY');updateSyncPill();return;}
+  try{ const body=Object.assign({},S.notes[key]); delete body.synced;
+    await db.doc('notes/'+key.replace(/[^A-Za-z0-9]/g,'_')).set(body);
+    S.notes[key].synced=true; save(); toast('saved'); }
+  catch(e){ dbState='error'; toast('NOT SAVED — open NOTES and tap Sync'); }
+  updateSyncPill();}
+function revert(){ if(!noteTarget)return; const e=S.notes[noteTarget.key];
+  if(e){delete e.replacement; if(!e.note) delete S.notes[noteTarget.key];}
+  save(); closePanel(); redraw(); }
+async function delNote(){ if(!noteTarget)return;
+  const key=noteTarget.key; clearTimeout(draftTimer);
+  delete S.notes[key]; save(); closePanel(); redraw(); updateSyncPill();
+  const db=await getDB(); if(db){try{await db.doc('notes/'+key.replace(/[^A-Za-z0-9]/g,'_')).delete();}catch(e){}}}
+function showNotes(){
+  const ks=Object.keys(S.notes), u=unsyncedCount();
+  let h='<h3>Your notes ('+ks.length+')</h3>'+
+    '<div class="kv"><span>in the database</span><span>'+(ks.length-u)+'</span></div>'+
+    '<div class="kv"><span>this device only</span><span style="color:'+(u?'var(--ruby)':'var(--verd)')+'">'+u+'</span></div>'+
+    '<div class="kv"><span>connection</span><span>'+dbState+'</span></div>'+
+    (Object.values(S.notes).filter(function(r){return r.stale}).length?
+      '<div class="kv"><span style="color:var(--amber)">orphaned by a rewrite</span><span style="color:var(--amber)">'+
+      Object.values(S.notes).filter(function(r){return r.stale}).length+'</span></div>':'')+
+    (dbState==='none'
+      ? '<p style="color:var(--ink3);font-size:.82rem;margin:.6rem 0">This copy has no database — notes live in this browser only. Use <b>Copy as text</b> and paste them into the conversation.</p>'
+      : '<button class="act'+(u?' prim':'')+'" onclick="pushAll()">Sync everything now</button>'+
+        '<button class="act" onclick="pullFromDB().then(function(){toast(\'reloaded\');showNotes();})">Reload my notes from the database</button>')+
+    '<button class="act'+(dbState==='none'?' prim':'')+'" onclick="copyNotes()">Copy as text</button>';
+  if(!ks.length)h+='<p style="color:var(--ink3);font-size:.85rem">Turn on EDIT and click any paragraph.</p>';
+  ks.forEach(k=>{const n=S.notes[k];
+    h+='<div class="noteitem"><em>'+esc(n.scene)+' · line '+n.line+' · '+(n.replacement?'rewritten':n.kind)+'</em>'+
+       esc((n.replacement||n.note||'').slice(0,260))+'</div>';});
+  openPanel(h);
+}
+
+/* ---------- persistence ---------- */
+let storageBroken=false;
+function put(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}
+  catch(e){if(k==='pp_notes')storageBroken=true;return false;}}
+function got(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
+function save(){
+  put('pp_progress',{vars:S.vars,scene:S.scene,pc:S.pc,edit:S.edit,started:S.started});
+  put('pp_notes',S.notes); put('pp_imgs',S.imgs);}
+function load(){
+  const r=got('pp_progress')||got('perpetua');
+  S.notes=got('pp_notes')||(r&&r.notes)||{};
+  S.imgs=got('pp_imgs')||(r&&r.imgs)||{};
+  if(r){S.vars=r.vars||{};S.scene=r.scene;S.pc=r.pc||0;S.edit=!!r.edit;S.started=!!r.started;}
+  return !!(r&&r.scene);}
+
+/* ---- notes are anchored to the TEXT they were written against, not the
+   line number, so that editing the source upstream cannot silently move a
+   rewrite onto the wrong paragraph ---- */
+function sourceLine(scene,line){
+  const a=P[scene]; if(!a) return null;
+  const n=a.find(x=>x.line===line);
+  return (n && (n.k==='text'||n.k==='opt')) ? n.a : null;
+}
+function reanchor(){
+  let moved=0, stale=0;
+  for(const key of Object.keys(S.notes)){
+    const r=S.notes[key]; if(!r.original) continue;
+    const [scene,ln]=[key.split(':')[0], +key.split(':')[1]];
+    if(sourceLine(scene,ln)===r.original){ delete r.stale; continue; }
+    const a=P[scene]||[];
+    const hit=a.find(x=>(x.k==='text'||x.k==='opt')&&x.a===r.original);
+    if(hit){
+      delete S.notes[key];
+      r.line=hit.line; delete r.stale;
+      S.notes[scene+':'+hit.line]=r; moved++;
+    } else { r.stale=true; stale++; }
+  }
+  if(moved) save();
+  return {moved,stale};
+}
+
+/* ---- the database is the source of truth for notes ---- */
+let DB=null, dbState='connecting';
+async function getDB(){
+  if(DB)return DB;
+  try{ if(typeof claude==='undefined'||!claude.use){dbState='none';return null;}
+    DB=await claude.use('db'); dbState=DB?'ready':'none'; return DB; }
+  catch(e){ dbState='none'; return null; }}
+async function pullFromDB(){
+  const db=await getDB(); if(!db){updateSyncPill();return;}
+  let changed=false;
+  try{ const snap=await db.collection('notes').get();
+    (snap.docs||[]).forEach(d=>{ if(!d.exists)return; const r=d.data(); if(!r||!r.scene)return;
+      const key=r.scene+':'+r.line, mine=S.notes[key];
+      if(!mine||(r.at||'')>(mine.at||'')){S.notes[key]=Object.assign({},r,{synced:true});changed=true;} });
+  }catch(e){ dbState='error'; }
+  try{ const snap=await db.collection('images').get();
+    (snap.docs||[]).forEach(d=>{ if(!d.exists)return; const r=d.data();
+      if(r&&r.slot&&r.dataUrl&&!S.imgs[r.slot]){S.imgs[r.slot]=r.dataUrl;changed=true;} });
+  }catch(e){}
+  const rr=reanchor();
+  if(changed||rr.moved){ save(); if(S.scene) redraw(); }
+  if(rr.moved) toast(rr.moved+' notes re-anchored');
+  updateSyncPill();}
+async function pushAll(){
+  const db=await getDB(); if(!db){toast('no connection — nothing pushed');return;}
+  let n=0;
+  for(const k in S.notes){ const r=S.notes[k]; if(r.synced) continue;
+    try{ const body=Object.assign({},r); delete body.synced;
+      await db.doc('notes/'+k.replace(/[^A-Za-z0-9]/g,'_')).set(body); r.synced=true; n++; }catch(e){} }
+  save(); toast(n?('pushed '+n):'everything already saved'); updateSyncPill(); showNotes();}
+function notesAsText(){
+  const ks=Object.keys(S.notes).sort();
+  if(!ks.length) return 'No notes.';
+  let out='ONE SOUL — author notes ('+ks.length+')\n';
+  ks.forEach(k=>{ const r=S.notes[k];
+    out+='\n--- '+r.scene+' · line '+r.line+' ---\n';
+    if(r.original)    out+='WAS: '+r.original+'\n';
+    if(r.replacement) out+='NOW: '+r.replacement+'\n';
+    if(r.note)        out+='NOTE: '+r.note+'\n';
+  });
+  return out;
+}
+function copyNotes(){
+  const t=notesAsText();
+  const ta=document.createElement('textarea');
+  ta.value=t; ta.style.cssText='position:fixed;top:-999px'; document.body.appendChild(ta);
+  ta.select();
+  let ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(()=>toast('copied'),()=>{});
+  else toast(ok?'copied':'select the box below and copy');
+  openPanel('<h3>Notes, as text</h3><p style="color:var(--ink3);font-size:.82rem">'+
+    (ok?'Copied to the clipboard. ':'')+'Paste this into the conversation and I will apply it to the source.</p>'+
+    '<textarea style="min-height:22rem;font-family:\'IBM Plex Mono\',monospace;font-size:.72rem" onclick="this.select()">'+
+    esc(t)+'</textarea><button class="act" onclick="showNotes()">Back</button>');
+}
+function unsyncedCount(){let n=0;for(const k in S.notes) if(!S.notes[k].synced)n++;return n;}
+function updateSyncPill(){
+  const el=$('csync'); if(!el)return;
+  const u=unsyncedCount();
+  if(dbState==='ready'&&!u&&!storageBroken) el.innerHTML='<span style="color:var(--verd)">saved</span>';
+  else if(dbState==='connecting') el.innerHTML='<span style="color:var(--ink3)">connecting</span>';
+  else if(u) el.innerHTML='<span style="color:var(--ruby)">'+u+' unsaved</span>';
+  else if(dbState==='none') el.innerHTML='<span style="color:var(--ink3)">local</span>';
+  else el.innerHTML='<span style="color:var(--ruby)">offline</span>';}
+
+/* ---------- boot ---------- */
+function titleScreen(){
+  S.scene=null;
+  $('stage').innerHTML='<div class="title">'+repeaterSVG()+'<h1>Perpetua</h1>'+
+    '<div class="sub">A first command</div>'+
+    '<div class="tag">One worn-out survey ship, a crew you choose yourself, and the rule that ruined the captain before you.</div></div>';
+  const w=document.createElement('div');w.className='choices';
+  const b=document.createElement('button');b.className='opt';b.textContent='Begin.';
+  b.onclick=()=>{S.started=true;S.vars={};S.stack=[];
+    (P.__startup__||[]).forEach(n=>{if(n.k==='cmd'&&n.c==='create'){const m=n.a.match(/^(\S+)\s+(.*)$/);if(m)S.vars[m[1]]=val(m[2].trim());}});
+    gotoScene(ORDER[0]);step();};
+  w.appendChild(b);
+  if(localStorage.getItem('perpetua')){
+    const c=document.createElement('button');c.className='opt';c.textContent='Continue where I left off.';
+    c.onclick=()=>{load();if(S.scene)step();else b.click();};w.appendChild(c);}
+  $('stage').appendChild(w); $('cwhere').textContent='title';
+}
+function buildBar(){
+  const defs=[['stats','Stats',showStats],['notes','Notes',showNotes],['jump','Jump',showJump],
+    ['edit','Edit',toggleEdit],['theme','Theme',toggleTheme],['size','A±',cycleSize],['restart','Restart',restart]];
+  $('bar').innerHTML='';
+  defs.forEach(([id,l,fn])=>{ if(id==='jump'&&!S.edit)return;
+    const b=document.createElement('button');b.textContent=l;b.onclick=fn;
+    if(id==='edit'&&S.edit)b.classList.add('on');$('bar').appendChild(b);});
+}
+function toggleEdit(){S.edit=!S.edit;document.body.classList.toggle('editing',S.edit);
+  buildBar();save();if(S.scene)redraw();else titleScreen();
+  toast(S.edit?'edit mode — click any paragraph':'edit mode off');}
+function toggleTheme(){const r=document.documentElement;
+  r.setAttribute('data-theme',r.getAttribute('data-theme')==='light'?'dark':'light');}
+let sizes=[17,19,21,24],si=1;
+function cycleSize(){si=(si+1)%sizes.length;document.documentElement.style.setProperty('--fs',sizes[si]+'px');}
+function restart(){if(!confirm('Start again from the beginning?'))return;
+  const n=S.notes,i=S.imgs,e=S.edit;localStorage.removeItem('perpetua');
+  S.vars={};S.scene=null;S.pc=0;S.stack=[];S.notes=n;S.imgs=i;S.edit=e;save();titleScreen();}
+
+(function(){
+  P.__startup__=parse(SCENES.__startup__||'');
+  const had=load();
+  document.body.classList.toggle('editing',S.edit);
+  buildBar();
+  if(had&&S.started)step(); else titleScreen();
+  reanchor(); updateSyncPill(); pullFromDB();
+  setInterval(function(){ if(unsyncedCount()) pushAll(); },30000);
+  addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') pullFromDB(); });
+  addEventListener('keydown',e=>{
+    if(e.key==='Escape')closePanel();
+    if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='e'){e.preventDefault();toggleEdit();}
+    if(S.edit&&e.key==='ArrowLeft'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName))goBack();
+  });
+})();
+</script>

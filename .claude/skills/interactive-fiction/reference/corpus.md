@@ -64,3 +64,34 @@ All three end with a choice-free wrap-up that only reports outcomes.
 choice** (4× the dragon) · **87 words per screen** (4× too many breaks) ·
 265 stat writes against **3 tests** — a write-to-test ratio of 88 against a
 corpus range of 1.8–5.6.
+
+## Failure handling
+
+724 stat-test `*if`/`*else` blocks (pattern `*if <stat> <op> <number>`):
+
+| Outcome of the failure branch | Count | Share |
+|---|---|---|
+| Reconverges — same `*goto` in both branches | 175 | 24% |
+| Reconverges — no `*goto` in either branch | 220 | 30% |
+| Genuinely divergent | 329 | 45% |
+
+**55% of failed stat tests cost the player nothing but knowledge.**
+
+## Relationship writes
+
+Vampire + Romance: 844 writes to `*rapport*`/`*love*`/`*affection*` stats.
+274 (32%) sit directly inside a chosen option; 570 (68%) fire inside
+conditional prose reacting to stats the player built elsewhere.
+
+## Screen rhythm
+
+`*page_break` 1,209 · `*choice` 1,207 — a ratio of **1.00** across all five
+games. Median prose before the first choice of a scene: **266 words**
+(range 22–2,432).
+
+## Process (from choiceofgames.com/looking-for-writers)
+
+CV → writing sample → several game concepts → **a full pitch in the form of an
+outline** → several rounds of editorial revision *on the outline* → contract →
+chapters delivered progressively. Chapter two must be at least 10,000 words.
+"Players see roughly 20% of the content per playthrough."

@@ -198,14 +198,72 @@ So, always:
 - **No ending before 75%.**
 - Last scene: no choices, report the consequences.
 
+## How failure is actually written
+
+Measured: **724 stat-test `*if`/`*else` blocks** across the corpus.
+**55% of them reconverge immediately** — both branches reach the same label, or
+neither branches at all. Failing a test usually costs you nothing but knowledge.
+
+Three patterns, in order of frequency:
+
+1. **Reconvergent flavour.** The high-stat player gets *understanding*; the
+   low-stat player gets *description*. Same plot, next line.
+
+   > `*if engineering > 60` → *"You're pretty sure that's a large electric motor at the end of those pipes. Probably the coolant pump."*
+   > `*else` → *"The pipe ends in another metal housing of some kind."*
+   > Both `*goto pump`.
+
+   This is the workhorse. It makes a stat feel like a sense organ rather than a
+   lock. Write it for every stat the player might have brought to a scene.
+
+2. **Failure costs something nameable** — a companion (`*set companioncount - 1`),
+   a wound, a reputation. Not the plot; a resource. The story continues poorer.
+
+3. **Failure hands the choice back.** Zombies answers a stupid plan with
+   *"A pew, huh. Um, I guess you could…hell, I don't know…sit on it and expire
+   quietly in the corner?"*, then a page break, then *"Really?"*, then a new
+   `*choice`. Failure as a beat of characterisation, not a wall.
+
+Death and hard branch-off are the minority and are earned. **Never write a
+failure branch that only says the player failed.**
+
+## How relationships are actually paced
+
+In the two romance-heavy games, **844 writes to relationship stats — but only
+32% sit directly inside a chosen option.** Two-thirds fire inside conditional
+prose: the person warms to you because of who you already are, not because you
+picked the kind line. Affection is mostly a *consequence of the character you
+built somewhere else*, revealed at the moment you meet.
+
+Practical rule: for each relationship, roughly one third of its movement from
+direct courtship choices, two thirds from stat-gated reactions inside ordinary
+scenes.
+
+## The rhythm of a screen
+
+`*page_break` to `*choice` runs **1.00 across the whole corpus** — one break per
+choice, alternating. Combined with 325–400 words per screen: the reader gets a
+paragraph block, a decision, a paragraph block, a break. Median prose before a
+scene's first choice: **266 words.** Open, orient, then ask.
+
+## How the professionals sequence the work
+
+They outline first, and it is not casual. Choice of Games' own submission
+pipeline: CV → writing sample → **several game concepts** → *"a full pitch for a
+game, in the form of an outline"* → **several rounds of revision with the
+editorial team on the outline** → contract → chapters delivered progressively,
+with **chapter two required to be at least 10,000 words**. Nobody writes scene
+one until the shape is agreed.
+
+Also from that page: **a player sees roughly 20% of the content in one
+playthrough.** A 100,000-word game is a 20,000-word read. Budget accordingly —
+variation is the product, not overhead.
+
 ## What is still unknown
 
 Worth researching before it matters, rather than guessing:
 
-- How failure is written *in practice* — whether failed tests branch, cost a
-  resource, or merely re-colour the same outcome.
-- Whether they use any beat-level scene template.
-- How romance arcs are paced against the main plot.
+- Whether they use any beat-level scene template below the scene level.
 - What separates a 10% prose score from a 6% one, beyond "engaging".
 
 ## The Scriptorium engine
