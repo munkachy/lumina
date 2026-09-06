@@ -59,7 +59,7 @@ Six have harps. Two have their eyes closed in a way you did not use to mind. One
 
 And one is from Walter, the Christmas before he died, and it says GUARDIAN ANGEL WATCHING OVER ME on the base in gold, and he was not a man who bought that kind of thing, and he must have stood in a shop and picked it up and thought: yes. That one.
 
-You have prayed to yours every day of your adult life. Out loud, most days.
+You have prayed to your angel every day of your adult life. Out loud, most days.
 
 And in 1979 you gave it a name, because nobody had ever given you one and it seemed rude to keep saying *hey*.
 
@@ -83,7 +83,7 @@ And in 1979 you gave it a name, because nobody had ever given you one and it see
 
 *label namedit
 
-${angelname}. You were twenty-six and you were doing your best.
+${angelname}. You were twenty-six and you were doing your best, and it stuck.
 
 *page_break
 
@@ -119,7 +119,7 @@ You know before you look, the way you know when a person has come up behind you 
 
 The first thing you notice is that it is not looking at you with any expression at all.
 
-Not a cold expression. Not a kind one. Expression is a thing that faces do, and there is no face. There is nothing in the room that is arranged for you to read.
+Not a cold expression. Not a kind one. Expression is a thing that faces do, and there is no face. Or rather, it is more than a face. There is nothing in the room that is arranged for you to read.
 
 It does not have a harp. It does not have a nightgown. It is not a woman. It is not a man either, and the more you look at it the more you understand that neither of those words was ever going to be any use here, and that you have spent forty-five years talking to something you had the wrong shape for entirely.
 
@@ -167,7 +167,7 @@ What do you say to it?
     You are good at this. You waited out Walter, two children and a county pension office.
     *line_break
     *line_break
-    It is better at it than you are. It is not even trying.
+    It is better at waiting than you are. It is not even trying.
     *set hope %+5
     *goto whereveryouwere
 
@@ -207,7 +207,7 @@ So you say: "Well? Are you going to do something, or what?"
 
 *comment ---- 0.5 : she does not take this well ----
 
-The apple juice is still on the tray. The machine down the hall has stopped. You have been in this room for eleven days and this is the first thing that has happened in it.
+The apple juice is still on the tray. The machine down the hall has stopped.
 
 "I'm sorry," you say. "*What?*"
 
@@ -279,7 +279,7 @@ You look at it for a while.
   #"So God is letting a woman with no legs and a tenth-grade education build an angel."
     "Yes."
     *goto whydothat
-  #"So this is Build-A-Bear. I am in a hospital bed at Build-A-Bear."
+  #"So this is Build-A-Bear. I am in a hospital bed and God wants me to play Build-A-Bear with you."
     "I do not know what that is."
     *line_break
     *line_break
@@ -304,7 +304,7 @@ You look at it for a while.
 
 *page_break
 
-"I have wondered," it says, "whether it is because you told Him, every day for forty-five years, that you would have done it differently."
+"I have wondered," it says, "whether it is because you told Him that you would have done it differently."
 
 *set formed true
 
@@ -334,7 +334,7 @@ You have about four seconds and you spend every one of them on the wrong thing.
 
 You look at the window. You look at the chair. You look at a jar of something on the nightstand, and the strip of light on the floor, and the door frame, and the ceiling again — turning the room over the way a woman turns a house over looking for her glasses, hunting for whatever it is that is doing this to you.
 
-And by the time it occurs to you to look at his face, you are already going.
+And by the time it occurs to you to look at the sick man's face, you are already vanishing.
 
 *page_break
 
@@ -342,13 +342,13 @@ And by the time it occurs to you to look at his face, you are already going.
 
 "That was the end," it says.
 
-"Bring me back. I wasn't ready, I didn't see —"
+"Bring me back. I wasn't ready, I didn't see who —"
 
 "No."
 
-"I need to see how it —"
+"But I know that man! Somehow. I need to find out who he —"
 
-"You will," it says. "In forty-nine years."
+"You will be back," the angel says. "In forty-nine years."
 
 *page_break
 
