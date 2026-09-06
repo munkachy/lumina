@@ -210,7 +210,7 @@ The Rest did not ask for this. They asked for the child. Ambrit is asking now, i
   #Give them the six doses.
     *set crew %-10
     *set nerve %+8
-    *set melisse "generous"
+    *set halbard "generous"
     "Six doses. ${medname}, start them today."
 
     *if (med = "vasi")
@@ -228,7 +228,7 @@ The Rest did not ask for this. They asked for the child. Ambrit is asking now, i
   #Two courses. Four doses. Seven stay aboard.
     *set rule %+8
     *set standing %+3
-    *set melisse "split"
+    *set halbard "split"
     "Two courses. Four doses. Administrator, you choose which two."
 
     It is the worst four seconds of the visit. Ambrit looks at you, then at the wall for a long moment, and then says a name, and another name, and does not say the third; and the third man is standing in the corridor and hears her not say it.
@@ -240,7 +240,7 @@ The Rest did not ask for this. They asked for the child. Ambrit is asking now, i
     *set crew %+10
     *set candor %+6
     *set standing %+5
-    *set melisse "refused"
+    *set halbard "refused"
     "The arrangement covers emergencies. This is not one, and I am nine days from resupply with a hundred and twelve people aboard. The answer is no."
 
     Ambrit nods. She expected it, and that is the part that stays with you — that she had already worked out the answer would be no and asked anyway, because asking cost her nothing and not asking would have cost her three men.
@@ -250,7 +250,7 @@ The Rest did not ask for this. They asked for the child. Ambrit is asking now, i
     *goto accident
   #Give it to ${medname}. ${medThey} runs the dispensary.
     *set rule %-14
-    *set melisse "delegated"
+    *set halbard "delegated"
     "Doctor. Your dispensary, your call."
 
     ${medname} looks at you for slightly too long.
@@ -430,13 +430,13 @@ ${medname} works on Ilse Novy in the Rest's two-bed clinic for three hours with 
 *if (med = "vasi")
   Vasi narrates the whole procedure aloud, level and unhurried, for the record. Afterwards, when you play the recording back, the part that stays with you is that in three hours and eleven minutes his voice does not change once, including at the point where he nearly loses her.
 
-*if (melisse = "generous")
+*if (halbard = "generous")
   Three miners with grey lung are on the second day of a course that will buy them a decade, and Ambrit has not mentioned it and will not.
-*if (melisse = "refused")
+*if (halbard = "refused")
   Fen Doury, fifty-eight, is on the line at the gallery mouth passing blocks with everybody else, and he does not look at you once, and it is not because he is angry.
-*if (melisse = "split")
+*if (halbard = "split")
   Fen Doury, fifty-eight, is on the line at the gallery mouth passing blocks with everybody else. He was not one of the two. He works his shift and then he works somebody else's.
-*if (melisse = "delegated")
+*if (halbard = "delegated")
   ${medname} comes out of the clinic at 0400, and you realise that you have not asked ${medthem} how the three miners were chosen, and that ${medthey} has been waiting nine hours for you to.
   *set rel_med %-4
 
