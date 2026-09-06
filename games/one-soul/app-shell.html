@@ -543,8 +543,11 @@ function showNotes(){
     (Object.values(S.notes).filter(function(r){return r.stale}).length?
       '<div class="kv"><span style="color:var(--amber)">orphaned by a rewrite</span><span style="color:var(--amber)">'+
       Object.values(S.notes).filter(function(r){return r.stale}).length+'</span></div>':'')+
-    '<button class="act'+(u?' prim':'')+'" onclick="pushAll()">Sync everything now</button>'+
-    '<button class="act" onclick="pullFromDB().then(function(){toast(\'reloaded\');showNotes();})">Reload my notes from the database</button>';
+    (dbState==='none'
+      ? '<p style="color:var(--ink3);font-size:.82rem;margin:.6rem 0">This copy has no database — notes live in this browser only. Use <b>Copy as text</b> and paste them into the conversation.</p>'
+      : '<button class="act'+(u?' prim':'')+'" onclick="pushAll()">Sync everything now</button>'+
+        '<button class="act" onclick="pullFromDB().then(function(){toast(\'reloaded\');showNotes();})">Reload my notes from the database</button>')+
+    '<button class="act'+(dbState==='none'?' prim':'')+'" onclick="copyNotes()">Copy as text</button>';
   if(!ks.length)h+='<p style="color:var(--ink3);font-size:.85rem">Turn on EDIT and click any paragraph.</p>';
   ks.forEach(k=>{const n=S.notes[k];
     h+='<div class="noteitem"><em>'+esc(n.scene)+' · line '+n.line+' · '+(n.replacement?'rewritten':n.kind)+'</em>'+
@@ -623,6 +626,32 @@ async function pushAll(){
     try{ const body=Object.assign({},r); delete body.synced;
       await db.doc('notes/'+k.replace(/[^A-Za-z0-9]/g,'_')).set(body); r.synced=true; n++; }catch(e){} }
   save(); toast(n?('pushed '+n):'everything already saved'); updateSyncPill(); showNotes();}
+function notesAsText(){
+  const ks=Object.keys(S.notes).sort();
+  if(!ks.length) return 'No notes.';
+  let out='ONE SOUL — author notes ('+ks.length+')\n';
+  ks.forEach(k=>{ const r=S.notes[k];
+    out+='\n--- '+r.scene+' · line '+r.line+' ---\n';
+    if(r.original)    out+='WAS: '+r.original+'\n';
+    if(r.replacement) out+='NOW: '+r.replacement+'\n';
+    if(r.note)        out+='NOTE: '+r.note+'\n';
+  });
+  return out;
+}
+function copyNotes(){
+  const t=notesAsText();
+  const ta=document.createElement('textarea');
+  ta.value=t; ta.style.cssText='position:fixed;top:-999px'; document.body.appendChild(ta);
+  ta.select();
+  let ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(()=>toast('copied'),()=>{});
+  else toast(ok?'copied':'select the box below and copy');
+  openPanel('<h3>Notes, as text</h3><p style="color:var(--ink3);font-size:.82rem">'+
+    (ok?'Copied to the clipboard. ':'')+'Paste this into the conversation and I will apply it to the source.</p>'+
+    '<textarea style="min-height:22rem;font-family:\'IBM Plex Mono\',monospace;font-size:.72rem" onclick="this.select()">'+
+    esc(t)+'</textarea><button class="act" onclick="showNotes()">Back</button>');
+}
 function unsyncedCount(){let n=0;for(const k in S.notes) if(!S.notes[k].synced)n++;return n;}
 function updateSyncPill(){
   const el=$('csync'); if(!el)return;
@@ -630,6 +659,7 @@ function updateSyncPill(){
   if(dbState==='ready'&&!u&&!storageBroken) el.innerHTML='<span style="color:var(--verd)">saved</span>';
   else if(dbState==='connecting') el.innerHTML='<span style="color:var(--ink3)">connecting</span>';
   else if(u) el.innerHTML='<span style="color:var(--ruby)">'+u+' unsaved</span>';
+  else if(dbState==='none') el.innerHTML='<span style="color:var(--ink3)">local</span>';
   else el.innerHTML='<span style="color:var(--ruby)">offline</span>';}
 
 /* ---------- boot ---------- */
