@@ -159,6 +159,7 @@ body.editing p:hover{box-shadow:-.7rem 0 0 rgba(227,171,72,.10), .7rem 0 0 rgba(
   0 0 0 .7rem rgba(227,171,72,.10)}
 p.hasnote{border-right:2px solid var(--ruby);padding-right:.55rem}
 p.edited{border-right:2px solid var(--verd);padding-right:.55rem}
+p.stalenote{border-right:2px dashed var(--amber);padding-right:.55rem}
 .backbtn{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.16em;
   text-transform:uppercase;background:none;border:1px solid var(--rule);color:var(--ink3);
   padding:.35rem .75rem;cursor:pointer;margin-bottom:1.5rem}
@@ -179,7 +180,7 @@ p.edited{border-right:2px solid var(--verd);padding-right:.55rem}
 
 <div class="frame">
 </div>
-<div class="crumb"><span id="cwhere">—</span><span id="cedit"></span></div>
+<div class="crumb"><span id="cwhere">—</span><span><span id="csync"></span> <span id="cedit"></span></span></div>
 <main id="stage"></main>
 <div class="bar" id="bar"></div>
 <div class="panel" id="panel"><button class="x" onclick="closePanel()">&times;</button><div id="panelBody"></div></div>
@@ -329,7 +330,10 @@ function flashDeltas(before){
   setTimeout(()=>f.classList.remove('show'),2600);
 }
 function keyOf(n){return n.scene+':'+n.line;}
-function textFor(n){const e=S.notes[keyOf(n)];return (e&&e.replacement)?e.replacement:n.v;}
+function textFor(n){const e=S.notes[keyOf(n)];
+  if(!e||!e.replacement) return n.v;
+  if(e.original && e.original!==n.v) return n.v;   /* stale — never overwrite the wrong line */
+  return e.replacement;}
 function render(){
   const st=$('stage'); st.innerHTML='';
   if(S.edit&&S.stack.length>1){
@@ -341,7 +345,8 @@ function render(){
     if(n.t==='text'){
       const p=document.createElement('p'), k=keyOf(n), e=S.notes[k];
       p.innerHTML=inline(textFor(n));
-      if(e&&e.replacement)p.classList.add('edited');
+      if(e&&e.stale)p.classList.add('stalenote');
+      else if(e&&e.replacement)p.classList.add('edited');
       else if(e)p.classList.add('hasnote');
       if(S.edit)p.onclick=()=>openNote(k,n.v);
       st.appendChild(p);
@@ -488,26 +493,58 @@ function openNote(key,original){
     '<textarea class="note" id="ntxt" placeholder="What is wrong with this?">'+esc(e.note||'')+'</textarea>'+
     '<button class="act" onclick="saveNote(\'rewrite\')">Ask Claude to rewrite</button>'+
     ((e.note||e.replacement)?'<button class="act" onclick="delNote()">Delete this note</button>':''));
-  setTimeout(()=>{const t=$('rtxt');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},60);
+  setTimeout(()=>{const t=$('rtxt');
+    if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);t.addEventListener('input',draftSave);}
+    const nt=$('ntxt'); if(nt) nt.addEventListener('input',draftSave);},60);
 }
-async function saveNote(kind){
-  if(!noteTarget)return;
+function draftRecord(kind){
   const repl=(($('rtxt')||{}).value||'').trim(), note=(($('ntxt')||{}).value||'').trim();
   const rec={kind,scene:noteTarget.key.split(':')[0],line:+noteTarget.key.split(':')[1],
-    original:noteTarget.original, note, at:new Date().toISOString()};
-  if(repl && repl!==noteTarget.original) rec.replacement=repl;
-  S.notes[noteTarget.key]=rec; save(); closePanel(); redraw();
-  const db=await claude.use('db');
-  if(db){try{await db.doc('notes/'+noteTarget.key.replace(/[^\w]/g,'_')).set(rec);
-    toast('saved for Claude');}catch(e){toast('saved on this device');}}
-  else toast('saved on this device');
-}
+    original:noteTarget.original,note,at:new Date().toISOString(),synced:false};
+  if(repl&&repl!==noteTarget.original) rec.replacement=repl;
+  return rec;}
+let draftTimer=null;
+function draftSave(){
+  if(!noteTarget)return;
+  clearTimeout(draftTimer);
+  draftTimer=setTimeout(()=>{ S.notes[noteTarget.key]=draftRecord('edit');
+    save(); updateSyncPill(); pushOne(noteTarget.key); },700);}
+async function pushOne(key){
+  const r=S.notes[key]; if(!r)return;
+  const db=await getDB(); if(!db){updateSyncPill();return;}
+  try{ const body=Object.assign({},r); delete body.synced;
+    await db.doc('notes/'+key.replace(/[^A-Za-z0-9]/g,'_')).set(body);
+    r.synced=true; save(); updateSyncPill(); }
+  catch(e){ dbState='error'; updateSyncPill(); }}
+async function saveNote(kind){
+  if(!noteTarget)return;
+  const key=noteTarget.key; clearTimeout(draftTimer);
+  S.notes[key]=draftRecord(kind); save(); closePanel(); redraw();
+  const db=await getDB();
+  if(!db){toast('SAVED ON THIS DEVICE ONLY');updateSyncPill();return;}
+  try{ const body=Object.assign({},S.notes[key]); delete body.synced;
+    await db.doc('notes/'+key.replace(/[^A-Za-z0-9]/g,'_')).set(body);
+    S.notes[key].synced=true; save(); toast('saved'); }
+  catch(e){ dbState='error'; toast('NOT SAVED — open NOTES and tap Sync'); }
+  updateSyncPill();}
 function revert(){ if(!noteTarget)return; const e=S.notes[noteTarget.key];
   if(e){delete e.replacement; if(!e.note) delete S.notes[noteTarget.key];}
   save(); closePanel(); redraw(); }
-function delNote(){ if(noteTarget){delete S.notes[noteTarget.key];save();closePanel();redraw();} }
+async function delNote(){ if(!noteTarget)return;
+  const key=noteTarget.key; clearTimeout(draftTimer);
+  delete S.notes[key]; save(); closePanel(); redraw(); updateSyncPill();
+  const db=await getDB(); if(db){try{await db.doc('notes/'+key.replace(/[^A-Za-z0-9]/g,'_')).delete();}catch(e){}}}
 function showNotes(){
-  const ks=Object.keys(S.notes); let h='<h3>Your notes ('+ks.length+')</h3>';
+  const ks=Object.keys(S.notes), u=unsyncedCount();
+  let h='<h3>Your notes ('+ks.length+')</h3>'+
+    '<div class="kv"><span>in the database</span><span>'+(ks.length-u)+'</span></div>'+
+    '<div class="kv"><span>this device only</span><span style="color:'+(u?'var(--ruby)':'var(--verd)')+'">'+u+'</span></div>'+
+    '<div class="kv"><span>connection</span><span>'+dbState+'</span></div>'+
+    (Object.values(S.notes).filter(function(r){return r.stale}).length?
+      '<div class="kv"><span style="color:var(--amber)">orphaned by a rewrite</span><span style="color:var(--amber)">'+
+      Object.values(S.notes).filter(function(r){return r.stale}).length+'</span></div>':'')+
+    '<button class="act'+(u?' prim':'')+'" onclick="pushAll()">Sync everything now</button>'+
+    '<button class="act" onclick="pullFromDB().then(function(){toast(\'reloaded\');showNotes();})">Reload my notes from the database</button>';
   if(!ks.length)h+='<p style="color:var(--ink3);font-size:.85rem">Turn on EDIT and click any paragraph.</p>';
   ks.forEach(k=>{const n=S.notes[k];
     h+='<div class="noteitem"><em>'+esc(n.scene)+' · line '+n.line+' · '+(n.replacement?'rewritten':n.kind)+'</em>'+
@@ -516,11 +553,84 @@ function showNotes(){
 }
 
 /* ---------- persistence ---------- */
-function save(){try{localStorage.setItem('onesoul',JSON.stringify(
-  {vars:S.vars,scene:S.scene,pc:S.pc,notes:S.notes,imgs:S.imgs,edit:S.edit,started:S.started}));}catch(e){}}
-function load(){try{const r=JSON.parse(localStorage.getItem('onesoul')||'null');
-  if(r){S.vars=r.vars||{};S.scene=r.scene;S.pc=r.pc||0;S.notes=r.notes||{};S.imgs=r.imgs||{};
-    S.edit=!!r.edit;S.started=!!r.started;return !!r.scene;}}catch(e){}return false;}
+let storageBroken=false;
+function put(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}
+  catch(e){if(k==='os_notes')storageBroken=true;return false;}}
+function got(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
+function save(){
+  put('os_progress',{vars:S.vars,scene:S.scene,pc:S.pc,edit:S.edit,started:S.started});
+  put('os_notes',S.notes); put('os_imgs',S.imgs);}
+function load(){
+  const r=got('os_progress')||got('onesoul');
+  S.notes=got('os_notes')||(r&&r.notes)||{};
+  S.imgs=got('os_imgs')||(r&&r.imgs)||{};
+  if(r){S.vars=r.vars||{};S.scene=r.scene;S.pc=r.pc||0;S.edit=!!r.edit;S.started=!!r.started;}
+  return !!(r&&r.scene);}
+
+/* ---- notes are anchored to the TEXT they were written against, not the
+   line number, so that editing the source upstream cannot silently move a
+   rewrite onto the wrong paragraph ---- */
+function sourceLine(scene,line){
+  const a=P[scene]; if(!a) return null;
+  const n=a.find(x=>x.line===line);
+  return (n && (n.k==='text'||n.k==='opt')) ? n.a : null;
+}
+function reanchor(){
+  let moved=0, stale=0;
+  for(const key of Object.keys(S.notes)){
+    const r=S.notes[key]; if(!r.original) continue;
+    const [scene,ln]=[key.split(':')[0], +key.split(':')[1]];
+    if(sourceLine(scene,ln)===r.original){ delete r.stale; continue; }
+    const a=P[scene]||[];
+    const hit=a.find(x=>(x.k==='text'||x.k==='opt')&&x.a===r.original);
+    if(hit){
+      delete S.notes[key];
+      r.line=hit.line; delete r.stale;
+      S.notes[scene+':'+hit.line]=r; moved++;
+    } else { r.stale=true; stale++; }
+  }
+  if(moved) save();
+  return {moved,stale};
+}
+
+/* ---- the database is the source of truth for notes ---- */
+let DB=null, dbState='connecting';
+async function getDB(){
+  if(DB)return DB;
+  try{ if(typeof claude==='undefined'||!claude.use){dbState='none';return null;}
+    DB=await claude.use('db'); dbState=DB?'ready':'none'; return DB; }
+  catch(e){ dbState='none'; return null; }}
+async function pullFromDB(){
+  const db=await getDB(); if(!db){updateSyncPill();return;}
+  let changed=false;
+  try{ const snap=await db.collection('notes').get();
+    (snap.docs||[]).forEach(d=>{ if(!d.exists)return; const r=d.data(); if(!r||!r.scene)return;
+      const key=r.scene+':'+r.line, mine=S.notes[key];
+      if(!mine||(r.at||'')>(mine.at||'')){S.notes[key]=Object.assign({},r,{synced:true});changed=true;} });
+  }catch(e){ dbState='error'; }
+  try{ const snap=await db.collection('images').get();
+    (snap.docs||[]).forEach(d=>{ if(!d.exists)return; const r=d.data();
+      if(r&&r.slot&&r.dataUrl&&!S.imgs[r.slot]){S.imgs[r.slot]=r.dataUrl;changed=true;} });
+  }catch(e){}
+  const rr=reanchor();
+  if(changed||rr.moved){ save(); if(S.scene) redraw(); }
+  if(rr.moved) toast(rr.moved+' notes re-anchored');
+  updateSyncPill();}
+async function pushAll(){
+  const db=await getDB(); if(!db){toast('no connection — nothing pushed');return;}
+  let n=0;
+  for(const k in S.notes){ const r=S.notes[k]; if(r.synced) continue;
+    try{ const body=Object.assign({},r); delete body.synced;
+      await db.doc('notes/'+k.replace(/[^A-Za-z0-9]/g,'_')).set(body); r.synced=true; n++; }catch(e){} }
+  save(); toast(n?('pushed '+n):'everything already saved'); updateSyncPill(); showNotes();}
+function unsyncedCount(){let n=0;for(const k in S.notes) if(!S.notes[k].synced)n++;return n;}
+function updateSyncPill(){
+  const el=$('csync'); if(!el)return;
+  const u=unsyncedCount();
+  if(dbState==='ready'&&!u&&!storageBroken) el.innerHTML='<span style="color:var(--verd)">saved</span>';
+  else if(dbState==='connecting') el.innerHTML='<span style="color:var(--ink3)">connecting</span>';
+  else if(u) el.innerHTML='<span style="color:var(--ruby)">'+u+' unsaved</span>';
+  else el.innerHTML='<span style="color:var(--ruby)">offline</span>';}
 
 /* ---------- boot ---------- */
 function titleScreen(){
@@ -564,6 +674,9 @@ function restart(){if(!confirm('Start again from the beginning?'))return;
   document.body.classList.toggle('editing',S.edit);
   buildBar();
   if(had&&S.started)step(); else titleScreen();
+  reanchor(); updateSyncPill(); pullFromDB();
+  setInterval(function(){ if(unsyncedCount()) pushAll(); },30000);
+  addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') pullFromDB(); });
   addEventListener('keydown',e=>{
     if(e.key==='Escape')closePanel();
     if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='e'){e.preventDefault();toggleEdit();}
