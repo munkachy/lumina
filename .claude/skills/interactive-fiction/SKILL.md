@@ -1,183 +1,217 @@
 ---
 name: interactive-fiction
-description: Craft rules for writing Choice-of-Games-style interactive novels for the Scriptorium engine — structure, choice design, stat systems and balance, prose style, and endings. Use whenever writing, outlining, revising or auditing a game in games/*/scenes/, adding scenes to an existing story, or planning a new one.
+description: Craft rules for writing Choice-of-Games-style interactive novels for the Scriptorium engine — story architecture, scene and arc shape, choice design, prose and characterisation, stat systems and balance, and continuity discipline for book-length work. Use whenever writing, outlining, revising or auditing a game in games/*/scenes/, adding scenes to an existing story, or planning a new one.
 ---
 
 # Writing interactive novels
 
-Distilled from Choice of Games' own design blog and judging rubric, plus a
-direct measurement of `Choice of the Dragon`'s public scene files. Their
-numbers are the industry's only published ones; treat them as the default and
-depart from them on purpose, not by accident.
+Built from Choice of Games' design blog and judging rubric, and from measuring
+five of their published games directly — 414,000 words of shipped work whose
+scene files are public. Numbers below are measured, not remembered.
+`reference/corpus.md` has the full tables.
 
-## The rubric they actually score against
+## Before writing a line
 
-| Weight | Criterion |
-|---|---|
-| 15% | Original, interesting **characters** |
-| 15% | Original, interesting **setting and plot** |
-| 15% | **Conflicting goals** with satisfying endings |
-| 15% | **Balanced, intentional, interesting choices** |
-| 10% | Inclusivity |
-| 10% | **Prose styling** |
-| 10% | **Creative stats**, consistently applied |
-| 5% | Length and coding efficiency |
-| 5% | Judge's choice |
+1. **Elevator pitch in one sentence.** If it is only a genre name, stop. Their
+   own examples: *tour guide on the moon obsessed with a video game*; *psychic
+   spy inhabiting other people's bodies*; *real estate agent renting a haunted
+   house*.
+2. **Name the conflicting goals.** Two or three things the player cannot all
+   have. This is 15% of their score and it is what makes endings mean anything.
+3. **Write the ledger first** (see *Continuity*). Then outline. Then write.
 
-A zero in any one category disqualifies the whole game regardless of the rest.
-Plot is scored on an **elevator-pitch test**: one sentence, understandable and
-compelling. If the pitch is just a genre name, the premise is not there yet.
+## Measured shape of a real game
 
-## Numbers
+| Game | Words | Choices | Opts/choice | Words/choice | Words/screen |
+|---|---|---|---|---|---|
+| Dragon | 23,658 | 142 | 2.8 | 167 | 401 |
+| Broadsides | 45,573 | 195 | 3.1 | 234 | 348 |
+| Romance | 40,616 | 109 | 3.3 | 373 | 514 |
+| Zombies | 106,344 | 434 | 2.7 | 245 | 324 |
+| Vampire | 198,210 | 439 | 3.3 | 452 | 325 |
 
-- **Total ≥ 100,000 words; average playthrough ≥ 20,000.** Their minimum.
-- **Playthrough ÷ total should land between 0.2 and 0.4.** Below 0.2 the game
-  is "bushy" — enormous effort the player never sees. Above 0.4 the choices
-  are not changing enough text.
-- **One choice roughly every 165 words.** Measured across the dragon.
-- **2.8 options per choice** on average; most sit at 2–4. Their rubric wants
-  **three or more** on most choices.
-- **A screen every ~400 words** (`*page_break`).
-- **~14 achievements**, mostly "finish above 80 in X" plus event flags. Cheap
-  to write, large effect on replay.
-- **No ending before 75% of the way through.**
+**What holds across all five:**
+
+- **Words per screen: 325–400.** The single most stable number in the corpus.
+  A `*page_break` roughly every 350 words. Breaking every 90 words turns
+  reading into tapping.
+- **Options per choice: 2.7–3.3.** Aim at 3.
+- **Words per choice: 165–450**, and it *rises with length*. A short game wants
+  ~170; a 100,000-word game runs 245–450. Do not force 165 into a long book.
+- **Scenes are large.** Mean scene: Broadsides 3,505 · Zombies 6,646 ·
+  Vampire 9,438. A 100,000-word game is ~15 scenes of ~6,500 words, not 40
+  small ones.
+
+## The arc
+
+All three long games do the same thing:
+
+- **The biggest scene sits at 60–80% of the way through**, and it is the
+  crisis, not the climax. (Vampire's *karlstein*: 33,182 words at 66%.
+  Broadsides' *CommandMutiny*: 8,796 at 82%.)
+- **A distinct climax scene follows it**, shorter and tighter.
+- **The last scene has zero choices.** Every one of them ends with a WrapUp of
+  1,700–2,900 words that only reports what the player's stats produced. The
+  falling action is mechanically inert on purpose — the deciding is over.
+- **Openings are small.** Zombies opens at 1,886 words; Broadsides at 2,139.
+  Get into the first real scene fast.
+- Early scenes are establishing-heavy; the middle is testing-heavy; the last
+  act cashes everything in.
 
 ## Structure: delayed branching
 
-Branching the story itself is arithmetic suicide — a seven-page two-way branch
-needs 128 pages; twenty pages needs over a million. So:
-
-**Chapters run in a fixed line. Chapter 1 always leads to Chapter 2.** What a
-choice decides is not *where* you go but whether you *succeed* when you get
-there. Stats carry the memory forward. Branch inside the scene, never between
-scenes.
-
-Shape of a 12-scene book, taken from the dragon: two large scenes (~5,500–6,500
-words, ~33 choices each), a spine of mediums (1,400–2,300), two or three smalls
-(550–1,050), a 15-word checkpoint, and a short ending.
+Branching the story is arithmetic suicide — seven pages of two-way branching
+needs 128 pages; twenty needs a million. So **chapters run in a fixed line**.
+Chapter 1 always leads to Chapter 2. A choice decides not *where* you go but
+whether you *succeed* when you get there. Branch inside the scene; carry
+memory in stats.
 
 ## The four kinds of choice
 
-- **Establishing** — sets Primary Variables, does not branch the story. "How
-  did you catch him?" Talked him down / chased him / frightened him. Same
-  outcome, different character. Use heavily in early chapters; this is
-  character creation without a form.
-- **Testing** — checks a Primary Variable and writes the result to a Secondary
-  Variable. Pass or fail.
-- **Multi-level testing** — the same, with graduated bands instead of pass/fail.
-  **Prefer these**, especially at climaxes.
-- **Objective** — the options point at genuinely different *goals*, not
-  different skills. The strongest kind, because the player must give something
-  up.
+- **Establishing** — sets a Primary Variable, does not change what happens.
+  Broadsides does this openly: two options give *word-for-word identical* result
+  text and differ only in the `*set`. Use heavily early; this is character
+  creation without a form.
+- **Testing** — reads a Primary Variable, writes the result to a Secondary.
+- **Multi-level testing** — the same with graduated bands. Prefer these,
+  especially at climaxes.
+- **Objective** — options point at genuinely different *goals*. Strongest kind,
+  because something must be given up.
 
-**Primary Variables** are what the character is. **Secondary Variables** are
-what has happened to the world. Too many objective choices that only raise
-Secondaries drains tension — let some of them cost something.
+**Primary Variables** are what the character is; **Secondary Variables** are
+what has happened to the world.
 
 ## The Four Point Trap
 
-The commonest failure: the game asks the same question over and over — strong,
-sneaky, smart, charming — so the only choice that ever mattered was the first
-one. Three defences:
+The commonest failure: the game asks strong/sneaky/smart/charming forever, so
+only the first choice ever mattered. Three defences:
 
-1. **More primary stats than options per choice.** Five or six stats against
-   three or four options forces variety.
-2. **Add a second axis.** The taxonomy names three: *choice* (how you try),
-   *success* (how well it goes), and **motivation** (why you did it). Same
-   action, different reason, is a real choice: shooting the man *because he
-   deserves it* versus *because procedure says so*.
-3. **Objective choices** — make the options aim at mutually exclusive goals.
+1. **More stats than options per choice** — 5–6 stats against 3–4 options.
+2. **Add a motivation axis.** Same act, different reason, is a real choice.
+   Broadsides at its best: *marriage might be kind of nice* vs *marriage to the
+   right person would be useful to my career* — identical outcome, different
+   person.
+3. **Objective choices** aimed at incompatible goals.
 
 ## Intentional choices
 
-The player must be able to predict what they are choosing. They cannot flip
-back or peek ahead, so a surprise is a betrayal, not a twist. Before the menu,
-signal three things:
+The player cannot flip back or peek ahead, so a surprise is a betrayal. Before
+the menu, signal the **story result**, the **stat being tested**, and the
+**relative difficulty** — either in the narration just above it or inside the
+option text. Never a "do nothing" option, and never let an NPC decide for them.
 
-- the **story result** of each option
-- the **stat being tested**, if one is
-- the **relative difficulty**
+## Writing the options
 
-Either in the narration just above the menu, or inside the option text itself.
-"I put on a baseball cap" tells the player nothing; "…because it looks good"
-or "…to hide my face" tells them which stat they are spending.
+Measured across the corpus: **median 7–10 words, 90th percentile 21–25, up to
+60.** They are not terse labels.
 
-**No "do nothing" option**, and never let the player hand the decision to an NPC.
+The strongest ones are **the character's own thought, in first person**, and
+they carry the motivation:
 
-## Stats
+> `#Bryce seems to have stumbled onto a good thing. It might be. . . kind of nice to have something like this myself. A home to return to, a loving ${spouse_word}. . .`
 
-Seven rules, theirs:
-
-1. **Don't use only skills** — or every choice collapses to "which skill wins?"
-2. **Include personality traits** — they let the player decide what the
-   character *wants*, not just what works.
-3. **Include morality traits, plural and opposed.** Honesty against compassion
-   beats a good/evil slider.
-4. **Include stats about the world** — relationships, reputation, progress.
-5. **Give expendable resources** — something that runs out.
-6. **Make every stat equally useful** across the whole story.
-7. **Avoid the standard RPG six.** Their best examples: *Je Ne Sais Quoi*
-   (heist), sleep deprivation (lawyers), Autonomy vs Empathy (robots).
-
-**Opposed pairs** are the workhorse: one slider, two names, high Brutality *is*
-low Finesse. No dump stats, because both ends unlock content.
-
-**Fairmath**: `%+20` adds 20% of the distance to 100, `%-20` subtracts 20% of
-the current value. Never reaches 0 or 100. This is what keeps a stat meaningful
-across 100,000 words instead of pinning to the ceiling by chapter three.
-Consequence: **early changes move a stat much further than late ones**, so
-front-load the establishing choices and taper.
-
-**Thresholds**: test in bands — roughly 70 / 50 / 30 — not at a single cutoff.
-
-## Balancing stat distribution
-
-Auditable, and worth actually counting before shipping:
-
-1. **Tests per stat within ±20% of each other.** Count every `*if` that reads a
-   primary stat. A stat tested twice as often as its neighbour is the real stat
-   and the others are decoration.
-2. **Raise opportunities ≥ tests, per stat.** A stat you are asked to spend
-   more often than you can build is a trap.
-3. **Every stat gets one moment of glory** — at least one scene where only that
-   stat wins, and it is a scene the player will remember.
-4. **A specialist should pass most tests in their specialty; a generalist about
-   half of everything.** If a generalist fails nearly everything, the bands are
-   too high.
-5. **No late difficulty spike** that suddenly demands one maxed stat after the
-   game has taught balanced growth.
-6. **Consistency**: the same act moves the same stat in chapter 3 and chapter 12.
+First-person option text runs **12–30%** of options across the corpus — it is a
+strong pattern, not a house rule. Narration is second person present throughout;
+options may be first-person thought, quoted speech, or plain action.
 
 ## Prose
 
-- **Narration in second person; options in first person.** This is their house
-  style and it is what the dragon does: *"You leap to the air…"* above,
-  `#I take to the air with a quick beat of my wings.` below. Options that are
-  spoken dialogue can stay in quotes.
-- **Present tense** is the default for the form.
-- **Word-perfect** is 10% of the score: real em-dashes, no smart quotes, no
-  typos. They will fail a game for punctuation.
-- Prose is scored on whether it *engages*, not whether it is ornate.
+Prose styling is 10% of the rubric, and word-perfection is part of it: real
+em-dashes, no smart quotes, no typos.
 
-## Endings
+What their prose actually does:
 
-- **Multiple winning conditions**, no single obviously-best ending.
-- Every ending needs dramatic weight, **including the losing ones**.
-- Endings must **respect the stats**: do not ignore the swordfighting a player
-  spent the game building, and never kill them at random.
-- **Conflicting goals** are what make endings matter — give the player two or
-  three things they cannot all have.
+- **Opens a scene on a physical situation, never an abstraction.**
+  *"The tropical sun is hot even through your hat, and it glares painfully off
+  the water. Through your stinging eyes, you can see looming up ahead the cliffs
+  of a little island."* Heat, glare, stinging, then the island.
+- **Carries exposition in dialogue.** The Captain explains the mission out loud;
+  the narration does not summarise it.
+- **Uses the concrete detail that implies the rest** — the charts say the island
+  is uninhabited, the Gaulish ship is *streaking*, the men's feet pound.
+- **Keeps sentences plain.** The register is a competent novelist, not a poet.
+  When a sentence is doing something clever, the reader stops being in the
+  world.
 
-## Measured reference: Choice of the Dragon
+**Characterisation.** Give the reader a small cast with sharp, repeated
+handles — a habit, a phrase, a physical tell — and reintroduce each one on
+re-entry, because the player may not have seen them for 10,000 words. Vampire
+carries 63 named `*_rapport` stats; Broadsides carries three. Either is fine.
+What is not fine is a character who exists only to deliver a choice.
 
-23,658 words · 142 choices · 399 options · 12 scenes · 14 achievements ·
-6 stats in 3 opposed pairs + Infamy + wealth/wounds/blasphemy.
+## Stats, and how to balance on the first pass
+
+Seven rules, theirs: don't use only skills; include personality traits; include
+**opposed** morality traits rather than a good/evil slider; include stats about
+the world; give an expendable resource; make every stat equally useful; avoid
+the standard RPG six.
+
+**Opposed pairs** are the workhorse — one slider, two names, no dump stats.
+**Fairmath**: `%+20` adds 20% of the distance to 100. Never hits 0 or 100.
+Early changes move much further than late ones, so front-load establishing
+choices and taper. **Test in bands** (~70/50/30), not at one cutoff.
+
+Measured balance targets:
+
+| Metric | Corpus | Rule |
+|---|---|---|
+| Writes per test | Zombies 1.8 · Broadsides 3.0 · Vampire 3.2 · Dragon 5.6 | **2–5.** Above 10 the stats are decoration. |
+| Tests per core stat | Dragon 8–19 · Zombies 14–25 · Vampire 33–73 | **At least 8**, whatever the length. |
+| Spread across core stats | 1.8×–3× | **No core stat tested more than 3× another.** |
+| Core stats | 5–8 | Plus as many flags as you like — Vampire declares 218 and tests 54. |
+
+**On the first pass**, before writing prose: list the core stats, decide how
+many tests each gets, and write those test moments into the outline as named
+beats. Then write toward them. Balancing afterwards is a rewrite.
+
+Every core stat needs **one moment of glory** — a scene only that stat wins,
+and one the player will remember.
+
+## Continuity for book-length work
+
+100,000 words fits in context. **Continuity still fails without external
+scaffolding**, and it has already failed here: in a 30,000-word draft a
+character's nickname was coined "as a kid" three paragraphs below being coined
+in 1979 at age twenty-six; 154 choices were designed and 46 written; 265 stat
+changes were set and 3 ever read. None of that was a memory limit. It was
+writing without a check.
+
+So, always:
+
+1. **A ledger file, written before the prose and updated as you go** —
+   `games/<name>/LEDGER.md`: every proper name, date, age, place, physical
+   detail, who knows what and when, and every promise made to the reader that
+   must pay off. Re-read it at the head of every scene.
+2. **Write scenes in story order.** Out-of-order writing is where dates drift.
+3. **Run `audit.py` before declaring a draft done**, not after. It counts
+   words, choices, options, screens, and every read and write of every stat.
+4. **A grep pass for hard facts** — years, ages, names — at the end of each act.
+5. **State budgets in the outline and check against them.** The 46-vs-154 gap
+   was visible from the first scene and nobody was counting.
+
+## Ending rules
+
+- **Multiple winning conditions**, none obviously best.
+- **Every ending needs weight, including the losing ones.**
+- **Endings must respect the stats.** Never ignore the skill a player spent the
+  game building; never kill them at random.
+- **No ending before 75%.**
+- Last scene: no choices, report the consequences.
+
+## What is still unknown
+
+Worth researching before it matters, rather than guessing:
+
+- How failure is written *in practice* — whether failed tests branch, cost a
+  resource, or merely re-colour the same outcome.
+- Whether they use any beat-level scene template.
+- How romance arcs are paced against the main plot.
+- What separates a 10% prose score from a 6% one, beyond "engaging".
 
 ## The Scriptorium engine
 
-Format and commands are in `games/*/FORMAT.md`. Build with
-`python3 build.py` inside the game directory — it injects the scenes into
-`app-shell.html` and writes both `index.html` and `<game>.html`. A line is a
-command only if it matches `*[a-z_]+`; a line starting `**bold**` is prose.
-Notes written by the author in edit mode live in the artifact database and are
-read back with the Artifact tool's `read_db`.
+Format in `games/*/FORMAT.md`. Build with `python3 build.py` inside the game
+directory — injects scenes into `app-shell.html`, writes `index.html` and
+`<game>.html`. A line is a command only if it matches `*[a-z_]+`; a line
+starting `**bold**` is prose. Author notes from edit mode live in the artifact
+database, read back with the Artifact tool's `read_db`. Audit with `audit.py`.
