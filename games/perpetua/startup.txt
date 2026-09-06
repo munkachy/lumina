@@ -87,8 +87,10 @@
 
 *comment ---------------- WHAT HAS HAPPENED ----------------
 *create told_crew "nothing"
-*create melisse "none"
-*create melisse_dead 0
+*create halbard "none"
+*create sedge "none"
+*create sedge_dead 0
+*create sedge_open false
 *create gave_cure false
 *create article_nine "none"
 *create kept_secret false
