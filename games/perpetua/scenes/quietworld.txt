@@ -65,6 +65,45 @@ It is B flat, three octaves below the bottom of a piano. It has been going for s
     You do. By 0600 there are thirty people in the observation blister who are supposed to be asleep, and Abara is off watch and asleep at the back of them with her boots on.
     *goto ossa_science
 
+*comment ---- added choice: the fortnight ----
+For nine days the *Perpetua* has been a survey ship with nothing to survey, and a hundred and twelve people with time on their hands is a condition with a literature.
+
+*choice
+  #Give them the fortnight. Watch bill to minimum, and I do not want to know.
+    *set crew %+12
+    *set rule %-8
+    You cut the watch bill to the legal minimum and announce that the ship is on survey routine, which means nothing at all, and then you go to your cabin and stay out of the way.
+
+    What a hundred and twelve people do with nine days is: a hull-inspection drone race, an argument about the third watch's coffee that reaches the first officer twice, four separate romances of which you are told about one, and the complete repainting of the number two hold by people nobody ordered to do it.
+    *set rel_med %+8
+    *goto ossa_rest
+  #Drill them. A ship with nothing to do is a ship that forgets.
+    *set rule %+12
+    *set crew %-8
+    *set nerve %+6
+    Fire drill, pressure drill, abandon drill, and then all three again at 0330 on the fourth day because that is when it will happen if it happens.
+
+    They are quicker by the ninth day. Measurably: eleven seconds off the pressure drill, which will matter later this year in a way you cannot know yet.
+
+    Nobody thanks you. Somebody writes *341* on the mess whiteboard and underneath it, in a different hand, *and counting.*
+    *set rel_sec %+8
+    *goto ossa_rest
+  #Take the science party's programme myself and work it.
+    *set rule %-6
+    *set candor %+8
+    You spend nine days doing the actual work of a survey — spectra, magnetometry, four hundred and eleven separate readings of a rock — at a bench, alongside three ratings and a lieutenant who did not expect the master of the ship to know how to run a sample.
+
+    *if (background = "science")
+      You are better at it than any of them and it takes about a day for that to stop being awkward and start being useful. It is the happiest week of your command and you do not tell anybody that either.
+      *set rel_eng %+10
+    *if (background != "science")
+      You are the fourth-best person at the bench and everybody is much too polite about it, and on the sixth day the lieutenant stops being polite and starts teaching you, and that is the day it becomes worth doing.
+      *set rel_eng %+6
+    *goto ossa_rest
+
+*label ossa_rest
+*page_break
+
 *label ossa_science
 *page_break
 
@@ -259,6 +298,39 @@ It comes down to you, in a cabin three metres by four, as everything does.
     *if (xo = "tanaka")
       "Twenty-one per cent," Tanaka-Osei says. "That's the honest bit. Most people would've written it up as though there was nothing lost." She hands it back. "Sign it."
     *goto ossa_end
+
+*comment ---- added choice: what goes in the catalogue name field ----
+The catalogue entry has a field the Survey almost never fills, because it is for bodies with features worth naming and Ossa was a rock.
+
+*choice
+  #Name the resonance for Abara.
+    *set crew %+10
+    *set candor %+8
+    *set rel_sec %+12
+    *ABARA RESONANCE, OSSA.* Four words in a field on a form, and it will be in the Concord's catalogue for as long as there is a catalogue, and a comms rating of twenty-two will be reading it at sixty.
+
+    ${xoname} points out, correctly, that the Survey's convention is to name for the vessel or the master.
+
+    "Then the Survey's convention has a gap in it," you say, and sign it.
+    *set standing %-4
+    *goto ossa_end2
+  #Name it for the ship.
+    *set rule %+8
+    *set standing %+4
+    *PERPETUA RESONANCE, OSSA.* Which is the convention, and which is correct, and which means that in eighty years somebody will look up a twenty-six-year-old Meridian because of a noise a rock makes.
+
+    You think about that for a while and decide you do not dislike it.
+    *goto ossa_end2
+  #Leave it blank. It had a name before we got here.
+    *set rule %+6
+    *set candor %-6
+    You leave the field empty, which the form permits and nobody does.
+
+    A rock that has been sounding one note since before there was anything on any world to hear it does not require four words in a Concord form, and you are aware that this is a slightly precious position, and you hold it anyway.
+    *goto ossa_end2
+
+*label ossa_end2
+*page_break
 
 *label ossa_end
 *page_break

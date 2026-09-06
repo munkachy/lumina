@@ -1,3 +1,384 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER TEN — THE WEIGHING ====================
+*comment Restraint's moment of glory: eleven seconds of silence in front of a
+*comment council, and Oleyo blinks. Budget: 14 choices, 14 tests.
+*comment Ledger: Nadire, independent, 11,000 people. Orbital elevator 26 years
+*comment old, built by a consortium that no longer exists; the climber track has
+*comment failed at the 900 km mark. Warden Sela Ruys chairs. Vote in eleven days.
+
+Nadire has a rope to the sky and it is broken nine hundred kilometres up.
+
+You can see it on the approach: a thread of dark against the daylight side, forty thousand kilometres of it, anchored on a mountain at the equator and running out to a counterweight that was a captured rock before it was an anchor. It is the only reason there are eleven thousand people here. Nadire is a hard world with thin soil and a great deal of ore, and everything it eats comes down that ribbon and everything it sells goes up it.
+
+The climber track failed at the nine-hundred-kilometre mark four months ago. The ribbon is intact. The track is not. Nothing has gone up or down since.
+
+They have eleven months of food.
+
+*page_break
+
+The *Ashaya* is in a parking orbit above the counterweight, four hundred metres of white, and she has been here four days.
+
+*if (nadire_close)
+  You take the *Perpetua* in and put her alongside the ribbon at eleven kilometres, which is close enough that the elevator is a physical object out of the viewport and not a line on a plot, and which is the most conspicuous thing this ship has done all year.
+
+  Tessine to Nadire in seven days and eleven hours. ${engname} has not slept properly since the third.
+  *set strain +7
+*if (nadire_close = false)
+  You take station at nine astronomical units, on your orders, and observe, and report.
+
+  From nine astronomical units the elevator is one pixel and the *Ashaya* is another.
+  *set standing %+4
+
+*page_break
+
+*comment ---------------- The offer ----------------
+
+Warden **Sela Ruys** chairs the council of Nadire. She is about forty-five, she was a track engineer before she was a warden, and she has the particular exhaustion of a person who understands the problem completely and cannot solve it.
+
+She sends you the file on the first day, unasked, complete, including the parts that do not help her.
+
+The Vaunt's offer is four pages and it is not a trick. You read it three times looking for the trick.
+
+**The Vaunt of Kes-Arahel will repair the climber track at the nine-hundred-kilometre station within one hundred and forty days, at its own cost, using its own yards, to a standard exceeding the original.**
+
+**In consideration: Nadire accedes to the Vaunt as an associated world. Vaunt law in matters of trade and transit. Vaunt tax at the associated rate, being eleven per cent. Vaunt vessels to have the freedom of the harbour. Local government in all other matters, guaranteed, and reviewable at Nadire's request in twenty years.**
+
+It is honest. That is the thing that keeps you awake: every number in it is true and every cost is stated on the page, including the eleven per cent, including the harbour.
+
+*page_break
+
+*if (eng = "osimo")
+  Osimo reads the engineering annexe twice. "They can do it," he says. "Hundred and forty days is honest. We couldn't do it in five hundred and I've been in the trade forty years." He puts it down. "That's not me being defeatist, Captain. That's a track."
+*if (eng = "kallas")
+  Kallas reads the engineering annexe at nine syllables a second and then goes quiet, which is much worse. "It's good," she says eventually. "It's not just good, it's *elegant*, they're re-using the original anchor geometry and they've found a way to do the splice under load — Captain, I would like permission to write to their engineer."
+*if (eng = "dorr")
+  "I am sorry," says Dorr. "I know the yard that would build this. I know the man who signed the annexe. There is nothing wrong with it and there is not going to be anything wrong with it, and if you are looking for a flaw so that you can tell that council something, I cannot give you one."
+
+*choice
+  #Ask ${engname} for a Concord costing. What would it take us?
+    *set rule %+8
+    *set candor %+10
+    It takes ${engname} two days and the answer is: four hundred and ten days, a heavy yard vessel that the Survey does not have in the Reach, and a sum that would have to be voted by eleven worlds who cannot agree on where to put two hundred and fourteen ships.
+
+    "And that is the good version," ${engthey} says. "That is assuming everybody says yes on the first vote."
+    *set rel_eng %+8
+    *goto nad_council
+  #Ask Ruys what she wants to happen.
+    *set rule %-10
+    *set candor %+12
+    *set crew %+8
+    Nobody has asked her. Four days of a Vaunt captain being scrupulously correct and a Concord ship arriving with orders to observe, and nobody has asked the Warden of Nadire what she would like.
+
+    She takes some time.
+
+    "I want a track," she says. "I want it in a hundred and forty days and I want to still be a world in twenty years and I have been told by two governments that I may have one of those." She looks at the ribbon out of her office window, which is a thing she can do. "Commander, I am not being difficult. I would take the Concord's offer if there were one."
+    *set standing %+6
+    *goto nad_council
+  #Say nothing to anyone for two days. Read everything.
+    *set candor %-10
+    *set rule %+10
+    *set nerve %-10
+    You read the file, the annexe, the treaty precedents, the four Vaunt associations of the last thirty years and what happened to each of them, and you talk to nobody for two days.
+
+    What you find is that the Vaunt keep their agreements. All four associated worlds still have local government. Two of them are richer than they were. One of them has petitioned twice for full accession and been refused, because the Vaunt do not want it and are not pretending to.
+
+    You come out of two days with a much better understanding and nothing whatsoever to offer.
+    *goto nad_council
+
+*label nad_council
+*page_break
+
+*comment ---------------- The table ----------------
+*comment Restraint's moment of glory.
+
+On the sixth day the council of Nadire sits in open session, in a hall at the foot of a mountain with a rope going up out of it, and hears both governments.
+
+There are eleven councillors and about nine hundred people in the public gallery and it is being carried live to every settlement on the world.
+
+Sar Vehn Oleyo speaks for forty minutes. He does not persuade. He explains: the geometry of the splice, the hundred and forty days, the eleven per cent and what it buys and what it costs, the freedom of the harbour and exactly what a Vaunt vessel may and may not do in it, the review at twenty years and the fact that a review is not a right of exit and he is not going to pretend it is.
+
+He is asked nine questions and he answers all nine, including the two that hurt him.
+
+Then Warden Ruys says: "Commander. The Concord."
+
+*page_break
+
+You have nothing.
+
+That is the actual position. The Concord cannot repair the track in four hundred days, cannot vote the money inside a year, cannot put a heavy yard vessel in the Cold Reach, and cannot offer association because the Concord does not do association; it does membership, and membership requires a vote of eleven worlds and takes, on the current form, nine years.
+
+You are a commander of a twenty-six-year-old survey ship with orders to observe and report.
+
+*choice
+  #Tell them exactly that. All of it, out loud, in the hall.
+    *set candor %+18
+    *set standing %-8
+    *set crew %+8
+    *set nadire "honest"
+    You stand up in a hall at the foot of a mountain and tell eleven thousand people that the Concord cannot fix their rope.
+
+    You give them the four hundred and ten days and the yard vessel and the eleven worlds and the nine-year accession, and you do not decorate any of it, and when you have finished there is a silence in which somebody in the public gallery says, quite clearly, "Well, that's that, then."
+
+    Warden Ruys writes something down. Oleyo does not look at you at all, which you understand later was a courtesy.
+    *goto nad_silence
+  #Make the case for what the Concord is, not what it can do.
+    *set candor %+8
+    *set rule %+8
+    *set standing %+8
+    *set nadire "argued"
+    You do not talk about the track. You talk about the Concord: eleven worlds that spent forty years killing each other and then agreed to be bound by something none of them controlled; a body so weak by design that it cannot tax a member or overrule one; and a rule that says no officer shall move the history of a world that has not asked.
+
+    "That is what we are offering you," you say. "It is not a track. It is that in a hundred years nobody will have decided anything about Nadire except Nadire."
+
+    It is the best speech you will ever give and it is completely true and you can feel it not working while you are giving it. A rope is a rope.
+    *goto nad_silence
+  #Ask the council a question instead.
+    *set rule %-12
+    *set candor %+10
+    *set nadire "asked"
+    "Warden. Councillors. Before I say anything, may I ask the council one question?
+
+    "In a hundred and forty days you will have a track. What is the first thing you will send up it?"
+
+    It is not rhetoric. You genuinely want to know and it takes them by surprise, and three councillors answer and they do not agree with each other, and the argument that follows is between Nadirans about Nadire and it runs for nineteen minutes and you say nothing at all during it.
+
+    Warden Ruys lets it run. Afterwards she tells you privately that it was the most useful nineteen minutes of the whole session and that she is not thanking you, because she is not sure you meant it.
+    *set standing %+4
+    *goto nad_silence
+
+*label nad_silence
+*page_break
+
+Then Sar Vehn Oleyo does the only unkind thing you ever see him do, and he does it because it is true, and that is the whole problem with him.
+
+He stands and says: "Warden — with the council's permission, one question to the Commander."
+
+Ruys nods.
+
+"Commander. Can the Concord repair this elevator?"
+
+*page_break
+
+Nine hundred people in the gallery. Eleven councillors. Every settlement on the world.
+
+There is a true answer and it is *no*, and if you say it the vote is over. There is a lawyer's answer — *the Concord has not been asked to* — and everybody in the hall will hear what it is. There is an angry answer and it would be the end of you.
+
+And there is the thing that a Vaunt officer, who does not lie and who keeps records and who has never in his life let a silence run, is not built to withstand.
+
+*choice
+  #Say nothing.
+    *set nerve %-20
+    *set rule %+8
+    *set nadire_silence true
+    *achieve restraint
+    You look at him and you do not answer.
+
+    One second. Two. The hall notices at four. At six, Warden Ruys puts her pen down. At eight, somebody in the gallery laughs — one short, startled sound, immediately stifled.
+
+    At eleven seconds, Sar Vehn Oleyo blinks.
+
+    It is not a defeat. He is not defeated; his offer is still four honest pages and your ship still cannot fix a rope. But eleven thousand people have just watched a Vaunt captain ask a question and receive nothing, for eleven seconds, in the open, and the *Ashaya* is four hundred metres of white and the *Perpetua* is a scuffed grey survey ship with a welded seam, and the room has understood something about weight that no speech of yours could have put there.
+
+    "I withdraw the question," Oleyo says.
+
+    "It was a fair question," you say, and sit down.
+    *set oleyo %+16
+    *set standing %+12
+    *goto nad_private
+  #"No."
+    *set candor %+18
+    *set nerve %+8
+    *set nadire_silence false
+    "No," you say. "Not in a hundred and forty days, not in four hundred, and not without a vote of eleven worlds that I cannot promise you and would not believe if somebody promised it to me."
+
+    The hall takes it the way a hall takes the truth: badly, and with respect.
+
+    Oleyo inclines his head. "Thank you, Commander. I asked because I wanted it said by you rather than by me."
+    *set oleyo %+10
+    *set standing %+6
+    *goto nad_private
+  #"Sar Oleyo — can the Vaunt leave in twenty years?"
+    *set nerve %+14
+    *set rule %+8
+    *set candor %+10
+    *set nadire_silence false
+    You do not answer his question. You ask him one, in front of nine hundred people, and it is the only question in the hall he cannot answer well.
+
+    Oleyo takes it standing up.
+
+    "No," he says. "The review at twenty years is a review. It is not a right of exit. I said so in my opening and I say it again now because the Commander is entitled to make me say it twice." A pause. "I will add, since we are being exact: no world has ever asked us to leave, and I do not know what my government would do, and neither does my government."
+
+    It is the best answer available and it is not a good one, and the hall hears that.
+    *set oleyo %+8
+    *set standing %+8
+    *goto nad_private
+
+*label nad_private
+*page_break
+
+*comment ---------------- The Weighing ----------------
+
+That night Oleyo asks for an hour and you give it to him, and the two of you sit in a room at the foot of a mountain with a bottle of something Nadiran and very rough.
+
+"You want to know why we do it this way," he says. "Everybody does, and nobody asks, so I will save you the walk round." He turns the glass. "May I explain the Weighing properly? I have never once been allowed to and I would like to before this ends."
+
+*choice
+  #"Go on."
+    *set rule %-6
+    *set candor %+8
+    *goto nad_weighing
+  #"Only if you will hear the Reticence properly afterwards."
+    *set candor %+12
+    *set rule %+8
+    *set oleyo %+10
+    "That is a fair trade," Oleyo says, "and nobody has offered it to me either."
+    *goto nad_weighing
+  #"I know what the Weighing is. I have read your constitution."
+    *set candor %-8
+    *set rule %+10
+    *set oleyo %-6
+    "You have read what we publish," Oleyo says, without any edge at all. "That is not the same and you know it is not the same, and I am offering to tell you the part that is not published, which is not a secret; it is only that nobody has ever wanted it."
+
+    You let him go on. It is the right decision and you made it four seconds late and he noticed.
+    *goto nad_weighing
+
+*label nad_weighing
+*page_break
+
+"An act is measured by what it produces. That is the whole of it and it sounds like nothing.
+
+"Here is what it means. It means that on Kes-Arahel there is no such thing as clean hands. There is no rule you can obey that makes you not responsible for what happens. If a world starves and I had a ship and a cargo and a regulation, the regulation is not a defence; the starving is on my file, in my hand, for ever."
+
+He turns the glass.
+
+"Do you understand what that costs? Every one of my officers carries every consequence of every restraint. There is no *I was ordered*, no *the rule required it*, no *it was not my decision*. It is exhausting and it is why we are careful and it is why, when we come to a world with a broken rope, we come with a survey and a costing and a hundred and forty days, because saying *we cannot* is a thing that goes on my record as an act."
+
+He looks up.
+
+"And your Standing Order Four says: hold still, and what follows is not yours.
+
+"Commander, I have read that sentence a hundred times and I have never once been able to decide whether it is the most cowardly thing a government has ever written down, or the only honest one."
+
+*page_break
+
+*choice
+  #"It is the only honest one, and I will tell you why."
+    *set rule %+12
+    *set candor %+12
+    *set oleyo %+8
+    "Because a man who believes he is responsible for everything will eventually do anything. You have just told me that your officers carry every consequence of every restraint. Sar Oleyo — that is not humility. That is a machine for producing intervention, and it has produced four associated worlds in thirty years, and every single one of them was helped."
+
+    Oleyo is quiet for a while.
+
+    "Yes," he says. "That is the strongest form of it and I have not heard it put that well." He refills the glass. "I would like to tell you that I have an answer. I have a *response*, which is that your rule has produced a Reach with no ships in it and a world with eleven months of food. It is not the same as an answer."
+    *goto nad_close
+  #"It is the most cowardly, and I obey it anyway."
+    *set candor %+16
+    *set crew %+8
+    *set oleyo %+14
+    "It is cowardly. I have thought so since Sedge and I thought so again at that table this afternoon. It says: hold still, and what follows is not yours, and it is not true, and everyone who obeys it knows it is not true.
+
+    "And I obey it, because the alternative is that two hundred and fourteen masters decide for themselves what other people's histories should be, and there is no version of that which does not end with the Concord doing to somebody what you are doing to Nadire, only worse, because we would be doing it kindly."
+
+    Oleyo puts the glass down.
+
+    "That," he says, "is very nearly word for word what Ivo Halloran wrote to me. In the letter he did not send, which his station forwarded to me by accident in the spring, and which I have not told anybody about until now."
+    *set halloran_regard %+10
+    *goto nad_close
+  #"Neither. It is a rule made by people who had just spent forty years finding out what they were like."
+    *set rule %+10
+    *set candor %+10
+    *set oleyo %+12
+    "The Concord of Ilium was written by eleven governments who had just finished killing each other for forty years, and every one of them had intervened somewhere for excellent reasons. They did not write Standing Order Four because they thought restraint was noble. They wrote it because they had all recently been *certain*, and they had seen what they were like when they were certain, and they wanted a rule that would still be there when they were certain again."
+
+    Oleyo sits with that for some time.
+
+    "We have not had our forty years," he says at last. "That is what you are telling me. That we are what your worlds were before Ilium, and that we are very good at it, and that we have not yet found out what we are like."
+
+    He refills both glasses.
+
+    "I do not think you are right. I would like it noted that I am not certain."
+    *set standing %+6
+    *goto nad_close
+
+*label nad_close
+*page_break
+
+*comment ---------------- Two days out ----------------
+
+The council votes in two days.
+
+*if (nadire_silence)
+  In the settlements they are talking about the eleven seconds. It has a name by the second day, which is how you know it has got away from you: they are calling it *the Commander's answer*, and it is being described by people who were not in the hall as everything from a rebuke to a confession, and Warden Ruys tells you, with no expression at all, that four councillors have changed their minds and she will not say in which direction.
+  *set standing %+6
+
+*if (rel_xo > 62)
+  ${xoname} comes to you at 0300 with a thing ${xothey} has been working on privately for six days: a Concord proposal, not for the elevator, but for a heavy yard vessel to be based permanently in the Cold Reach, costed, staffed, and argued, with a note that it is nine years too late for Nadire and might not be for the next one.
+
+  It is a very good piece of work. ${xoThey} has done it in ${xotheir} own time and has not mentioned it once.
+  *set rel_xo %+8
+*if (rel_xo <= 62)
+  ${xoname} keeps the watch bill, files the reports, and does not offer an opinion on Nadire at any point in eleven days, and when you ask directly ${xothey} says, "It is not the ship's decision, Captain," which is correct.
+
+*if (chap = "wren")
+  Wren asks you, at 0300, whether you have decided what you are going to do if the vote goes the other way — if Nadire says no to the Vaunt and asks the Concord for something you cannot give.
+
+  You had not thought about it. He knows you had not thought about it. That is why he asked.
+  *set rel_chap %+8
+*if (chap = "onu")
+  Onu says: "They will vote yes and they will be right and you will feel sick, and that is the correct order for those three things." She goes on folding. "Do not tell them they are wrong. They will be alive."
+  *set rel_chap %+8
+*if (chap = "serat")
+  "You have been preparing for the vote to go against you," Serat says, "and there is a real possibility it does not, and you have done no work at all on what you would do then. Neither has anybody. I would look at that."
+  *set rel_chap %+6
+*if (chap = "none")
+  Nobody asks you what you will do if the vote goes the other way. It does not occur to you to ask yourself until the morning of the eleventh day, at 0410, at the comms board, with the maintenance channel empty.
+  *achieve empty_berth
+
+*page_break
+
+*choice
+  #Signal Adjo. Tell him this world is being lost for the price of a yard vessel.
+    *set candor %+14
+    *set nerve %+8
+    *set standing %-4
+    You transmit nineteen hundred words to the Delegate for the Cold Reach that amount to one sentence: that the Concord is about to lose a world, permanently and without a shot, because eleven member governments will not fund a single heavy yard vessel for a region with three colonies and eleven settlements in it.
+
+    The reply comes in eleven hours and it is four lines and it is not a brush-off.
+
+    *Commander — I know. I have said it at four sessions. Say it in your report, in those words, and say it in the finding of any inquiry you ever sit at, and keep saying it after I am gone. That is not a consolation. It is the actual mechanism. C.A.*
+    *set rel_xo %+6
+    *goto nad_end
+  #Signal nothing. Observe and report, as ordered.
+    *set rule %+12
+    *set candor %-10
+    *set standing %+6
+    You file the observation report. It is complete, accurate, and airless, and it is exactly what was asked for, and it will be read by three people.
+
+    *if (nadire_close)
+      It also has to explain why a ship ordered to observe is parked eleven kilometres off the ribbon, and you write that paragraph four times.
+      *set standing %-4
+    *goto nad_end
+  #Ask Ruys for one thing: that the Concord be allowed to survey the wreck of the track, whatever happens.
+    *set rule %+10
+    *set candor %+8
+    *set crew %+6
+    It is the only thing you can think of that costs Nadire nothing and is not nothing: that whatever the council decides, a Concord vessel may put engineers on the failed section and record what went wrong, and publish it, so that the other four elevators in this arm of the sky do not fail the same way in twenty-six years.
+
+    Ruys agrees inside a minute. Oleyo, asked, agrees inside a minute and offers his own survey data unprompted, complete, uncompressed, with his engineers' annotations still on it.
+
+    It is the smallest thing anybody does at Nadire and it is the only thing anybody does at Nadire that will still matter in fifty years.
+    *set oleyo %+10
+    *set standing %+8
+    *set nadire_survey true
+    *goto nad_end
+
+*label nad_end
+*page_break
+
+On the tenth night the ribbon catches the sun after the mountain has gone dark, so that for about four minutes there is a thread of light going up out of a black world into a black sky, forty thousand kilometres of it, broken nine hundred kilometres up where nobody can see.
+
+Eleven thousand people watch it. They do this every night. It is not a ceremony; it is just that it happens and everybody stops.
+
+The council votes in the morning.
+
 *finish

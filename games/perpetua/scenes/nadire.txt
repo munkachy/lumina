@@ -1,3 +1,498 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER ELEVEN — NADIRE ====================
+*comment THE CLIMAX. Crew's moment of glory. The act is identical; the intention
+*comment is everything, and nobody will ever be able to tell them apart,
+*comment including you. Budget: 15 choices, 15 tests.
+*comment Ledger: the ribbon parts at 0410 on the morning of the vote, at the
+*comment 900 km mark. Nineteen people at Station Nine, which is ON the falling
+*comment section. Below it: three equatorial settlements, 2,140 people. Burn
+*comment window 71 minutes. The rescue takes 90. Neither ship can do both.
+
+The ribbon parts at 0410.
+
+Not the track. The ribbon: four months of a dead climber loading forty thousand kilometres of tether the wrong way at one point, and at 0410 on the morning of the vote the ninth strand goes, and then the eighth, and then all of them at once.
+
+Above the break, thirty-nine thousand kilometres of tether and a counterweight that was a captured rock start to rise, and are gone, and will be a hazard to navigation for two hundred years.
+
+Below the break, nine hundred kilometres of tether begins to fall.
+
+*page_break
+
+${xoname} has it in ninety seconds because the whole ship is already awake.
+
+"Nine hundred kilometres of ribbon coming down along the ground track. It does not land in one place, Captain, it *lays down* — east to west across the equatorial belt over about six hours as it deorbits."
+
+"What is under it?"
+
+"Three settlements. Kell, Ottery, and the Fold Works." A pause. "Two thousand one hundred and forty people."
+
+And then, because ${xothey} has read the same plot you have:
+
+"And there are nineteen people at Station Nine, which is the maintenance platform at the nine-hundred-kilometre mark, which is on the falling section."
+
+*page_break
+
+*comment ---------------- The two jobs ----------------
+
+There are exactly two things that can be done and they are the same object.
+
+**One.** A ship can grapple the upper end of the falling section and burn east, hard, for seventy-one minutes, and drag the whole nine hundred kilometres far enough round the world that it lays down in the Sonder Ocean instead of across Kell, Ottery, and the Fold Works. After seventy-one minutes the geometry is gone and the section is committed.
+
+**Two.** A ship can put shuttles on Station Nine and take nineteen people off. It takes ninety minutes: the platform's dock is rated for one shuttle at a time and there are nineteen people and a hard vacuum and no lift.
+
+You cannot do both. Nobody can do both. Under acceleration the platform's dock cannot be approached at all, and ninety minutes of rescue puts the burn window nineteen minutes in the past.
+
+There are two ships in this system.
+
+*page_break
+
+The signal from the *Ashaya* comes across at 0416, in clear, on the open band that Nadire ground control is carrying live to every settlement on the world.
+
+"*Perpetua*, this is *Ashaya*. I have the same plot you have. My shuttles are faster than yours by about eleven minutes over that distance and my hull is rated for the tether load and yours is not.
+
+"I can do either. I cannot do both. Neither can you. I am not going to choose in front of eleven thousand people who are voting in four hours, Commander, because whichever I choose will be read as an argument, and it would be one.
+
+"So: you choose. Tell me which of the two you are taking and I will take the other and I will not say another word about it today."
+
+*page_break
+
+*if (chap = "wren")
+  Wren is on the bridge. He does not say anything and he does not leave.
+*if (chap = "onu")
+  Onu is on the bridge with her sleeves already rolled. "Sickbay's ready for nineteen or for two thousand," she says. "It cannot be ready for both either."
+*if (chap = "serat")
+  "Whatever you choose," Serat says, "choose it in the next four minutes, because at five the bridge starts watching you not choose."
+*if (chap = "none")
+  The bridge is very quiet and there is nobody aboard whose job it is to say anything at a moment like this, and nobody does.
+
+*if (xo = "marand")
+  "Nineteen against two thousand one hundred and forty," Marand says. "That is not a decision, Captain, that is arithmetic, and I want to say out loud that it is arithmetic before anybody makes it into something else."
+*if (xo = "ferreo")
+  "Captain," Ferreo says, very quietly, "whichever one you take, the other one is the one the world will watch. Station Nine is nineteen people on a live feed. The ocean is a burn nobody can see." He swallows. "I am telling you that because somebody has to and I am ashamed of it."
+*if (xo = "tanaka")
+  Tanaka-Osei has put down what she was eating, which you have not seen her do. "Nineteen you can see," she says. "Two thousand you can't. That's the whole thing, isn't it. That's just — that's the whole thing."
+
+*page_break
+
+*comment ---------------- The choice ----------------
+
+*choice
+  #Take the burn. Two thousand one hundred and forty.
+    *set nadire "burn"
+    *set crew %-10
+    *set rule %+10
+    *set standing %+6
+    "*Ashaya*, *Perpetua*. I am taking the tether. Station Nine is yours. Go now."
+
+    "Understood," says Oleyo, and the *Ashaya*'s shuttles are away in under two minutes, and he does not say another word for six hours, exactly as he promised.
+    *goto nad_burn
+  #Take Station Nine. Nineteen people, and I can see them.
+    *set nadire "station"
+    *set crew %+14
+    *set rule %-8
+    *set standing %-6
+    "*Ashaya*, *Perpetua*. I am taking Station Nine. The tether is yours."
+
+    "Understood," says Oleyo.
+
+    A pause of about two seconds — the only hesitation you ever hear from him.
+
+    "Commander, my hull is rated for that load and yours is not, and I would have taken the tether whichever you had said. I want that on the record before I burn. *Ashaya* out."
+    *set oleyo %+8
+    *goto nad_station
+  #"Sar Oleyo — you take Station Nine and I take the tether, and I am telling you why, on this channel, now."
+    *set nadire "burn"
+    *set candor %+18
+    *set rule %+10
+    *set crew %-6
+    You put it on the open band that eleven thousand people are listening to.
+
+    "*Ashaya*, *Perpetua*. I am taking the tether because it is two thousand one hundred and forty people against nineteen and for no other reason. I am aware that Station Nine is the one that can be seen and that the burn is the one that cannot, and I want the council of Nadire to hear me say, before I do it, that I know exactly which of these two jobs would look better on a Concord ship this morning, and that I have taken the other one."
+
+    A pause.
+
+    "Understood, *Perpetua*," Oleyo says. "For the record, and I will not raise it again: I would have said the same thing and I would not have said it out loud. *Ashaya* out."
+    *set oleyo %+14
+    *set standing %+10
+    *goto nad_burn
+  #"Neither. Both ships take Station Nine, and we do the burn in fifty minutes with two hulls."
+    *set nadire "both"
+    *set nerve %+18
+    *set crew %+12
+    *set rule %-10
+    It is not in any manual. Two ships, nineteen people off in fifty minutes instead of ninety by working both sides of a dock rated for one, and then a tandem burn with two hulls on the tether at reduced load — which nobody has ever done, and which ${engname} says can be made to work, and which requires the *Perpetua* to hold a station-keeping tolerance she was not built for while a warship burns nine hundred metres off her beam.
+
+    There is a silence on the open band.
+
+    "Commander," Oleyo says at last, "that is not the arithmetic."
+
+    "No. It is the other thing."
+
+    Another silence.
+
+    "*Ashaya* concurs. My people are at the dock in eleven minutes. Commander — if this fails, it fails on both of us, and I would like you to know that I am aware of that and that I am doing it anyway."
+    *set oleyo %+20
+    *goto nad_both
+
+*label nad_burn
+*page_break
+
+*comment ---------------- The burn ----------------
+*comment Crew's moment of glory.
+
+A Meridian-class survey ship is not built to tow anything.
+
+She has four grapples for coming alongside a wreck at two metres a second, and a hull rated for survey loads, and a chief engineer who has been up for four days. What is being asked of her is to take nine hundred kilometres of composite ribbon on those four grapples and burn east at full military power for seventy-one minutes.
+
+*if (eng = "osimo")
+  Osimo comes up to the bridge, which he does twice a year. "Captain," he says. "She'll do it. She'll do it once." He looks at the plot. "You'll want to ask them, though. Not tell them. This one you ask."
+*if (eng = "kallas")
+  Kallas is at nine syllables a second and then, abruptly, is not. "She can do it," she says, slowly, which is the most frightening thing you have ever heard her say. "The grapples fail at about sixty-two minutes on my numbers and I need seventy-one, and the difference is nine minutes of a thing I cannot calculate, so I am going to go and stand next to them."
+*if (eng = "dorr")
+  "I am sorry," says Dorr. "There is no version of this that does not damage her permanently. I can give you seventy-one minutes. I cannot give you a ship afterwards. That is the price and you should have it before you decide."
+
+*page_break
+
+*comment ---------------- Asking ----------------
+
+A hundred and twelve people. The intercom is on the bulkhead. It is 0431.
+
+*choice
+  #Ask them.
+    *set crew %+18
+    *set rule %-12
+    *set candor %+14
+    *achieve crewfirst
+    "This is the Captain. In eleven minutes I am going to put this ship on the end of nine hundred kilometres of falling tether and burn east at full military power for seventy-one minutes, to lay it in the ocean instead of across two thousand one hundred and forty people at Kell, Ottery, and the Fold Works.
+
+    "The *Perpetua* was not built to do this. My chief engineer's numbers say the grapples fail at about sixty-two minutes and I need seventy-one. There is no regulation covering it and I cannot order anybody to a station on a burn the ship is not rated for.
+
+    "So I am asking. Anyone who wants off the burn stations, go now, and it will not be in anybody's file, and I will not know who you were."
+
+    You take your hand off the intercom.
+
+    ${xoname} reports the burn stations manned at 0439. Full complement.
+
+    Nobody moved.
+    *set standing %+12
+    *set rel_xo %+10
+    *set rel_eng %+10
+    *set rel_med %+8
+    *set rel_sec %+8
+    *goto nad_burn_run
+  #Tell them.
+    *set rule %+16
+    *set nerve %+10
+    *set crew %-8
+    "This is the Captain. Burn stations. Full military power in eleven minutes, duration seventy-one, tether load on all four grapples. Carry on."
+
+    Forty seconds. Burn stations manned at 0437, two minutes faster than asking would have taken, and every one of them is at their post because you said so and for no other reason, which is what a chain of command is and what it is for.
+
+    You will think about the two minutes for a long time.
+    *set standing %+8
+    *goto nad_burn_run
+  #Ask ${engname} what to say, and say that.
+    *set rule %-16
+    *set crew %+12
+    *set rel_eng %+16
+    You hand the intercom to your chief engineer.
+
+    *if (eng = "osimo")
+      "This is Osimo. She'll hold. I've had her nineteen years and she has never once let go of anything she was told to hold. Burn stations." Nine seconds. It is the only time in twenty-six years that the *Perpetua*'s engineer has used the ship's address system.
+    *if (eng = "kallas")
+      "This is Kallas. The grapples are rated to sixty-two minutes and we need seventy-one, and I am going to be standing next to number three for all seventy-one of them, and if anybody wants to know why it is because the number is wrong and I want to be there when we find out by how much. Burn stations."
+    *if (eng = "dorr")
+      "This is Dorr. I am sorry — this will damage her past repair and we are going to do it anyway, and I would like to say, because I have never said it on this ship, that I left the Vaunt for a service that would ask me to do something like this instead of costing it. Burn stations."
+
+    Burn stations manned at 0439. Full complement.
+    *set standing %+8
+    *goto nad_burn_run
+
+*label nad_burn_run
+*page_break
+
+Seventy-one minutes.
+
+The *Perpetua* takes the upper end of a falling ribbon on four grapples at 0442 and opens her engines, and the whole ship begins to make a noise that nobody aboard has heard before: a low grinding through the frames, felt in the deck plating, in the teeth, in the aft corridor where the plating rings dead.
+
+At eleven minutes the number two coolant loop stops whistling.
+
+At thirty-one minutes the number three grapple mount begins to deform and ${engname} reports it and does not recommend anything.
+
+At sixty-two minutes — the number, the exact number — the number three grapple goes. The ship yaws hard to port on the weld she has yawed to port on since before you were aboard, and Beye, or the lieutenant of the second watch, catches her in under two seconds.
+
+At sixty-two minutes and nine seconds you have three grapples and nine minutes to go.
+
+*page_break
+
+*choice
+  #Hold the burn.
+    *set nerve %+18
+    *set rule %+10
+    *set strain +26
+    "Hold the burn."
+
+    Nine minutes on three grapples, and the ship screaming through the frames, and ${engname} on the hardline reading numbers in a voice that has stopped being level at about the fourth minute.
+
+    At seventy-one minutes you cut the engines and release, and nine hundred kilometres of tether goes over the horizon and comes down, over the following five hours, in eleven thousand kilometres of empty water in the Sonder Ocean.
+
+    Kell, Ottery, and the Fold Works do not lose a roof.
+    *set nadire_saved 2140
+    *goto nad_after
+  #Cut at sixty-eight. Take the eastern edge of Kell and live with it.
+    *set nerve %-10
+    *set rule %+12
+    *set crew %+10
+    *set strain +16
+    Three grapples and a deforming frame and a ship you are responsible for. You cut at sixty-eight minutes, three short, and release, and the ribbon goes over the horizon.
+
+    It lays down across eleven thousand kilometres of the Sonder Ocean and, at the last, across four hundred metres of the eastern edge of Kell settlement, where it takes out a grain store, two vehicle sheds, and a water line, and where — because it is 0553 and everybody in the settlement has been awake and outside watching the sky since 0420 — it kills nobody at all.
+
+    Warden Ruys tells you afterwards that if you had cut at sixty-five it would have taken the school.
+    *set nadire_saved 2140
+    *goto nad_after
+  #Ask ${engname}. Nine seconds to decide and it is ${engtheir} ship too.
+    *set rule %-18
+    *set crew %+12
+    *set rel_eng %+14
+    *set strain +22
+    "${engname} — three grapples, nine minutes. Your call."
+
+    *if (eng = "osimo")
+      "Hold it," says Osimo, instantly. "Hold it, hold it, hold it — she's got it, Captain, she's *got* it—" and he is right, and the *Perpetua* holds seventy-one minutes on three grapples, and afterwards Osimo cannot talk for some time.
+    *if (eng = "kallas")
+      "Seventy, not seventy-one," Kallas says, at nine syllables a second. "Seventy is the number, seventy is the number, the mount goes at seventy-one point four and I would like to be wrong about that and I am not wrong about that—" and you cut at seventy, and the mount is found afterwards to have been eleven seconds from failure.
+    *if (eng = "dorr")
+      "I am sorry," says Dorr, on the hardline, over the noise. "Hold it. All nine minutes. I will not be able to give you this ship afterwards and I am telling you to hold it."
+
+    The ribbon goes over the horizon and lays down in eleven thousand kilometres of empty water.
+    *set nadire_saved 2140
+    *goto nad_after
+
+*label nad_station
+*page_break
+
+*comment ---------------- Station Nine ----------------
+
+Ninety minutes, one dock, nineteen people, and a platform that is falling the whole time.
+
+You take the *Kittiwake* in yourself or you do not, and either way it is nineteen separate trips up a ladder in hard suits with the platform's own structure beginning to complain, and the whole of it carried live to a world that votes at 0900.
+
+*if (kem_pc) or (ashaya_pc)
+  You go. Of course you go. ${xoname} says one sentence for the record and you do not hear the end of it, which by now is a thing that happens.
+  *set nerve %+12
+  *set rel_xo %-4
+
+The nineteen are maintenance crew. They have been living on that platform for four months trying to fix a climber track with parts made on a world with no orbital industry, and they knew the ribbon was going, and they stayed, because if they had come down the track would never have been fixed at all.
+
+The last one off is a woman of sixty named Anke Dell who has been on Station Nine since before it was a station, and who will not board until the other eighteen are away, and who says, when you finally get her into the *Kittiwake* at the eighty-ninth minute: "Did somebody take the ribbon?"
+
+Somebody did.
+
+*page_break
+
+The *Ashaya* takes the upper end of the falling section on grapples her hull is actually rated for, and burns east for seventy-one minutes, and lays nine hundred kilometres of tether into the Sonder Ocean, and Kell and Ottery and the Fold Works do not lose a roof.
+
+Sar Vehn Oleyo does not say one word about it on any channel, then or afterwards, exactly as he promised at 0416.
+
+*set nadire_saved 2159
+*set oleyo %+10
+*set standing %-4
+*goto nad_after
+
+*label nad_both
+*page_break
+
+*comment ---------------- Both ----------------
+
+It should not work.
+
+Two shuttle bays on a dock rated for one, working opposite faces of a platform that is falling; nineteen people off in fifty-one minutes; and then two hulls on one tether at nine hundred metres' separation, burning in tandem, sharing a load neither was designed to take alone and neither has ever taken together.
+
+*if (eng = "dorr")
+  Dorr talks the *Ashaya*'s engineer through the load split in Vaunt, on an open channel, for eleven minutes, with the whole of Nadire listening to a defector coordinate a burn with the yard that built the ship he left.
+  *set rel_eng %+12
+*if (eng != "dorr")
+  ${engname} and the *Ashaya*'s engineer work out the load split in forty minutes across a language barrier and two incompatible instrument fits, and afterwards neither of them can explain how.
+  *set rel_eng %+10
+
+The burn goes at 0531 with twenty minutes of margin gone. It runs seventy-one minutes. At sixty-two the *Perpetua*'s number three grapple mount begins to deform, and the *Ashaya* takes more of the load without being asked and without saying anything about it, and holds it for nine minutes.
+
+Nine hundred kilometres of tether lays down in the Sonder Ocean.
+
+Nineteen people are alive on two ships. Two thousand one hundred and forty are alive under a sky with nothing in it.
+
+*set nadire_saved 2159
+*set strain +22
+*set oleyo %+16
+*set standing %+14
+*goto nad_after
+
+*comment ---- added choice: the last of the burn ----
+*if (nadire != "station")
+  When the engines cut, the *Perpetua* is quiet in a way she has never been.
+
+  The number three grapple mount is forty centimetres out of true. There is a crack behind it that ${engname} will find at 0900 and will not report until ${engthey} has measured it four times. Nobody on the ship has said anything for about ninety seconds.
+
+  *choice
+    #Say something to them. Now, while the engines are still cooling.
+      *set candor %+12
+      *set crew %+12
+      "This is the Captain. Kell, Ottery, and the Fold Works. Two thousand one hundred and forty. That was you.
+
+      "That is the whole message. Secure from burn stations."
+
+      Twenty-one words. On the mess deck, at 0554, somebody starts clapping and this time everybody else does too.
+      *set rel_xo %+6
+      *set rel_eng %+6
+      *goto nad_after2
+    #Secure from burn stations. The ship knows what it did.
+      *set rule %+10
+      *set candor %-8
+      "Secure from burn stations. Damage control parties to the number three mount. ${xoname}, I want a frame survey by 0900."
+
+      It is exactly the right series of orders and the ship executes all of them, and nobody says anything about Kell or Ottery or the Fold Works for nine hours, and then, at 1500, somebody writes *2,140* on the mess whiteboard and leaves it there for the rest of the commission.
+      *goto nad_after2
+    #Go down to the engine spaces.
+      *set crew %+10
+      *set nerve %+6
+      *set rel_eng %+16
+      You leave the bridge and go down four decks to a compartment that is at fifty-one degrees and full of people who have been standing next to a mount that was rated to sixty-two minutes.
+
+      You do not make a speech. You are there for about eleven minutes and you shake about nine hands and you get soot on a uniform that will not come clean, and ${engname} says, at the end, "Captain — you should be on the bridge," and does not mean it at all.
+      *goto nad_after2
+
+  *label nad_after2
+  *page_break
+
+*label nad_after
+*page_break
+
+*comment ---------------- The intention ----------------
+*comment The book's real question, in its final form.
+
+By 0700 it is over and the world has watched all of it.
+
+By 0730 Warden Sela Ruys has moved, and the council has agreed without a division, that the vote be postponed by eleven days.
+
+By 0800 four councillors have said publicly that the Concord came and did the unglamorous half, or the visible half, or both halves alongside the Vaunt — depending on which of those happened — and that this should count for something.
+
+And at 0830, alone in a cabin three metres by four with a viewport, you have to look at what you have done and decide what it was.
+
+*if (plaque)
+  Twenty centimetres from your face, in brass: *THE LEAST THAT ANSWERS.*
+
+The act was correct. It was an emergency, and the arrangement covers emergencies, and two thousand one hundred and fifty-nine people are alive, and there is not a line of Standing Order Four that forbids any of it.
+
+And you knew, at 0416, which of the two jobs would look better on a Concord ship on the morning of a vote.
+
+*page_break
+
+*choice
+  #Write it in the log. All of it, including what I knew at 0416.
+    *set candor %+18
+    *set rule %+8
+    *set nadire_honest true
+    *achieve more
+    *There is no rule against what I did this morning and I want the record to say what I was thinking while I did it. At 0416 I knew which of the two tasks would be seen. I chose on the numbers. I believe I chose on the numbers. I am not able to prove it to myself and I am certainly not able to prove it to anybody reading this, and the reason I am writing it down is that a master who is sure of his own motives on a morning like this is a master who has stopped checking.*
+
+    You sign it and file it and it goes to the Survey's archive, where it will sit for thirty years.
+    *set standing %-6
+    *goto nad_ruys
+  #Write the facts. My motives are not the Survey's business.
+    *set candor %-12
+    *set rule %+12
+    *set standing %+8
+    Times, tasks, loads, casualties, disposition. Nine hundred words, complete, accurate, and airless.
+
+    It is exactly what the form asks for. The form has never once asked for the only part of the morning that is in any doubt, and you notice that this is not an accident: two hundred and fourteen masters would find that box unbearable, and the Survey knows it.
+    *goto nad_ruys
+  #Go and say it to Ruys' face before the vote.
+    *set candor %+20
+    *set nerve %+14
+    *set standing %-10
+    *set nadire_honest true
+    You go down to the hall at the foot of the mountain and you tell the Warden of Nadire, privately, that at 0416 you knew which of the two jobs would be seen, and that you chose the other one on the numbers, and that you cannot prove to her or to yourself that the arithmetic was the whole of it, and that she should weigh this morning accordingly when the council votes in eleven days.
+
+    Ruys listens to the whole thing.
+
+    "Commander," she says at last, "in four months I have had two governments in this hall and you are the first person who has told me something against yourself." She goes to the window with the ribbon that is not there any more. "I am not going to tell you what that is worth. It would be a kind of payment."
+    *set standing %+10
+    *goto nad_ruys
+
+*label nad_ruys
+*page_break
+
+*comment ---------------- Oleyo ----------------
+
+Oleyo comes across at 1900, aboard the *Perpetua*, without being invited, which he has never done.
+
+He looks at the number three grapple mount for some time on the way in. It is deformed forty centimetres out of true and there is a crack in the frame behind it that runs eleven metres into the hull.
+
+"Commander. Two things, and then I will go.
+
+"The first is that I have transmitted a full account of this morning to my government, complete, including the part where a Concord officer took the task that could not be seen." He pauses. "I have also transmitted it to Concord Central, which I am not required to do, and to Tessine Station, which I am not required to explain."
+
+*page_break
+
+"The second is that I am going to lose Nadire.
+
+"Eleven days. Four councillors have moved and two more will. When the vote comes it will be against association, narrowly, and the reason will not be the Concord's offer, because the Concord has no offer. It will be that eleven thousand people watched two ships this morning and formed a view about what kind of thing they wanted in their harbour for the next two hundred years."
+
+He puts his cap on the table, which he has not done before.
+
+"I want to be exact about this, because I have been exact all year and I am not going to stop at the end. You did not outbid me. You did not out-argue me. You did the arithmetic I would have done, in front of people, in a ship that was not rated for it, and then you told them you had thought about how it would look.
+
+"I could not have done the last part. My service does not have a place to put it. That is the whole of the difference and I have been eleven days working out how to say it."
+
+*choice
+  #"Sar Oleyo. Nadire still needs a track."
+    *set candor %+14
+    *set crew %+10
+    *set oleyo %+18
+    "Whatever the council votes in eleven days, eleven thousand people have no elevator and eleven months of food. The Concord cannot build them a track. You can. Build it anyway."
+
+    Oleyo looks at you for a long moment.
+
+    "Without association."
+
+    "Without association. As a thing that happened."
+
+    "That is not the Weighing," he says slowly. "That is not anything my government has a form for." He picks up his cap. "I am going to put it to them. It will fail. I am going to put it to them anyway and I would like you to know that I am aware of exactly why I am doing it, which is that you asked me in a room and I could not think of the sentence that says no."
+    *set nadire_track true
+    *goto nad_end
+  #"You will be back."
+    *set rule %+12
+    *set nerve %+8
+    "You will be back in twenty years with a better offer, and they will be poorer, and the Concord will still have two hundred and fourteen ships and eleven arguments. I am not pretending this morning settled anything."
+
+    "No," Oleyo agrees. "It did not." He picks up his cap. "But I am fifty-one, Commander, and I will not be the one who comes back, and whoever does will read the file, and the file now contains a morning in which the Concord did the half nobody could see." A pause. "That is not nothing. I have spent eleven years telling my government that it is nothing."
+    *set oleyo %+10
+    *goto nad_end
+  #"Why did you signal Tessine Station?"
+    *set candor %+12
+    *set crew %+8
+    Oleyo does not pretend not to understand.
+
+    "Because Ivo Halloran has been sitting on a wheel for fourteen months believing that his service will never again do a difficult thing well," he says, "and this morning it did, in a ship he recommended you for, and I am not going to leave him to find that out from a bulletin."
+
+    He picks up his cap.
+
+    "I have written to him three times, Commander. He has never answered. I expect this one will do it, and I expect he will be furious that it came from me, and I would rather have him furious than where he is."
+    *set halloran_regard %+16
+    *set oleyo %+14
+    *goto nad_end
+
+*label nad_end
+*page_break
+
+The *Ashaya* leaves Nadire orbit on the twelfth day, after the vote, and Sar Vehn Oleyo signals one line in clear as she goes.
+
+*Commander — the Weighing says an act is measured by what it produces. This morning produced two thousand one hundred and fifty-nine people and one argument I cannot win. Thank you for both. V.O.*
+
+*set nadire_vote true
+
+Behind him, the *Perpetua* sits over a world with no rope to the sky, with a forty-centimetre deformation in her number three grapple mount and an eleven-metre crack in her frame, and nine days of anything from anywhere.
+
+She is not going to be a survey ship much longer. Everybody aboard has worked that out and nobody has said it.
+
 *finish
