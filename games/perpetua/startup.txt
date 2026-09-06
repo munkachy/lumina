@@ -108,6 +108,7 @@
 *create met_halloran false
 *create halloran_regard 50
 *create nadire "none"
+*create nadire_close false
 *create nadire_saved 0
 *create plaque false
 *create tern_lost false
