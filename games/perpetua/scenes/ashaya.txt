@@ -1,3 +1,562 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER FOUR — ASHAYA ====================
+*comment First contact with the Vaunt. Oleyo is courteous, exact, does not lie,
+*comment and is right about a thing you cannot accept. He thanks you for Sedge.
+*comment Budget: 11 tests. First deaths are possible here.
+*comment Ledger: the freighter Corvine, independent, 41 aboard, reactor event
+*comment nine hours from the Marl jump point. Ashaya is 4 hours out; you are 11.
+
+The distress call comes in at 0340 on the automatic band and it is not a voice, it is a beacon, which is worse.
+
+**CORVINE, INDEPENDENT, MARL TRANSIT. REACTOR EVENT. FORTY-ONE SOULS. NO CONTAINMENT.**
+
+${xoname} has the plot up before you are on the bridge.
+
+"Eleven hours at cruise," ${xothey} says. "Nine and a half if we push her. There is also a second ship answering." A pause. "Four hours out. Vaunt."
+
+The bridge of a Meridian is nine metres across and everybody in it can hear everything anybody says.
+
+*page_break
+
+*if (eng = "osimo")
+  Osimo comes up from below without being called, which he has done twice in four months, both times when somebody was about to ask his engines for something. "You can have nine and a half," he says. "You cannot have it twice."
+*if (eng = "kallas")
+  Kallas is already talking. "Nine and a half is not the number, the number is nine and forty because the number two loop will not take a sustained overpressure past the eighth hour, and before you ask, yes, I can give you nine and forty, and no, I would not."
+*if (eng = "dorr")
+  "I am sorry," Dorr says. "Nine and a half will cost you a coolant loop and possibly the seals. That is not a refusal. That is the price, and you should have it before you decide."
+
+*choice
+  #Push her. Nine and a half hours.
+    *set nerve %+12
+    *set strain +11
+    *set crew %-4
+    "Nine and a half, ${engname}. Take what you need."
+
+    The *Perpetua* is twenty-six years old and she goes, and for nine and a half hours the number two coolant loop stops whistling, which is the single most frightening thing that has happened aboard this ship.
+    *set rel_eng %-4
+    *goto ashaya_arrive
+  #Eleven hours at cruise. She is old and there is another ship already closer.
+    *set nerve %-12
+    *set rule %+6
+    *set strain +3
+    "Cruise, Mister Beye."
+
+    Beye says "Aye, Captain" in a voice with nothing in it at all, and holds cruise for eleven hours, and does not look at you once.
+    *set rel_eng %+8
+    *goto ashaya_arrive
+  #Ask ${engname} for the largest number ${engthey} will stand behind.
+    *set rule %-10
+    *set crew %+6
+    *set strain +7
+    *set rel_eng %+10
+    You ask for the number ${engthey} will put ${engtheir} name to, and you get it, and it is ten hours and ten minutes, and it is not a compromise — it is the actual number, which nobody has asked ${engthem} for before.
+    *goto ashaya_arrive
+
+*label ashaya_arrive
+*page_break
+
+*comment ---------------- The Ashaya ----------------
+
+You come out of transit into a field of debris the size of a small moon's ring, and there are two ships in it.
+
+One is the *Corvine*: eleven thousand tonnes of independent freighter, broken across the middle, venting from four points, turning slowly the wrong way. Her aft third is a furnace.
+
+The other is the *Ashaya*.
+
+She is four hundred metres of white, and she is beautiful, and everything about her says the same thing in a different way: that the people who built her were not making compromises with a budget. Where the *Perpetua* has a welded seam from something that happened years ago, the *Ashaya* has a continuous hull. Where you have four guns, she has an arrangement you cannot identify at all.
+
+She has twelve shuttles in the air and she has been working for six hours.
+
+*if (eng = "dorr")
+  Beside you, Dorr has gone completely still. He built the coolant baffle on that class. He has not seen one from the outside since he was thirty-six.
+  *set rel_eng %-5
+
+*page_break
+
+The signal comes across before you have finished the approach, in Concord Standard, unaccented, on an open channel that everybody on both ships can hear.
+
+"Concord vessel, this is *Ashaya* of Kes-Arahel, Sar Vehn Oleyo commanding. We have taken twenty-nine off the *Corvine*. Twelve remain in the forward habitat ring, which is intact and will remain intact for approximately four hours. We are not going to get them."
+
+A pause of exactly the right length.
+
+"I am glad you have come, Commander. I would rather it were you than nobody."
+
+*set met_oleyo true
+
+*choice
+  #"Ashaya, this is Perpetua. Why are you not going to get them?"
+    *set candor %+10
+    *set rule %+4
+    "Because the transit from my ship to the forward ring passes within nine metres of the aft third," Oleyo says, "and the aft third is at four thousand degrees and will fail asymmetrically at some point in the next four hours, and I do not know when. The transit is one hundred and forty seconds each way. I have run it nine times with instruments. I would be sending eleven of my people to a place where I cannot tell them when the wall falls."
+
+    "Twelve for eleven."
+
+    "Twelve *probable* for eleven *possible*," Oleyo says, "which is not the same arithmetic, and which I am aware sounds like an excuse, and is not one."
+    *goto ashaya_council
+  #"Ashaya, we will take them. Stand off and keep your shuttles clear of my approach."
+    *set nerve %+14
+    *set rule %+8
+    *set oleyo %-4
+    "Understood, Commander. My lanes are yours. I will hold at nine kilometres and my medical bay is open to you and will remain open whatever happens."
+
+    He does not argue. He does not warn you. He clears his shuttles out of your way in under two minutes and then his ship goes quiet, and it is somehow much worse than being argued with.
+    *goto ashaya_council
+  #"Ashaya, Perpetua. Give me your instrument data on the aft third. All of it."
+    *set rule %-6
+    *set candor %+6
+    *set oleyo %+8
+    "All of it," Oleyo agrees, and it arrives in ninety seconds: nine passes, full spectrum, uncompressed, with his own crew's annotations in Vaunt still on it and no attempt to clean them up.
+
+    ${engname} has it inside four minutes and comes back looking unhappy.
+
+    "It is good data," ${engthey} says. "It is better data than we could take. And it says what he said it says."
+    *set rel_eng %+6
+    *goto ashaya_council
+
+*label ashaya_council
+*page_break
+
+*comment ---------------- The twelve ----------------
+
+Twelve people in the forward habitat ring of the *Corvine*. Four hours, probably. One hundred and forty seconds each way through a lane nine metres from a wall at four thousand degrees.
+
+Your ship has two shuttles. The *Tern* carries nine at a squeeze.
+
+Two runs.
+
+*if (sec = "oyelaran")
+  "Two runs, four crew, and I will fly the second one myself," Oyelaran says. "I am not being noble, Captain. I am the most expendable qualified body on this ship and that is an actual category."
+*if (sec = "whitlow")
+  "Two runs," Whitlow says, "and if the wall goes it goes during the second, because it always goes during the second, and I would like that said before anybody volunteers."
+*if (sec = "mott")
+  "I will fly neither," Mott says, "because I am too heavy for the *Tern* with nine aboard, and that is the only reason, and I want it said out loud so that nobody invents a better one for me."
+
+*if (med = "nour")
+  Nour says: "Twelve people who are conscious, uninjured, and have been listening to their own ship burn for six hours. I will need the mess deck cleared, not sickbay."
+*if (med = "sorrel")
+  Sorrel says: "Do we know their names?" and somebody says no, and he says, "We will in an hour," and goes to find out, and comes back with all twelve.
+*if (med = "vasi")
+  Vasi says: "Twelve, uninjured. If the wall fails during a transit I will have nine burns and no burn ward and I will be triaging in the *Tern*'s bay by torchlight. I mention it so that you are choosing it rather than discovering it."
+
+*if (chap = "wren")
+  Wren asks whether he may go on the second run. You say no. He accepts it immediately and completely, and then asks whether he may be in the bay when they come aboard, and that one you cannot refuse.
+*if (chap = "onu")
+  Onu is already in the shuttle bay laying out blankets, having asked nobody, and when you find her there she says, "Two runs?" without looking up.
+*if (chap = "serat")
+  Serat says: "Whatever you decide, decide it in the next eleven minutes. Past that the crew stops preparing and starts waiting, and waiting is where people get hurt."
+*if (chap = "none")
+  Nobody asks to go on the second run. It does not occur to you until much later that on Halloran's ship, somebody would have.
+
+*page_break
+
+*choice
+  #Two runs. Volunteers only. I fly the second one.
+    *set nerve %+14
+    *set crew %+8
+    *set rule %+6
+    *set standing %-4
+    *set ashaya_pc true
+    You are the commanding officer of a Concord Survey vessel and you are going to fly a shuttle through a nine-metre lane, and ${xoname} tells you exactly what ${xothey} thinks of that, on the record, in one sentence, and then stops.
+    *goto ashaya_run
+  #Two runs. Volunteers only. ${secname} runs it.
+    *set nerve %+8
+    *set rule %+6
+    *set rel_sec %+8
+    You ask for volunteers and get twenty-two of them inside ninety seconds, which is a thing you will think about for the rest of your life.
+    *goto ashaya_run
+  #One run. Nine of the twelve. Then we reassess.
+    *set nerve %-8
+    *set rule %+10
+    *set crew %+6
+    *set ashaya_split true
+    Nine, then look at the wall again, then decide. It is the coward's arithmetic and it is also the only version where you are not committing to the second transit before you have any new information, and both of those sentences are true.
+    *goto ashaya_run
+  #Signal Oleyo. Ask him to put his shuttles back in and do it together.
+    *set rule %-12
+    *set crew %+6
+    *set oleyo %+14
+    *set candor %+8
+    There is a silence of about four seconds on the open channel.
+
+    "Commander," Oleyo says, "I have declined this transit. If I now fly it beside you, my declining it was a lie, and I do not tell them." Another pause. "But my shuttles are faster than yours and my crews are better and neither of those facts is in dispute. So: I will fly the lane empty, ahead of each of your runs, at the same distance, thirty seconds early. If the wall fails, it fails on me first and your pilot turns."
+
+    ${xoname} says, very quietly, "That is not a rescue. That is a canary."
+
+    "Yes," says Oleyo, on the open channel, because he has excellent ears. "That is what it is."
+    *set ashaya_canary true
+    *goto ashaya_run
+
+*label ashaya_run
+*page_break
+
+*comment ---------------- The lane ----------------
+*comment Multi-level: nerve band x strain band determines losses. Reconvergent
+*comment in structure — everybody gets the twelve out or does not — but the cost
+*comment differs and is remembered for the rest of the book.
+
+Beye flies the first run.
+
+One hundred and forty seconds out. He talks the whole way, which he has never done, a flat unbroken commentary of numbers and distances, and at the ninety-second mark the *Corvine*'s aft third throws off a plume that lights the inside of the *Tern* like a window at noon and he does not stop talking.
+
+He brings back nine.
+
+*page_break
+
+*if (ashaya_split)
+  You look at the wall again. It is worse. The instruments say between forty minutes and four hours and cannot be made to say anything more useful than that.
+
+  There are three people still in the forward ring. Their names, because ${medname} found out, are Aleta Ruso, Bin Chey, and a boy of sixteen called Otho Marn who is Ruso's sister's son and who has been talking to your comms rating for two hours about nothing at all.
+
+  *choice
+    #Go. Now, before it gets worse.
+      *set nerve %+14
+      *set crew %+6
+      *goto ashaya_second
+    #Ask for the *Ashaya*'s read one more time, then go.
+      *set rule %-6
+      *set oleyo %+8
+      Oleyo's data comes back in forty seconds and says the same thing his last nine passes said. He adds one line, in his own hand, in Concord Standard: *I would go now, Commander. I would not have gone at all, and if I were going I would go now.*
+      *goto ashaya_second
+    #Nobody flies that lane twice. Signal the ring and tell them the truth.
+      *set nerve %-16
+      *set crew %+14
+      *set rule %+10
+      *set candor %+12
+      *goto ashaya_abandon
+
+*if (ashaya_split = false)
+  *goto ashaya_second
+
+*label ashaya_second
+*page_break
+
+The second run goes at the hundred and eleventh minute.
+
+*if (ashaya_canary)
+  A Vaunt shuttle flies the lane empty thirty seconds ahead of it. You watch it on the plot: a white spark going in where nobody has to go, at exactly the distance, exactly on time. Its pilot's name is on the manifest Oleyo sent unasked. It is Sar Deneth Iru and she is twenty-six years old.
+  *set oleyo %+6
+
+*if (ashaya_pc)
+  You fly it.
+
+  One hundred and forty seconds is a very long time. At sixty seconds you understand, in a way that no briefing ever conveyed, that the wall is not a wall, it is a *decision* somebody else's ship made six hours ago and is still making. At ninety seconds you find out what your own voice sounds like. At one hundred and eleven you are alongside the forward ring with three people getting in behind you and one of them is a boy of sixteen who says *thank you* like a person being handed a coat.
+*if (ashaya_pc = false)
+  You watch it from the bridge of your own ship on a plot nine metres across with eleven people around you, and it is worse than flying it, and everyone who has done both says so.
+
+*page_break
+
+*if (strain >= 30)
+  The *Perpetua* has been pushed hard and the *Tern* has been pushed harder.
+
+  Eleven seconds out from the ring, on the way home, the *Tern*'s port attitude cluster gives up. It is not the wall. It is nine and a half hours at overpressure and a shuttle that was due for overhaul at Sarn Basin, and the two things you did not do at Sarn Basin were overhaul the *Tern* and refuse the run.
+
+  Beye holds her. He gets her back on the ship's own gravity with the bay doors open and no attitude control at all, and it is the best flying anybody aboard will ever see, and it puts the *Tern* into the far bulkhead at four metres a second.
+
+  Everyone lives. The *Tern* does not. She is written off where she sits.
+  *set tern_lost true
+  *set strain +8
+  *set rel_eng %-6
+
+*if (strain < 30)
+  The *Tern* comes home on time and on her own power, and the bay doors close, and somebody in the bay starts clapping and then stops because nobody else has.
+
+  The *Corvine*'s aft third fails asymmetrically at the two-hundred-and-ninth minute, exactly as Oleyo said it would, and takes the forward habitat ring with it. There is nobody in it.
+
+*set salvage_saved 12
+*goto ashaya_meet
+
+*label ashaya_abandon
+*page_break
+
+You open the channel to the forward ring yourself, because it is not a thing you can give to anybody else.
+
+You tell Aleta Ruso, Bin Chey, and a boy of sixteen named Otho Marn that no shuttle is coming; that you have looked at the wall and you have looked at your people and you have decided; and that you are sorry, and that you will stay on the channel.
+
+Ruso says: "How long?"
+
+You tell her the truth, which is that nobody knows, and that it is between forty minutes and four hours.
+
+The channel stays open for two hours and nine minutes. Your comms rating, whose name is Tey Abara and who is twenty-two, stays at the board for all of it and does not hand over. Towards the end Otho Marn asks her what Sarn is like, because he has never been, and she tells him, and she is still telling him when the aft third fails.
+
+*set salvage_saved 9
+*set sedge_dead +3
+*set standing %-6
+*set crew %+10
+
+*if (chap != "none")
+  ${chapname} is on the bridge for the last forty minutes, standing behind the comms board, saying nothing, one hand flat on the back of Abara's chair.
+  *set rel_chap %+10
+*if (chap = "none")
+  Nobody is standing behind the comms board. Afterwards Abara goes off watch and there is nowhere in particular for her to go, and she goes to the mess, and it is 0400 and the mess is empty.
+  *set rel_med %-4
+
+*goto ashaya_meet
+
+*label ashaya_meet
+*page_break
+
+*comment ---------------- Sar Vehn Oleyo ----------------
+
+Six hours later, with the debris field thinning and twenty-nine survivors on his ship and
+*if (salvage_saved = 12)
+  twelve
+*if (salvage_saved = 9)
+  nine
+on yours, Oleyo asks for a meeting and leaves the venue to you.
+
+*choice
+  #He comes aboard the *Perpetua*.
+    *set rule %+8
+    *set nerve %+4
+    *set ashaya_venue "mine"
+    He comes across in a shuttle with two people and no weapons and walks up your ramp into a twenty-six-year-old survey ship that smells of cold metal and old coffee, and he looks at everything, and he says nothing about any of it, and you cannot tell whether that is courtesy or a report.
+    *goto oleyo_scene
+  #I go across to the *Ashaya*.
+    *set nerve %+10
+    *set candor %+6
+    *set oleyo %+10
+    *set ashaya_venue "his"
+    *set rel_xo %-6
+    ${xoname} objects. Formally, on the record, in the manner of a first officer who intends the objection to be readable in thirty years. You overrule ${xothem} and go.
+
+    The *Ashaya* is quiet inside. That is the thing nobody tells you about Vaunt ships: they are quiet, and the corridors are wide, and there is art on the walls of a working warship, and none of it is about victory.
+    *goto oleyo_scene
+  #Neither. We do this on a screen.
+    *set rule %+10
+    *set candor %-8
+    *set oleyo %-8
+    *set ashaya_venue "screen"
+    You do it on a screen, which is correct, which is prudent, and which Oleyo accepts without a flicker.
+
+    "As you wish, Commander," he says, and the whole conversation that follows is nine per cent worse for both of you, and you both know it, and neither of you says so.
+    *goto oleyo_scene
+
+*label oleyo_scene
+*page_break
+
+Sar Vehn Oleyo is about fifty. Grey at the temples, a face built for patience, and a uniform without a single decoration on it, because in the Vaunt the decorations are in the record and the record is public and wearing them would be a redundancy.
+
+He uses your rank scrupulously and never your name.
+
+*if (eng = "dorr")
+  The first thing he does is look for Dorr, find him, and address him in Vaunt: three words, quietly, and Dorr answers with two.
+
+  Then, to you, in Concord Standard: "Lieutenant Dorr built the coolant baffle on the ship you have been looking at all day. My government has a claim on him which it does not exercise at this distance and I have no claim on him at all. I asked after his mother. She is well." A pause. "He knew that. I wanted him to know that I knew he knew."
+  *set rel_eng %-8
+  *set oleyo %+4
+
+*if (ashaya_venue = "his")
+  On the way in he shows you the *Corvine*'s twenty-nine, in a compartment his people have cleared, with his own crew sitting among them. He does not point it out.
+
+*page_break
+
+"Three things," Oleyo says, "and then I will stop taking your time.
+
+"The first is that I have transmitted the *Corvine*'s survivor list to Marl, to Concord Central, and to my own government, complete and identical, on all three, in clear. You will want to verify that. Please do.
+
+"The second is that
+*if (salvage_saved = 12)
+  you got twelve people out of a lane I had declined, and I was wrong about the fourth hour by nineteen minutes, and if I had been wrong the other way you would have lost a shuttle and a crew. I am telling you that I was wrong. I am not telling you that you were right.
+*if (salvage_saved = 9)
+  you looked at the same wall I looked at and reached the same conclusion, six hours later, with a different ship and a worse instrument fit. Three people died in that ring. I want you to know that I count them on my side of the ledger and not on yours, and that this is not generosity; it is bookkeeping.
+"
+
+He stops. He is a man who signals his paragraphs.
+
+"The third is Sedge."
+
+*page_break
+
+*if (sedge = "held")
+  "You went to Sedge," Oleyo says, "and forty-one thousand people had a blight, and six thousand of them asked you for seed, and you gave them nothing, because the recognised government of that world had not asked.
+
+  "Thank you, Commander. I mean that exactly. For eleven years my government has argued about whether the Concord's restraint is a principle or a posture. It has been an expensive argument. You have settled it in one afternoon, at no cost to me, and I am obliged to you, and I am sorry."
+*if (sedge = "water")
+  "You went to Sedge," Oleyo says, "and you gave six thousand people a water plant and withheld the seed, and you wrote in your log that this was *the least that answers.*
+
+  "Thank you, Commander. I have written that phrase down. It is the most useful four words I have acquired this year." He looks at you. "You should know what I am going to do with them. I am going to read them aloud, in a room on Kes-Arahel, to people who believe the Concord is sincere."
+*if (sedge = "gave")
+  "You went to Sedge," Oleyo says, "and a faction asked and a government refused, and you landed the stores anyway and put it in your own log in your own hand.
+
+  "Thank you, Commander. For eleven years my government has been assured that the Concord will not move. You have made a liar of everyone who told them so, and you have done it on a world that will remember it for a century." A pause. "I do not know yet whether that makes my work harder or easier. Neither do you. That is why I am thanking you and not congratulating you."
+*if (sedge = "council")
+  "You went to Sedge," Oleyo says, "and you took a man's own plan, and you handed it back to him with your hand still on it, and now the Concord's stores are in his silos and his name is on the distribution and nobody on that world believes they were helped.
+
+  "Thank you, Commander. That is the most Vaunt thing I have ever watched a Concord officer do." He says it perfectly levelly. "I do not mean it kindly. I mean that I recognised it, and that recognising it cost me something, and I would rather have gone on thinking your service could not."
+
+*page_break
+
+*choice
+  #"You are welcome. Now tell me what you were doing in Sedge space."
+    *set candor %+12
+    *set nerve %+8
+    *set oleyo %+6
+    "Watching," Oleyo says immediately. "Legally, at nine astronomical units, in space no treaty assigns to anyone. I filed the transit with my government and did not file it with yours, because I am not required to and because you would have moved."
+
+    "That is an answer."
+
+    "It is the whole answer. I am not going to give you a better one and I am not going to give you a worse one." He almost smiles. "Commander, you will find that I am extremely tiresome about this. I do not lie. It is not a virtue. It is that I keep records, and a lie is a second set of books."
+    *goto oleyo_ceyla
+  #"Do not thank me again."
+    *set candor %+8
+    *set rule %+8
+    *set oleyo %-6
+    "Do not thank me again. Not for Sedge, not for anything I do in this Reach, not on an open channel and not in a room. Whatever I decide out here, I do not want it arriving on Kes-Arahel with your gratitude attached to it."
+
+    Oleyo considers this properly, which is his most disarming quality.
+
+    "I cannot agree to that," he says at last. "If you do a thing that helps me I will say so, because if I only said it when it suited me you would be right not to believe me the rest of the time." A pause. "But I understand the request, and I am sorry that it is not available."
+    *goto oleyo_ceyla
+  #Say nothing at all and let it sit.
+    *set candor %-14
+    *set rule %+6
+    You let the silence run. It runs for a long time. Oleyo does not fill it, which tells you a great deal about Oleyo.
+
+    *if (nerve <= 45)
+      Eventually he says: "You are very restful, Commander. The last master of this ship was not."
+    *if (nerve > 45)
+      Eventually he says: "You are holding still on purpose. I do it too. It is a good habit and it does not work on people who have it."
+    *goto oleyo_ceyla
+
+*label oleyo_ceyla
+*page_break
+
+"There is a fourth thing," Oleyo says, "which I said there would not be, and I apologise.
+
+"I took the Ceyla system. Not a fleet — me, this ship, eleven weeks after Ivo Halloran took nine hundred and six people off Ceyla III in front of my sensors and told my government, without meaning to, that the Concord had nothing in this Reach.
+
+"Forty-one thousand people on Ceyla II are Vaunt subjects now. They are not being mistreated. Their harvest was better last year than the year before. That is the arrangement, Commander: we are not cruel, we are simply *there*, and afterwards the argument is over."
+
+He looks at his hands.
+
+"Ivo Halloran is the most honest officer your service has produced in my lifetime, and he is on a station, and I took his system. I have wanted to say that to somebody in a Concord uniform for fourteen months."
+
+*set ceyla_known 2
+
+*choice
+  #"He saved nine hundred and six people."
+    *set crew %+10
+    *set candor %+8
+    "He did," Oleyo agrees. "And he cost forty-one thousand their government, and both of those are his, and he has never once, in any transcript I have read, tried to put down either half of it." He looks up. "Do you understand what I am telling you? I am not attacking him. I am telling you that he is carrying the whole thing, alone, on a station, and that nobody in your service will take any of it off him because taking any of it means admitting the rule did it."
+    *set oleyo %+8
+    *goto oleyo_close
+  #"Then you should be thanking him, not me."
+    *set candor %+10
+    *set nerve %+6
+    "I have written to him twice," Oleyo says. "He has not replied. I did not expect him to and I will write again." He straightens his cuff, a gesture you have seen on a Concord delegate in a graving dock four months ago. "It is not a taunt, Commander. There are eleven people alive in this service who understand what he did, and four of them are Vaunt, and that is a very lonely arithmetic for a man on a station."
+    *set oleyo %+10
+    *goto oleyo_close
+  #"Sar Oleyo. Would you have evacuated Ceyla III?"
+    *set candor %+14
+    *set rule %-6
+    The question stops him. It is the first time all day.
+
+    "No," he says at last. "Nine hundred and six against a system: the Weighing does not permit it and I would not have permitted it. I would have held position and observed, exactly as your Survey ordered him to, and I would have been right, and nine hundred and six people would be ash."
+
+    A pause.
+
+    "I have thought about that a great deal, Commander, and I have not been able to make it stop being both of those things at once."
+    *set oleyo %+16
+    *goto oleyo_close
+  #"I am not going to discuss a Concord officer with you."
+    *set candor %-12
+    *set rule %+12
+    *set oleyo %-10
+    "No," Oleyo says. "That is correct and I should not have raised it, and I am not sorry, and both of those are true." He stands. "You are a more careful officer than the last one, Commander. I say that without any pleasure at all."
+    *goto oleyo_close
+
+*label oleyo_close
+*page_break
+
+At the airlock — or on the screen, which is worse — Oleyo asks one more thing, and it is not what you expect.
+
+"Your ship. *Perpetua.* We name ours for places. You name yours for people." He tilts his head. "Who was she?"
+
+*choice
+  #"I do not know."
+    *set candor %+12
+    "I do not know," you say. "I have asked four people. Nobody aboard knows. She has been in commission for twenty-six years."
+
+    Oleyo takes this in with what looks, briefly and unmistakably, like distress.
+
+    "Commander," he says, "that is the single most Concord thing I have ever heard, and I want you to understand that I am not being clever. You carry the names of your dead on your hulls and you have stopped reading them." He puts his cap on. "Find out. Do me the courtesy."
+    *set oleyo %+10
+    *goto ashaya_end
+  *if (plaque)
+    #Tell him.
+      *set candor %+8
+      *set rule %-4
+      You tell him: a woman who would not be moved, who was not consoled, and who did not stop; who died a very long time ago, in a way the Concord's founders thought worth carrying on a hull.
+
+      Oleyo listens to all of it without moving.
+
+      "Thank you," he says. "In the Vaunt we would have named a *place* for her, and it would have been forgotten in a century, and your way is better and I am not permitted to say so at home."
+      *set oleyo %+14
+      *goto ashaya_end
+  #"Why do you want to know?"
+    *set candor %-6
+    *set rule %+8
+    "Because I am going to be opposite you for some time," Oleyo says, "and I would rather know what is written on the thing that is opposite me." He puts his cap on. "It is not intelligence, Commander. It is manners."
+    *set oleyo %-4
+    *goto ashaya_end
+
+*label ashaya_end
+*page_break
+
+The *Ashaya* goes coreward at 1900 and is off your plot in under an hour, and the *Perpetua* turns for Marl with
+*if (salvage_saved = 12)
+  twelve
+*if (salvage_saved = 9)
+  nine
+survivors in the mess deck and a debris field astern.
+
+*if (tern_lost)
+  The *Tern* is a write-off in the number one bay with her nose folded, and Beye has been to look at her twice, and ${engname} has put a tarpaulin over the front of her because people kept stopping.
+  *if (sec = "mott")
+    On the third day Mott takes the tarpaulin off, and writes *TERN* on the *Kittiwake* in proper letters, and puts the tarpaulin back. Nobody asks her about it. It stops being funny and becomes something else.
+
+*choice
+  #Signal Concord Central. Full report, including everything Oleyo said.
+    *set candor %+14
+    *set rule %+6
+    *set standing %-4
+    You transmit all of it: the lane, the twelve, the arithmetic, the meeting, and every word Oleyo said about Ceyla and about Halloran, verbatim, with your own note that you believe he was telling the truth.
+
+    You are aware that a Concord delegate is going to read a Survey commander's assessment that a Vaunt captain was telling the truth, and that this will be filed, and that it will follow you.
+    *goto ashaya_last
+  #Signal Concord Central. The rescue only.
+    *set candor %-10
+    *set rule %+8
+    *set standing %+6
+    Position, casualties, survivors, disposition. Eleven hundred words about a shuttle lane and not one about a conversation.
+
+    It is complete, accurate, and airless, and it is exactly what the form asks for, and the form has never once asked for the only part of the day that mattered.
+    *goto ashaya_last
+  #Signal Central. And signal Tessine Station.
+    *set candor %+10
+    *set crew %+12
+    *set standing %-6
+    You file the report. Then you write a second signal, nine lines, to a harbour pilot on Tessine Station, and you tell him that a Vaunt officer said his name today with respect, and that you thought he should hear it from a Concord ship rather than not at all.
+
+    You do not expect an answer. You do not get one for four months.
+    *set halloran_regard %+12
+    *goto ashaya_last
+
+*label ashaya_last
+*page_break
+
+At 0200 you go down to the mess deck, where twelve — or nine — people who no longer have a ship are asleep on the benches under Survey blankets.
+
+*if (crew > 62)
+  Somebody has moved the whiteboard so that the day count is not the first thing they see when they wake up. Nobody has told you who. You find out eleven weeks later, by accident, that it was Beye.
+  *set rel_sec %+4
+*if (crew <= 62)
+  The whiteboard still says the day count. Three hundred and eleven. It is the first thing they will see.
+
+*if (oleyo > 62)
+  On the board beside it, somebody has written *ASHAYA* and, under it, *29.* Just the number. Nobody has rubbed it out.
+*if (oleyo <= 62)
+  Somebody has written *VAUNT* on the board and drawn a line under it, and somebody else has written *29* beside it, and somebody has scrubbed at that and given up halfway.
+
+You stand there for a while, and then you go up, and the number two coolant loop starts whistling again at 0340, which means the ship is cool, which means she is well.
+
 *finish

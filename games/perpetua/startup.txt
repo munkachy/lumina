@@ -104,6 +104,10 @@
 *create nadire_saved 0
 *create plaque false
 *create tern_lost false
+*create ashaya_pc false
+*create ashaya_split false
+*create ashaya_canary false
+*create ashaya_venue "none"
 *create beye_alive true
 
 *comment ---------------- ACHIEVEMENTS ----------------
