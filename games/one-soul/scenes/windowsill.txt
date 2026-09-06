@@ -28,11 +28,11 @@ And above that, in the box that says PATIENT, there is your name.
   #Bernadette.
     *set name "Bernadette"
     *goto pickedname
-  #Stanley.
-    *set name "Stanley"
+  #Dolores.
+    *set name "Dolores"
     *goto pickedname
-  #Curtis.
-    *set name "Curtis"
+  #Yolanda.
+    *set name "Yolanda"
     *goto pickedname
   #That is not my name.
     What is it?
@@ -59,7 +59,31 @@ Six have harps. Two have their eyes closed in a way you did not use to mind. One
 
 And one is from Walter, the Christmas before he died, and it says GUARDIAN ANGEL WATCHING OVER ME on the base in gold, and he was not a man who bought that kind of thing, and he must have stood in a shop and picked it up and thought: yes. That one.
 
-You have prayed to yours every day of your adult life. Out loud, most days. You made up a name for it in 1979 because nobody ever gave you one and it seemed rude to keep saying *hey*.
+You have prayed to yours every day of your adult life. Out loud, most days.
+
+And in 1979 you gave it a name, because nobody had ever given you one and it seemed rude to keep saying *hey*.
+
+*choice
+  #Angelo.
+    *set angelname "Angelo"
+    *goto namedit
+  #Buddy.
+    *set angelname "Buddy"
+    *goto namedit
+  #Sunshine.
+    *set angelname "Sunshine"
+    *goto namedit
+  #Pete.
+    *set angelname "Pete"
+    *goto namedit
+  #Something else.
+    What did you call it?
+    *input_text angelname
+    *goto namedit
+
+*label namedit
+
+${angelname}. You were twenty-six and you were doing your best.
 
 *page_break
 
@@ -113,7 +137,7 @@ What do you say to it?
     *line_break
     *line_break
     It does not move. It does not indicate that it has declined to move. It is simply still there, the way a wall is still there, and you understand that you have just said *get out* to a wall.
-    *set severity %+20
+    *set hope %-5
     *goto whereveryouwere
 
   #"Where were you?"
@@ -136,8 +160,7 @@ What do you say to it?
     *line_break
     *line_break
     You are stalling.
-    *set splendor %-15
-    *set severity %+10
+    *set hope %+5
     *goto whereveryouwere
 
   #Nothing. You look at it and you wait.
@@ -145,7 +168,7 @@ What do you say to it?
     *line_break
     *line_break
     It is better at it than you are. It is not even trying.
-    *set valor %-20
+    *set hope %+5
     *goto whereveryouwere
 
 *label whereveryouwere
@@ -207,7 +230,6 @@ The apple juice is still on the tray. The machine down the hall has stopped. You
     *line_break
     *line_break
     "No," it agrees.
-    *set severity %+15
     *set hope %-5
     *goto refuse
 
@@ -225,7 +247,6 @@ The apple juice is still on the tray. The machine down the hall has stopped. You
     *line_break
     It does not soften that.
     *set hope %-10
-    *set severity %+10
     *goto refuse
 
   #"What if I tell you to do something wicked?"
@@ -254,15 +275,38 @@ You have a bad feeling about the one more thing.
 
 You look at it for a while.
 
-"You're telling me," you say slowly, "that God is letting a woman with no legs and a tenth-grade education *build an angel.*"
+*choice
+  #"So God is letting a woman with no legs and a tenth-grade education build an angel."
+    "Yes."
+    *goto whydothat
+  #"So this is Build-A-Bear. I am in a hospital bed at Build-A-Bear."
+    "I do not know what that is."
+    *line_break
+    *line_break
+    "You pick out the fur, and you pick out the little voice box, and then you put a heart in it, and you have to kiss the heart first. My granddaughter made a rabbit."
+    *line_break
+    *line_break
+    "Then yes," it says. "It is somewhat like that."
+    *line_break
+    *line_break
+    "Oh, *don't*."
+    *goto whydothat
+  #"You have had four seconds. I have had seventy years. Which of us should be doing this?"
+    "Neither of us was consulted," it says.
+    *goto whydothat
+  #Nothing. You look at it for a while.
+    You look at it for a while. It waits. It is extremely good at waiting and you are about to find out how good.
+    *goto whydothat
 
-"Yes."
+*label whydothat
 
 "Why would He do that?"
 
 *page_break
 
 "I have wondered," it says, "whether it is because you told Him, every day for forty-five years, that you would have done it differently."
+
+*set formed true
 
 *page_break
 

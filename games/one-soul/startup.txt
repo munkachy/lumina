@@ -22,6 +22,8 @@
 *comment fixed — everything downstream depends on 1979 and 2024 — so the
 *comment age is implied and never stated. Nothing else about you is.
 *create name "Loretta"
+*create angelname "Angelo"
+*create formed false
 
 *comment ---------------- THE ANGEL ----------------
 *comment Three opposed pairs. High valor IS low patience: one slider, two names.
