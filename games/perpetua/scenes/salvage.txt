@@ -1,3 +1,404 @@
-*comment placeholder
-Chapter placeholder.
+*comment ==================== CHAPTER SEVEN — SALVAGE ====================
+*comment Action. Nerve's moment of glory. Strain cashes in. Budget: 15 choices,
+*comment 13 tests, and the first tests of every relationship stat.
+*comment Ledger: Kem Station, Concord member colony refinery, 411 aboard, in
+*comment orbit over the gas giant Kem. Station chief Ovan Rask, 44. Primary
+*comment hydrogen separator failure. Perpetua holds 200 in an emergency.
+
+**KEM STATION. SEPARATOR FAILURE. FOUR HUNDRED AND ELEVEN ABOARD. SIX HOURS.**
+
+You are four days out of Ossa and the message is nineteen minutes old.
+
+Kem Station is a refinery: eleven thousand tonnes of pipework in orbit over a gas giant, cracking hydrogen for a Concord member colony of ninety thousand people on the moon below, who cannot heat their houses without it. It has three habitat rings and four hundred and eleven people and it has just lost its primary separator.
+
+${xoname} has the arithmetic before you ask, because ${xothey} always does now.
+
+"Two hours at flank. The *Perpetua* holds two hundred in an emergency lift — two hundred and forty if we vent the laboratory decks and put people in the corridors. There is no other ship inside eleven days."
+
+Four hundred and eleven. Two hundred and forty.
+
+*page_break
+
+*choice
+  #Flank speed. Whatever it costs her.
+    *set nerve %+12
+    *set strain +12
+    *set rel_eng %-6
+    "Flank, Mister Beye."
+    *if (article_nine = "charged")
+      Except that it is not Mister Beye any more; it is a lieutenant from the second watch who is competent and careful and eleven per cent slower than the young man you handed to a Board at Marl, and you notice, and you make yourself stop noticing.
+      *set crew %-4
+    The *Perpetua* is twenty-six years old and she goes, and the number two coolant loop stops whistling at the fifty-first minute, which is the sound of a ship telling you what she thinks.
+    *goto kem_arrive
+  #Flank — and start venting the laboratory decks now.
+    *set nerve %+10
+    *set rule %+8
+    *set strain +9
+    Flank speed and a working party stripping the laboratory decks in transit, so that when you arrive you are already a lifeboat and not a survey ship.
+
+    It costs you the entire scientific fit of the *Perpetua*, which goes into the number three hold in ninety minutes by people who are being careful and then, at the eleventh minute, stop being careful.
+    *set rel_eng %-4
+    *set crew %+8
+    *goto kem_arrive
+  #What is the fastest speed ${engname} will stand behind?
+    *set rule %-10
+    *set strain +6
+    *set rel_eng %+10
+    You ask for the number ${engthey} will sign, and get it, and it is two hours and eleven minutes.
+    *if (strain > 34)
+      ${engThey} adds: "And Captain — she has taken a great deal this year. That number is smaller than it was in the spring and I would like you to know that I know why."
+    *goto kem_arrive
+
+*label kem_arrive
+*page_break
+
+*comment ---------------- Ovan Rask ----------------
+
+Kem Station is lit up like a city and leaking from four points along its spine, and the whole of it is turning very slowly, and there is a plume off the number one separator hall that goes out sixty kilometres before it thins.
+
+**Ovan Rask** is the station chief. He is forty-four, he has been here eleven years, and he is on your screen inside two minutes with soot on his face.
+
+"Commander. Thank you for coming. We are not evacuating."
+
+*page_break
+
+He has a case and he makes it fast, because he has six hours.
+
+If the station is abandoned, the separator hall goes, and if the separator hall goes the whole refinery is scrap; and ninety thousand people on the moon below burn hydrogen to stay alive through a winter that is four months long and starts in nine weeks. Rebuilding takes three years. The colony does not have three years of anything.
+
+He wants to fight the fire. He wants to put every person he has into the separator hall and hold it, and he wants your fire suppression and your people, and he is asking, formally, on the record, as the senior Concord official present.
+
+*if (sec = "oyelaran")
+  Oyelaran, quietly: "Captain, he is not wrong about the winter and he is a station chief, not a fire officer. Somebody in that hall is going to have to tell him when to stop, and it will not be him."
+*if (sec = "whitlow")
+  Whitlow, quietly: "He has been awake for thirty hours and he has just done a very large sum in his head. I would like somebody to check it who is not him."
+*if (sec = "mott")
+  Mott, quietly: "He is afraid of the wrong thing. That is not a criticism. It is a fact about him that you will need in an hour."
+
+*choice
+  #"Chief, I am evacuating your non-essential personnel. Now. Argue while they board."
+    *set nerve %+12
+    *set rule %+12
+    *set crew %+8
+    You do not wait for him to finish. You start the lift while he is still making his case, and you tell him he may go on making it, and he does, all the way through, while three hundred and eleven people who are not firefighters go into your holds.
+
+    It is rude, it is correct, and it saves you ninety minutes that turn out later to be the whole margin.
+    *set standing %+6
+    *goto kem_plan
+  #"Show me the hall. Then I will decide."
+    *set rule %+6
+    *set nerve %-4
+    *set candor %+6
+    You go across with ${secname} and you look at it yourself: eleven metres of separator gallery with the deck plating already blue, and forty people in bad suits doing something brave and disorganised, and Rask's own fire chief standing at the door doing arithmetic with his hands.
+
+    It takes fourteen minutes. You come back knowing exactly what you are dealing with, and fourteen minutes poorer.
+    *set strain +2
+    *goto kem_plan
+  #"Chief — how many of the four hundred and eleven do you actually need?"
+    *set rule %-8
+    *set candor %+10
+    *set crew %+10
+    Rask stops. Nobody has asked him that. He has been holding the whole station in his head as one object for thirty hours.
+
+    He works it out on the screen with a soot-black finger: forty-one to fight the fire, nineteen to run the station, eleven for the reactor. Seventy-one.
+
+    "Then three hundred and forty of your people are coming aboard my ship," you say, "and seventy-one are staying, and now we are having the same argument instead of two different ones."
+    *set rel_xo %+8
+    *set standing %+8
+    *goto kem_plan
+
+*label kem_plan
+*page_break
+
+*comment ---------------- The hall ----------------
+
+The number one separator hall is on fire in a way that is not really fire: a hydrogen flame at that pressure is nearly invisible and it cuts.
+
+The problem is a valve. There is a manual isolator eleven metres inside the hall, behind the gallery, which was designed to be reachable and is now on the wrong side of a plume, and if somebody gets to it the hall stops burning in ninety seconds and the refinery is saved. If nobody gets to it, the hall burns for another four hours and takes the spine with it.
+
+Rask's fire chief will not send anyone. He is right not to.
+
+*if (eng = "osimo")
+  Osimo has the station schematic up and one thick finger on it. "There's a service crawl under the gallery deck. It's for a man with a lamp, not a man in a hard suit." He looks up. "I've been a man with a lamp."
+*if (eng = "kallas")
+  Kallas is talking at nine syllables a second. "There's a crawlway, it's under the gallery, it's rated for maintenance access which means it's rated for someone smaller than me, and before anybody says anything, yes, I have measured, and no, I have not measured myself, I have measured the crawlway."
+*if (eng = "dorr")
+  "I am sorry," says Dorr. "There is a way in. There is a service crawl under the gallery deck. I would rather not have found it and I have found it, and now you know, and I apologise for that as well."
+
+*page_break
+
+*comment ---------------- Nerve's moment of glory ----------------
+
+Somebody is going to go into a service crawl under a burning separator gallery to reach a manual isolator eleven metres in.
+
+*choice
+  #I go.
+    *set nerve %+16
+    *set crew %+6
+    *set standing %-6
+    *set kem_pc true
+    You are the master of a Concord Survey vessel and there are eleven other qualified bodies within nine metres of you, and you go anyway, and every single argument against it is correct.
+
+    ${xoname} says one sentence for the record. You do not hear the end of it.
+    *set rel_xo %-8
+    *goto kem_crawl
+  #${engname} goes. It is ${engtheir} trade.
+    *set rule %+10
+    *set nerve %+6
+    *set kem_eng true
+    ${engname} goes, because ${engthey} found it and knows it and is the only person aboard who will recognise the isolator by feel in no light at all.
+
+    You watch a hundred and eleven seconds of nothing on a hardline and find out what that is like.
+    *set rel_eng %+12
+    *goto kem_crawl
+  #Ask for a volunteer. Whoever it is, they hear the odds first.
+    *set rule %-8
+    *set candor %+12
+    *set crew %+10
+    You put the actual numbers on the open channel — the plume, the crawl, the ninety seconds, the fact that the gallery deck above is at a temperature that the suits are rated for and not qualified for — and then you ask.
+
+    You get nine volunteers in eleven seconds, three of them from Kem Station's own people, and you have to choose, which is worse than being asked.
+    *set kem_vol true
+    *set rel_sec %+10
+    *goto kem_crawl
+  #Nobody goes. Pull everyone off and let the hall burn.
+    *set nerve %-18
+    *set crew %+16
+    *set rule %+10
+    *set kem_burn true
+    "Chief Rask, I am ordering your people out of the hall. All of them. Now."
+
+    He argues. He argues for four minutes on an open channel in front of both crews and he is not wrong about a single fact, and at the end of it you say, "Chief. Ninety thousand people will be cold. Forty-one people are eleven metres from a hydrogen flame. I am not trading the second for the first and you may say whatever you like about it afterwards."
+
+    He gets his people out. It takes eleven minutes and one of them has to be carried.
+    *goto kem_burn_out
+
+*label kem_crawl
+*page_break
+
+One hundred and eleven seconds in the crawl.
+
+*if (kem_pc)
+  It is eleven metres and it takes a very long time. The hard suit is rated to nine hundred degrees for four minutes and the number on your wrist is nine hundred and forty and you have been in for two.
+
+  At the eighth metre the deck above you makes a noise like a ship's plate settling, and you find out — for the second time this year, and this time with nobody listening — exactly what your own voice sounds like.
+
+  The isolator is a wheel. It is where the schematic said it would be. It takes eleven full turns and the last four are with both hands and your shoulder against the bulkhead, and then the noise overhead changes pitch and goes away.
+
+  Ninety seconds later the hall is out.
+
+  *if (nerve > 70)
+    You come back out of the crawl on your own feet, and there are about thirty people at the gallery door, and not one of them cheers, because they have all just watched their commanding officer do something that no regulation in the Survey permits, and the silence is the loudest thing you will ever hear.
+    *set standing %+14
+    *set rel_sec %+10
+    *set rel_med %+8
+  *if (nerve <= 70)
+    You come out of the crawl and your legs do not work and two ratings take you under the arms without being told, and you are extremely angry about that for about six seconds and then you are not.
+    *set standing %+8
+  *achieve nerve
+
+*if (kem_eng)
+  ${engname} goes in with a lamp and a wrench and no commentary at all, and the hardline carries breathing and nothing else for ninety-one seconds, and then a grunt, and then eleven turns of a wheel counted out loud in a voice that is being kept level on purpose.
+
+  Ninety seconds later the hall is out.
+
+  ${engThey} comes out with a suit that will never be used again and a burn across the back of one hand that ${medname} will be unhappy about for six weeks.
+  *if (eng = "osimo")
+    Osimo says, "Told you. A man with a lamp." Then he sits down on a crate and does not get up for eleven minutes, and nobody comments.
+  *if (eng = "kallas")
+    Kallas talks for four solid minutes at nine syllables a second about the isolator's thread pitch and does not once mention being in a crawlway under a fire, and then stops mid-sentence and says, "I would like to sit down," and does.
+  *if (eng = "dorr")
+    Dorr says, "I am sorry, that took eleven seconds longer than it should have," and everybody in the gallery looks at him, and he understands, visibly, in real time, that this was the wrong thing to say and that nobody minds.
+  *set rel_eng %+14
+  *set standing %+10
+
+*if (kem_vol)
+  The volunteer is a Kem Station pipe fitter named Ines Halloway, thirty-six, who has been through that crawl eleven times in eleven years with a lamp, and who says, when you ask why she is volunteering, "Because I know where the wheel is and you don't."
+
+  She is in for a hundred and four seconds. The hall goes out ninety seconds after she reaches it.
+
+  She comes out with a cracked faceplate and second-degree burns to one forearm and she is fine, and the thing you remember is that she is furious — not at you, at the valve, which she has told the station council about twice.
+  *set standing %+8
+  *set rel_sec %+8
+
+*set strain +5
+*goto kem_after
+
+*label kem_burn_out
+*page_break
+
+The number one separator hall burns for four hours and eleven minutes and then takes the spine.
+
+Kem Station does not explode; refineries do not explode, they come apart in a slow and undramatic way over a day and a half, venting, while everybody watches from a Survey ship's holds. By the third day it is eleven thousand tonnes of scrap in a decaying orbit and the Concord will spend four years arguing about who pays to clear it.
+
+Four hundred and eleven people are alive. Every single one.
+
+Ninety thousand people on the moon below will burn stored hydrogen through a four-month winter, and then rationed hydrogen through the next one, and the Concord will get a temporary plant up in the second year. The excess mortality figure, when it is published eleven months later, is two hundred and forty.
+
+Ovan Rask does not speak to you again.
+
+*set kem_dead 240
+*set standing %-10
+*set crew %+8
+*goto kem_after
+
+*label kem_after
+*page_break
+
+*comment ---------------- The ship ----------------
+*comment Strain cashes in here. This is the price of every fast decision made
+*comment since Sarn Basin.
+
+The *Perpetua* has three hundred and forty people in her corridors and she has been at flank twice this year and she has a shuttle bay with a written-off *Tern* in it, and on the second day out from Kem she tells you what she thinks.
+
+*if (strain >= 45)
+  The number two coolant loop lets go at 0340 in the aft corridor, where the deck plating rings dead underfoot, which is where it has been going to let go since before you came aboard and which is why the deck plating rings dead underfoot.
+
+  It takes out the loop, eleven metres of run, and the aft laboratory bulkhead. Nobody is killed. Two ratings are burned. The ship loses forty per cent of her heat rejection and has to run at a third of cruise for eleven days, and ${engname} sleeps in the engine spaces for six of them.
+
+  You are nine days from a yard at full speed. You are twenty-seven at a third.
+  *set strain +10
+  *set rel_eng %-4
+*if (strain >= 28) and (strain < 45)
+  The number two coolant loop cracks — does not fail, cracks — at 0340, and ${engname} gets a clamp on it in nine minutes and then stands looking at it for a long time.
+
+  "She will hold to Marl," ${engthey} says. "She will not hold to Marl and then anywhere else. I want that in writing from me to you, Captain, not the other way round."
+  *set strain +4
+*if (strain < 28)
+  The number two coolant loop whistles.
+
+  That is all it does. ${engname} has been up to it four times in a fortnight and the seals are original and it is twenty-six years old and it whistles, and on the second day out from Kem, with three hundred and forty people asleep in the corridors, that thin clean kettle-note under the deck is the most reassuring sound on the ship.
+  *set rel_eng %+6
+
+*page_break
+
+*choice
+  #Signal Central. Full damage report, and I am requesting relief.
+    *set candor %+14
+    *set rule %+6
+    *set standing %-8
+    You transmit the actual condition of your ship to Concord Central and ask, in writing, for a relief vessel in the Cold Reach.
+
+    There is no relief vessel in the Cold Reach. There will not be one. You know that, and Adjo knows it, and you send it anyway, because the only thing worse than an unanswered request is an unmade one, and because in eleven months somebody is going to read the file.
+    *set rel_xo %+8
+    *goto kem_crewbeat
+  #Signal Central. She is fit for patrol.
+    *set candor %-12
+    *set nerve %+8
+    *set standing %+6
+    You report the ship fit for patrol, which is true in the sense that she is moving and false in every sense that matters, and you continue the circuit.
+
+    ${xoname} countersigns.
+    *if (xo = "marand")
+      Marand countersigns and writes in her own notebook, in her own hand, *fit for patrol*, with the date, and shows you nothing.
+      *set rel_xo %-6
+    *if (xo = "ferreo")
+      "I would sign that too," Ferreo says, "and I want you to know that is not reassurance."
+    *if (xo = "tanaka")
+      "Fit for patrol," Tanaka-Osei repeats. "Twelve years in freight, I signed that about nine hundred times. Twice it was true." She signs it.
+    *goto kem_crewbeat
+  #Ask ${xoname} what ${xothey} would put in it, and send that.
+    *set rule %-14
+    *set candor %+8
+    *set rel_xo %+14
+    You hand your first officer a blank damage report and tell ${xothem} to write what ${xothey} actually thinks and that you will send it unaltered over your own name.
+
+    ${xoname} takes four hours.
+    *if (xo = "marand")
+      What comes back is eleven hundred words, exact, unsparing about the ship and entirely silent about the master, and at the bottom: *The above is the condition of the vessel. The decisions that produced it were sound and I concurred in all but one, which is not material.* You never find out which one.
+    *if (xo = "ferreo")
+      What comes back is nine hundred words that manage to be completely truthful and to make four separate people at Central feel personally responsible for the state of your coolant loops, and you cannot find the seam anywhere.
+    *if (xo = "tanaka")
+      What comes back is four hundred words with no adjectives in it at all, and a last line that says: *This ship has done more this year than she was built to do and there is no line on the form for that, so I am putting it here.*
+    *goto kem_crewbeat
+
+*label kem_crewbeat
+*page_break
+
+*comment ---------------- Three hundred and forty guests ----------------
+*comment Relationship reaction block. Every rel_ stat gets read at least once.
+
+Three hundred and forty refugees on a ship built for a hundred and twelve is not a crisis. It is eleven days of queueing.
+
+*if (rel_med > 62)
+  ${medname} runs the corridors like a ward and does not lose anybody, including two births and one seventy-one-year-old with a heart that ${medthey} should not have been able to keep going for eleven days, and does.
+*if (rel_med <= 62)
+  ${medname} runs the corridors correctly and reports twice daily and does not lose anybody, and at no point in eleven days do the two of you have a conversation that is not a report.
+
+*if (rel_sec > 62)
+  ${secname} works out on the second day that the fights will start at the water points and not at the food, and moves the water points, and there are no fights.
+*if (rel_sec <= 62)
+  There are four fights, all of them at the water points, all of them on the fourth day, and ${secname} stops all four and files all four correctly.
+
+*if (rel_eng > 62)
+  ${engname} finds eleven hundred litres of hot water a day that the ship's specification says does not exist, and will not tell anybody where it comes from, and the whole of the number two hold is grateful and slightly frightened.
+*if (rel_eng <= 62)
+  There is not enough hot water. There is never going to be enough hot water. ${engname} says so on the first day and is right for eleven days.
+
+*if (chap != "none")
+  *if (rel_chap > 62)
+    ${chapname} is in the corridors for eleven days and does not appear to sleep, and by the fourth day three hundred and forty people from Kem Station know ${chaptheir} name, and by the eighth day they are bringing ${chapthem} their arguments instead of bringing them to ${secname}, which halves ${secname}'s workload and is never once discussed.
+    *set crew %+6
+  *if (rel_chap <= 62)
+    ${chapname} does the work, competently, in the corridors, for eleven days. Three hundred and forty people from Kem Station do not learn ${chaptheir} name.
+*if (chap = "none")
+  There is nobody whose job it is to be in the corridors, so ${medname} does it, and ${secname} does it, and on the sixth day you find your first officer sitting on the deck in the number two hold at 0200 explaining the Concord's compensation schedule to a woman who has lost a house, and ${xoname} looks up at you with an expression that says *this is not my trade* and goes on doing it.
+  *set rel_xo %+6
+  *achieve empty_berth
+
+*page_break
+
+*choice
+  #Walk the corridors every night. All eleven of them.
+    *set crew %+12
+    *set nerve %+4
+    You walk it at 0200 every night for eleven nights, all three holds, and you talk to whoever is awake, and by the fourth night people are waiting up for you, which is the point at which ${xoname} tells you to stop doing it at the same time every night.
+
+    You go on doing it at the same time every night.
+    *set rel_xo %-4
+    *set standing %+6
+    *goto kem_end
+  #Stay off the decks. Let ${xoname} run it. That is what ${xothey} is for.
+    *set rule %+10
+    *set crew %-8
+    *set rel_xo %+10
+    You delegate it completely and do not interfere once, and ${xoname} runs eleven days of refugee traffic on a survey ship without a single incident that reaches you.
+
+    It is excellent command practice and it is the correct use of a first officer, and three hundred and forty people leave your ship at Marl Colony without having any idea what the master of it looked like.
+    *goto kem_end
+  #Put Rask to work.
+    *set rule %-8
+    *set candor %+10
+    *set crew %+8
+    *if (kem_burn)
+      Ovan Rask has lost his station and has not spoken to you in six days, and you send for him and give him three hundred and forty of his own people to run in your corridors, and he takes it, and he does it well, and he still does not speak to you.
+
+      On the ninth day he says, "You were right about the forty-one." That is the whole conversation. It is more than you expected and less than you wanted.
+      *set standing %+6
+    *if (kem_burn = false)
+      Ovan Rask has a station to go back to and three hundred and forty people in your corridors who used to be his, and you put him in charge of them, which is not in any regulation, and which means that for eleven days a Concord station chief runs a Concord Survey vessel's lower decks.
+
+      It works perfectly. ${xoname} finds it deeply irregular and says so twice and then stops saying it.
+      *set standing %+4
+    *goto kem_end
+
+*label kem_end
+*page_break
+
+The orders are waiting at Marl Colony.
+
+They are four lines long and they are signed by Ceron Adjo, Delegate for the Cold Reach, who came up from the surface in person to hand you a folder in a graving dock at Sarn Basin eight months ago.
+
+**CS PERPETUA. PROCEED MARL COLONY. MASTER TO ATTEND SURVEY BOARD OF INQUIRY, 4 CONCORD, IN PERSON.**
+**ASSESSOR: R. IVANESCU.**
+**MATTERS: SEDGE; KEM; AND SUCH OTHER MATTERS AS THE BOARD SHALL DETERMINE.**
+
+*if (article_nine != "charged") and (kept_secret)
+  *comment The player is carrying something.
+  *And such other matters as the Board shall determine.*
+
+  You read that line four times.
+*if (article_nine = "charged")
+  You have already sent this Board one of your own people. Nineteen days ago they took forty minutes over him.
+
 *finish
