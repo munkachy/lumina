@@ -33,15 +33,14 @@ body{
 .frame::before{content:"";position:absolute;inset:0;
   border:9px solid var(--came);
   box-shadow:inset 0 0 0 1px rgba(227,171,72,.20), inset 0 0 60px rgba(0,0,0,.55)}
-.arch{position:absolute;top:10px;left:50%;transform:translateX(-50%);
-  width:min(38rem,88%);height:auto;opacity:.42}
+
 main{max-width:var(--col);margin:0 auto;padding:5.6rem 1.5rem 2rem;position:relative;z-index:1}
 
 /* ---------- prose ---------- */
 p{margin:0 0 1.2rem;text-wrap:pretty}
 strong{font-weight:600;color:var(--amber)}
 em{font-style:italic}
-.hr{width:5.5rem;height:14px;margin:1.9rem auto;opacity:.55}
+.hr{height:.55rem}
 figure{margin:1.8rem 0}
 figure img{width:100%;display:block}
 .glazed{position:relative;border:1px solid var(--came);
@@ -139,13 +138,14 @@ button.cont:hover{border-color:var(--amber);color:var(--amber);
   margin-bottom:.28rem;font-style:normal;letter-spacing:.1em}
 
 /* ---------- stat flash ---------- */
-.flash{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);z-index:70;
-  display:flex;flex-direction:column;gap:.35rem;align-items:center;pointer-events:none;
-  opacity:0;transition:opacity .25s}
+.flash{position:fixed;left:50%;top:2.7rem;transform:translateX(-50%);z-index:70;
+  display:flex;flex-direction:row;flex-wrap:wrap;gap:.35rem;justify-content:center;
+  pointer-events:none;opacity:0;transition:opacity .3s}
 .flash.show{opacity:1}
-.flash div{font-family:"IBM Plex Mono",monospace;font-size:.86rem;letter-spacing:.14em;
-  text-transform:uppercase;padding:.35rem .9rem;background:rgba(0,0,0,.72);
-  border:1px solid currentColor;animation:rise .5s ease-out}
+.flash div{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.14em;
+  text-transform:uppercase;padding:.32rem .8rem;background:var(--lead);
+  border:1px solid currentColor;box-shadow:0 4px 18px rgba(0,0,0,.7);
+  animation:rise .45s ease-out}
 @keyframes rise{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
 .toast{position:fixed;bottom:4.6rem;left:50%;transform:translateX(-50%);z-index:70;
   background:var(--glass2);border:1px solid var(--amber);color:var(--amber);
@@ -178,14 +178,6 @@ p.edited{border-right:2px solid var(--verd);padding-right:.55rem}
 </style>
 
 <div class="frame">
-  <svg class="arch" viewBox="0 0 640 76" aria-hidden="true">
-    <path d="M4 76 L4 46 Q4 14 48 14 L296 14 L320 3 L344 14 L592 14 Q636 14 636 46 L636 76"
-      fill="none" stroke="#e3ab48" stroke-width="1.6" stroke-linejoin="round"/>
-    <path d="M18 76 L18 50 Q18 27 52 27 L300 27 L320 18 L340 27 L588 27 Q622 27 622 50 L622 76"
-      fill="none" stroke="#e3ab48" stroke-width="0.9" stroke-linejoin="round" opacity=".5"/>
-    <circle cx="320" cy="40" r="7" fill="none" stroke="#e3ab48" stroke-width="0.9" opacity=".55"/>
-    <circle cx="320" cy="40" r="2.4" fill="#e3ab48" opacity=".5"/>
-  </svg>
 </div>
 <div class="crumb"><span id="cwhere">—</span><span id="cedit"></span></div>
 <main id="stage"></main>
@@ -212,7 +204,8 @@ function parse(src){
     const t=raw.replace(/\t/g,'  ');
     const ind=t.length-t.replace(/^ +/,'').length, s=t.trim();
     if(!s){out.push({ind,k:'blank',line:i});return;}
-    if(s[0]==='*'){const m=s.match(/^\*([a-z_]+)\s?(.*)$/);out.push({ind,k:'cmd',c:m?m[1]:'',a:m?m[2]:'',line:i});}
+    const cm = s[0]==='*' ? s.match(/^\*([a-z_]+)\s?(.*)$/) : null;
+    if(cm){out.push({ind,k:'cmd',c:cm[1],a:cm[2],line:i});}
     else if(s[0]==='#'){out.push({ind,k:'opt',a:s.slice(1).trim(),line:i});}
     else out.push({ind,k:'text',a:s,line:i});
   });
@@ -302,7 +295,7 @@ function step(pushHistory){
       while(j<a.length){const m=a[j];
         if(m.k==='blank'){j++;continue;}
         if(m.ind<=n.ind)break;
-        if(m.k==='opt'){if(oi===null)oi=m.ind;if(m.ind===oi)opts.push({label:m.a,body:j+1});}
+        if(m.k==='opt'){if(oi===null)oi=m.ind;if(m.ind===oi)opts.push({label:m.a,body:j+1,line:m.line,scene:S.scene});}
         j++;}
       S.choices={opts,after:j};return render();}
     S.pc++;
@@ -333,7 +326,7 @@ function flashDeltas(before){
   }
   if(!rows.length)return;
   const f=$('flash'); f.innerHTML=rows.join(''); f.classList.add('show');
-  setTimeout(()=>f.classList.remove('show'),1250);
+  setTimeout(()=>f.classList.remove('show'),2600);
 }
 function keyOf(n){return n.scene+':'+n.line;}
 function textFor(n){const e=S.notes[keyOf(n)];return (e&&e.replacement)?e.replacement:n.v;}
@@ -342,7 +335,9 @@ function render(){
   if(S.edit&&S.stack.length>1){
     const b=document.createElement('button');b.className='backbtn';b.textContent='◂ previous screen';
     b.onclick=goBack;st.appendChild(b);}
+  let lastWasBr=false;
   S.page.forEach(n=>{
+    if(n.t!=='br') lastWasBr=false;
     if(n.t==='text'){
       const p=document.createElement('p'), k=keyOf(n), e=S.notes[k];
       p.innerHTML=inline(textFor(n));
@@ -351,9 +346,8 @@ function render(){
       if(S.edit)p.onclick=()=>openNote(k,n.v);
       st.appendChild(p);
     } else if(n.t==='br'){
-      const d=document.createElement('div');d.className='hr';
-      d.innerHTML='<svg viewBox="0 0 90 14" width="90" height="14"><path d="M4 7h30M56 7h30" stroke="#e3ab48" stroke-width="1" opacity=".5"/><path d="M45 1l6 6-6 6-6-6z" fill="none" stroke="#e3ab48" stroke-width="1" opacity=".7"/></svg>';
-      st.appendChild(d);
+      if(!lastWasBr){const d=document.createElement('div');d.className='hr';st.appendChild(d);}
+      lastWasBr=true; return;
     } else if(n.t==='img'){ st.appendChild(imageEl(n));
     } else if(n.t==='chart'){ st.appendChild(chartEl());
     } else if(n.t==='input'){
@@ -370,9 +364,20 @@ function render(){
   if(S.choices){
     const w=document.createElement('div');w.className='choices';
     S.choices.opts.forEach(o=>{
-      const b=document.createElement('button');b.className='opt';
-      b.innerHTML=inline(o.label)+(S.edit?'<span class="delta">'+esc(deltaText(o.body)||'—')+'</span>':'');
-      b.onclick=()=>pick(o);w.appendChild(b);});
+      const k=o.scene+':'+o.line, ov=S.notes[k];
+      const lab=(ov&&ov.replacement)?ov.replacement:o.label;
+      const row=document.createElement('div');row.style.cssText='display:flex;gap:.4rem;align-items:stretch';
+      const b=document.createElement('button');b.className='opt';b.style.flex='1';
+      b.innerHTML=inline(lab)+(S.edit?'<span class="delta">'+esc(deltaText(o.body)||'—')+'</span>':'');
+      b.onclick=()=>pick(o);
+      row.appendChild(b);
+      if(S.edit){
+        const e=document.createElement('button');e.className='opt';e.style.cssText='flex:0 0 2.6rem;text-align:center;border-left-color:var(--ink3)';
+        e.innerHTML='&#9998;'; e.title='edit this option\'s wording';
+        e.onclick=ev=>{ev.stopPropagation();openNote(k,o.label);};
+        row.appendChild(e);
+      }
+      w.appendChild(row);});
     st.appendChild(w);
   } else if(S.scene){
     const b=document.createElement('button');b.className='cont';b.textContent='continue';
