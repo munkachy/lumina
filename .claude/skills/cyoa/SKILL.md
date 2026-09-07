@@ -247,6 +247,56 @@ If a line withholds, the reader must be able to describe what is being withheld
 character something concrete to say instead — a date, a number, a name, an
 object — and let the withholding sit in what they do not bring up.
 
+## Write the skeleton before you write a word
+
+**Do this first, every time.** It is the single highest-value habit in this
+skill and it was learned the expensive way: four rounds of revision on a
+finished story, every one of them a motivation problem, none of them a prose
+problem.
+
+The reason prose hides motivation is that prose *encodes* it — in mood, gesture,
+subtext — and encoded motivation reads as complete to the person who already
+knows the answer. A skeleton forces the answer into a separate short document
+where it can be checked, argued with and rejected **before fifteen thousand
+words are resting on it.**
+
+It also changes what the editor's job is. A reader who can only find problems by
+playing five thousand words of finished prose is doing archaeology. A reader
+handed two pages can say *why would she do that?* in five minutes, at the point
+where the answer is cheap to change.
+
+### The format — one block per scene, about 120 words
+
+```
+SCENE 4 · THE SACRISTY · 12:20 a.m.
+  Here:      Ondrej alone; Marek on the telephone from the car park
+  I want:    to stop the phone ringing before she goes to answer it
+  In my way: the phone is at the far end, past the sanctuary, and she is closer
+  He wants:  to find out why nothing has come out of that door in ninety minutes
+  Changes:   he learns his own name exists; the shelf of registers is now visible
+  Choices:   answer it / let it ring          ← both are ways of protecting her
+  Sets:      —
+```
+
+Rules for the block:
+
+- **"I want" is a sentence beginning *I want to…* that can be played in the next
+  sixty seconds.** *I want to be forgiven* is a super-objective and belongs at
+  the top of the document, once. *I want to reach the phone before she does* is
+  a scene want.
+- **Every named person in the scene gets a want**, including the ones who barely
+  speak. A character with no want in the room is furniture.
+- **"Changes" must not be empty.** A scene where nothing moves is a corridor;
+  merge it into a neighbour.
+- **The options are tactics for the same want.** If they are not, either the
+  want is wrong or you have two scenes.
+
+Top of the document: the **super-objective** in one sentence, the cast with one
+line each, and the world's rules in a short list. That is the whole skeleton for
+a 12,000-word story: about two pages.
+
+Get it approved. Then write.
+
 ## Objective, obstacle, tactic — and why this form is stricter about it
 
 Actors solve exactly the problem this story keeps failing. Before a scene they
@@ -328,6 +378,63 @@ Four things that actually work:
 4. **Let branches contradict each other about small things and never about
    large ones.** Small inconsistencies read as different days. A large one reads
    as an author who lost track.
+
+## Building something: the third mode
+
+Some stories are about assembling a thing and then finding out whether it was
+the right thing — a robot, a ship, a defence. *Choice of Robots* is the
+best-known: the robot carries its own attributes (Autonomy, Military, Empathy,
+Grace) which are **separate from the player's**, and the ending is read off the
+machine rather than off the person.
+
+That separation is the whole trick, and it means a build game does **not** need
+opposed character stats. What it needs is **inventory** — discrete facts about
+what exists in the world. *The wall is reinforced. The well runs. The tower has
+a sightline.* Those are not stats; they are the same kind of object as *you have
+the silver key*, and the CYOA tradition has always carried them.
+
+So: no numbers, no bands, no fairmath. Eight to twelve flags, each one a thing
+you could photograph.
+
+### The shape
+
+    LEARN     what can be built, and what can go wrong        ~25%
+    BUILD     spend a limited budget; you cannot have it all  ~35%
+    ROLL      a crisis arrives                                 ~5%
+    HOLD      it tests what you built                         ~30%
+    AFTER     read the result off the inventory, by name       ~5%
+
+### The four ways it fails, and the fix for each
+
+1. **The lottery.** The player builds blind, the crisis is random, and losing
+   feels arbitrary. **Fix: telegraph every crisis during the LEARN phase**, and
+   let looking cost the same currency as building. *Work spent scouting is work
+   not spent on the wall* is the best decision in the genre, because it makes
+   the roll a risk the player took rather than a trick played on them.
+2. **The dominant build.** One combination wins everything, so there is no
+   choice after the first playthrough. **Fix: make each crisis test a different
+   pair of projects**, and never let one project appear in every pair.
+3. **The dead build.** A player's whole investment is irrelevant to the crisis
+   they drew. **Fix: partial credit.** Every project does something against
+   everything; specialisation changes the degree, not the kind. Nobody should
+   watch their eight days of work do literally nothing.
+4. **The invisible result.** The player cannot see why they survived. **Fix:
+   show the working.** At resolution, name each thing they built and say what it
+   did, in order, including the ones that did not help.
+
+### Keep the moral choices off the build
+
+The decisions that matter most — who comes inside, who is left out, who is told
+the truth — must not be solvable by construction. Build well and you still have
+to choose who goes on the last truck. That is what stops a build game from being
+a spreadsheet with adjectives, and it is where the story lives.
+
+### Randomness
+
+The engine has no RNG by default; `*rand <var> <lo> <hi>` adds one. Weight the
+draw by what the player learned, so scouting genuinely changes the odds rather
+than merely describing them. A roll the player could not have influenced is not
+a game mechanic, it is weather.
 
 ## Endings
 
