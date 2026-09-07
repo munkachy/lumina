@@ -207,17 +207,32 @@ one person having an argument with himself, and a reader feels it before they
 can name it.
 
 A character's *idiolect* — their own private dialect — is built from levers you
-can set deliberately, one at a time:
+can set deliberately. They are not equally strong, and the strongest two are the
+ones least often used:
 
-| Lever | What to vary |
-|---|---|
-| **Vocabulary** | Trade, schooling, decade. A millwright and a delegate reach for different nouns for the same object. |
-| **Sentence length** | Clipped, or long and joined with *and*. This is the loudest difference and the easiest to hold. |
-| **Grammar** | Contractions or none. Dropped subjects. Whether they finish sentences. |
-| **How they answer** | Straight, sideways, with a fact, with another question, or by changing the subject. |
-| **What they never say** | The strongest lever and the least used. A character with no word for *grace*, or who cannot say *I'm frightened*, is characterised every time the gap shows. |
-| **Openers and fillers** | "Well." "Right." "I'm not going to pretend." Two per character, no more. |
-| **Register under stress** | Some people get shorter. Some get formal. Some start doing arithmetic. |
+| Lever | What to vary | Strength |
+|---|---|---|
+| **Schooling** | Which word they reach for first. A man who left school at fourteen does not say *asymmetrically*; he says *lopsided*, or he points. | strongest |
+| **First language** | What English they learned, when, and from whom. Someone who learned it as an adult from books has no idioms — idioms are the last thing you get and the first thing you lose — and slightly foreign word order that never quite went. | strongest |
+| **What they talk about** | A nurse describes bodies. A machinist describes tolerances. A widow describes what things cost. People reach for their own trade to explain everything. | strong |
+| **Sentence length** | Clipped, or long and joined with *and*. Loud, easy to hold. | strong |
+| **How they answer** | Straight, sideways, with a fact, with a question, by changing the subject. | strong |
+| **What they never say** | A character with no word for *grace*, or who cannot say *I'm frightened*, is characterised every time the gap shows. | strong |
+| **Region** | Real markers, not phonetic spelling: a Pittsburgher says a shirt *needs washed* and tells you to *redd up*. Two per character. | medium |
+| **Openers** | "Well." "Right." Two per character, no more. | medium |
+| **Contractions** | Weak, and a trap. Stripping them is television's stock signal for *foreign* or *not human*, and a reader who has seen that trick will feel the machinery. Use it only if you can say why this person, in this life, speaks that way. | weakest |
+
+**Do not write accents phonetically.** *Vould you like ze soup* is a costume, not
+a voice, and it patronises the speaker. Foreignness lives in grammar and
+idiom — a missing article, a preposition that is nearly right, a proverb
+translated too literally — never in misspelling.
+
+**The narration is a voice too.** In second person the narration *is* the
+viewpoint character's mind, so his schooling binds it. If he left school in
+1918 to go into the mill, his interior monologue cannot reach for *geometry*,
+*asymmetrically*, *arithmetic* as figures of speech. This is the commonest way
+a carefully-voiced character is undone: the dialogue is his and the paragraphs
+around it belong to an educated stranger.
 
 **Write the sheet before the dialogue.** One line per character in the ledger,
 naming three levers and one forbidden thing. Then, in revision, read only that
@@ -231,6 +246,41 @@ If a line withholds, the reader must be able to describe what is being withheld
 (see the puzzle test above). If they cannot, the line is decoration. Give the
 character something concrete to say instead — a date, a number, a name, an
 object — and let the withholding sit in what they do not bring up.
+
+## Objective, obstacle, tactic — and why this form is stricter about it
+
+Actors solve exactly the problem this story keeps failing. Before a scene they
+answer three questions, and if they cannot, they cannot play it:
+
+- **Objective.** What do I want, here, in the next minute? Not in life — here.
+- **Obstacle.** What is stopping me?
+- **Tactic.** What am I going to *do* about it?
+
+Stanislavski stacks the scene objectives under a **super-objective**, the thing
+the character wants across the whole story, which every scene want is a local
+version of. Uta Hagen's form of the questions is the practical one: *What do I
+want? What is in my way? What do I do to get it?*
+
+**Here is why a branching story cannot skip this. The reader is the actor.**
+Objective and obstacle are the author's to supply; the tactic is the choice, and
+the choice is the reader's. Hand them a menu without an objective and you have
+asked somebody to play a scene they have not been given — they will pick at
+random, and afterwards they will not know why their character did what he did,
+because neither did you.
+
+So, at every choice:
+
+- **Name the want in the node, in one plain sentence, immediately above the
+  menu.** Not implied by mood. Named.
+- **Name what is in the way**, and make it something in the room.
+- **Make each option a different tactic for the same want.** That is what makes
+  options feel like a decision rather than a fork. Two roads to the same desire
+  beat two unrelated actions every time.
+
+A useful diagnostic: write the want as a sentence beginning *I want to…* and
+check it is a want and not a mood. *I want to be forgiven* is a super-objective
+and cannot be played. *I want to get past the water without being seen from the
+steps* can be played, right now, in this room.
 
 ## Two more rules the form is strict about
 
@@ -361,6 +411,9 @@ Build with `python3 build.py`; check the graph with
    intrigued. Run the four-line check.
 7. **One voice in several mouths.** Strip the tags. If you cannot tell them
    apart, neither can the reader.
+8. **A menu with no objective above it.** The reader is the actor; they can
+   only supply the tactic. Give them the want and the obstacle or the choice is
+   a coin toss they will resent.
 
 ## Sources
 
@@ -370,7 +423,10 @@ Gardner, *The Art of Fiction* (the vivid and continuous dream); Jane Friedman,
 Bransford, *Are You Creating a Mystery or Just Being Vague?* (the puzzle test);
 Emily Short, *Small-Scale Structures in CYOA* (the confirmation-required
 choice, and the rest of the node-level patterns). Dialogue: the idiolect levers
-and the tag-strip test, from the working literature on character voice. Short
+and the tag-strip test, from the working literature on character voice.
+Motivation: Stanislavski's objectives, obstacles and super-objective, and Uta
+Hagen's three questions, borrowed from acting because actors have to solve in
+rehearsal what a reader of this form has to solve at every menu. Short
 fiction: Poe's unity of effect — one sitting, one effect, every line doing
 double duty — and the modern compression tradition that follows from it, with
 the caveat above about compression that carries nothing.

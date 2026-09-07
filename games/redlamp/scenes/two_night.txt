@@ -94,9 +94,23 @@ The phone is on the wall. You pick it up.
 
 You have not heard that word in ninety-four years. It goes through you like the font did.
 
-"You do not remember it," he says. "I know that. You stopped saying it in the winter of 1954, in a rooming house on Wick Avenue in Youngstown, and I have not heard it out of you since. I have kept it. That is one of the two useful things I have done in my life."
+"You will not say it," he says. "I know. You stopped in the winter of 1954, in a rooming house on Wick Avenue in Youngstown. I asked you a question and you began to answer and you stopped in the middle of the first word, and you have not said it since, and I have not made you."
+
+A pause. Forty metres away he does not move.
+
+"You remember the boy perfectly. I am aware of that. You have told me about him for ninety-four years — his mother, the mill, the bell in the tower — and never once as yourself. Always as somebody you knew."
 
 His voice has not aged the way voices age, and there is nothing theatrical in it, and he does not use contractions, because he learned this language formally from a man in about 1890 and it set that way.
+
+"I will tell you why I am still standing here, because you have not asked and you should.
+
+"At eleven o'clock I watched you go through that door. I gave you forty minutes. There is an old woman in there alone and you have not fed in nine days, and forty minutes was generous — the Ondrej I have known since 1931 would have been out of that door by twenty past with his coat straight.
+
+"It is now twenty past twelve. That is an hour and a half. I have stood at a fence in the wet for an hour and a half waiting for a thing to happen that has always happened, and it has not happened, and I do not know why."
+
+A pause.
+
+"That is the only reason I am here myself instead of sending the two on the corner. I want to see what comes out of that door. It has been ninety-four years and you have never once surprised me.
 
 "Now the arithmetic. I am at the fence. I will be at the fence at fourteen minutes past six, which is five hours and fifty-four minutes from now. The two on Braddock Avenue will be at the corner. Nobody is coming through that door.
 
@@ -188,7 +202,7 @@ The sodium light buzzes.
 
 "Of everything," says Marek, without any weight on it at all. "Two wars. Four presidents you had opinions about. The night at the Aliquippa works. Nine hundred sunsets over that river and you watched every one of them and told me twice that it was the only thing worth having."
 
-He is not selling. That is the difficulty. He is doing an inventory, and the inventory is accurate, and there are good things in it.
+He is not selling. That is the difficulty. He is doing a list, and every line of it is right, and there are good things in it.
 
 "And about six hundred people," he says. "Give or take. I have never kept the number and I do not believe you have either."
 
@@ -231,22 +245,28 @@ You pick it up. It is ordinary glass, the kind you get in a restaurant supply ca
 
 You know what was in it before the water. You know exactly what this cup is for: the priest rinses his fingers into it after he has handled the Host, and the water goes down the stone sink into the ground, because even a fragment must not go into a drain.
 
-Here is what you have not looked at for the last hour, because you have been busy.
+Here is what you want, and you have wanted it since you were seven years old on the epistle side with your feet not touching the floor.
 
-You have not fed in nine days.
+*Liek nesmrteľnosti.* The medicine of immortality — the antidote so that we should not die but live. Fr. Kubica said it in Slovak on a Sunday afternoon in about 1911 and you have carried it for a hundred and fourteen years the way a man carries a folded paper in his coat until it comes apart at the creases.
 
-Nine days, and four hours inside a building that has been doing to you since the vestibule what this building does, and every one of those four hours has cost something you do not have. There is a woman in the fourth pew with a bad valve and the only key. There is a man at a fence who will still be at the fence at dawn. Your hands are not steady and have not been since the font.
+You have a kind of not-dying. You did not ask for it, you have had it since April of 1931, and you want it taken off you.
 
-And here, on a ledge, in a rinsing cup somebody meant to wash on Sunday evening, is a thimble of water that was in a room with Him four days ago.
+And there is a medicine for the true kind. It is in this building. It has been in this building the whole time you have been sitting in the back of it.
 
-It will not help. You know that with the part of you that has been going in and out of churches since 1931 and can tell a rinse from a Person at forty metres through a wall.
+*page_break
 
-The other part is not listening. The other part is saying: *it touched Him, and it is right there in your hand, and there is not one person alive who would ever have to know.*
+What is in the way is thirty-one metres of centre aisle and three steps, and you have not been able to do it. Not tonight, not in 1954, not once. You got halfway up that aisle in about 1962 and went out through a window.
+
+So you are in the back room instead, at one in the morning, looking at a rinsing cup.
+
+You know what it is. It is water. Four days ago a tired man rinsed his fingers into it over the stone sink and set it down and forgot it, and there is nothing in that glass but water that was in the room.
+
+But it was in the room. And it is eleven inches from your hand, and the box is thirty-one metres away, and you have been telling yourself all night that those are the same direction.
 
 *choice
   #Lift the cup off the ledge.
     *goto lifted_cup
-  #Put your hands behind your back and read the label on the kettle.
+  #Put your hands behind your back. The thing you want is up the aisle.
     *goto put_it_down
 
 *label lifted_cup
@@ -254,20 +274,18 @@ The other part is not listening. The other part is saying: *it touched Him, and 
 
 You lift it.
 
-It weighs nothing. It is a restaurant-supply glass with a chip out of the base, and you hold it up between your eye and the sacristy window, and the water in the bottom catches the sodium light off the car park and goes orange.
+It weighs nothing. A restaurant-supply glass with a chip out of the base, and you hold it up between your eye and the window, and the water in the bottom catches the sodium light off the car park and goes orange.
 
-Four days ago a tired man in his thirties rinsed his fingers into this over the stone sink, and did it badly, the way you do a thing you have done nine thousand times, and set the glass down on the ledge and forgot it.
+You are aware that you have stopped moving.
 
-Nothing about it is holy. Everything about what is happening in your hand is not about the water.
+You have been standing at this sink with a glass at eye level for some seconds now, and the reason you have stopped is that a part of you is waiting to be interrupted. For the door. For a voice. For a hand on your arm.
 
-You are aware, standing there, that you have stopped moving. You have been standing at this sink with a glass at eye level for some seconds now, and the reason you have stopped is that some part of you is waiting to be interrupted — for the door, for a voice, for a hand on your arm.
-
-The sacristy is very quiet. There is a kettle and a mop in a bucket and nobody at all.
+The sacristy is very quiet. There is a kettle with a hard-water ring in it and a mop standing in a bucket and nobody at all.
 
 *choice
   #Drink it.
     *goto ending_ablutions
-  #Set it down square with the edge and take your hands off the sink.
+  #Set it down square with the edge and go up the aisle instead.
     *goto put_it_down
 
 *label put_it_down
@@ -284,17 +302,27 @@ Then you stand with both hands on the stone rim of that sink for some time, in a
 
 You drink it.
 
-A second and a half, and in that second and a half you understand exactly what you have just done, in order, like a list.
+There is about a thimble of it and it is cold and it tastes of nothing whatsoever, because it is water out of a tap in a sacristy in Braddock, Pennsylvania.
 
-You did not do sacrilege. Sacrilege is up three steps behind a brass door and you did not go near it. You did something smaller and worse. You were in a building with Him in it for four hours, and you did not say one word to Him, and then you went into the back room and tried to get a piece of the effect off a ledge, quickly, in silence, out of a glass somebody meant to wash.
+You stand there with the empty glass in your hand and you wait.
 
-You treated Him as a medicine. Nine days hungry and four hours hurting, and given a whole night and an open building, that is what you came up with.
+*page_break
 
-The water has never hurt anybody. The water is not what this is.
+Nothing happens.
 
-The thing that goes through you is not chemistry. It is the whole ninety-four years arriving at once with nothing between you and it, the way it arrives at the end anyway, only now, standing up, in the sacristy, at one in the morning.
+Nothing at all happens, and nothing goes on happening, for about eleven seconds, and in those eleven seconds a hundred and fourteen years comes down.
 
-They find the glass on the floor. They never find you at all.
+Because it *was* water. You knew that going in — you said it to yourself twice, standing at this sink, in those words — and you drank it anyway, and now you are standing in a back room at one in the morning with an empty glass and the certain knowledge that you tried it, that you finally tried the thing you have been carrying since you were seven, and that it was the wrong thing, and that the right thing is thirty-one metres away and you did not go.
+
+You will not go now. That is the part that finishes it. You know, with your whole self, in the way you know your own hands, that you had one attempt in you tonight and you spent it on a rinsing cup because a rinsing cup was near.
+
+*page_break
+
+Despair is not sadness. Nobody tells you that either. It is a decision that arrives already made: that there is nothing, that there was never going to be anything, and that the ninety-four years were the whole of it.
+
+You have been running on one sentence since 1911. It goes out at eleven minutes past one in the morning in a sacristy, and there is nothing underneath it, and you find out what a thing like you is when the sentence is gone.
+
+They find the glass on the floor by the sink. It is not broken. They never find you at all.
 
 *ending The Ablutions
 
@@ -324,11 +352,15 @@ That bowl. That vestibule. The one you could not get past an hour ago.
 
 *page_break
 
-You sit down on the floor of the sacristy with your back against the vesting case and the book open on your knees, and you stay there for a while.
+You sit down on the floor of the sacristy with your back against the vesting case and the book open on your knees.
 
-There is a second entry four lines down in the same hand — *Sokolová, Terézia* — and a third, in 1907, that is a brother you did not know you had and who must have died small, because the parish burial books are on the same shelf and you do not open them.
+You knew all of it. That is what nobody understands about this and what you have never been able to say to Marek: you have never forgotten one thing. You could have told anybody who asked about the house on Talbot Avenue, the mill whistle, the woman from Trenčín who signed with a cross, the boy who went up the tower in 1928 with a chain hoist. You know that boy better than you know anything.
 
-Ninety-four years. You have been a great many things in ninety-four years and none of them had a name, and you had genuinely stopped believing there had ever been one.
+What you have not been able to do since about 1954 is say *that was me* and have it stay said. It comes apart. You get three or four seconds and then the sentence is about somebody else again, a boy you knew once, dead a long time.
+
+And here it is written down. One line, one hand, one afternoon in August of 1904: the boy, and the water in the bowl in the vestibule, and the name, all on the same line, in ink, by a man who was there.
+
+You cannot argue with a book.
 
 There was one. It is written down. It has been on this shelf, forty metres from where you were sitting, the whole time.
 
@@ -378,7 +410,9 @@ Verna has moved. She is in the fourth pew still but she has turned sideways with
 
 Four hours and forty minutes until the sun comes down Braddock Avenue and through the east window, which was given in 1924 by a family called Hlavatý and shows a man knocking at a door that has no handle on his side.
 
-You cannot sit still.
+What you want has not changed since you were seven. It is thirty-one metres up the centre aisle behind a brass door and you cannot make yourself walk at it.
+
+So you are going to walk at something else. That is what a man does when the thing he came for is straight ahead of him: he finds an errand.
 
 *choice
   #Go to the box on the epistle side.
@@ -428,11 +462,13 @@ Not to leave; there is nowhere to leave to and the bolt is thrown. You do it the
 *label confessional
 *page_break
 
-The confessional is wood, on the epistle side, between the fourth and fifth windows: three doors, the middle one for the priest and one on each side for whoever comes. Nobody has used the face-to-face room in fifteen years. It smells of old varnish and the particular dust that gets into carved wood and stays.
+The confessional is wood, on the epistle side, between the fourth and fifth windows: three doors, the middle one for the priest and one on each side for whoever comes. Nobody has used the face-to-face room in fifteen years. It smells of old varnish and the dust that gets down into carved wood and stays.
 
 The penitent's side has a kneeler and a screen and a card on the wall with the Act of Contrition printed on it in two languages, the English one gone brown at the folds.
 
 The priest's side has a chair, a small light with a bulb out, and a purple stole hanging on a nail.
+
+You are not here to confess. You have not decided anything like that. You are here because this is the one box in the building where a man used to be able to say what he had done and have somebody answer, and you would like to sit inside that for a minute and see whether it still holds air.
 
 *choice
   #Kneel on the penitent's side, where you knelt at nineteen.
@@ -527,7 +563,11 @@ The tower stair is off the vestibule behind a door with a hook on it, and there 
 
 At the top there is a chamber with four louvred openings and a bell in a timber frame, and the rope drops away through a hole in the floor into the dark. **1928** is stamped in the frame where the beam was replaced.
 
-You know that beam. You cut the shoulder on it in a shop on Rankin Boulevard when you were twenty-four, and you came up here on a Saturday with three other men and a chain hoist, and Fr. Kubica sent up a crate of beer at four o'clock and stood at the bottom shouting instructions that nobody could hear.
+You know that beam. There was a shop on Rankin Boulevard and a Saturday in June, and four men and a chain hoist, and Fr. Kubica sent up a crate of beer at four o'clock and stood at the bottom of the stair shouting instructions nobody could hear.
+
+You can see the shoulder cut on the end of it from here. You cut it. He was twenty-four.
+
+*He.* You get about four seconds of *I* at a time and then it slides, and it has been doing that since 1954, and you have stopped fighting it because fighting it is worse.
 
 Nobody has rung this bell since 1974.
 *achieve rope
@@ -605,6 +645,10 @@ Half past three. The radiator has cycled off and the building is going cold, and
 
 Two and three quarter hours. The red lamp burns at the end of the nave and the centre aisle runs the whole length of the building towards it, forty metres of terrazzo and old wax.
 
+There are two hours and forty-five minutes left and one thing you want, and it is up that aisle, and you have spent four of the seven hours you were given finding jobs in other rooms.
+
+The other thing in this church is a woman in the fourth pew who has been awake since eleven and has not asked you for anything. You have not fed in nine days. Both of those facts are in the room with you and only one of them is a plan.
+
 *choice
   #Get up and start up the centre aisle towards the lamp.
     *goto the_aisle
@@ -618,7 +662,7 @@ You sit down in the fourth pew, on the end, with a metre of bench between you.
 
 Verna has her rosary in her lap. The beads of the second decade are worn to the string — one decade, out of five, worn down to nothing while the other four are still round.
 
-"That's from my Peter," she says, when she sees where you are looking. "He's forty-six and he lives in Youngstown and he doesn't call. I do the second one for him." She turns the string over. "Thirty-one years, Thursdays. Somebody in Youngstown's had about sixteen thousand Hail Marys and hasn't the faintest idea."
+"That's off my Peter," she says, when she sees where you are looking. "He's forty-six and he lives in Youngstown and he doesn't call. I do the second one for him." She turns the string over. "Thirty-one years, Thursdays. Somebody in Youngstown's had about sixteen thousand Hail Marys and hasn't the faintest idea."
 
 Youngstown. You are still enough for long enough that she notices.
 
@@ -641,7 +685,7 @@ Every word of that is true.
 
 You stay.
 
-She talks about Peter, and about her husband Mikuláš who worked at the Edgar Thomson works and died in 1998, and about the pierogi sale that used to fill the undercroft with four hundred people and now fills it with nine.
+She talks about Peter, and about her husband Mikuláš who worked at the Edgar Thomson works and died in 1998, and about the pierogi sale that used to fill the undercroft with four hundred people and now fills it with nine, and about the hall floor down there, which needs washed and has needed washed since Lent.
 
 And the whole time, underneath, that other voice is doing arithmetic, and it is patient, and it is not going anywhere, and it has got all night.
 
@@ -662,9 +706,23 @@ She is not frightened for any of them, which is the thing you told yourself, and
 
 Afterwards you sit in the fourth pew on the Mary side with the thermos and the plastic rain bonnet on the bench beside you and a rosary on the floor with one decade worn to the string, and the red lamp goes on burning at the end of the building because it is not a smoke alarm and it does not know.
 
-At twenty to six Fr. Dan Cusack unlocks the side door with a travel mug in his hand.
+You are out through the sacristy window at four o'clock, because there is no reason left to stay in the building and every reason to be somewhere else before the light.
 
-You are out through the sacristy window before he has the lights on. You are in the culvert under the Rankin Bridge by six. You have another ninety-four years, if you want them, and you know now exactly what they are made of, and so do you.
+Marek is at the corner of the church, by the downspout, with his hands in his coat pockets.
+
+He has been there since about two. He heard it — a Karsk could have heard it from the fence, and Marek is a great deal older than that — and he came round to the corner and waited, and he does not say anything now.
+
+He does not need to. His face has the specific slackness of a man who has had a question answered and did not enjoy the answer. For five hours he stood at a fence not knowing what was in that church. Now he knows. It was the same thing that has always been in it, taking a little longer than usual.
+
+"Talbot Avenue," he says. "The car is at the end."
+
+You go with him. The two on the corner never had to move at all.
+
+*page_break
+
+At twenty to six Fr. Dan Cusack unlocks the side door of St. Wenceslaus with a travel mug in one hand and a ring of keys he has not sorted since June.
+
+You have another ninety-four years, and you know exactly what they are made of, and so does the man driving.
 
 *set fed true
 *ending The Fourth Pew

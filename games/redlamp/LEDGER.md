@@ -48,15 +48,45 @@ Physical facts, used consistently:
 
 ## You
 
-You do not know your name at the start. You are told it, if you find it, in the
-1900–1909 register in the sacristy:
+**He has not forgotten anything.** That is the point and it must never read as
+amnesia, which is not what happens to people and is not what happened to him.
+
+He remembers all of it, in detail: hanging the bell in 1928, the beer Fr. Kubica
+sent up at four o'clock, his mother's hands, the boarding house on Talbot
+Avenue. What he lost is not the memories. It is the ability to make the word
+*I* reach back to the boy in them. Ondrej Hlavatý is somebody he remembers
+extremely well, the way you remember a friend who died — and the connection
+between that boy and the thing sitting in the back pew came apart at some point
+between 1931 and about 1954, and will not hold for more than a few seconds at a
+time.
+
+So he can tell you everything about Ondrej Hlavatý and cannot say *I am*.
+
+The register in the sacristy is what breaks that, because a document is a
+witness. Somebody with a good hand wrote both halves on one line in 1904 and it
+has been sitting on a shelf ever since, and you cannot argue with a book:
 
 > **Hlavatý, Ondrej Michal — b. 14 Aug 1904 — bapt. 21 Aug 1904 — par. Ján
 > Hlavatý & Anna (Sokolová) — spon. Michal Sokol, Terézia Bártová**
 
-You were baptised in that font in the vestibule. That is the fact the whole
-story turns on: the water that will not let you pass is the water you were
-sealed in. You have not been able to say your own name since 1931.
+That is also why an act of contrition is gated behind it. Contrition needs a
+first person. He could not say *I have sinned* while *I* would not reach.
+
+**What he wants — the super-objective.** In about 1911, in this building,
+Fr. Jozef Kubica preached on the Eucharist in Slovak and used the old phrase
+from Ignatius of Antioch: *liek nesmrteľnosti*, the medicine of immortality,
+the antidote so that we should not die but live for ever. Ondrej was seven and
+sitting on the epistle side and remembers the whole afternoon.
+
+He has carried that sentence for ninety-four years as the one hope he has. He
+has a false immortality. There is a medicine of the true one, four streets from
+where he was born, and it is in a brass box at the end of this building.
+
+**He is right about the medicine and wrong about the dose.** He cannot make
+himself go up those three steps, so on any night when he is desperate enough he
+reaches for something adjacent and available instead — the rinse water, the
+cup, the brass door — and none of those is the thing, and every one of them is a
+way of not walking up the aisle.
 
 Marek made you in April 1931, in a boarding house on Talbot Avenue, while you
 were dying of an influenza that took four other men in the same house. You were
@@ -122,35 +152,36 @@ which is the point.
 Written before the dialogue was revised. Read each character's lines end to end
 and cut anything that could have come out of somebody else's mouth.
 
-**Marek — inventory.** He keeps records, so he speaks in them: dates, counts,
-street names, sums. Long flat declaratives joined with *and*. **No
-contractions** — he learned English formally in about 1890 and it set. No
-metaphor, ever; he does not have that gear. Never asks a question he does not
-know the answer to. Says *I am not going to pretend* and *I do not say untrue
-things*. **Never says:** anything he cannot source. If asked a direct question
-he answers it, completely, including when the answer costs him.
+**Marek — learned it as an adult, from books, a very long time ago.** He has
+no idioms at all; idioms are the last thing you acquire and he never did. Word
+order is a shade formal and occasionally a shade wrong in a way that is not
+quite placeable. He counts things — dates, street names, sums, minutes — because
+he keeps records and that is how he thinks. No metaphor: he does not have that
+gear. He answers a direct question completely, including when the answer costs
+him. **Never says:** anything he cannot source, and never a figure of speech.
 
-**Verna — short, concrete, deflecting.** Pittsburgh Slovak, seventy-nine.
-Sentences of four to nine words. Contractions everywhere; drops subjects
-(*"Wouldn't have gone anyway."*). Answers with a fact and then undercuts it with
-a second sentence. *"Well."* as a complete utterance. Calls him *son*. Talks
-about her own body plainly and other people's souls not at all. **Never says:**
-an abstract noun. She has no *grace*, no *mercy*, no *redemption* — she has
-*somebody has to*.
+**Verna — Braddock, eighth grade, mother from Trenčín.** Four to nine words a
+sentence. Talks in what things cost and what they weigh. Two Pittsburgh
+markers, used and not explained: a thing *needs washed*, and you *redd up* a
+room. Her mother's English is under hers in the rhythm, not the spelling.
+Answers with a fact and then undercuts it with a second sentence. *"Well."* as a
+whole utterance. Calls him *son*. **Never says:** an abstract noun. There is no
+*grace*, no *mercy*, no *redemption* in her — there is *somebody has to*.
 
-**Ondrej — starved out loud, enormous inside.** The narration is long, exact and
-observant, because that is what ninety-four years of watching produces. What he
-*says* is two to seven words, because he has not used his voice in a week and
-because everything he might say is either a lie or too large. The gap between
-the two is the character. **Never says:** what he wants. He cannot; that is the
-whole problem, and it is only solved in the confessional, if at all.
+**Ondrej — left school at fourteen for the open hearth, 1918.** This binds the
+narration as well as the dialogue, because in second person the narration is
+his mind. He does not reach for *geometry* or *asymmetrically* as figures of
+speech; he reaches for tools, weights, weather, and the trades. Ninety-four
+years of reading gave him range and did not give him a different set of
+instincts. Aloud he says two to seven words, because he has not used his voice
+in a week and everything he might say is either a lie or too big.
+**Never says:** what he wants. He cannot, until the register, and then he can.
 
-**Fr. Cusack — modern, tired, honest about his limits.** Says *Right.* as a
-whole sentence, and *All right* when frightened. Self-interrupts and restarts.
-Builds sentences as *I'm going to* — announcing his next act, which is what a
-man does when he has no idea what he is doing. Apologises for what he cannot
-do, out loud, before anybody asks. **Never says:** anything that claims more
-authority than he has.
+**Fr. Cusack — modern, thirty-four, four parishes, tired.** *Right.* as a whole
+sentence, and *All right* when frightened. Self-interrupts and restarts. Builds
+sentences as *I'm going to* — announcing his next act, which is what a man does
+when he has no idea what he is doing. Says out loud what he cannot do, before
+anybody asks. **Never says:** anything claiming more authority than he has.
 
 ## What is true in this world
 
