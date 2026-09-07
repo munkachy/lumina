@@ -198,6 +198,64 @@ reader cannot either.
 - **What is in the way?**
 - **What do I not know, and can I describe its shape?**
 
+## Give each mouth a different shape
+
+The test is mechanical and unforgiving: **strip every dialogue tag from a page
+and see whether you can still tell who is speaking.** If you cannot, the
+characters do not have voices, they have lines. Two people who sound alike are
+one person having an argument with himself, and a reader feels it before they
+can name it.
+
+A character's *idiolect* — their own private dialect — is built from levers you
+can set deliberately, one at a time:
+
+| Lever | What to vary |
+|---|---|
+| **Vocabulary** | Trade, schooling, decade. A millwright and a delegate reach for different nouns for the same object. |
+| **Sentence length** | Clipped, or long and joined with *and*. This is the loudest difference and the easiest to hold. |
+| **Grammar** | Contractions or none. Dropped subjects. Whether they finish sentences. |
+| **How they answer** | Straight, sideways, with a fact, with another question, or by changing the subject. |
+| **What they never say** | The strongest lever and the least used. A character with no word for *grace*, or who cannot say *I'm frightened*, is characterised every time the gap shows. |
+| **Openers and fillers** | "Well." "Right." "I'm not going to pretend." Two per character, no more. |
+| **Register under stress** | Some people get shorter. Some get formal. Some start doing arithmetic. |
+
+**Write the sheet before the dialogue.** One line per character in the ledger,
+naming three levers and one forbidden thing. Then, in revision, read only that
+character's lines end to end and cut anything that could have come out of
+somebody else's mouth.
+
+**A warning about compression.** Terse, aphoristic dialogue reads as strong on
+the page and is the commonest way a voice goes hollow: *"You know why, and it is
+not the reason you made up."* That is a sentence with a shape and no content.
+If a line withholds, the reader must be able to describe what is being withheld
+(see the puzzle test above). If they cannot, the line is decoration. Give the
+character something concrete to say instead — a date, a number, a name, an
+object — and let the withholding sit in what they do not bring up.
+
+## Two more rules the form is strict about
+
+**Every option needs a reason a sane person would have.** Not just the good
+one — *both*. If the reader cannot see why anybody would take the second option,
+it is not a choice, it is a trap with a door painted on it. Fixing this is
+usually a matter of one sentence of context above the menu: name the cost of the
+safe route. A choice between "go the safe way" and "go the way that hurts" is
+not a choice until the safe way costs something too.
+
+**Put a beat between the temptation and the irreversible act.** Any choice the
+reader cannot come back from — a death, a betrayal, the worst thing available —
+gets Emily Short's *confirmation-required* structure: choose to approach, then
+stand there a moment with it in your hands, then choose again. Not to be kind.
+Because in life nobody does the worst thing in one motion, and a story that lets
+them makes the act feel like a slip rather than a decision. A reader who falls
+into the worst ending has been tripped, not tempted.
+
+**Get the world's real facts right.** A story set inside somebody's actual
+tradition, trade or century is checked by readers who know it. One wrong detail
+— a lamp that behaves like a lightbulb, a rule that does not work that way —
+undoes a page of good atmosphere, because it tells the reader you were
+decorating rather than describing. Look the thing up. The true version is
+almost always better than the invented one, and it comes with detail attached.
+
 ## World-building in a branching story
 
 Branching fights world-building, and the fight is the reason a lot of CYOA feels
@@ -301,6 +359,8 @@ Build with `python3 build.py`; check the graph with
 6. **Vagueness wearing mystery's coat.** A reader who cannot name what the
    protagonist wants, or who the second person in the room is, is not
    intrigued. Run the four-line check.
+7. **One voice in several mouths.** Strip the tags. If you cannot tell them
+   apart, neither can the reader.
 
 ## Sources
 
@@ -309,4 +369,8 @@ Gardner, *The Art of Fiction* (the vivid and continuous dream); Jane Friedman,
 *How Not to Confuse Your Readers* (information versus context); Nathan
 Bransford, *Are You Creating a Mystery or Just Being Vague?* (the puzzle test);
 Emily Short, *Small-Scale Structures in CYOA* (the confirmation-required
-choice, and the rest of the node-level patterns).
+choice, and the rest of the node-level patterns). Dialogue: the idiolect levers
+and the tag-strip test, from the working literature on character voice. Short
+fiction: Poe's unity of effect — one sitting, one effect, every line doing
+double duty — and the modern compression tradition that follows from it, with
+the caveat above about compression that carries nothing.

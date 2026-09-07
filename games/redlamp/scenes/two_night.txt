@@ -50,7 +50,9 @@ It is a real bell, not an electronic one — a landline in the sacristy behind t
 
 It rings eleven times and stops. Then it starts again.
 
-Verna has gone very still. "Nobody has that number," she says. "Not at this hour. Not even Father."
+Verna has gone very still. "Nobody calls that," she says. "Not at this hour. If Father wants me he rings my cell."
+
+The number is on the sign in front of the church, in white plastic letters, and has been since 1962.
 
 Out in the lot, the man at the fence has a phone against his ear and is looking at the building.
 
@@ -92,17 +94,54 @@ The phone is on the wall. You pick it up.
 
 You have not heard that word in ninety-four years. It goes through you like the font did.
 
-"You do not remember it," he says. "I know. I have watched you not remember it since about 1954. It is a great mercy, on the whole. I have kept it for you."
+"You do not remember it," he says. "I know that. You stopped saying it in the winter of 1954, in a rooming house on Wick Avenue in Youngstown, and I have not heard it out of you since. I have kept it. That is one of the two useful things I have done in my life."
 
-His voice is exactly as you remember it and has not aged the way voices age. There is nothing theatrical in it. Marek does not do that.
+His voice has not aged the way voices age, and there is nothing theatrical in it, and he does not use contractions, because he learned this language formally from a man in about 1890 and it set that way.
 
-"I am not coming onto the property," he says. "You know why and it is not the reason you have made up. I will stand here until fourteen minutes past six. The two on Braddock will stand there too. You will come out, or the sun will come in — those are the shapes of it, and there is no third one, and you are old enough not to look for a third one."
+"Now the arithmetic. I am at the fence. I will be at the fence at fourteen minutes past six, which is five hours and fifty-four minutes from now. The two on Braddock Avenue will be at the corner. Nobody is coming through that door.
+
+"You come out, or the sun comes in. There is no third thing. I am not saying that to frighten you. I am saying it because it is the entire content of tonight and neither of us has anything to add to it."
 
 *choice
   #Ask him why he came himself, after ninety-four years of sending others.
     *goto why_himself
+  #"Why will you not come in here? In ninety-four years I have never asked."
+    *goto why_not_in
   #Put the phone back on the hook while he is still talking.
     *goto hung_up
+
+*label why_not_in
+*page_break
+
+"Why won't you come in?" you say. "Ninety-four years. I never asked."
+
+The line goes quiet.
+
+It stays quiet for eleven seconds, which is a thing you have never got out of Marek, not in Youngstown, not in the winter of 1954, not once.
+
+"I was baptised," he says.
+
+*page_break
+
+"In a wooden church about six hundred kilometres east of Trnava, in a year I am not going to give you, by a priest whose name I have kept and am also not going to give you. My mother carried me. There was snow on the road and my father stayed with the horse."
+
+The sodium light buzzes. Forty metres away, through two sets of doors, he does not move at all.
+
+"That is the whole of the answer and it is not what you have spent ninety-four years assuming. It is not a rule and it is not a curse and nobody forbids me anything. It is that I have had a great deal longer at this than you have. What that font did to you at the door tonight is what this car park is doing to me now, at the fence, forty metres out, through a wall."
+
+A pause.
+
+"I am not able to bear it. I stopped pretending I might learn to in about 1840."
+
+*page_break
+
+"Ondrej," he says. "You have never asked me that. Ninety-four years, and you asked me tonight, at twenty past twelve, from inside."
+
+There is something in his voice that you do not have a name for and are not going to be given time to work out.
+
+"I want that recorded," Marek says. "By me, to myself, at this fence. It is recorded."
+
+*goto registers_offer
 
 *label why_himself
 *page_break
@@ -111,7 +150,11 @@ His voice is exactly as you remember it and has not aged the way voices age. The
 
 A pause. In the lot, forty metres away through two sets of doors, he shifts his weight.
 
-"I am not angry with you. I have never once been angry with you. I found you in a boarding house on Talbot Avenue in April of 1931 with your lungs full and four dead men on your floor, and I gave you ninety-four years." Another pause. "You have never thanked me and I have never asked you to. But you know the sentence is true, and you know I do not say untrue ones. That has been the trouble with me all along."
+"I am not angry. I have not been angry with you at any point, including August." Another pause. "April of 1931. A boarding house on Talbot Avenue, second floor, the room at the back. Four men dead in that house in eleven days and you were the fifth on the list, and your lungs were full, and I gave you ninety-four years."
+
+"You always say that part."
+
+"Because it is true," says Marek, "and I do not say untrue things. That has been the trouble with me from the beginning."
 
 *choice
   #"Then say the other true one. Say what I have done since."
@@ -122,11 +165,19 @@ A pause. In the lot, forty metres away through two sets of doors, he shifts his 
 *label marek_true
 *page_break
 
-"Then say the other one," you say. "The true one you always leave out. Say what I have done with them."
+"You always stop in the same place," you say. "*I gave you ninety-four years.* Then nothing. Finish it."
 
-There is a pause on the line long enough that you can hear the sodium light through the phone as well as through the glass.
+"No."
 
-"No," says Marek. "That one is yours. I have never once claimed it and I am not going to take it off you now, at a quarter to one, to win an argument." He shifts his weight forty metres away. "You have wanted me to take it for thirty years, Ondrej. I have watched you want it. I cannot. It is not mine and it never was, and that is the only unkind thing I have ever done to you."
+"Finish it, Marek."
+
+"No," says Marek, "and I will tell you exactly why, and then we will both wish I had not.
+
+"The rest of that sentence is *and you did what you did with them.* If I say it out loud you will hear me taking it, because that is what you have wanted from me since about 1955, and I am not going to."
+
+The sodium light buzzes.
+
+"Approximately six hundred people. I have never kept the number and I do not believe you have either. Not one of them is mine. I have wanted to take them off you for thirty years, because you are the only thing I have ever made that I liked, and I cannot, because they are not mine to take and there is nobody I could hand them to."
 
 *goto registers_offer
 
@@ -180,14 +231,43 @@ You pick it up. It is ordinary glass, the kind you get in a restaurant supply ca
 
 You know what was in it before the water. You know exactly what this cup is for: the priest rinses his fingers into it after he has handled the Host, and the water goes down the stone sink into the ground, because even a fragment must not go into a drain.
 
-It is the closest you will ever get. It is a rinse. It is not Him and it never was, and a thing that has been going into churches for ninety-four years knows the difference between a rinse and a Person.
+Here is what you have not looked at for the last hour, because you have been busy.
 
-You know that.
+You have not fed in nine days.
+
+Nine days, and four hours inside a building that has been doing to you since the vestibule what this building does, and every one of those four hours has cost something you do not have. There is a woman in the fourth pew with a bad valve and the only key. There is a man at a fence who will still be at the fence at dawn. Your hands are not steady and have not been since the font.
+
+And here, on a ledge, in a rinsing cup somebody meant to wash on Sunday evening, is a thimble of water that was in a room with Him four days ago.
+
+It will not help. You know that with the part of you that has been going in and out of churches since 1931 and can tell a rinse from a Person at forty metres through a wall.
+
+The other part is not listening. The other part is saying: *it touched Him, and it is right there in your hand, and there is not one person alive who would ever have to know.*
 
 *choice
-  #Drink what is in it, knowing exactly what it is not.
+  #Lift the cup off the ledge.
+    *goto lifted_cup
+  #Put your hands behind your back and read the label on the kettle.
+    *goto put_it_down
+
+*label lifted_cup
+*page_break
+
+You lift it.
+
+It weighs nothing. It is a restaurant-supply glass with a chip out of the base, and you hold it up between your eye and the sacristy window, and the water in the bottom catches the sodium light off the car park and goes orange.
+
+Four days ago a tired man in his thirties rinsed his fingers into this over the stone sink, and did it badly, the way you do a thing you have done nine thousand times, and set the glass down on the ledge and forgot it.
+
+Nothing about it is holy. Everything about what is happening in your hand is not about the water.
+
+You are aware, standing there, that you have stopped moving. You have been standing at this sink with a glass at eye level for some seconds now, and the reason you have stopped is that some part of you is waiting to be interrupted — for the door, for a voice, for a hand on your arm.
+
+The sacristy is very quiet. There is a kettle and a mop in a bucket and nobody at all.
+
+*choice
+  #Drink it.
     *goto ending_ablutions
-  #Put the cup back on the ledge and take your hands off it.
+  #Set it down square with the edge and take your hands off the sink.
     *goto put_it_down
 
 *label put_it_down
@@ -204,9 +284,13 @@ Then you stand with both hands on the stone rim of that sink for some time, in a
 
 You drink it.
 
-There is a moment — perhaps a second and a half — when nothing happens, and in that second and a half you understand precisely what you have done. Not sacrilege. Something smaller and worse. You have treated Him as a medicine: a thing to be got into you, quickly, for an effect, without a word said, in a back room, off a ledge, out of a glass somebody meant to wash.
+A second and a half, and in that second and a half you understand exactly what you have just done, in order, like a list.
 
-He is not a medicine. Whatever was in that cup was water, and water has never hurt anybody.
+You did not do sacrilege. Sacrilege is up three steps behind a brass door and you did not go near it. You did something smaller and worse. You were in a building with Him in it for four hours, and you did not say one word to Him, and then you went into the back room and tried to get a piece of the effect off a ledge, quickly, in silence, out of a glass somebody meant to wash.
+
+You treated Him as a medicine. Nine days hungry and four hours hurting, and given a whole night and an open building, that is what you came up with.
+
+The water has never hurt anybody. The water is not what this is.
 
 The thing that goes through you is not chemistry. It is the whole ninety-four years arriving at once with nothing between you and it, the way it arrives at the end anyway, only now, standing up, in the sacristy, at one in the morning.
 

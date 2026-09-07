@@ -117,6 +117,41 @@ which is the point.
 
 ---
 
+## The four voices
+
+Written before the dialogue was revised. Read each character's lines end to end
+and cut anything that could have come out of somebody else's mouth.
+
+**Marek — inventory.** He keeps records, so he speaks in them: dates, counts,
+street names, sums. Long flat declaratives joined with *and*. **No
+contractions** — he learned English formally in about 1890 and it set. No
+metaphor, ever; he does not have that gear. Never asks a question he does not
+know the answer to. Says *I am not going to pretend* and *I do not say untrue
+things*. **Never says:** anything he cannot source. If asked a direct question
+he answers it, completely, including when the answer costs him.
+
+**Verna — short, concrete, deflecting.** Pittsburgh Slovak, seventy-nine.
+Sentences of four to nine words. Contractions everywhere; drops subjects
+(*"Wouldn't have gone anyway."*). Answers with a fact and then undercuts it with
+a second sentence. *"Well."* as a complete utterance. Calls him *son*. Talks
+about her own body plainly and other people's souls not at all. **Never says:**
+an abstract noun. She has no *grace*, no *mercy*, no *redemption* — she has
+*somebody has to*.
+
+**Ondrej — starved out loud, enormous inside.** The narration is long, exact and
+observant, because that is what ninety-four years of watching produces. What he
+*says* is two to seven words, because he has not used his voice in a week and
+because everything he might say is either a lie or too large. The gap between
+the two is the character. **Never says:** what he wants. He cannot; that is the
+whole problem, and it is only solved in the confessional, if at all.
+
+**Fr. Cusack — modern, tired, honest about his limits.** Says *Right.* as a
+whole sentence, and *All right* when frightened. Self-interrupts and restarts.
+Builds sentences as *I'm going to* — announcing his next act, which is what a
+man does when he has no idea what he is doing. Apologises for what he cannot
+do, out loud, before anybody asks. **Never says:** anything that claims more
+authority than he has.
+
 ## What is true in this world
 
 Rules that hold on every path. Do not contradict them.
