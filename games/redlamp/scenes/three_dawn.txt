@@ -1,0 +1,434 @@
+*comment ==================== ACT THREE — DAWN ====================
+*comment Thirty-four minutes with a priest, and then 6:14. Nine endings live here.
+*comment Cusack absolves; he does not adjudicate metaphysics and he cannot stop
+*comment the sun. Grace is not a cure. Never say that in the text.
+
+Twenty-five to six. The car is a fifteen-year-old Corolla with a diocesan parking sticker and one hubcap missing, and it parks across two spaces because there is nobody to park badly in front of.
+
+The man who gets out is thirty-four, unshaven, in a black jacket over a clerical shirt with the collar tab pushed in crooked. He has a travel mug in one hand and a ring of keys in the other that he has not sorted since June, and he stands under the sodium light going through them with his thumb.
+
+Marek has stepped back from the fence. He is nine metres away in the dark by the hedge and Fr. Dan Cusack walks past him without seeing him, because Marek has been not being seen since before the mill was built.
+
+The side door goes. The corridor light comes on.
+
+*page_break
+
+"Verna," says Fr. Cusack, from the sacristy door, in the flat voice of a man who has found something he has to deal with before coffee. "It's twenty to six."
+
+"I know what time it is, Father."
+
+"You've been here since eleven."
+
+"I have."
+
+He comes out past the rail with the mug still in his hand, and he gets four steps into the sanctuary before he sees you, halfway up the aisle in a coat, forty metres from the nearest working light.
+
+He stops.
+
+*page_break
+
+To his enormous credit he does not run and he does not shout. What he does is put the mug down on the second step, which is not where mugs go, and say: "All right."
+
+Then: "Verna. Come here to me."
+
+"No," says Verna Sowka, from the fourth pew. "You come here to us, and sit down, and I'll tell you what's what."
+
+*page_break
+
+It takes four minutes and she does it badly, and it does not matter, because by the second minute Fr. Cusack has stopped listening to her and started looking at you properly — at where you are on the floor, at how far up the aisle you got, at the fact that you have not once in four minutes looked at the far end of the building.
+
+He is not a man who believes in this. Nothing in nine years of seminary and four parishes has prepared him for it and he does not, in fact, believe it, and you can hear his heart going like a bird's.
+
+He gets up off the pew and comes down the aisle to you and stops two metres away.
+
+"Sunrise is fourteen minutes past six," he says. "Is that right?"
+
+*page_break
+
+Thirty-four minutes.
+
+*choice
+  #"Father. I want to go to confession, and there are thirty minutes."
+    *goto confess_ask
+  #Say nothing. There is nothing he can do about the sun.
+    *goto say_nothing_cusack
+  #Go past him, out through the vestibule, and take what is coming.
+    *goto to_the_doors
+
+*label say_nothing_cusack
+*page_break
+
+You say nothing.
+
+Fr. Cusack waits. He is bad at silences and he waits anyway, standing two metres up the aisle in a jacket with a travel mug going cold on the second step behind him, and after a while he crouches down so that his eyes are level with yours, which nobody has done to you in ninety-four years.
+
+"I don't know what you are," he says. "I want to say that out loud so you know I'm not pretending. I've got about thirty minutes and no idea, and I'd rather be honest than impressive."
+
+He looks at the floor between you.
+
+"But I know what I'm for. So I'm going to sit in that box on the epistle side until quarter past six, because that's the only useful thing I've got, and if you come, you come."
+
+He goes and sits in it. You can hear the door.
+
+*goto after_offer
+
+*label confess_ask
+*page_break
+
+"Father," you say. "I want to go to confession."
+
+Fr. Cusack's breath goes out of him.
+
+"Right," he says. "Right. Yes." He looks around the church as though the box might have moved. "Yes. Come on, then."
+
+*goto in_the_box
+
+*label after_offer
+*page_break
+
+Ten past six. Four minutes.
+
+The dark over the roofs to the east is the colour it goes just before. Verna has not moved out of the fourth pew. Fr. Cusack is sitting in a wooden box on the epistle side with a purple stole round his neck and the light with the bulb out, and he has been in there for twenty-nine minutes, and he has not come out once to check.
+
+*choice
+  #Go to the box on the epistle side while there is still time.
+    *goto in_the_box
+  #Stay where you are, halfway up the aisle, and let it come.
+    *goto final_nave
+
+*label in_the_box
+*page_break
+
+You kneel on the penitent's side. Cracked leather over a board, a lattice screen with cloth behind it, and this time there is somebody on the other side of it.
+
+*if (name = false)
+  "Bless me, Father, for I have sinned," you say, and then you stop, because the next word is a name and you do not have one.
+
+  Behind the screen, Fr. Cusack waits. Then, gently: "You can start anywhere. It's not a form."
+
+  So you start anywhere, and it takes what is left, and it is not orderly. You have no name to put to any of it and that is itself the first thing you confess.
+*if (name)
+  "Bless me, Father, for I have sinned. It has been a hundred and two years since my last confession. My name is Ondrej Michal Hlavatý and I was baptised in the font in that vestibule on the twenty-first of August, nineteen hundred and four."
+
+  There is a long pause behind the screen.
+
+  "Go on," says Fr. Cusack.
+
+  So you go on, and it takes what is left.
+
+*page_break
+
+You do not give him the list. There is no list; there is not time for a list and you both know it inside the first minute, and what you give him instead is the shape of it — what you are, how you came to be it, what you have done with it, and the ninety-four years of deciding every morning not to think about any of that.
+
+He does not interrupt. Twice he starts to and does not.
+
+At six minutes past six you get to the end and say the thing on the card, the brown one, in the flat vowels of a mill town.
+
+*if (contrite)
+  You have said it once already tonight, in this box, to nobody. It is not less this time. It is the same thing with a man on the other side of the screen, which turns out to be a different act entirely and not a smaller one.
+*if (contrite = false)
+  *set contrite true
+  *achieve contrition
+  You find, saying it out loud to another human being at six minutes past six in the morning, that you mean the middle of it — *for having offended Thee* — and that the sun coming down Braddock Avenue is somewhere in it too, and that you are not going to pretend otherwise to a priest at this hour.
+
+*page_break
+
+Then Fr. Dan Cusack, thirty-four, four parishes, who does not believe any of this and has not slept properly since Tuesday, says:
+
+"For your penance—" and stops.
+
+You hear him breathe.
+
+"For your penance, stay where you are and let the light in."
+
+And then he raises his hand behind a lattice screen in a wooden box in Braddock, Pennsylvania, at eight minutes past six on a Thursday morning, and says the words, all of them, in the right order, without hurrying:
+
+*Deus, Pater misericordiarum... ego te absolvo a peccatis tuis, in nomine Patris, et Filii, et Spiritus Sancti.*
+
+*achieve absolved
+
+*page_break
+
+You come out of the box.
+
+He comes out of his side at the same moment, still in the stole, and the two of you stand in the side aisle of St. Wenceslaus for a second and a half, and neither of you has the least idea what the procedure is, because there is no procedure.
+
+"I can't stop it," he says. "The sun. I want to be clear I can't stop it. I don't have anything for that."
+
+"No."
+
+"Right." He wipes his face with his hand. "Then come and sit down, at least. Not on the floor."
+
+*goto final_nave
+
+*label to_the_doors
+*page_break
+
+You go past him.
+
+Fr. Cusack says something behind you and Verna says something sharper, and you are through the inner doors into the vestibule with the terrazzo and the missalette rack and the radiator, and the granite bowl on its pillar with **1897** cut into the base.
+
+The outer doors are unlocked now, because a priest came in through the side and there is a Corolla in the lot with a diocesan sticker on it.
+
+Through the glass, under the sodium light, Marek has come back to the fence.
+
+*choice
+  #Go straight past the granite bowl and out through the doors.
+    *goto ending_font
+  #Stop at the doors and talk to him.
+    *goto marek_last
+
+*label ending_font
+*page_break
+
+You do not go along the wall this time. You go straight, at speed, because there are eight minutes left and speed is the only thing you have ever been able to bring to any of it.
+
+Your coat catches the rim and the bowl comes off the pillar.
+
+It is granite, it is a hundred and twenty-eight years old, and it weighs a great deal, and when it goes over it goes over onto you, and forty litres of Saturday's water goes across the terrazzo floor of the vestibule in a sheet.
+
+There is no time at all. There is your mother's name, and a shawl, and a room full of people in August of 1904 who are all now dead, and somebody saying *Ondrej Michal* out loud over this exact bowl and meaning it, and then a great deal of light with no sun in it.
+
+Fr. Cusack finds a wet floor, a cracked font on its side, and a coat.
+
+He kneels down in the water in his good trousers and he stays there a long time, and when the diocese asks him afterwards what happened he says, every time, the same sentence, which is: *A man came in out of the rain and I was late.*
+
+*ending The Font
+
+*label marek_last
+*page_break
+
+You stop at the glass. He comes to within two metres of the other side of it, which is the closest he has been to this building in ninety-four years.
+
+"You look terrible," Marek says. "Come out. There is a car at the end of Talbot and you have ten minutes, which is eight more than you need."
+
+*if (name)
+  "You have not called me by my name all night," you say. "Not since the telephone."
+
+  Marek's face does something. It is the first movement you have seen in it since 1931.
+
+  "No," he says. "I have not. You found it, then."
+*if (name = false)
+  "Say it again," you say. "What you called me on the telephone."
+
+  "No," says Marek. "You will only ask what it means, and I do not think I could stand that."
+
+*page_break
+
+"I want to say one thing to you," he says, "and then you will decide, and I will accept whatever it is, because I have never once made you do anything and I am not starting on a Thursday.
+
+"I found you dying. That is true. I gave you ninety-four years and you have used them, and nothing that happened in them was done by me. Every one of those was yours. I have never told you otherwise and I am not telling you otherwise now."
+
+He puts one hand flat on the glass, which is a thing he has not done.
+
+"There is nothing in that building for you. It has never once answered you. In ninety-four years, not once, not a word, not a sign — and you know that I do not say untrue things."
+
+*page_break
+
+He is right about all of it.
+
+That is what you will think about, if there is any afterwards to think in: that every sentence Marek said at that door was true, and that the last one was true and complete and still somehow not the case, and that you have no argument against it and are not going to go.
+
+Behind you, four pews up, an old woman with a bad hip is saying the third decade out loud to nobody.
+
+*choice
+  #Open the outer door and go down the steps to him.
+    *goto ending_out
+  #Turn round and go back up the aisle.
+    *goto final_nave
+
+*label ending_out
+*page_break
+
+You open the outer door of St. Wenceslaus at eleven minutes past six and go down the steps into the lot.
+
+Marek does not say anything. He does not gloat; he has never gloated, that is not among his faults. He puts his hand on the back of your neck the way he did on Talbot Avenue in April of 1931 and walks you to the car at the end of the street, and the two at the corner by the pharmacy fall in behind, and it is over in ninety seconds.
+
+Three minutes later the sun comes down Braddock Avenue and through a window given in 1924 by a family called Hlavatý, and it lands in the fourth pew on the Mary side, where a seventy-nine-year-old woman is sitting with a rosary and a thermos, waiting for somebody who has gone.
+
+She keeps the hour. She is there the following Thursday, and the one after that.
+
+*ending Out to Him
+
+*label final_nave
+*page_break
+
+Six minutes past. You come back up the centre aisle of St. Wenceslaus.
+
+Verna Sowka has not moved out of the fourth pew on the Mary side in seven hours. Fr. Cusack is standing at the end of it with his hands at his sides and no idea what to do with them.
+
+The east window is over the side altar: a man in a red cloak knocking at a door with no handle on his side, given in 1924 by a family whose name you have either found tonight or not.
+
+*if (fed)
+  *goto ending_sunrise_fed
+
+*choice
+  #Sit down in the fourth pew on the Mary side, beside her.
+    *goto sit_down
+  #Go down to the undercroft. There are no windows.
+    *goto ending_undercroft
+
+*label ending_undercroft
+*page_break
+
+You go through the sacristy and down the concrete stair and behind the plywood partition at the east end, where the ground rises, and you sit down on the floor with your back against a slab that says **JOZEF KUBICA · KŇAZ · 1861–1931.**
+
+Upstairs, at fourteen minutes past six, the light comes through the east window and lies across the fourth pew, and Verna Sowka is in it, and Fr. Dan Cusack is standing at the end of the pew, and neither of them says anything for a long time.
+
+Nothing comes down the stairs.
+
+*if (contrite)
+  You spend Friday down there, and Saturday, and by Sunday you are gone through the coal chute and across the river, absolved and alive and no different at all in any way that anybody could measure.
+
+  There is a Thursday in November when you are on Braddock Avenue at eleven at night and the outer doors are open, and you stand across the street for forty minutes and do not go in, and then in December you do.
+
+  It is not an ending. It is what you got instead of one, and it is more than you had any business getting.
+  *ending The Undercroft
+*if (contrite = false)
+  You spend Friday down there, and Saturday, and by Sunday you are gone through the coal chute and across the river.
+
+  Nothing happened. That is the honest account of the night: you sat in a building for seven hours, you were spoken to by an old woman and a tired priest, you did not take anything from anybody, and at fourteen minutes past six you were four metres underneath it all with your back to a dead man's slab.
+
+  Ninety-five years. Then ninety-six.
+
+  Sometimes on a Thursday you are on Braddock Avenue at eleven at night, and the outer doors of St. Wenceslaus are standing open, and you keep walking.
+  *ending Ninety-Five
+
+*label sit_down
+*page_break
+
+You sit down in the fourth pew on the Mary side, on the end, with a metre of bench between you.
+
+Verna does not move over. She puts her hand out flat on the wood in the space between you, palm up, and leaves it there, and does not look at you, and does not say anything about it.
+
+Fr. Cusack sits down in the pew in front and turns sideways.
+
+Nine minutes.
+
+*page_break
+
+*if (contrite = false)
+  *goto not_contrite_end
+
+You cannot receive. You have known that since the vestibule and it has never once been in question tonight: not the box, not the aisle, not the rail. There is no version of this where you go up those three steps and are given anything.
+
+What you can do is want it.
+
+That has a name, and the name is older than this building and older than the country the building is in, and a man from Trenčín taught it to a woman who taught it to a boy in 1911 in a house on Talbot Avenue: that when you cannot come to the table you can ask to be brought, and the asking is not a substitute for anything, and it is not nothing.
+
+*page_break
+
+So you do that. Sitting down, in a coat, in the fourth pew, at eleven minutes past six.
+
+You do not say it out loud.
+*if (name)
+  You say your own name first, because everything starts there, and it has taken you the whole night and a green cloth book to be able to.
+
+  *Ondrej Michal Hlavatý.*
+*if (name = false)
+  You have no name to put at the front of it, and you go on anyway, which is its own kind of asking.
+
+And then the thing you want, which you have not been able to say in any language since April of 1931, and which is four words long, and which the far end of the building has been waiting to hear for ninety-four years.
+
+*page_break
+
+At six minutes past thirteen the roofs on the east side of Braddock Avenue go from black to grey.
+
+Verna's hand is still on the wood between you, palm up.
+
+*choice
+  #Take the hand she has left open on the wood between you.
+    *goto took_hand
+  #Leave it where it is. You have not earned that.
+    *goto left_hand
+
+*label left_hand
+*page_break
+
+You leave her hand where it is.
+
+She does not move it. At about eleven minutes past she says, without turning her head: "Suit yourself," in exactly the tone she used about the tea, and she leaves it there anyway, palm up, on the wood, for the last three minutes.
+
+*goto dawn_moment
+
+*label took_hand
+*page_break
+
+You take her hand.
+
+It is seventy-nine years old and there is a wedding ring worn thin on it and the knuckles are wrong from arthritis, and she closes her fingers round yours and grips hard enough to hurt, which she would be able to do, tonight, to you.
+
+"There we are," says Verna Sowka.
+
+*goto dawn_moment
+
+*label dawn_moment
+*page_break
+
+*if (fed = false)
+  *achieve allnight
+*achieve dawn
+
+At fourteen minutes past six the sun comes up over the Monongahela and down Braddock Avenue between the shuttered pharmacy and the bank, and it goes through a window given in 1924 by a family called Hlavatý, and it comes into the church.
+
+It is not the way you expected and you have had ninety-four years to expect it.
+
+It is not a fire. It is the vestibule again — the granite bowl, the hand in the water, the thing that is not a burn — and it is what happened halfway up the aisle, and it is the four seconds you managed of looking at the far end of the building at midnight, and it is all of that at once and all the way through, and there is nothing left over to be afraid with.
+
+*page_break
+
+*if (name)
+  Somebody in the room says *Ondrej Michal* out loud, over a granite bowl, in August of 1904, and means it as a promise.
+
+  It has never once been withdrawn. That is the last thing you find out and it turns out to have been the only thing.
+*if (name = false)
+  Somebody in the room says a word over a granite bowl in August of 1904 and means it as a promise, and you have never in ninety-four years found out what the word was.
+
+  You find out now. It takes no time at all.
+
+Verna Sowka is holding a coat.
+
+*page_break
+
+Fr. Dan Cusack says the 6:30 that morning for nine people. He does not say what it is offered for and nobody asks, because nobody at a weekday Mass in a merged parish ever asks.
+
+Afterwards he goes into the sacristy and puts the 1900 register back on the shelf, third from the left, and stands with his hand on the spine for some time.
+
+*ending A Happy Death
+
+*label not_contrite_end
+*page_break
+
+Nine minutes, and nothing to do with them.
+
+You have not said anything to anybody tonight. Not in the box, not on the aisle, not to the man who sat in a wooden cupboard for twenty-nine minutes on the off chance. You have been in this building for seven hours and you have been perfectly silent in the only direction that was open.
+
+It is not defiance. You would have to care more than you do for it to be defiance. It is ninety-four years of a habit, and the habit is holding, and you can feel it holding right up to the end.
+
+*page_break
+
+*if (fed = false)
+  *achieve allnight
+
+At fourteen minutes past six the sun comes down Braddock Avenue and through the east window.
+
+It is a fire. That is all, and it is quick, and there is no part of it that is addressed to anybody.
+
+Verna Sowka is holding a coat. She stands in the fourth pew with it over her arm for a long time, and Fr. Cusack does not tell her to sit down.
+
+"He never said," she says at last. "Seven hours. He never said one word to Him, Father. Not one."
+
+*ending Sunrise
+
+*label ending_sunrise_fed
+*page_break
+
+There is no version of this in which you sit down in the fourth pew, because there is nobody in the fourth pew.
+
+You go out through the sacristy window at nine minutes past six with the sound of Fr. Dan Cusack starting to shout behind you, and you are in the culvert under the Rankin Bridge before the light reaches the water.
+
+Ninety-five years. Then ninety-six.
+
+The parish keeps the Thursday hour going for about four months out of respect and then it lapses, the way it lapsed in 1996, and after that the lamp burns from eleven to midnight over an empty church, which is what it was doing before she came and what it will do after.
+
+*ending The Fourth Pew

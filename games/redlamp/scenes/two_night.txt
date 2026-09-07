@@ -1,0 +1,701 @@
+*comment ==================== ACT TWO — THE NIGHT ====================
+*comment A walk through one building, in three hours, each ending at the nave.
+*comment Two-way forks throughout; one three-way at the top of Hour Two.
+*comment Deaths available: the sacrarium, the tabernacle, the fourth pew,
+*comment the lot, the font. All signposted. Sets `name` and, if `name`, `contrite`.
+
+*comment ---------------- HOUR ONE: the tea, the phone, the sacristy ----------------
+
+Midnight and four minutes. The radiator ticks. Out in the lot the sodium light buzzes at a frequency you can hear and she cannot, and under it a man stands at the fence with his hands in his pockets and has not moved in fifty minutes.
+
+Verna Sowka holds out the thermos cap. There is about an inch of tea in it and it is steaming, and her hand is not steady, and she holds it out anyway across the back of the pew.
+
+"It's got sugar in," she says. "I don't know if that's a thing or not."
+
+*choice
+  #Take the cap out of her hand, and let her watch you hold it.
+    *goto tea_yes
+  #"I can't," and watch what that does to her face.
+    *goto tea_no
+
+*label tea_yes
+*page_break
+
+You take it. The cap is warm through your fingers and that is the whole of it — you cannot taste tea, you have not tasted anything but the one thing since 1931, and both of you know within about four seconds that this was never about the tea.
+
+"Well," Verna says, taking it back. "That's that sorted."
+
+She screws the cap on. Her hands have stopped shaking, which is not the same as her being less afraid; she is exactly as afraid as she was, and she has simply put her hands somewhere else.
+*achieve thermos
+
+*goto phone
+
+*label tea_no
+*page_break
+
+"I can't," you say.
+
+"No." She looks at the cap for a second and then drinks it herself, in one go, the way you take medicine. "No, I didn't think so. I don't know what I was doing there."
+
+She does know. So do you. It is the thing people do at a wake when there is nothing else in the house to offer, and she has done it at a great many wakes.
+
+*goto phone
+
+*label phone
+*page_break
+
+At twenty past twelve the telephone rings.
+
+It is a real bell, not an electronic one — a landline in the sacristy behind the sanctuary, on the wall by the vesting case, that the parish has kept because two of the four churches in this grouping have no cell coverage in the basement.
+
+It rings eleven times and stops. Then it starts again.
+
+Verna has gone very still. "Nobody has that number," she says. "Not at this hour. Not even Father."
+
+Out in the lot, the man at the fence has a phone against his ear and is looking at the building.
+
+*choice
+  #Go the length of the nave and answer it yourself.
+    *goto answer
+  #Let it ring, and find out how long he is willing to wait.
+    *goto let_ring
+
+*label let_ring
+*page_break
+
+You let it ring.
+
+It rings for forty minutes. Eleven, and a pause, and eleven again, with the pause getting shorter, and the sound coming up the sanctuary steps and down the length of the nave and into the back of your skull.
+
+At one o'clock Verna gets up.
+
+"I'll get it, then," she says.
+
+You are in front of her before you have decided to be — across the aisle, four metres in under a second, and you have not moved like that in front of a living person in eleven years and you see exactly what it does to her face.
+
+"I'll go," you say.
+
+*goto answer
+
+*label answer
+*page_break
+
+The sacristy is behind the sanctuary on the gospel side, through a low door, and you go the long way round the outside of the rail so that you do not have to cross in front of the brass box.
+
+It is a working room and it smells like one: linen, lemon oil, the vesting case with its shallow drawers, a credence table, an electric kettle, a wall safe with a dial, a stone sink in the corner with a second tap and no drain to the sewer. Under the window there is a shelf of green cloth account books with years stamped on the spines, back to 1897.
+
+The phone is on the wall. You pick it up.
+
+"Ondrej," says Marek.
+
+*page_break
+
+You have not heard that word in ninety-four years. It goes through you like the font did.
+
+"You do not remember it," he says. "I know. I have watched you not remember it since about 1954. It is a great mercy, on the whole. I have kept it for you."
+
+His voice is exactly as you remember it and has not aged the way voices age. There is nothing theatrical in it. Marek does not do that.
+
+"I am not coming onto the property," he says. "You know why and it is not the reason you have made up. I will stand here until fourteen minutes past six. The two on Braddock will stand there too. You will come out, or the sun will come in — those are the shapes of it, and there is no third one, and you are old enough not to look for a third one."
+
+*choice
+  #Ask him why he came himself, after ninety-four years of sending others.
+    *goto why_himself
+  #Put the phone back on the hook while he is still talking.
+    *goto hung_up
+
+*label why_himself
+*page_break
+
+"Because you left," Marek says. "Not because you killed anybody, not because of the business in Youngstown. Because you *left*, and the others watched you do it, and now four of them are thinking about a thing they were not thinking about in August."
+
+A pause. In the lot, forty metres away through two sets of doors, he shifts his weight.
+
+"I am not angry with you. I have never once been angry with you. I found you in a boarding house on Talbot Avenue in April of 1931 with your lungs full and four dead men on your floor, and I gave you ninety-four years." Another pause. "You have never thanked me and I have never asked you to. But you know the sentence is true, and you know I do not say untrue ones. That has been the trouble with me all along."
+
+*choice
+  #"Then say the other true one. Say what I have done since."
+    *goto marek_true
+  #"Ninety-four years of what, Marek?"
+    *goto marek_of_what
+
+*label marek_true
+*page_break
+
+"Then say the other one," you say. "The true one you always leave out. Say what I have done with them."
+
+There is a pause on the line long enough that you can hear the sodium light through the phone as well as through the glass.
+
+"No," says Marek. "That one is yours. I have never once claimed it and I am not going to take it off you now, at a quarter to one, to win an argument." He shifts his weight forty metres away. "You have wanted me to take it for thirty years, Ondrej. I have watched you want it. I cannot. It is not mine and it never was, and that is the only unkind thing I have ever done to you."
+
+*goto registers_offer
+
+*label marek_of_what
+*page_break
+
+"Ninety-four years of what?" you say.
+
+"Of everything," says Marek, without any weight on it at all. "Two wars. Four presidents you had opinions about. The night at the Aliquippa works. Nine hundred sunsets over that river and you watched every one of them and told me twice that it was the only thing worth having."
+
+He is not selling. That is the difficulty. He is doing an inventory, and the inventory is accurate, and there are good things in it.
+
+"And about six hundred people," he says. "Give or take. I have never kept the number and I do not believe you have either."
+
+*goto registers_offer
+
+*label hung_up
+*page_break
+
+You put the phone back on the hook.
+
+It does not ring again. That is worse; it means he has said the part he came to say and is content to wait, and Marek waiting is the oldest fact in your life.
+
+*goto registers_offer
+
+*label registers_offer
+*page_break
+
+The room is quiet. The kettle has a hard-water ring inside it. Somebody has left a stack of Mass cards and a roll of tape on the credence table, and there is a mop in the corner standing in a bucket that was emptied and not rinsed.
+
+Two things in this room are not ordinary.
+
+The first is the shelf of green account books under the window, thirteen of them, each stamped with a decade. **REGISTRUM BAPTIZATORUM.** Names, dates, parents, godparents, written by hand for a hundred and twenty-eight years.
+
+The second is the sink in the corner. It has two taps and one of them runs into a stone basin that does not drain into the sewer; it drains straight down into the ground under the church, because what goes into it is not allowed to go anywhere else. There is a small glass cup on the ledge beside it with a film of water in the bottom, left there after the last Mass and not yet washed.
+
+*choice
+  #Take down the book with 1900 on the spine.
+    *goto the_book
+  #Pick up the glass cup on the ledge beside the stone sink.
+    *goto the_cup
+
+*label the_cup
+*page_break
+
+You pick it up. It is ordinary glass, the kind you get in a restaurant supply catalogue, and there is perhaps a thimble of water in it, and it has been standing since Sunday evening.
+
+You know what was in it before the water. You know exactly what this cup is for: the priest rinses his fingers into it after he has handled the Host, and the water goes down the stone sink into the ground, because even a fragment must not go into a drain.
+
+It is the closest you will ever get. It is a rinse. It is not Him and it never was, and a thing that has been going into churches for ninety-four years knows the difference between a rinse and a Person.
+
+You know that.
+
+*choice
+  #Drink what is in it, knowing exactly what it is not.
+    *goto ending_ablutions
+  #Put the cup back on the ledge and take your hands off it.
+    *goto put_it_down
+
+*label put_it_down
+*page_break
+
+You put the cup back on the ledge, exactly where it was, square with the edge.
+
+Then you stand with both hands on the stone rim of that sink for some time, in a small room with a hard-water kettle and a mop in a bucket, and you do not do anything at all, and that is not nothing.
+
+*goto the_book
+
+*label ending_ablutions
+*page_break
+
+You drink it.
+
+There is a moment — perhaps a second and a half — when nothing happens, and in that second and a half you understand precisely what you have done. Not sacrilege. Something smaller and worse. You have treated Him as a medicine: a thing to be got into you, quickly, for an effect, without a word said, in a back room, off a ledge, out of a glass somebody meant to wash.
+
+He is not a medicine. Whatever was in that cup was water, and water has never hurt anybody.
+
+The thing that goes through you is not chemistry. It is the whole ninety-four years arriving at once with nothing between you and it, the way it arrives at the end anyway, only now, standing up, in the sacristy, at one in the morning.
+
+They find the glass on the floor. They never find you at all.
+
+*ending The Ablutions
+
+*label the_book
+*page_break
+
+The 1900 book comes off the shelf heavier than it looks. Green cloth boards gone black at the corners, and the pages inside are ruled in faint blue with the columns printed in Latin and the entries in ink.
+
+You are not looking for anything. You want that understood, later, when you think about this: you are a man with six hours to get through, in a room with a book in it.
+
+The handwriting from 1904 belongs to somebody with a good hand and a slow pen. Every entry is the same shape. Name, born, baptised, parents, godparents.
+
+Your thumb stops on the twenty-first of August.
+
+*page_break
+
+**Hlavatý, Ondrej Michal — natus 14 Aug 1904 — bapt. 21 Aug 1904 — par. Ján Hlavatý et Anna (Sokolová) — spon. Michal Sokol, Terézia Bártová.**
+
+Ondrej Michal Hlavatý.
+
+You were born in August of 1904 in a house on Talbot Avenue, four streets from this building, to a man who worked the open hearth and a woman from Trenčín who never learned to write English and signed with a cross, and eight days later they carried you four streets in a shawl and put your head over a granite bowl in a vestibule.
+
+That bowl. That vestibule. The one you could not get past an hour ago.
+
+*set name true
+*achieve ondrej
+
+*page_break
+
+You sit down on the floor of the sacristy with your back against the vesting case and the book open on your knees, and you stay there for a while.
+
+There is a second entry four lines down in the same hand — *Sokolová, Terézia* — and a third, in 1907, that is a brother you did not know you had and who must have died small, because the parish burial books are on the same shelf and you do not open them.
+
+Ninety-four years. You have been a great many things in ninety-four years and none of them had a name, and you had genuinely stopped believing there had ever been one.
+
+There was one. It is written down. It has been on this shelf, forty metres from where you were sitting, the whole time.
+
+*choice
+  #Say it out loud in the empty sacristy.
+    *goto said_aloud
+  #Close the book and put it back on the shelf, third from the left.
+    *goto put_back
+
+*label said_aloud
+*page_break
+
+"Ondrej Michal Hlavatý," you say, to a vesting case and a kettle with a hard-water ring in it.
+
+It is a Slovak name and your mouth still knows how to do it, which is the part that takes the legs out from under you: the *ch*, and the accent on the first syllable, and the long *y* at the end, all of it still in there under ninety-four years like a tool in a drawer nobody opened.
+
+You say it four more times. Then you stop, because there is a woman in the fourth pew who can hear a great deal better than she lets on.
+
+*goto hour_two
+
+*label put_back
+*page_break
+
+You close the book and put it back on the shelf, third from the left, square with the others.
+
+You do not say it. Not out loud, not in a small room at one in the morning, with nobody to hear it but a kettle.
+
+It is in you now regardless. That is what you find out on the way back down the sanctuary steps: that reading it was enough to do the damage, and that there was never a version where you read that line and walked away the same thing you were.
+
+*goto hour_two
+
+*label hour_two
+*page_break
+
+*comment ---------------- HOUR TWO: the building ----------------
+
+Half past one. You come back out through the low door and down the outside of the rail, and the nave is exactly as you left it: twenty-two pews on each side, one bulb over the choir stair, and the red lamp at the far end doing what it has done since 1897.
+
+Verna has moved. She is in the fourth pew still but she has turned sideways with her bad leg up on the bench, and she has her coat over her knees, and she is awake.
+
+*if (name)
+  "You found something," she says.
+
+  You have. You are not going to say it out loud yet, because saying it out loud is a different act from reading it, and you are not ready for the different act.
+*if (name = false)
+  "You look worse," she says. "I didn't think that was on the table."
+
+Four hours and forty minutes until the sun comes down Braddock Avenue and through the east window, which was given in 1924 by a family called Hlavatý and shows a man knocking at a door that has no handle on his side.
+
+You cannot sit still.
+
+*choice
+  #Go to the box on the epistle side.
+    *goto confessional
+  #Go up the ninety-one steps to the bell you helped hang.
+    *goto tower
+  #Go down the concrete stair to the undercroft, where there are no windows.
+    *goto undercroft
+  #Go back out to the vestibule and look at the doors.
+    *goto vestibule
+
+*label vestibule
+*page_break
+
+The vestibule is four paces across, with a terrazzo floor and a rack of missalettes and a radiator that has cycled off.
+
+The outer doors are bolted and the key is in a seventy-nine-year-old woman's coat pocket in the fourth pew. Through the glass you can see the lot: the sodium light, the chain-link fence, a man standing at it with his hands in his pockets who has not changed position in two hours, and beyond the fence, at the corner by the shuttered pharmacy, two more.
+
+Between you and the doors is a granite bowl on a granite pillar, filled on Saturday, with a hairline crack patched in the wrong colour of grout and **1897** cut into the base.
+
+You were carried past that bowl in a shawl in August of 1904. You have been past it once tonight, going the other way, and you remember what it cost.
+
+*choice
+  #Put your hand down into the water in the granite bowl.
+    *goto hand_in
+  #Leave the bowl alone and go back into the nave.
+    *goto back_to_nave
+
+*label hand_in
+*page_break
+
+You put your hand in the water.
+
+Not to leave; there is nowhere to leave to and the bolt is thrown. You do it the way a man puts his hand on a stove he has been told about.
+
+*if (name)
+  It is not a burn. It is your mother's name — Anna, from Trenčín, who could not write English and signed with a cross — and it is the weight of a shawl, and it is a room full of people in 1904 who are all now dead, and it is somebody saying *Ondrej Michal* out loud over this exact bowl and meaning it as a promise that has never once been withdrawn.
+
+  You take your hand out. The water is still moving. You stand and watch it go still, which takes about eleven seconds, and you do not go back into the nave for a while.
+*if (name = false)
+  It is not a burn. It is somebody in the room saying a word you cannot hear, which they have been saying since 1897, and which is addressed to you, and which you have no way of receiving because you do not know what you are called.
+
+  You take your hand out. It is the loneliest four seconds of ninety-four years.
+
+*goto back_to_nave
+
+*label confessional
+*page_break
+
+The confessional is wood, on the epistle side, between the fourth and fifth windows: three doors, the middle one for the priest and one on each side for whoever comes. Nobody has used the face-to-face room in fifteen years. It smells of old varnish and the particular dust that gets into carved wood and stays.
+
+The penitent's side has a kneeler and a screen and a card on the wall with the Act of Contrition printed on it in two languages, the English one gone brown at the folds.
+
+The priest's side has a chair, a small light with a bulb out, and a purple stole hanging on a nail.
+
+*choice
+  #Kneel on the penitent's side, where you knelt at nineteen.
+    *goto pen_side
+  #Sit on the wrong side of the screen, in the priest's chair.
+    *goto priest_side
+
+*label priest_side
+*page_break
+
+You sit in the priest's chair in the dark with a stole on a nail beside you.
+
+It is the wrong side of the screen and you know it is the wrong side, and you sit there anyway for a quarter of an hour, because from here you can see the shape of the kneeler through the mesh and imagine somebody on it.
+
+The last time you were on the other side of that screen you were nineteen. It was 1923. You told a man in this box about a girl and about money you took out of your father's coat, and he gave you three Hail Marys and told you to put the money back, and you did.
+
+You have not been able to think of that as a real memory for a very long time. It has been a thing that happened to somebody in a photograph.
+*achieve stole
+
+*goto pen_side
+
+*label pen_side
+*page_break
+
+You kneel on the penitent's side, which is worse.
+
+The kneeler is cracked leather over a board. The screen is a lattice with a cloth behind it, and there is nobody on the other side of it, and there will be nobody until twenty to six.
+
+The card is on the wall at eye level. *O my God, I am heartily sorry for having offended Thee, and I detest all my sins* — and then a fold, and then the brown part, and you can read all of it, and it is the words that are not the difficulty.
+
+The difficulty is the first two syllables. Every one of these begins with somebody saying who he is.
+
+*if (name)
+  *goto pen_named
+*if (name = false)
+  *goto pen_nameless
+
+*label pen_nameless
+*page_break
+
+"Bless me, Father," you say, out loud, in an empty box at two in the morning, "for I have sinned. It has been—"
+
+And there is nothing. Not resistance; a blank. The place where a man says *I* is empty in you, and has been for so long that you had stopped noticing the shape of the hole.
+
+You get up off the kneeler.
+
+Whatever this is, it does not start here. It starts with somebody's name, and you do not have one, and you have not had one since a boarding house on Talbot Avenue.
+
+*goto back_to_nave
+
+*label pen_named
+*page_break
+
+"Bless me, Father, for I have sinned," you say, out loud, in an empty box at two in the morning. "It has been a hundred and two years since my last confession. I am Ondrej Michal Hlavatý and I have—"
+
+You stop.
+
+Not because the words are hard. Because they are not: they come out of you in the flat vowels of a mill town, in the voice of a man who used to say them at fourteen with his cap in his hands, and hearing that voice again is the worst thing that has happened to you tonight.
+
+There is nobody behind the screen. You know exactly what that means and exactly what it does not.
+
+*choice
+  #Say the rest of it anyway, to nobody in a box.
+    *goto contrition_here
+  #Get up. This needs a priest and there is no priest.
+    *goto back_to_nave
+
+*label contrition_here
+*page_break
+
+You say the rest of it.
+
+Not the list. The list would take until dawn and past it and you will make it later, to a man with keys, if there is a later. What you say is the short thing on the card, and you say it the way you were taught to at seven years old by a woman from Trenčín who could not write her own name in English:
+
+*O my God, I am heartily sorry for having offended Thee.*
+
+And here is the part nobody warns you about: you find that you mean the middle of it. Not the ending — you are not sorry because of the sun, and you are honest enough at this hour to know that the sun is somewhere in it. But *for having offended Thee.* Him. The One at the end of the building you have not been able to look at since you came in off Braddock Avenue, who has been in the room the whole time, and who you have spent ninety-four years pretending was a fixture.
+
+You are sorry about *Him*. That is the whole of it and it takes about four seconds.
+
+*set contrite true
+*achieve contrition
+
+You kneel in a wooden box with your forehead against a lattice screen and nothing whatsoever happens, and you have been alive long enough to know that this is not evidence of anything either way.
+
+*goto back_to_nave
+
+*label tower
+*page_break
+
+The tower stair is off the vestibule behind a door with a hook on it, and there are ninety-one steps, and you count them because you counted them once before.
+
+At the top there is a chamber with four louvred openings and a bell in a timber frame, and the rope drops away through a hole in the floor into the dark. **1928** is stamped in the frame where the beam was replaced.
+
+You know that beam. You cut the shoulder on it in a shop on Rankin Boulevard when you were twenty-four, and you came up here on a Saturday with three other men and a chain hoist, and Fr. Kubica sent up a crate of beer at four o'clock and stood at the bottom shouting instructions that nobody could hear.
+
+Nobody has rung this bell since 1974.
+*achieve rope
+
+*page_break
+
+From the louvres you can see the whole of it: the wet roofs going down to the river, the two of them still at the corner by the pharmacy, and directly below, in the lot, the top of Marek's head under the sodium light.
+
+He knows you are up here. He does not look up. Looking up would be a move and Marek does not make moves; he stands still for a century and the world comes to him, which is how he got you the first time.
+
+*choice
+  #Take hold of the rope, and think about who would come.
+    *goto rope_now
+  #Leave the rope where it is and go back down the stairs.
+    *goto back_to_nave
+
+*label rope_now
+*page_break
+
+You take the rope. It is old hemp gone slick and it fits your hands, and one pull would put nine hundred pounds of bronze into motion over Braddock Avenue at two in the morning.
+
+Who comes? Police, in about six minutes. A patrol car, one officer, a young man with a flashlight coming into a dark church where a starving thing has been sitting for three hours.
+
+You know exactly how that goes. You have known since about 1940 exactly how that goes.
+
+You let the rope go. It swings against the frame twice, and the bell does not sound, and you stand there in the tower with your hands empty and understand that you have just decided something and that it counts.
+
+*goto back_to_nave
+
+*label undercroft
+*page_break
+
+The stair down is behind the sacristy: bare concrete, a handrail, and a light switch at the bottom that you do not use.
+
+The undercroft is the whole footprint of the church. Furnace at the far end, ticking. Folding tables stacked against a wall. A refrigerator with a hum and a sheet of paper taped to it that says PLEASE LABEL. Six decades of parish festival bunting in a cardboard box.
+
+There are no windows. Not one, anywhere, on any wall.
+
+Nothing down here will ever see the sun.
+
+*page_break
+
+Behind a plywood partition at the east end, where the ground rises, there is a slab with a name cut into it.
+
+**JOZEF KUBICA · KŇAZ · 1861–1931 · REQUIESCAT IN PACE**
+
+Fr. Kubica built this church out of instalments off a payroll, buried the men it took to build it, and died in the summer of 1931, which was a busy season for you also.
+
+He shouted instructions up a tower at you in 1928 that nobody could hear. He would have been the man on the other side of the screen in 1923.
+*achieve kubica
+
+*page_break
+
+You could stay down here.
+
+Not could — *can*. There is no window in this room and none in the passage and none on the stair, and if you were behind that plywood at fourteen minutes past six you would be behind it at seven, and at noon, and on Friday, and the whole thing would simply carry on.
+
+The refrigerator hums. Upstairs, four decks of floorboards away, a seventy-nine-year-old woman is sitting in the fourth pew with her leg up.
+
+You go back up. Not because you decided to. Because you have not finished, and something in you knows the difference between a hiding place and a decision, and you have used up a great deal of your life on the first one.
+
+*goto back_to_nave
+
+*label back_to_nave
+*page_break
+
+*comment ---------------- HOUR THREE: the aisle ----------------
+
+Half past three. The radiator has cycled off and the building is going cold, and the only sounds in it are Verna's breathing four pews up and the sodium light outside doing its frequency.
+
+*if (name)
+  Ondrej Michal Hlavatý. It sits in you now like a stone in a shoe. You cannot walk anywhere in this building without it.
+*if (name = false)
+  You still have no idea what you were called. It has begun to matter in a way it has not mattered since about 1954.
+
+Two and three quarter hours. The red lamp burns at the end of the nave and the centre aisle runs the whole length of the building towards it, forty metres of terrazzo and old wax.
+
+*choice
+  #Get up and start up the centre aisle towards the lamp.
+    *goto the_aisle
+  #Sit down in the fourth pew and let her talk to you.
+    *goto with_verna
+
+*label with_verna
+*page_break
+
+You sit down in the fourth pew, on the end, with a metre of bench between you.
+
+Verna has her rosary in her lap. The beads of the second decade are worn to the string — one decade, out of five, worn down to nothing while the other four are still round.
+
+"That's from my Peter," she says, when she sees where you are looking. "He's forty-six and he lives in Youngstown and he doesn't call. I do the second one for him." She turns the string over. "Thirty-one years, Thursdays. Somebody in Youngstown's had about sixteen thousand Hail Marys and hasn't the faintest idea."
+
+Youngstown. You are still enough for long enough that she notices.
+
+*page_break
+
+You are also, at half past three in the morning, in the fourth hour of a hunger you have not fed in nine days.
+
+It is not a rage. That is the thing they get wrong in every film. It is patient and reasonable and it sounds exactly like your own voice, and what it is saying now, very quietly, is that she is seventy-nine, that her hip is bad, that Peter does not call, that she has perhaps six years, and that it would take under four seconds and she would not be frightened for any of them.
+
+Every word of that is true.
+
+*choice
+  #Get up and move away from her. Now.
+    *goto moved_away
+  #Stay where you are and let her keep talking.
+    *goto stayed_close
+
+*label stayed_close
+*page_break
+
+You stay.
+
+She talks about Peter, and about her husband Mikuláš who worked at the Edgar Thomson works and died in 1998, and about the pierogi sale that used to fill the undercroft with four hundred people and now fills it with nine.
+
+And the whole time, underneath, that other voice is doing arithmetic, and it is patient, and it is not going anywhere, and it has got all night.
+
+At ten to four she leans over and puts her hand on your forearm to make a point about the pierogi sale.
+
+*choice
+  #Take her. Four seconds, and she would not be frightened for any of them.
+    *goto ending_pew
+  #Get up out of that pew before your hands decide for you.
+    *goto moved_away
+
+*label ending_pew
+*page_break
+
+Four seconds.
+
+She is not frightened for any of them, which is the thing you told yourself, and it turns out to have been the true part and not the important part.
+
+Afterwards you sit in the fourth pew on the Mary side with the thermos and the plastic rain bonnet on the bench beside you and a rosary on the floor with one decade worn to the string, and the red lamp goes on burning at the end of the building because it is not a smoke alarm and it does not know.
+
+At twenty to six Fr. Dan Cusack unlocks the side door with a travel mug in his hand.
+
+You are out through the sacristy window before he has the lights on. You are in the culvert under the Rankin Bridge by six. You have another ninety-four years, if you want them, and you know now exactly what they are made of, and so do you.
+
+*set fed true
+*ending The Fourth Pew
+
+*label moved_away
+*page_break
+
+You get up so fast the pew rocks.
+
+You are eight metres away with your back against a pillar before you have thought about it, and Verna is sitting with her hand still out where your arm was, and she has worked out precisely what just happened, because she is seventy-nine and not a fool.
+
+"Right," she says. Her voice is not steady. "Right. Well. You'll want to be over there, then."
+
+She stays where she is. She does not move to the door. It takes her a minute and a half to get her breathing down and then she says, to the front of the church rather than to you: "Was that close?"
+
+"Yes."
+
+"Right," Verna says again, and picks up the rosary, and starts the second decade.
+
+*goto rosary_offer
+
+*label rosary_offer
+*page_break
+
+She says them out loud. Not at you — she is not performing, she has done this at half past three on a Thursday for thirty-one years and it is simply what she does.
+
+At the fourth Hail Mary she stops and holds the string out sideways in your direction without looking round.
+
+"Second one's for Peter," she says. "You can have the third."
+
+*choice
+  #Take the string out of her hand and find the worn decade.
+    *goto took_beads
+  #"I can't say those," and let her do the third one alone.
+    *goto refused_beads
+
+*label refused_beads
+*page_break
+
+"I can't say those," you say.
+
+"Nobody can say them," Verna says. "That's not what they're for." But she takes the string back and does not push it, and she does the third decade herself with her eyes shut, and you stand eight metres off with your back against a pillar and listen to the whole of it.
+
+*goto the_aisle
+
+*label took_beads
+*page_break
+
+You take the beads.
+
+You do not say anything. You cannot; the hunger is still four seconds away and it is using your voice for other purposes. But she says them and you hold the string, and at some point in the third decade your thumb finds the worn ones — the second decade, the sixteen thousand for a man in Youngstown who does not call — and stays there.
+
+Ten of them. It takes four minutes.
+*achieve decade
+
+When she has finished she takes the rosary back, and looks at it, and says, "Huh," and puts it in her coat pocket.
+
+*goto the_aisle
+
+*label the_aisle
+*page_break
+
+Twenty past four. The aisle is forty metres of terrazzo with the wax worn off down the middle where a hundred and twenty-eight years of people have walked.
+
+You get about halfway.
+
+It is not a wall and there is nothing dramatic about it. It is the way a room feels when you have wronged the person sitting in it and they have not said anything, and the wrongness is entirely in you, and every step forward is a step further into being seen.
+
+At the halfway point you are on your knees on the terrazzo, and you are not sure how many pews you have passed.
+
+*page_break
+
+From here you can see the whole sanctuary: three steps, the rail nobody removed, the altar, and behind it in the wall a brass box the size of a bread bin with a small key in a lock that has not been turned since Sunday, and above it the lamp.
+
+The box is not locked well. You could open it in a second and a half. You have opened better than that.
+
+*choice
+  #Go up the three steps, over the rail, and open the box.
+    *goto ending_tabernacle
+  #Stay on your knees halfway up the aisle and go no further.
+    *goto stay_kneeling
+
+*label ending_tabernacle
+*page_break
+
+You go up the three steps and over the rail and you put your hand on the brass door, and it opens the way an old lock opens, which is easily.
+
+Inside there is a linen cloth and a covered vessel, and inside that there is bread, and it is not bread.
+
+You knew that before you touched the door. That is the thing that will never afterwards be arguable: you did not do this because you thought it was empty. You did it because it was full, and because you have spent ninety-four years being unable to bear that anything was full.
+
+You do not remember the next part. There is a version where you are trying to consume Him and a version where you are trying to destroy Him, and they turn out to be closer together than you would have believed, and neither is available to you.
+
+Fr. Dan Cusack finds the sanctuary at twenty to six. He is thirty-four years old and he has four parishes and he has never had a day like it, and what he does — before the police, before the diocese, before anything — is kneel down on the second step and start to gather up what is on the floor with his hands.
+
+You are in the culvert under the Rankin Bridge by six. You have another ninety-four years.
+
+*ending What You Broke
+
+*label stay_kneeling
+*page_break
+
+You stay where you are, halfway up the aisle, on the terrazzo, with your hands on your knees.
+
+*if (contrite)
+  You have already said the short thing in the box on the epistle side, and you find that having said it does not make this easier and does make it possible. There is a difference. Nobody ever explains the difference and it is the whole of the difference.
+*if (contrite = false)
+  You have not said anything to anybody tonight and you do not say anything now. You kneel on a cold floor halfway up a church because you cannot go forward and will not go back, which is where a great many people have knelt, and none of them were what you are.
+
+Behind you, four pews back, Verna Sowka says: "You can stop there. He's not counting the yards."
+
+*page_break
+
+The building goes on being cold.
+
+At twenty past five the sky over the roofs to the east is not lighter, but the quality of the dark is different, the way it is different an hour before.
+
+At twenty-five to six a car turns off Braddock Avenue into the lot with its headlights on and its wipers going.
+
+Marek steps back from the fence to let it in.
+
+*goto_scene three_dawn

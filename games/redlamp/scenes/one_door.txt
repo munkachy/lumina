@@ -1,0 +1,229 @@
+*comment ==================== ACT ONE — THE DOORWAY ====================
+*comment Every reader reads all of this. The world goes here: the font, the lamp,
+*comment the doors, the sun at 6:14, and what you are. Four choices, no deaths.
+*comment Bottleneck at the end: Verna locks the outer doors at midnight.
+
+The outer doors of St. Wenceslaus are oak and they are standing open, and you are through them before you have decided anything.
+
+Behind you, Braddock Avenue is wet and empty under the sodium lights, and there are two of them at the corner by the shuttered pharmacy who have been walking behind you since the bridge. They are not hurrying. They have never once had to hurry.
+
+You are in a vestibule with a terrazzo floor and a rack of missalettes and a radiator ticking under the window. It smells of candle wax and wet coats. Somewhere ahead, past a second set of doors with glass in them, there is a red light burning that you can see from here and cannot look at.
+
+You have not needed to breathe since April of 1931.
+
+You are breathing anyway, hard, because the room expects it.
+
+*page_break
+
+Between you and the inner doors there is a granite bowl on a granite pillar.
+
+It is knee-high and it is directly in the way, because whoever built this place in 1897 put it exactly where a person coming in from the street would have to pass it. That was the point. Somebody filled it on Saturday and nobody has emptied it, and the surface of the water is perfectly still, and there is a hairline crack in the granite that somebody patched once with the wrong colour of grout.
+
+The vestibule is four paces across. The bowl takes up one of them.
+
+*choice
+  #Go along the wall, with the radiator against your back.
+    *goto wall
+  #Go straight past it, close enough that your coat swings over the rim.
+    *goto straight
+
+*label wall
+*page_break
+
+You go along the wall.
+
+The radiator is on and it is the first warmth you have felt in a week, and you are aware of how absurd it is that you notice. Your left sleeve brushes the pillar. That is all. There is a distance of perhaps forty centimetres between your coat and the water and you keep it, and you get through the inner doors with nothing worse than the feeling of having been looked at by something that did not turn its head.
+
+*goto nave_back
+
+*label straight
+*page_break
+
+You go straight past it, close enough that your coat swings over the rim.
+
+It is not a burn. Everybody says burn, and it is not that. It is the feeling of a name being said in a room you are standing in, when you had been sure nobody there knew it — that lurch under the sternum, the whole body going still and hot at once.
+
+You are on your knees on the terrazzo before you understand that you have gone down.
+
+It lasts nine seconds. When it passes you are looking at the underside of the bowl from twenty centimetres away, at the place where the granite was patched with the wrong grout, and at a shape cut into the pillar's base that you can just make out in the dark: a year. **1897.**
+
+You get up. Your hands are shaking, and they have not shaken in a very long time.
+
+*goto nave_back
+
+*label nave_back
+*page_break
+
+The nave of St. Wenceslaus is twenty-two pews on each side and one light left on, over the stair to the choir loft, and everything else in the building is dark except at the far end.
+
+At the far end, up three steps and behind a rail that nobody ever got around to taking out, there is a small brass box in the wall, and above it, hanging on a chain from the ceiling, a wick burning in red glass.
+
+It has been burning since 1897. It goes out only when the box is empty, and the box has not been empty in a hundred and twenty-eight years except once, in a power cut in 1966, and the woman who was here that night is here tonight.
+
+You cannot look at it. Not the way you cannot look at the sun — the way you cannot look at somebody you did something to.
+
+You take the last pew on the left and sit down in a church for the first time since Coolidge was president.
+
+*choice
+  #Look up at the far end anyway. Get the measure of it.
+    *goto looked
+  #Keep your eyes on the floor. You know what is up there.
+    *goto floor
+
+*label looked
+*page_break
+
+You look up the length of the nave at the red glass.
+
+Four seconds, and you are looking at the floor again and your jaw is locked so hard that something in it grinds. There is no light in this building bright enough to hurt anybody. The one over the choir stair is a forty-watt bulb. That is not what happened.
+
+What happened is that somebody was in the room and had been the whole time, and you had been behaving as though the room were empty, and for four seconds you were not able to keep that up.
+
+You sit very still until it stops.
+
+*goto verna_speaks
+
+*label floor
+*page_break
+
+You keep your eyes down.
+
+There is a hymn number card on the back of the pew in front, still showing last Sunday's numbers, and a cracked leather kneeler, and a hole in the wood where somebody's grandson worked at it with a pencil forty years ago. You look at all of that instead.
+
+It does not help as much as you expected. You can feel where the far end of the building is the way you can feel where a stove is in a dark kitchen.
+
+*goto verna_speaks
+
+*label verna_speaks
+*page_break
+
+Then the fourth pew on the other side says: "Well."
+
+*page_break
+
+She has turned round on the bench with one arm over the back of it, the way you turn round in a car, and she is looking straight at you. Seventy-nine or eighty. A clear plastic rain bonnet still tied under her chin. A thermos on the seat beside her and a rosary in her right hand with the beads of one decade worn down to the string.
+
+She has been here since eleven. She is here every Thursday from eleven to midnight and has been for thirty-one years, since the parish signed up for perpetual adoration in 1994 and the roster fell apart inside two years and nobody told her.
+
+She is frightened of you. You can hear it from four metres away: the heart going, the small catch in the breath. She is frightened in the complete physical way that an animal is frightened, and she has not moved, and she is not going to.
+
+"You came in fast," she says. "Is somebody after you?"
+
+*choice
+  #Tell her yes, and find out what your own voice sounds like.
+    *goto said_yes
+  #Say nothing and let her decide what you are.
+    *goto said_nothing
+  #Go up the choir loft stair, out of her sight.
+    *goto loft
+
+*label said_yes
+*page_break
+
+"Yes," you say.
+
+Your own voice surprises you. It is a week since you used it and it comes out wrong — too quiet, and with the flat vowels of a mill town that stopped talking like that forty years ago.
+
+Verna Sowka looks at you for a while.
+
+"Then sit further in," she says. "Anybody at that door can see you where you are."
+
+*goto after_verna
+
+*label said_nothing
+*page_break
+
+You say nothing.
+
+It goes on a long time. She does not fill it, which is not what you expected; she just keeps her arm over the back of the pew and looks at you, and her heart goes, and after a while she nods slightly at something she has worked out on her own.
+
+"All right," she says. "Then sit further in. Anybody at that door can see you where you are."
+
+*goto after_verna
+
+*label loft
+*page_break
+
+The stair to the choir loft is behind a curtain by the inner doors and it takes you up eleven steps to a gallery with an organ console under a dust sheet and four rows of benches nobody has sat in since the parish stopped having a choir.
+
+From up here you can see the whole nave, the red lamp at the end of it, and the top of a clear plastic rain bonnet in the fourth pew on the Mary side.
+
+She has not turned back round. She is still looking at where you were.
+
+"You can stay up there if you like," she says, in a normal voice, to the empty pew you left. "It's warmer down here and the bench is padded, and I'm not going anywhere until midnight."
+
+You come down. You are not sure why, and you will think about it later.
+
+*goto after_verna
+
+*label after_verna
+*page_break
+
+You move up four pews. It is not much and it puts a pillar between you and the glass of the inner doors, and she watches you do it and then turns back round to face the front, which is the thing that undoes you slightly — that she turns her back.
+
+Out in the lot, under the sodium light on the pole by the fence, someone is standing.
+
+He is not moving. He has his hands in his coat pockets and his head tipped slightly, the way a man stands when he is waiting for somebody to finish an argument he already knows the end of. He does not come any closer than the chain-link fence.
+
+You know him. You have known him for ninety-four years.
+
+*page_break
+
+At three minutes to midnight Verna Sowka gets up, badly, holding the pew in front of her, and walks the whole length of the nave past you and out into the vestibule.
+
+You hear the outer doors close. You hear the bolt go over. You hear the key turn, twice, and then a small sound of a key being put into a coat pocket.
+
+She comes back and stands at the end of your pew with her hand on the rail.
+
+"They lock at midnight," she says. "I do it, because I'm the last one out on Thursdays." She is still frightened. It has not gone down at all in the last twenty minutes; if anything it is worse, now that she is close enough to see your hands. "Only I'm not going out. Not with that one standing in the lot."
+
+She sits down on the end of the pew in front of yours, sideways, so she can see you.
+
+"Sun's up at ten past six," she says. "I looked it up on the phone. Fourteen minutes past, if you want it exact."
+
+*page_break
+
+She says it the way you would say a bus time.
+
+She has known what you are since the vestibule. She has locked the two of you in together on purpose. She is seventy-nine and her hip is bad and the nearest door she could reach is forty metres away behind a bolt she threw herself.
+
+"Six hours and something," Verna says. "I'd usually be home by now."
+
+*choice
+  #"Open the door and go home. I am asking you."
+    *goto go_home
+  #"Why would you do that? You do not know one thing about me."
+    *goto why
+
+*label go_home
+*page_break
+
+"Open that door and go home," you say. "I am asking you. You do not understand what is in this pew."
+
+"I understand fine." She works the thermos cap loose with both hands, because her hands are not good either. "You came in off the street with your coat on and you went past that font like it bit you, and then you sat in the back like a man at his own mother's funeral." She pours an inch of tea into the cap. "I've been coming here thirty-one years, son. I know what people look like when they've come in to get away from something. It's most of them."
+
+"And the one in the lot?"
+
+"That one didn't come in," Verna says.
+
+*goto act_one_end
+
+*label why
+*page_break
+
+"Why would you do that?" you say.
+
+She thinks about it properly, which very few people do when you ask them a real question.
+
+"Because I've had this hour thirty-one years and nobody has ever needed it," she says at last. "Not once. I sat here every Thursday from eleven to twelve and it was me and Him and the radiator." She gets the thermos cap loose with both hands. "And tonight there's somebody in the back of my church at eleven o'clock at night with his coat on, and he's been shaking since the vestibule."
+
+She pours an inch of tea into the cap.
+
+"So I'm not going out to the car park. Don't ask me twice, because the second time I'd have to think about it."
+
+*goto act_one_end
+
+*label act_one_end
+*page_break
+
+*goto_scene two_night
