@@ -3,8 +3,8 @@
 **Nothing is built yet. This is the document to argue with.**
 
 A trading game on the Space Trader chassis. The economy, the encounter loop and
-the two reputation scales are the proven 2002 design, matched close to
-one-to-one. The innovation is the three valleys and what is being hauled.
+the police record are the proven 2002 design, matched close to one-to-one. The
+innovation is the three valleys, the crew, and what is being hauled.
 
 ---
 
@@ -25,14 +25,14 @@ one, or you can buy five and start again from nothing.
 | System | Original | Ours |
 |---|---|---|
 | Skills | Pilot, Fighter, Trader, Engineer (1–10) | **Driving, Fighting, Dealing, Mending** (1–10) |
-| Crew | ship has 1–3 crew slots; 31 mercenaries carry the same skills | truck has 1–4 **seats**; 12 recruitable crew |
+| Crew | 1–3 quarters, so **at most 2 hires**; 29 mercenaries; skills read as a max | 1–4 **seats**; 12 crew; **Fighting is shared** |
 | Vehicle | 15 ships: cargo / weapon / shield / gadget / crew / fuel / hull | 6 trucks: cargo / mounts / plating / fittings / seats / fuel / frame |
 | Weapons | 4 lasers, power 10/15/25/40 | 4 mounts, same power curve |
 | Shields | 3, power 20/35/50 | 3 platings, same |
 | Gadgets | 6 | 6 fittings, same prices |
 | Goods | 10, price 30–5000, demand tied to local events | 10, same shape |
 | Contraband | Narcotics and Firearms, **legality set per government** | **Blood and Ammunition, legality set per settlement** |
-| Reputation | two scales: police record −70…+75, combat 0…1500 | **Warrant** and **Renown**, same ranges |
+| Reputation | police record −70…+75, **and** combat reputation 0…1500 | **Warrant** alone — the second scale is cut |
 | Encounters | police / pirate / trader | patrol / raider / hauler |
 
 The one thing the original gets wrong and we fix: its police record only ever
@@ -111,7 +111,7 @@ radio 15,000 · floodlights (night targeting) 25,000 · muffled engine (run dark
 
 ---
 
-## Crew — twelve, four skills each, one trait
+## The roster — twelve, four skills each, one trait
 
 Every seat is a crate you are not carrying. That is the whole cost model.
 
@@ -130,9 +130,99 @@ Every seat is a crate you are not carrying. That is the whole cost model.
 | **Fr. Emil Sarto** | 2 | 1 | 3 | 4 | *see below* |
 | **Fr. Jan Kwiat** | 1 | 1 | 2 | 5 | *see below* |
 
-**Hardening.** Crew have a state: *steady → hard → gone*. Fang hunting and
-night fighting harden them. Hardened crew fight better, take less, and start
-refusing the priest's calls. Only a priest moves them back. He takes a seat.
+---
+
+## Crew — how Space Trader does it, and what we change
+
+**The original, read off the source rather than remembered:**
+
+- **29 mercenaries**, rolled once when the game begins. Each skill is
+  `1 + d5 + d6`: one to ten, but 5 and 6 are common and a 10 is about a 3% roll.
+- **Each is pinned to one solar system for the entire game**, one per system, out
+  of 120. They never move. A system shows **at most one**, and there is no way
+  to learn who is where except by going there.
+- **Hiring is free.** The cost is a **daily wage**: the sum of his four skills
+  × 3, taken for every day you travel.
+- **You can carry two.** Ships have 1–3 crew quarters and one is yours; only
+  four of the ten buyable ships have room for a second hire.
+- **The ship's skill in each area is the *highest* aboard — not the sum.**
+- **Firing is free and instant**, and the man goes back on the roster at his home
+  system, not where you dropped him.
+- **Mercenaries never improve.** Only the commander does.
+
+**Where that goes wrong.** Because skills read as a maximum, the second hire is
+usually worth nothing. Once anybody aboard has Pilot 9, every other pilot in the
+game is a wage with no return. Twenty-nine people collapse into one question —
+*whose one number is high?* — and crew stops being people and becomes a gadget
+you have to feed.
+
+### 1. Fighting is shared. The other three are not.
+
+One person drives. One talks the price. The best mechanic does the work and the
+others hand him tools. But in a fight everybody shoots.
+
+> **Driving, Dealing, Mending** — the best aboard, and nobody else counts.
+> **Fighting** — the best aboard, plus half of each other person's, rounded down.
+
+Sull 2, Beck 7, Sten 8, Tomasz 6 gives you 8 + 1 + 3 + 2 = **14**, against 8 for
+the same man riding alone. That one rule is the entire reason a fourth seat can
+be worth having — and it is still not obviously right, because a seat is a crate
+you are not carrying and a wage you pay every single day.
+
+### 2. Wages, same arithmetic as the original
+
+Sum of the four skills × 3, per day. Four decent people run about 200 a day.
+Against a flour run that is more than half the profit. Against a blood run it is
+six percent. **The roster you can afford is a function of what you are willing
+to haul** — which is the game, stated as a wage bill.
+
+### 3. Pinned to place, like the original — but gated by history, not luck
+
+Thirteen settlements and twelve people. If each simply sat at home, one lap of
+the map would hand you the whole roster and there would be nothing left to find.
+So everyone has a home **and** a condition. Some are there the first day. The
+rest turn up once you have done the thing that would make a person get into a
+truck with you.
+
+| | Where | When |
+|---|---|---|
+| Ivar Sull | Fenner | day one |
+| Ollie Frame | Tolm | day one |
+| Fr. Jan Kwiat | Tolm | day one |
+| Ruta Kelm | Bright's Ford | day one |
+| Fr. Emil Sarto | Ashgate | day one |
+| Corin Wace | Bright's Ford | the second time you come through |
+| Sten | Ashgate | after you have beaten a raider |
+| Tomasz | Sennick | day one in Vann |
+| Marya Doust | Doulton | after somebody in your cab gets hurt |
+| Beck | Marrow | after an inspection has cost you real money |
+| Halda Vey | Cade | after one night run |
+| **Nessa Roan** | Marrow | **Watched or worse** — she will not walk up to a clean truck |
+
+You still cannot see who is where without driving there. **Maps and radio**
+(15,000) tells you a settlement has somebody looking for a seat. It does not
+tell you who.
+
+### 4. They change, and the original's never do
+
+*Steady → hard → gone.* Fang hunting and night fighting move them along it.
+
+| | Fighting | Dealing | And |
+|---|---|---|---|
+| steady | — | — | — |
+| **hard** | +2 | −2 | refuses one thing he used to do |
+| **gone** | +3 | −4 | will haul anything, and stops going to the priest |
+
+Only a priest moves anyone back, and he takes a seat to do it. Corin Wace is the
+one person who drifts the other way: +1 to a skill every six weeks, up to 7.
+
+### 5. Firing is free, and he waits where you left him
+
+Which makes one thing worth saying out loud. **Putting Kwiat out at the post
+before you load blood is not the same as his permission.** Nothing changes
+numerically — the crew harden exactly as they would if he had never been aboard,
+because he is not aboard. The only consequence is that he says so when you come
+back for him. That is enough.
 
 ---
 
@@ -166,14 +256,33 @@ Sarto accepts being carried for that reason. **Kwiat notices, and says so.**
 
 ---
 
-## Warrant and Renown
+## Warrant — the one reputation scale
+
+**Renown is cut.** In the actual source, Space Trader's combat reputation does
+three things and no more: raiders break off when it is high, it gates two side
+quests, and it goes up when you kill. The valleys already escalate who you meet,
+and they do it more legibly. One scale is enough.
 
 **Warrant** (their police record, −70…+75):
 Wanted −50 · Marked −20 · Watched −5 · **Clean 0** · Licensed +10 · Bonded +30 ·
 Commended +60
 
-**Renown** (their combat reputation, 0…1500):
-Unknown 0 · Known 20 · Steady 80 · Solid 150 · Hard 300 · Feared 600 · A Name 1500
+Warrant then does four jobs. Three of them are already in the original and I had
+not given them enough credit:
+
+1. **It sets how hard a patrol hits you.** Space Trader multiplies police
+   strength by 2 below Villain and by 3 below Psychopath. Same rule here: below
+   Marked, the Bureau stops inspecting and starts hunting. That is the job
+   Renown looked like it was doing.
+2. **It sets the fine**, scaled to what you are worth — so getting rich never
+   makes the law cheap.
+3. **Below Watched, everything you buy costs about 11% more.** Nobody gives a
+   discount to a man he may have to explain later. This is the best small idea
+   in the original and almost nobody notices it is there.
+4. **It opens and closes doors** — ours, not theirs.
+
+Climbing back is slow on purpose. Killing a raider is worth +1 and one blood run
+costs several. You can be dragged down in a week and spend a season coming back.
 
 ### The gate — the fix for Space Trader's dead stat
 
@@ -294,12 +403,18 @@ the shock is that it talks like a person, because it is one.
    decision.
 2. **Twelve crew may be four too many** for a first build. Eight would be
    testable and still feel like a roster.
-3. **Renown may be dead weight.** Space Trader's combat reputation mostly just
-   scares pirates off. If Warrant is carrying the real decisions, Renown might be
-   one scale too many.
+3. **Fighting counting half from everyone else.** This one rule is holding the
+   whole four-seat truck up. If it is wrong, the Coach is worthless and the
+   roster collapses back into Space Trader's — one high number and two
+   passengers.
 4. **The berths ending.** Buying five berths instead of one is a strong final
    beat and it is also the kind of thing that can read as the game telling you
    what the right answer was. It may want to be quieter than that.
 5. **Whether the sabotage path can pay at all.** Right now it pays nothing, which
    makes it a vow rather than a strategy. That might be correct. It might also
    mean nobody plays it.
+6. **An earned crew member.** Space Trader has Zeethibal: free, one skill at 10,
+   awarded rather than hired. Ours would be one of the vampires fighting the
+   farms — no wage, high Fighting, and every checkpoint becomes a risk while he
+   is in the cab. It makes the priests' argument physical instead of verbal. It
+   may also be one turn of the screw too many.
