@@ -1,0 +1,279 @@
+*comment ============================================================
+*comment SCENE TEN — THE LONG MIDDLE
+*comment 1999–2016, ages 24–41. ~1,700 words, 12 choices.
+*comment Job: seventeen years in twelve fast decisions. The pace should
+*comment feel like a life going past. Wilkinsburg. The unexplained
+*comment number. And years where there is genuinely nothing to do.
+*comment ============================================================
+
+*comment ---- 10.1 : the number that should not be there ----
+
+Prayers has been at nothing since February 1986.
+
+Except that it has not. Since the third week of November 1993 there has been a one sitting in the corner of the panel, small and steady and completely unexplained, and it has not moved in six years, and nothing in the world accounts for it.
+
+*page_break
+
+"What is that."
+
+"I am not going to tell you."
+
+"You are *not going to tell me?*"
+
+"No."
+
+*page_break
+
+"Is it Renee?"
+
+"No."
+
+"Is it his mother?"
+
+"No."
+
+"Is it —" and you go through everybody you can think of, and it is none of them, and after a while you stop, and it sits there at one for another seventeen years.
+
+*page_break
+
+*comment ---- 10.2 : Wilkinsburg. 2001, age twenty-six ----
+
+A man at work called Curtis Hale invites him to a service in Wilkinsburg on a Sunday in March 2001, in the way people do — three times, casually, over five months, with no pressure and no follow-up when he says no.
+
+The fourth time Adam says yes because he has nothing on.
+
+*page_break
+
+The building used to be a bank. There are two hundred people in it and they are pleased to see each other in a way that is not performed. Somebody's grandmother makes him sit down and puts a bulletin in his hand. The music goes on considerably longer than he expects and about eight minutes into it he stops looking at his watch.
+
+Nobody has an angle. That is the thing he cannot get past afterwards. He came in braced for one and there is not one.
+
+*page_break
+
+At the end they pray for people by name, out loud, and Curtis puts a hand on his shoulder without asking and says his name into a room of two hundred strangers, and about forty of them say it back.
+
+*set_ward prayers 4
+
+*page_break
+
+The number moves.
+
+There is no asterisk on it. Nothing in the text remarks on it. It simply goes from one to four and stays there for about nine months and then slowly comes back down as people who met a man once stop remembering to.
+
+*page_break
+
+*choice
+  #"That counts?"
+    "Yes."
+    *line_break
+    *line_break
+    You wait for the rest of it, because you were raised in the 1950s in the Hill District and you are waiting for the rest of it.
+    *line_break
+    *line_break
+    "That is the rest of it," your angel says.
+    *set charity %+20
+    *set hope %+15
+    *goto wilkinsburg
+
+  #Say nothing and watch the number.
+    You watch the number.
+    *set charity %+10
+    *set hope %+10
+    *goto wilkinsburg
+
+  #"They've got half of it wrong in there."
+    "Some of them have some of it wrong. So did your grandmother, and so do you, and so did the woman who taught you in 1961." A pause. "That is a different conversation and it is a real one and it is not this afternoon's."
+    *set severity %+15
+    *goto wilkinsburg
+
+*label wilkinsburg
+
+*page_break
+
+*comment ---- and the room is split ----
+
+Afterwards there is coffee, and two men talk to him about the same subject within twenty minutes of each other, and they are on opposite sides of it, and both of them are trying to help.
+
+*page_break
+
+The first is about sixty and takes it with total seriousness. He speaks about it in terms more frightening than anything Adam has ever heard in a Catholic building — genuinely frightening, in a way that is meant kindly and lands like a hand on the back of the neck. He is not a fanatic. He has a daughter and a bad knee and he is trying to save somebody's life.
+
+The second is about thirty-five and warm and slightly puzzled that anybody still worries. He says something reassuring and general and means every word of it, and it costs Adam nothing at all to hear, and it is worth exactly what it cost.
+
+*page_break
+
+Adam Kowalczyk goes home with no category for either of them.
+
+He does not go back. Curtis asks twice more and then stops asking, and they are friendly at work for another six years.
+
+*page_break
+
+*choice
+  #"Which of those two was right?"
+    "Neither of them said the true thing," your angel says. "One of them said a true thing too loudly to a man who was already deaf in that ear. The other said a comfortable thing that was not true."
+    *line_break
+    *line_break
+    "So what was the difference between that room and St. Casimir?"
+    *line_break
+    *line_break
+    "About four hundred yards and a great deal of history," it says. "And nothing whatever, this afternoon, on this question. Nobody in either building said it in a way he could use. That has been the whole problem since 1990 and it is not about which building."
+    *set charity %+20
+    *set hope %+5
+    *goto middle
+
+  #"Get him back there next week."
+    You try. You spend three months on it. Curtis asks twice more and Adam is genuinely busy the first time and genuinely not the second.
+    *set valor %+20
+    *set hope %-5
+    *goto middle
+
+  #Nothing. It was a Sunday.
+    It was a Sunday. He got up, he went somewhere, some people prayed for him by name, and a number moved.
+    *set valor %-15
+    *set charity %+10
+    *goto middle
+
+*label middle
+
+*page_break
+
+*comment ---- 10.3 : two of them, the same way ----
+
+Nicole, 2001 to 2005. Then a long stretch of nothing much. Then Amanda, 2008 to 2013.
+
+They end the same way and it is not for one reason.
+
+*page_break
+
+That is what you have to be careful about here, and you get it wrong twice before you get it right.
+
+Chastity is at the root of it — you can see the root, you have been looking at the root since 1988 — but a root is not a tree. What is above ground by 2005 is a whole system: the avoidance, the drinking that is two more than he says it is, the work that is not really work but an alibi with a desk, the habit of leaving a room, and eventually the habit of leaving before anybody can leave first.
+
+*page_break
+
+He can name the pattern by Amanda. He does name it, out loud, once, in 2012, in a car, to Amanda, accurately.
+
+And then he does nothing about it, because naming a pattern feels enough like dealing with one to be going on with.
+
+*page_break
+
+*choice
+  #"He knows. He said it out loud. He *knows.*"
+    "Yes."
+    *line_break
+    *line_break
+    "So how does he —"
+    *line_break
+    *line_break
+    "Knowing has never been the difficult part," your angel says. "You have known about a stairlift since 2019."
+    *line_break
+    *line_break
+    You do not speak to it for about a week.
+    *set severity %+20
+    *set hope %-10
+    *goto seventh
+
+  #"It's not just the one thing any more."
+    "No. It has not been the one thing since about 1999. It is a way of standing that grew up around one thing and then stopped needing it."
+    *set charity %+15
+    *goto seventh
+
+  #Work on Amanda instead.
+    You spend two years on a woman who is not your commission and about whom you know almost nothing, because she is in the room and she is going to be hurt and nobody else appears to be doing anything.
+    *line_break
+    *line_break
+    "She has her own," your angel reminds you.
+    *line_break
+    *line_break
+    "Then it can have the night off."
+    *set charity %+25
+    *set_hidden overreach 5
+    *goto seventh
+
+*label seventh
+
+*page_break
+
+*comment ---- 10.4 : 2007 ----
+
+In 2007 a crowd shows up.
+
+There are books in the airport shops and a documentary and three people at work who have opinions now, and for about two years Adam Kowalczyk feels genuinely, physically lighter.
+
+*page_break
+
+And here is what that is about, and it is not argument.
+
+He has believed all of this since he was eighteen. Nothing he encounters in 2007 tells him one thing he had not already decided on a bus in February of 1993.
+
+What is new is that there are *other people*, in numbers, saying it out loud, in public, with charts. He has been carrying it privately for fourteen years and now he is not carrying it, and the relief of that is enormous and has nothing whatever to do with whether any of it is true.
+
+*page_break
+
+"He was lonely," you say.
+
+"He was lonely," your angel agrees.
+
+"That's all it was. Fourteen years of it and it was just —"
+
+"It was mostly that. There is an argument in there too and it is not a bad one. But you have put your finger on the load-bearing part."
+
+*page_break
+
+*comment ---- 10.5 : nothing to do ----
+
+And then there are the years where there is nothing.
+
+*page_break
+
+2009. 2010. 2011. Whole years where you go looking for something to spend your angel on and there is not one thing. He gets up, he goes to a job he does not mind, he comes home, he watches something, he goes to bed. He is not in danger. He is not in grace either, particularly. He is thirty-five years old and nothing is happening to him at all.
+
+*page_break
+
+You find this much harder than 1989.
+
+*choice
+  #Push. There must be something.
+    There is not. You spend eleven months looking for a lever in a life that does not have one, and at the end of it a man is thirty-six instead of thirty-five.
+    *line_break
+    *line_break
+    "You are not failing," your angel says, eventually. "There is a difference between failing and attending and you are going to have to learn it, because most of this office is the second one."
+    *set valor %+20
+    *set hope %-15
+    *goto middle_end
+
+  #Ask what he is supposed to be doing.
+    "What am I *for*, in a year like this?"
+    *line_break
+    *line_break
+    "Being here," it says.
+    *line_break
+    *line_break
+    "That's not a job."
+    *line_break
+    *line_break
+    "It is the entire job," your angel says. "Everything else is occasional."
+    *set patience_note true
+    *set valor %-25
+    *set charity %+20
+    *goto middle_end
+
+  #Spend the time on Stan and Ewa instead.
+    You spend four years on two people in their seventies in a house on Dobson Street, and one of them is writing in a notebook you have never been allowed to look at, and neither of them ever knows.
+    *set charity %+25
+    *set splendor %-20
+    *goto middle_end
+
+  #Go and look at the number again.
+    One. Still one. Six, now seven, now eight, now seventeen years of it, and nothing in the world to account for it, and your angel will not say.
+    *set severity %+10
+    *set hope %+5
+    *goto middle_end
+
+*label middle_end
+
+*page_break
+
+And then it is 2016, and it is March, and a telephone rings in an apartment in Bloomfield at ten past six in the morning.
+
+*finish

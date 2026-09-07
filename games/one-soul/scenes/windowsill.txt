@@ -1,0 +1,361 @@
+*comment ============================================================
+*comment SCENE ZERO — THE WINDOWSILL
+*comment Tuesday 15 October 2024. Target 1,200 words, 4 choices.
+*comment Job: establish the player, break them, teach the whole
+*comment mechanic inside one joke, end on Adam's last four seconds.
+*comment ============================================================
+
+You have been awake since four in the morning.
+
+The room has a window in it, which the brochure made a great deal of. What the window looks at is the third level of a parking structure. If you angle yourself and it is early enough, you can see a piece of sky over the top of it, about the size of a bath towel.
+
+It is early enough. The sky is doing nothing.
+
+Your sister went home Sunday. The physical therapist comes at ten and is twenty-four years old and says *we* when she means *you*. There is a cup of apple juice on the tray that has been there since last night, and somebody will take it away eventually, and until then it is yours.
+
+They took the second leg on Thursday.
+
+*page_break
+
+By the door there is a whiteboard, and somebody has written on it in green marker: TODAY IS TUESDAY. THE WEATHER IS CLOUDY. YOUR NURSE IS DEVON.
+
+And above that, in the box that says PATIENT, there is your name.
+
+*choice
+  #Loretta.
+    *set name "Loretta"
+    *goto pickedname
+  #Bernadette.
+    *set name "Bernadette"
+    *goto pickedname
+  #Dolores.
+    *set name "Dolores"
+    *goto pickedname
+  #Yolanda.
+    *set name "Yolanda"
+    *goto pickedname
+  #That is not my name.
+    What is it?
+    *input_text name
+    *goto pickedname
+
+*label pickedname
+
+Somebody has spelled it right, which is not nothing.
+
+*page_break
+
+There is one photograph on the tray table, face down, because you turned it over on Friday and have not turned it back. Walter, on a folding chair at somebody's wedding in 1988, squinting.
+
+*page_break
+
+On the windowsill there are fourteen porcelain angels.
+
+You asked for them. Your niece brought them in two shoeboxes with dish towels between the layers, and she set them up in a row while you watched, and she was so pleased about it that you said thank you twice.
+
+Every one of them is a woman in a nightgown.
+
+Six have harps. Two have their eyes closed in a way you did not use to mind. One is holding a lamb, and you have owned it for thirty-one years and you have never once worked out what the lamb is doing there. One is a raffle prize from the sodality in 1994 and is not, when you look at it honestly, very well made.
+
+And one is from Walter, the Christmas before he died, and it says GUARDIAN ANGEL WATCHING OVER ME on the base in gold, and he was not a man who bought that kind of thing, and he must have stood in a shop and picked it up and thought: yes. That one.
+
+You have prayed to your angel every day of your adult life. Out loud, most days.
+
+And in 1979 you gave it a name, because nobody had ever given you one and it seemed rude to keep saying *hey*.
+
+*choice
+  #Angelo.
+    *set angelname "Angelo"
+    *goto namedit
+  #Buddy.
+    *set angelname "Buddy"
+    *goto namedit
+  #Sunshine.
+    *set angelname "Sunshine"
+    *goto namedit
+  #Pete.
+    *set angelname "Pete"
+    *goto namedit
+  #Something else.
+    What did you call it?
+    *input_text angelname
+    *goto namedit
+
+*label namedit
+
+${angelname}. You were twenty-six and you were doing your best, and it stuck.
+
+*page_break
+
+You put your hand out.
+
+It is not a rampage. It is one motion with your forearm, and it takes about a second and a half, and then it is very loud and then it is very quiet and you are still sitting there with your arm out.
+
+Nobody comes. Somewhere down the hall a machine is going off and it has been going off for ten minutes and nobody is coming for that either.
+
+You say, to the ceiling, in a completely ordinary voice:
+
+*line_break
+*line_break
+I have talked to you every day since 1979.
+
+I made up a name for you because nobody ever gave me one.
+
+I have got nothing back in forty-five years that I could point at and say, that. That was you.
+
+And they took the other leg on Thursday.
+*line_break
+*line_break
+
+That is the whole prayer. It is not blasphemy. There is a whole book of the Bible where a man says considerably worse and God's complaint at the end of it is not about the tone.
+
+*page_break
+
+*comment ---- 0.3 : something is in the room ----
+
+There is something in the room.
+
+You know before you look, the way you know when a person has come up behind you in a kitchen. And when you look, the first thing you notice is not the size of it and not the light coming off it.
+
+The first thing you notice is that it is not looking at you with any expression at all.
+
+Not a cold expression. Not a kind one. Expression is a thing that faces do, and there is no face. Or rather, it is more than a face. There is nothing in the room that is arranged for you to read.
+
+It does not have a harp. It does not have a nightgown. It is not a woman. It is not a man either, and the more you look at it the more you understand that neither of those words was ever going to be any use here, and that you have spent forty-five years talking to something you had the wrong shape for entirely.
+
+You are not afraid, which surprises you.
+
+You are furious, which does not.
+
+*page_break
+
+What do you say to it?
+
+*choice
+  #"Get out."
+    You have thrown people out of rooms before and it has always worked.
+    *line_break
+    *line_break
+    It does not move. It does not indicate that it has declined to move. It is simply still there, the way a wall is still there, and you understand that you have just said *get out* to a wall.
+    *set hope %-5
+    *goto whereveryouwere
+
+  #"Where were you?"
+    You do not plan to say it. It comes out the way a cough comes out.
+    *line_break
+    *line_break
+    Something happens then — not a change of expression, because there is no face for one — but something in the room *turns toward the question*, the way a dog's ears turn.
+    *line_break
+    *line_break
+    It does not answer. Not yet. You will get that answer, but you have forty-nine years to go first, and neither of you knows that yet.
+    *set charity %+20
+    *set hope %+10
+    *goto whereveryouwere
+
+  #"You're not real. I'm on morphine."
+    A reasonable position. You are, in fact, on morphine.
+    *line_break
+    *line_break
+    "You are on four milligrams," it says, "and you took the last one at eleven, and you have never in your life hallucinated anything, and you are stalling."
+    *line_break
+    *line_break
+    You are stalling.
+    *set hope %+5
+    *goto whereveryouwere
+
+  #Nothing. You look at it and you wait.
+    You are good at this. You waited out Walter, two children and a county pension office.
+    *line_break
+    *line_break
+    It is better at waiting than you are. It is not even trying.
+    *set hope %+5
+    *goto whereveryouwere
+
+*label whereveryouwere
+
+*page_break
+
+*comment ---- 0.4 : the arrangement ----
+
+"You broke your statues," it says.
+
+"They were mine."
+
+"Yes."
+
+"Fourteen of them and not one of them looked anything like you."
+
+"No," it says. "They did not."
+
+You wait for the rest of it. In your experience there is always a rest of it, and it usually starts with *now.*
+
+There is no rest of it. It is just standing there having agreed with you, and after a while you realise it is going to keep standing there having agreed with you until you say something else.
+
+*page_break
+
+So you say: "Well? Are you going to do something, or what?"
+
+"I am waiting to be told what to do."
+
+"By who?"
+
+*page_break
+
+"You."
+
+*page_break
+
+*comment ---- 0.5 : she does not take this well ----
+
+The apple juice is still on the tray. The machine down the hall has stopped.
+
+"I'm sorry," you say. "*What?*"
+
+"There is a man," it says. "He is not in this room. He was given to me before he existed and I have been beside him since, and he has never known it, and he has about nine hours left. For as long as this lasts, what I am to do about him will reach me through you."
+
+"Through *me.*"
+
+"Yes."
+
+"Why?"
+
+"Because you broke your statues."
+
+*choice
+  #"That's not a reason. That's a punishment."
+    "It may be both," it says. "Those are not opposites. A man was struck dumb for nine months for a smaller question than the one you asked, and it was the best thing that ever happened to him, and he wrote a song about it afterwards."
+    *line_break
+    *line_break
+    "I'm not writing anything."
+    *line_break
+    *line_break
+    "No," it agrees.
+    *set hope %-5
+    *goto refuse
+
+  #"I'm not qualified."
+    "No," it says. "That is correct and it does not change anything. I am not going to explain the arrangement to you and then take it back because you have raised an objection to it. You have raised a good objection. It is still the arrangement."
+    *set charity %+10
+    *goto refuse
+
+  #"What if I get it wrong?"
+    "You will."
+    *line_break
+    *line_break
+    You wait for the part where it softens that.
+    *line_break
+    *line_break
+    It does not soften that.
+    *set hope %-10
+    *goto refuse
+
+  #"What if I tell you to do something wicked?"
+    "Then I will not do it, and you will have found out something about the arrangement that I would rather you found out now than later."
+    *line_break
+    *line_break
+    "That's it? That's the whole safety catch?"
+    *line_break
+    *line_break
+    "It has held for a while," it says.
+    *set_hidden tried_to_make_him_sin true
+    *set charity %+10
+    *goto refuse
+
+*label refuse
+
+*page_break
+
+*comment ---- 0.6 : the formation, stated once and not repeated ----
+
+"There is one more thing and then we will begin."
+
+You have a bad feeling about the one more thing.
+
+"I am not what I will be," it says. "What you decide is not only going to reach him. It is going to reach *me.* Every time you choose, some part of what I am hardens into the shape you chose, and it does not come back, and at the end of this I will be a particular kind of thing forever, and the kind will be the one you made."
+
+You look at it for a while.
+
+*choice
+  #"So God is letting a woman with no legs and a tenth-grade education build an angel."
+    "Yes."
+    *goto whydothat
+  #"So this is Build-A-Bear. I am in a hospital bed and God wants me to play Build-A-Bear with you."
+    "I do not know what that is."
+    *line_break
+    *line_break
+    "You pick out the fur, and you pick out the little voice box, and then you put a heart in it, and you have to kiss the heart first. My granddaughter made a rabbit."
+    *line_break
+    *line_break
+    "Then yes," it says. "It is somewhat like that."
+    *line_break
+    *line_break
+    "Oh, *don't*."
+    *goto whydothat
+  #"You have had four seconds. I have had seventy years. Which of us should be doing this?"
+    "Neither of us was consulted," it says.
+    *goto whydothat
+  #Nothing. You look at it for a while.
+    You look at it for a while. It waits. It is extremely good at waiting and you are about to find out how good.
+    *goto whydothat
+
+*label whydothat
+
+"Why would He do that?"
+
+*page_break
+
+"I have wondered," it says, "whether it is because you told Him that you would have done it differently."
+
+*set formed true
+
+*page_break
+
+*comment ---- 0.7 : the end of Adam, four seconds ----
+
+You are going to say something. You have several things ready.
+
+And then the room is gone.
+
+*image adam-room.webp A dim room, late afternoon, a bed seen from the doorway.
+
+You are standing in a doorway. It is October and it is afternoon, and the light coming in is the colour of weak tea. There is a bed. There is a shape in the bed that is a man, and he is not old, and he is very near the end of something, and there is a chair beside him with nobody in it.
+
+And you know this room.
+
+*page_break
+
+Not the man. You have never seen the man. **The room.**
+
+You have never been in it and you know it anyway, and the knowing is physical and slightly sickening, like missing a step in the dark. You know the ceiling tile with the water stain on it. You know the exact grey of that light and what time it has to be for the light to do that. You know, without going over there, that the window looks at the third level of a parking structure.
+
+*page_break
+
+You have about four seconds and you spend every one of them on the wrong thing.
+
+You look at the window. You look at the chair. You look at a jar of something on the nightstand, and the strip of light on the floor, and the door frame, and the ceiling again — turning the room over the way a woman turns a house over looking for her glasses, hunting for whatever it is that is doing this to you.
+
+And by the time it occurs to you to look at the sick man's face, you are already vanishing.
+
+*page_break
+
+*set_hidden glimpsed true
+
+"That was the end," it says.
+
+"Bring me back. I wasn't ready, I didn't see who —"
+
+"No."
+
+"But I know that man! Somehow. I need to find out who he —"
+
+"You will be back," the angel says. "In forty-nine years."
+
+*page_break
+
+And then there is no room, and no parking structure, and no floor.
+
+And no light yet either.
+
+*achieve argued
+
+*finish

@@ -1,0 +1,191 @@
+*title Perpetua
+*subtitle A first command
+*author Scriptorium
+
+*scene_list
+  orders
+  coldreach
+  leastthatanswers
+  ashaya
+  articlenine
+  quietworld
+  salvage
+  theboard
+  halloran
+  theweighing
+  nadire
+  wrapup
+
+*comment ---------------- YOU ----------------
+*create name "Rell"
+*create pcthey "she"
+*create pcthem "her"
+*create pctheir "her"
+*create pcThey "She"
+*create background "science"
+*create why "earned"
+*create commissioned false
+
+*comment ---------------- THE FOUR LINES ----------------
+*comment Opposed pairs. High is the first name, low is the second. Neither end
+*comment is the good end; the Survey reads all four off your log either way.
+*comment nerve  : Nerve / Restraint  — you move, or you wait
+*comment candor : Candour / Guard    — you say it, or you keep it
+*comment crew   : Crew / Mission     — you protect your people, or you finish the job
+*comment rule   : Rule / Counsel     — you decide, or the room decides
+*create nerve 50
+*create candor 50
+*create crew 50
+*create rule 50
+
+*comment ---------------- THE WORLD ----------------
+*create standing 40
+*create strain 12
+*create oleyo 50
+*create met_oleyo false
+
+*comment ---------------- YOUR OFFICERS ----------------
+*create xo ""
+*create xoname "—"
+*create xothey "she"
+*create xothem "her"
+*create xotheir "her"
+*create xoThey "She"
+*create rel_xo 50
+
+*create eng ""
+*create engname "—"
+*create engthey "she"
+*create engthem "her"
+*create engtheir "her"
+*create engThey "She"
+*create rel_eng 50
+
+*create med ""
+*create medname "—"
+*create medthey "she"
+*create medthem "her"
+*create medtheir "her"
+*create medThey "She"
+*create rel_med 50
+
+*create sec ""
+*create secname "—"
+*create secthey "she"
+*create secthem "her"
+*create sectheir "her"
+*create secThey "She"
+*create rel_sec 50
+
+*create chap "none"
+*create chapname "—"
+*create chapthey "he"
+*create chapthem "him"
+*create chaptheir "his"
+*create chapThey "He"
+*create rel_chap 50
+
+*comment ---------------- WHAT HAS HAPPENED ----------------
+*create told_crew "nothing"
+*create halbard "none"
+*create sedge "none"
+*create sedge_dead 0
+*create sedge_open false
+*create kem_pc false
+*create kem_eng false
+*create kem_vol false
+*create kem_burn false
+*create kem_dead 0
+*create gave_cure false
+*create article_nine "none"
+*create kept_secret false
+*create quiet_named false
+*create salvage_saved 0
+*create board_verdict "open"
+*create board_candid false
+*create board_asked false
+*create ceyla_known 0
+*create met_halloran false
+*create halloran_regard 50
+*create nadire "none"
+*create nadire_close false
+*create nadire_silence false
+*create nadire_survey false
+*create nadire_honest false
+*create nadire_track false
+*create nadire_vote false
+*create nadire_saved 0
+*create plaque false
+*create tern_lost false
+*create ashaya_pc false
+*create ashaya_split false
+*create ashaya_canary false
+*create ashaya_venue "none"
+*create beye_alive true
+
+*comment ---------------- ACHIEVEMENTS ----------------
+*achievement plaque visible 25 Who She Was
+  Find out who the ship is named for.
+  Found out who she was, and that nobody had asked in twenty-six years.
+
+*achievement empty_berth visible 25 The Empty Berth
+  Sail without a chaplain, and be asked about it.
+  Sailed without one, and was asked, twice, by people who did not agree with each other.
+
+*achievement least visible 50 The Least That Answers
+  Give exactly what Standing Order Four permits, and no more.
+  Gave the least that answers. It answered.
+
+*achievement more visible 50 More Than Answers
+  Break Standing Order Four in front of a witness.
+  Broke it, in front of a witness, and wrote it in the log yourself.
+
+*achievement oleyo_respect visible 50 Sar Vehn Oleyo
+  Finish with the Vaunt captain's regard at 80 or above.
+  Was thanked, at the end, by a man who takes no pleasure in lying.
+
+*achievement whole_crew visible 100 All Hands
+  Reach the last chapter with every officer above 60.
+  Brought all five of them the whole way, and not one of them agreed with you throughout.
+
+*achievement nerve visible 50 Nerve
+  Finish with Nerve at 80 or above.
+  Finished a commander who moves first. It cost what it costs.
+
+*achievement restraint visible 50 Restraint
+  Finish with Restraint at 80 or above.
+  Finished a commander who waits. That cost something too.
+
+*achievement candour visible 50 Candour
+  Finish with Candour at 80 or above.
+  Never once said the useful thing instead of the true one.
+
+*achievement guard visible 50 Guard
+  Finish with Guard at 80 or above.
+  Carried what could not be shared, and did not put it down.
+
+*achievement crewfirst visible 50 Crew
+  Finish with Crew at 80 or above.
+  Brought them home. That was the whole job, in the end.
+
+*achievement missionfirst visible 50 Mission
+  Finish with Mission at 80 or above.
+  Finished the work. Someone always has to.
+
+*achievement ruler visible 50 Rule
+  Finish with Rule at 80 or above.
+  Decided. Alone, and on time, and in the dark.
+
+*achievement counsel visible 50 Counsel
+  Finish with Counsel at 80 or above.
+  Listened to the youngest person in the room, and was right to.
+
+*achievement halloran visible 100 Ivo Halloran
+  Reach the end knowing everything about Ceyla.
+  Learned all of it, including the part he does not say out loud.
+
+*achievement noone_lost hidden 100 Not One
+  ---
+  Some commanders come back with everybody.
+
+*goto_scene orders

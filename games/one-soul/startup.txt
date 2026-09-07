@@ -1,0 +1,120 @@
+*title One Soul
+*subtitle Angelic Orders, Book One
+*author Scriptorium
+
+*scene_list
+  windowsill
+  assembly
+  fourhours
+  ordinarytime
+  otherwatch
+  vigil
+  whattheytoldhim
+  legion
+  whathedoesnttell
+  permissionslip
+  longmiddle
+  thehour
+  threshold
+
+*comment ---------------- YOU ----------------
+*comment Set in scene zero, off a whiteboard by the door. The year is
+*comment fixed — everything downstream depends on 1979 and 2024 — so the
+*comment age is implied and never stated. Nothing else about you is.
+*create name "Loretta"
+*create angelname "Angelo"
+*create formed false
+
+*comment ---------------- THE ANGEL ----------------
+*comment Three opposed pairs. High valor IS low patience: one slider, two names.
+*comment Your choices do not merely track these. They form them, and what
+*comment they form is permanent, because he is not the kind of thing that changes.
+*create valor 50
+*create severity 50
+*create splendor 50
+
+*comment Charity is not opposed to anything. It is what the rest is for.
+*create charity 50
+
+*comment ---------------- LORETTA ----------------
+*comment Hope belongs to her, not to him. The blessed do not hope; they possess.
+*comment She is a wayfarer and it is the only stat she owns, and the endings
+*comment are read off it.
+*create hope 40
+
+*comment ---------------- ADAM ----------------
+*create needle 1
+*create prayers 0
+*create consolation 3
+*create sight "clear"
+*create culpability "unknown"
+
+*comment ---------------- HIDDEN ----------------
+*create overreach 0
+*create heard_him_first false
+*create caught_the_lie false
+*create asked_for 0
+*create tactic 0
+*create rescued false
+*create glimpsed false
+*create tried_to_make_him_sin false
+*create birds 0
+
+*comment ---------------- ACHIEVEMENTS ----------------
+*achievement stood_aside visible 50 Let Them
+  Decline to obstruct, once, on purpose.
+  Stood aside in 1984 and waited thirty-four years to find out.
+
+*achievement counted visible 50 Three
+  Count them without being told.
+  Counted them. There were three.
+
+*achievement storm visible 25 Josie
+  Bring a bird home through weather.
+  Brought a hen home from Springfield in a crosswind.
+
+*achievement argued visible 25 By Who
+  Argue with an angel and lose.
+  Argued with an angel and lost, on the first day.
+
+*achievement impossible visible 50 Not That
+  Ask him to do something he cannot do.
+  Asked him to do something he cannot do, and found out what that looks like.
+
+*achievement corridor visible 100 Down the Hall
+  Go.
+  Went.
+
+*achievement mercy visible 50 Mercy
+  Finish with Mercy at 80 or above.
+  Formed an angel who is gentle with failure.
+
+*achievement severity visible 50 Severity
+  Finish with Severity at 80 or above.
+  Formed an angel who does not look away from anything.
+
+*achievement patience visible 50 Patience
+  Finish with Patience at 80 or above.
+  Formed an angel who can wait longer than a human life.
+
+*achievement valour visible 50 Valour
+  Finish with Valor at 80 or above.
+  Formed an angel who moves first and asks after.
+
+*achievement hidden visible 50 Hiddenness
+  Finish with Hiddenness at 80 or above.
+  Formed an angel nobody will ever notice.
+
+*achievement splendour visible 50 Splendour
+  Finish with Splendor at 80 or above.
+  Formed an angel you can feel come into a room.
+
+*achievement charity visible 100 Charity
+  Finish with Charity at 90 or above.
+  Formed an angel who never once stopped.
+
+*achievement pope hidden 100 At Least You Weren't Pope
+  ---
+  Some people are given more than one.
+
+*goto_scene windowsill
