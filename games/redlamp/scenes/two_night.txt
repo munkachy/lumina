@@ -25,7 +25,7 @@ You take it. The cap is warm through your fingers and that is the whole of it �
 
 "Well," Verna says, taking it back. "That's that sorted."
 
-She screws the cap on. Her hands have stopped shaking, which is not the same as her being less afraid; she is exactly as afraid as she was, and she has simply put her hands somewhere else.
+She screws the cap on. Her hands have stopped shaking, which is not the same as her being less afraid; she is exactly as afraid as she was, and she has simply put her shaking somewhere else.
 *achieve thermos
 
 *goto phone
@@ -92,15 +92,27 @@ The phone is on the wall. You pick it up.
 
 *page_break
 
-You have not heard that word in ninety-four years. It goes through you like the font did.
+You have not heard that word in ninety-four years. It collapses you like the font did.
 
-"You will not say it," he says. "I know. You stopped in the winter of 1954, in a rooming house on Wick Avenue in Youngstown. I asked you a question and you began to answer and you stopped in the middle of the first word, and you have not said it since, and I have not made you."
+"Ondrej Michal Hlavatý," says Marek. "Born on Talbot Avenue in August of 1904. Father Ján, at the open hearth. Mother Anna, out of a village outside Trenčín, who could not write and signed with a cross."
+
+You do not know any of that. You have never known any of that.
+
+"I say it to you about once every ten years," he says. "I have done it since the nineteen-forties. It is the only thing I have that you do not. I hand it over, it does not take, and I hand it over again."
+
+*page_break
+
+"In the winter of 1954, in a rooming house on Wick Avenue in Youngstown, I said it and you asked me who that was."
 
 A pause. Forty metres away he does not move.
 
-"You remember the boy perfectly. I am aware of that. You have told me about him for ninety-four years — his mother, the mill, the bell in the tower — and never once as yourself. Always as somebody you knew."
+"Not as a joke. You asked me who Ondrej Hlavatý was, and I told you — the mother, the mill, the bell in the tower — and you listened for eleven minutes the way a man listens to somebody else's family history. Politely. And then you asked me whether I wanted the window open."
 
-His voice has not aged the way voices age, and there is nothing theatrical in it, and he does not use contractions, because he learned this language formally from a man in about 1890 and it set that way.
+Another pause.
+
+"Tonight is the nineteenth time I have said it to you. Tonight you have asked me a question back. That has not happened before, and I am not enjoying it."
+
+His voice has not aged the way voices age and there is nothing theatrical in it. He learned this language as a grown man, out of books, from somebody a hundred and eighty-five years dead, and it left him with no idioms at all. That is the thing you notice about Marek in the end. Not one figure of speech in ninety-four years.
 
 "I will tell you why I am still standing here, because you have not asked and you should."
 
