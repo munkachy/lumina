@@ -46,6 +46,10 @@ Then you are through the inner doors and out of the frame, and whoever it was do
 
 You get into the nave with nothing worse than the feeling of having been looked at by something that did not turn its head.
 
+And with something else you cannot place: for about a second and a half, at the pillar, there was a woman holding you in daylight in a room full of people, and it was gone before you could look at it.
+
+You have not had a picture in your head that you did not put there since about 1941.
+
 *goto nave_back
 
 *label straight
@@ -53,13 +57,25 @@ You get into the nave with nothing worse than the feeling of having been looked 
 
 You go straight past it, close enough that your coat swings over the rim.
 
-It is not a burn. Everybody says burn. It is not that. It is the feeling of a name being said in a room you are standing in, when you had been sure nobody there knew it — that lurch under the sternum, the whole body going still and hot at once.
+It is not a burn. Everybody says burn. It is not that.
+
+It is a room you have never seen, full of people, in daylight. A woman holding you. Somebody saying a word over you that you cannot hear the end of. Cold water on the back of your head and the sound of thirty people who all know each other, breathing.
 
 You are on your knees on the terrazzo before you understand that you have gone down.
 
-It lasts nine seconds. When it passes you are looking at the underside of the bowl from twenty centimetres away, at the place where the granite was patched with the wrong grout, and at a shape cut into the pillar's base that you can just make out in the dark: a year. **1897.**
+*page_break
 
-You get up. Your hands are shaking, and they have not shaken in a very long time.
+Here is the thing nobody tells you when you are made, because the ones who make you have been at it too long to remember it themselves.
+
+You do not lose your teeth or your reflection. You lose *yourself*. Not all at once — over about ten years it goes, the way a name goes off a gravestone, and at the end of it you can still speak four languages and lay a weld and read a room, and you cannot say who learned any of it. You keep everything except the person it happened to.
+
+And it comes back near Him. That is all. Not a rule and not a punishment: He is the truth, and things come back near the truth, and what it feels like from the inside is being burned.
+
+Ninety-four years, and eleven seconds at a font in the dark, and a woman is holding you in daylight in a room you have never seen.
+
+It lasts nine seconds. When it goes you are looking at the underside of the bowl from twenty centimetres away, at the granite patched with the wrong grout, and at a year cut into the base of the pillar: **1897.**
+
+You get up. Your hands are shaking and they have not shaken in a very long time.
 
 *goto nave_back
 
@@ -88,19 +104,23 @@ You came in here because you were driven in. You are still sitting here for a di
 
 *page_break
 
-In about 1911 the old pastor of this parish preached on that box, in Slovak, on a Sunday afternoon, and used a phrase that is older than the church and older than the language he said it in.
+Because sitting down facing that way brought the second one.
+
+A Sunday afternoon. Hot. A priest with a beard, in Slovak, going on about the box at the end of the room, and a phrase in the middle of it that a child could hold on to when the rest was just noise.
 
 *Liek nesmrteľnosti.* The medicine of immortality. The antidote, he said, so that we should not die, but live.
 
-You were seven. You were sitting on the epistle side with your feet not touching the floor and you did not understand one word of the sermon around it and you have never once, in a hundred and fourteen years, forgotten the phrase.
+You were seven. You were sitting on the epistle side and your feet did not touch the floor. You have not had that afternoon in ninety-four years and you have it now, whole, down to the heat and the smell of the wool.
 
-You have a kind of not-dying. You have had it since April of 1931 and you would give anything to be rid of it.
+*page_break
 
-And four streets from the house you were born in, at the end of a room you are sitting in, behind a brass door with a small key in it, there is a medicine for the other kind.
+So now you know what you want, which is more than you knew at eleven o'clock.
 
-That is what you want. It is the only thing you have wanted for ninety-four years.
+You have a kind of not-dying. You have had it since April of 1931 and you would give anything at all to be rid of it.
 
-What is stopping you is that it is forty metres away up a centre aisle, and you have got exactly nowhere near it, and you have been in this building for eleven minutes.
+And there is a medicine for the other kind. It is behind a small brass door thirty-one metres up the middle of this room, four streets from the house you were born in, and it has been there the whole time.
+
+What is stopping you is thirty-one metres. That is the entire obstacle and it is going to take you all night.
 
 *choice
   #Look up at the far end anyway. Get the measure of it.
@@ -145,9 +165,11 @@ She has been here since eleven. She is here every Thursday from eleven to midnig
 
 She is frightened of you. You can hear it from four metres away: the heart going, the small catch in the breath. She is frightened in the whole-body way that an animal is frightened, and she has not moved, and she is not going to.
 
-"Son," is what she will call you, before the hour is out, because that is what she calls everybody under sixty.
+"Son," is what she will call you before the hour is out, because that is what she calls everybody under sixty.
 
-You will not be able to answer to it. Not because you have forgotten your name — you have forgotten nothing, that is not what happens — but because the name belongs to a boy you remember very clearly and cannot get the word *I* to reach.
+You will not be able to answer to it. You do not know what you were called. It went with the rest of him somewhere in the nineteen-thirties and you stopped looking for it a long time before that stopped hurting.
+
+You have had two pieces of him back in the last eleven minutes. Both of them came in this building and neither came anywhere else in ninety-four years, and you are sitting very still now, the way a man sits still when a bird has landed near him.
 
 She has also, in the eleven seconds since you sat down, worked out what you are. You can watch her do it. Her eyes go to the font behind you, and then to the width of the gap you left going round it, and then to your hands; and then something in her face closes over, the way a ledger closes.
 

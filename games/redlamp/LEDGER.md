@@ -48,29 +48,49 @@ Physical facts, used consistently:
 
 ## You
 
-**He has not forgotten anything.** That is the point and it must never read as
-amnesia, which is not what happens to people and is not what happened to him.
+## The one rule this world runs on
 
-He remembers all of it, in detail: hanging the bell in 1928, the beer Fr. Kubica
-sent up at four o'clock, his mother's hands, the boarding house on Talbot
-Avenue. What he lost is not the memories. It is the ability to make the word
-*I* reach back to the boy in them. Ondrej Hlavatý is somebody he remembers
-extremely well, the way you remember a friend who died — and the connection
-between that boy and the thing sitting in the back pew came apart at some point
-between 1931 and about 1954, and will not hold for more than a few seconds at a
-time.
+**What a vampire loses is himself.**
 
-So he can tell you everything about Ondrej Hlavatý and cannot say *I am*.
+Not by a curse laid on him from outside. It is what the thing costs. Over about
+ten years after you are made, the person you were goes — the way a name goes off
+a gravestone — and at the end of it you can still speak four languages and lay a
+weld and read a room, and you cannot say who learned any of it. You keep
+everything except the one it happened to.
 
-The register in the sacristy is what breaks that, because a document is a
-witness. Somebody with a good hand wrote both halves on one line in 1904 and it
-has been sitting on a shelf ever since, and you cannot argue with a book:
+**And it comes back near Him.** That is the whole of the lore and everything
+else in the story falls out of it. He is the truth, and things come back near
+the truth, and from the inside that feels like burning.
 
-> **Hlavatý, Ondrej Michal — b. 14 Aug 1904 — bapt. 21 Aug 1904 — par. Ján
-> Hlavatý & Anna (Sokolová) — spon. Michal Sokol, Terézia Bártová**
+So the font is not a repellent. Neither is a crucifix, and neither is the lamp
+at the end of the nave. **They are mirrors.** What a thing like Ondrej cannot
+stand is being told the truth about itself by somebody who loves it and is not
+going to stop.
 
-That is also why an act of contrition is gated behind it. Contrition needs a
-first person. He could not say *I have sinned* while *I* would not reach.
+That is why Marek stands at a fence for seven hours. He is not barred; he could
+walk through that door tonight and nothing would stop him. He has had a hundred
+and eighty-five years more than Ondrej to accumulate, and he would get all of it
+at once, standing up, in the middle of a nave — everything he was and everything
+he has done, with the names attached. He has decided against that every night
+since 1840, and he says so plainly when he is asked, which nobody has done in
+ninety-four years.
+
+**The night is a recovery, and the reader should feel it accumulate.** Track it:
+
+| Where | What comes back |
+|---|---|
+| The font, 11:04 p.m. | A room in daylight. A woman holding him. A word he cannot hear the end of. |
+| Sitting down facing the front | Fr. Kubica's sermon. *Liek nesmrteľnosti.* Seven years old, feet not touching the floor. |
+| Verna, midnight | Small things — a kitchen, a mill whistle |
+| The tower, 2 a.m. | Hanging the bell in 1928. The shoulder cut he made himself. |
+| **The register, 1 a.m.** | All of it, and — for the first time since about 1936 — in the **first person**. That is what the name is: not a fact but a grammatical person. |
+| The sun, 6:14 | The rest. |
+
+Marek has said the name to him about once a decade since the 1940s and it has
+never taken. In 1954, in a rooming house on Wick Avenue in Youngstown, Marek
+said it and Ondrej asked politely who that was, and listened to eleven minutes
+of his own life the way you listen to somebody else's family history. Tonight is
+the nineteenth time Marek has tried.
 
 **What he wants — the super-objective.** In about 1911, in this building,
 Fr. Jozef Kubica preached on the Eucharist in Slovak and used the old phrase
