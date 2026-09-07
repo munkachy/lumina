@@ -1,6 +1,7 @@
 # NIGHTFREIGHT — design document
 
-**Nothing is built yet. This is the document to argue with.**
+**The first draft is built and playable: `games/nightfreight/index.html`.**
+This document is now the record of what was decided and why.
 
 A trading game on the Space Trader chassis. The economy, the encounter loop and
 the police record are the proven 2002 design, matched close to one-to-one. The
@@ -14,9 +15,14 @@ You drive a truck between settlements in a country where the nights are not
 safe, and the most profitable cargo is blood, and nobody will tell you where it
 comes from.
 
-**Win condition:** 500,000 and a berth on the boat at Halloway, which is the
-only way out of the country. **The berths are sold one at a time.** You can buy
-one, or you can buy five and start again from nothing.
+**Win condition:** a berth on the boat at Halloway, which is the only way out of
+the country, and which costs 500,000. The berths are sold one at a time.
+
+**The ending does not score you.** It says who is on the boat, who is standing
+on the dock, how many teeth you sold and how many loads you took through a farm
+gate. If you bought a spare berth and left the name blank, it says that too, and
+it does not say whether that was good. The man on the quay does not ask what you
+are; he asks for the money.
 
 ---
 
@@ -77,8 +83,17 @@ Prices are the low–high band; the local event pushes within and past it.
 | **Ammunition** | 600–1100 | **restricted in 4 of 13** | a hunt, a siege |
 | **Blood** | 2000–3000 | **restricted in 9 of 13** | always |
 
+**Restricted does not mean absent.** There is a buyer everywhere; where it is
+restricted there is a buyer *and a risk*, so the price carries the risk — about
+20% over, against 10% under where it is open. That is where the whole blood
+margin comes from, and it means the temptation is on the board from Fenner on
+day one rather than waiting for the Kell. Buying or selling restricted goods
+where they are restricted costs Warrant even when nobody stops you, because
+somebody watched the crates come off.
+
 **Fangs are not a trade good.** They are sold to Bureau posts at a published
-schedule price, fresh worth more than old. Selling raises Warrant.
+schedule price — 1,200 for ten days after they are drawn, 700 after that.
+Selling raises Warrant, and hardens everybody in the cab.
 
 **Local events:** quiet · siege · fever · hard frost · crop failure · a strike ·
 a hunt (Bureau sweep).
@@ -92,13 +107,16 @@ a hunt (Bureau sweep).
 | Panel van | 10 | 1 | 0 | 0 | 0 | 14 | 4 | start |
 | Flatbed | 15 | 2 | 1 | 0 | 1 | 16 | 5 | 10,000 |
 | Box truck | 25 | 2 | 1 | 1 | 2 | 15 | 5 | 30,000 |
-| **Coach** | 20 | **4** | 2 | 2 | 2 | 14 | 5 | 75,000 |
+| **Coach** | 20 | **4** | 1 | 1 | 2 | 14 | 4 | 75,000 |
 | Hauler | 45 | 3 | 2 | 2 | 3 | 13 | 6 | 150,000 |
 | Armoured hauler | 35 | 3 | 3 | 3 | 3 | 12 | 8 | 300,000 |
 
-The Coach is the interesting one: worst cargo-per-credit in the game, and the
-only truck that carries four people. It is the truck you buy if you have decided
-what this year is for.
+**The Coach was too obviously right, so it is now soft.** Four seats, and one
+mount and one plating to defend them with — because it is a bus, and the sides
+are glass. It is the worst cargo-per-credit in the game, it is the only truck
+that carries four people, and taking it into the Kell means taking four people
+into the Kell in a vehicle that cannot take a hit. That is the trade, and it is
+a real one now.
 
 **Mounts** (power 10 / 15 / 25 / 40): shotgun rack 2,000 · rifle mount 12,500 ·
 heavy mount 35,000 · the Doulton gun 50,000 (not for sale).
@@ -111,24 +129,36 @@ radio 15,000 · floodlights (night targeting) 25,000 · muffled engine (run dark
 
 ---
 
-## The roster — twelve, four skills each, one trait
+## The roster — eight, four skills each, one trait
 
 Every seat is a crate you are not carrying. That is the whole cost model.
 
-| | Dri | Fig | Dea | Men | Trait |
-|---|---|---|---|---|---|
-| **Ivar Sull**, ex-haulage | 8 | 2 | 4 | 3 | Will not drive at night for any money |
-| **Beck**, ex-Bureau | 4 | 7 | 3 | 2 | Checkpoints cost half; settlements distrust you |
-| **Ruta Kelm**, buyer | 2 | 1 | 9 | 2 | Reads a market; refuses to haggle over medicine |
-| **Ollie Frame**, mechanic | 3 | 2 | 2 | 9 | Fixes anything; drinks |
-| **Sten**, raider turned | 6 | 8 | 2 | 3 | Hardens fastest of anyone |
-| **Marya Doust**, nurse | 3 | 2 | 4 | 7 | Mends people, not trucks. Will not ride on ammunition |
-| **Corin Wace**, boy | 5 | 3 | 3 | 4 | Learns — gains a point every six weeks, up to 7 |
-| **Halda Vey**, night driver | 9 | 3 | 2 | 2 | Only takes night contracts. Expensive |
-| **Tomasz**, quiet | 5 | 6 | 5 | 5 | No weakness and no edge. Never leaves |
-| **Nessa Roan**, smuggler | 6 | 4 | 7 | 2 | Halves the Warrant cost of a blood run |
-| **Fr. Emil Sarto** | 2 | 1 | 3 | 4 | *see below* |
-| **Fr. Jan Kwiat** | 1 | 1 | 2 | 5 | *see below* |
+Twelve was four too many, so four are gone: **Beck** (his checkpoint discount
+only did what Warrant already does), **Tomasz** (deliberately featureless — with
+eight, everybody has to have an edge), **Marya Doust** (she needed an injury
+system that does not exist yet) and **Halda Vey** (a second driver behind Sull,
+gated on a night-contract system that does not exist either).
+
+What is left is four specialists, one investment, one outlaw, two priests — and
+one you cannot hire.
+
+| | Dri | Fig | Dea | Men | Wage | Trait |
+|---|---|---|---|---|---|---|
+| **Ivar Sull**, ex-haulage | 8 | 2 | 4 | 3 | 51 | Will not drive at night, and will not sit in the back and watch you do it |
+| **Ruta Kelm**, buyer | 2 | 1 | 9 | 2 | 42 | Reads a market. Will not haggle over medicine |
+| **Ollie Frame**, mechanic | 3 | 2 | 2 | 9 | 48 | Fixes anything. Drinks, which costs you every day |
+| **Sten**, raider turned | 6 | 8 | 2 | 3 | 57 | The best gun on the road, and he hardens twice as fast as anyone |
+| **Corin Wace**, boy | 5 | 3 | 3 | 4 | 45 | Nineteen and useless. Gains a point every six weeks, to seven |
+| **Nessa Roan**, smuggler | 6 | 4 | 7 | 2 | 57 | Halves the Warrant cost of a blood run. Will not walk up to a clean truck |
+| **Fr. Emil Sarto** | 2 | 1 | 3 | 4 | 30 | Holds that the trade is licit. Will ride on a blood run and say grace over it |
+| **Fr. Jan Kwiat** | 1 | 1 | 2 | 5 | 27 | Holds that the not-knowing is the point. Gets out when blood is loaded |
+| **Andrej Vist** | 6 | 10 | 2 | 3 | — | Not for hire. See below |
+
+Wace is the one the whole seat economy is built around: you carry somebody who
+is worth nothing now because of what he will be in four months. That is a bet,
+and it costs you 45 a day and a crate every day you hold it.
+
+---
 
 ---
 
@@ -392,29 +422,48 @@ Vire and Rook's End are farms. Pell is neither and will not say what it is. The
 vampires fighting the farms make contact — mid-fight, and one of them talks, and
 the shock is that it talks like a person, because it is one.
 
-**The boat.** 500,000 and a berth. Berths sell one at a time.
+**The boat.** A berth is 500,000 and they sell one at a time. Nothing tells you
+that buying a second one is the right answer, because nothing knows.
 
 ---
 
-## What I would like you to reject
+## What was decided
 
-1. **The Coach.** Four seats and terrible cargo is the most interesting truck in
-   the table, and it may be so obviously the "good" choice that it flattens the
-   decision.
-2. **Twelve crew may be four too many** for a first build. Eight would be
-   testable and still feel like a roster.
-3. **Fighting counting half from everyone else.** This one rule is holding the
-   whole four-seat truck up. If it is wrong, the Coach is worthless and the
-   roster collapses back into Space Trader's — one high number and two
-   passengers.
-4. **The berths ending.** Buying five berths instead of one is a strong final
-   beat and it is also the kind of thing that can read as the game telling you
-   what the right answer was. It may want to be quieter than that.
-5. **Whether the sabotage path can pay at all.** Right now it pays nothing, which
-   makes it a vow rather than a strategy. That might be correct. It might also
-   mean nobody plays it.
-6. **An earned crew member.** Space Trader has Zeethibal: free, one skill at 10,
-   awarded rather than hired. Ours would be one of the vampires fighting the
-   farms — no wage, high Fighting, and every checkpoint becomes a risk while he
-   is in the cab. It makes the priests' argument physical instead of verbal. It
-   may also be one turn of the screw too many.
+1. **The Coach** — rejected as written, and fixed rather than cut. One mount, one
+   plating, a weaker frame. Four seats in a vehicle that cannot take a hit.
+2. **Twelve crew** — cut to eight, plus Vist. Named above.
+3. **Fighting counting half from everyone else** — kept. It is the reason the
+   Coach exists, and it is the reason you carry Wace for four months before he
+   is worth anything.
+4. **The berths ending** — made quieter. No "buy five and start again". You can
+   buy a spare and leave the name blank, and the ending reports it flatly with
+   everything else.
+5. **The sabotage path paying nothing** — kept. It is a vow, not a strategy, and
+   it is allowed to be one.
+6. **Andrej Vist, the earned crew member** — kept and built. He is not for hire.
+   He comes down the bank on the Vire road once you have crossed at Ostrow and
+   have never sold a tooth or taken a load through a farm gate. No wage, Fighting
+   10, and a patrol that opens the back finds him. **Sarto gets down and shakes
+   his hand. Kwiat asks him where he gets his blood, Vist says he does not know
+   which farm, and Kwiat will not ride with him** — the same question he asks
+   about your cargo, asked consistently, and it costs him something to ask it.
+
+---
+
+## What is in the first draft
+
+Thirteen settlements on one continuous map, ten goods, seven local events, six
+trucks, four mounts, three platings, six fittings, eight crew and Vist, Warrant
+with the gate, patrols and raiders and haulers by valley, a combat loop, the
+Rell licence, hardening, both priests, fangs on the Bureau schedule, the Ostrow
+scene, and the boat. It saves to the browser.
+
+**Not in yet:** sabotage as a playable path (it is named, not built), the
+Doulton gun as an award, farm contracts as distinct jobs rather than ordinary
+sales, and anything that happens to Vist after he is aboard beyond the
+checkpoint.
+
+**Numbers I expect to be wrong,** and would rather hear about from playing than
+guess at: the raider rate in Colter, whether 500,000 is reachable in a sensible
+number of days, whether the Coach is now too weak instead of too strong, and
+whether hardening moves fast enough to be felt before the Kell.
