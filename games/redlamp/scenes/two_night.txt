@@ -654,15 +654,41 @@ From here you can see the whole sanctuary: three steps, the rail nobody removed,
 The box is not locked well. You could open it in a second and a half. You have opened better than that.
 
 *choice
-  #Go up the three steps, over the rail, and open the box.
-    *goto ending_tabernacle
+  #Go up the three steps, over the rail, and stand at the box.
+    *goto at_the_rail
   #Stay on your knees halfway up the aisle and go no further.
     *goto stay_kneeling
+
+*label at_the_rail
+*page_break
+
+You go up the three steps and over the rail, which nobody has done from that side in a hundred and twenty-eight years except to clean.
+
+Up here the lamp is not at the far end of anything. It is above your head and slightly behind you, and the red comes down over your shoulders and onto your hands and onto the brass door of the box, which is warm, because it is under a lamp.
+
+It has a keyhole and a small key in it, and the key is turned to the left, and there is nothing else. No bolt, no bar, no wire. A hundred and twenty-eight years of a brass door that anybody in this neighbourhood could have opened at any hour, kept shut by nothing whatsoever except what everybody in the neighbourhood understood it to be.
+
+Your hand is on it.
+
+*choice
+  #Turn the key.
+    *goto ending_tabernacle
+  #Take your hand off the door and step back down.
+    *goto stepped_back
+
+*label stepped_back
+*page_break
+
+You take your hand off the brass and go back over the rail and down the three steps, and you are on the terrazzo again at the foot of them with your back to the sanctuary.
+
+You do not remember deciding. That is the part you will have, afterwards, if there is an afterwards: not a decision, just the fact that at some point your hand came off the door, and that the hand is yours and has done a great many things since 1931 and did that one too.
+
+*goto stay_kneeling
 
 *label ending_tabernacle
 *page_break
 
-You go up the three steps and over the rail and you put your hand on the brass door, and it opens the way an old lock opens, which is easily.
+You turn the key. The brass door opens the way an old lock opens, which is easily.
 
 Inside there is a linen cloth and a covered vessel, and inside that there is bread, and it is not bread.
 

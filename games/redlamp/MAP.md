@@ -74,18 +74,18 @@ Audited with `.claude/skills/cyoa/reference/audit.py`.
 
 | | Delivered | Corpus | |
 |---|---|---|---|
-| Nodes | 71 | — | |
-| Words | 11,293 | — | |
+| Nodes | 73 | — | |
+| Words | 11,514 | — | |
 | Median words per node | 128 | gamebooks 55–132 | ok |
-| Nodes with no choice | 61% | 43–55% | high |
+| Nodes with no choice | 60% | 43–55% | high |
 | Two-way share of choices | 82% | 77–87% | ok |
-| Two / three / four-plus way | 23 / 4 / 1 | — | ok |
+| Two / three / four-plus way | 24 / 4 / 1 | — | ok |
 | Longest forced run | 2 | median 2–3, ceiling 4 | ok |
 | Merge rate | 23% | Gauntlet low; Quest 31–37% | ok |
 | Reachable from node 1 | 100% | 93–100% | ok |
 | Median choice-line words | 11 | 11–12 | ok |
 | Endings | 9 | Gauntlet 8–20 | ok |
-| One playthrough | 26 nodes, 4,088 words | — | 36% of the book |
+| One playthrough | 28 nodes, ~4,400 words | — | 38% of the book |
 
 The one figure outside its band is nodes-with-no-choice, at 61% against a
 published 43–55%. It is arithmetic rather than pacing: each added choice brings
@@ -104,3 +104,26 @@ story wants to. At the keyboard the reader gets a decision every second screen.
    by Marek, or by the sun.
 4. Marek never lies.
 5. No one states the theology. The rooms do it.
+
+---
+
+## What the robot playthroughs found
+
+Eight uniform random walks through the first draft ended: **What You Broke ×4,
+The Ablutions ×2, The Fourth Pew ×1, A Happy Death ×1.** Half of all walks
+forced the tabernacle.
+
+A random walk is not a reader — a reader chooses — but 50% at a near-universal
+bottleneck means the road to that ending was too wide. Nearly every path funnels
+through the halfway point of the centre aisle, and there it was a straight
+coin-flip between opening the box and staying on your knees.
+
+The fix is Emily Short's **confirmation-required choice**: the temptation and
+the act are now two separate decisions with a node between them, in which you
+are standing at the rail with your hand on warm brass, looking at a keyhole
+that has been kept shut for a hundred and twenty-eight years by nothing
+whatsoever except what the neighbourhood understood it to be.
+
+After the change, the same eight seeds end: **A Happy Death ×3, What You Broke
+×2, The Ablutions ×2, The Fourth Pew ×1.** Nobody smashes a tabernacle in one
+motion, and now the game does not let them.
