@@ -19,20 +19,32 @@ Between you and the inner doors there is a granite bowl on a granite pillar.
 
 It is knee-high and it is directly in the way, because whoever built this place in 1897 put it exactly where a person coming in from the street would have to pass it. That was the point. Somebody filled it on Saturday and nobody has emptied it, and the surface of the water is perfectly still, and there is a hairline crack in the granite that somebody patched once with the wrong colour of grout.
 
-The vestibule is four paces across. The bowl takes up one of them.
+The vestibule is four paces across. The bowl takes up one of them, in the middle, and there are two ways round it.
+
+The wall route is the long way. It runs under the window in the outer door — a foot of clear glass at head height, put there in 1897 so the ushers could see who was coming — and it holds you in that window for the better part of three seconds.
+
+There are two of them on Braddock Avenue who have been walking behind you since the bridge. They are not hurrying and they do not need to. If either of them is on the steps in the next three seconds, the wall route puts your face in that glass.
+
+The other way is straight through the middle, past the bowl, at speed.
 
 *choice
-  #Go along the wall, with the radiator against your back.
+  #Take the wall, under the window, and hope the steps are empty.
     *goto wall
-  #Go straight past it, close enough that your coat swings over the rim.
+  #Go straight through the middle and take whatever the water does.
     *goto straight
 
 *label wall
 *page_break
 
-You go along the wall.
+You take the wall.
 
-The radiator is on and it is the first warmth you have felt in a week, and you are aware of how absurd it is that you notice. Your left sleeve brushes the pillar. That is all. There is a distance of perhaps forty centimetres between your coat and the water and you keep it, and you get through the inner doors with nothing worse than the feeling of having been looked at by something that did not turn its head.
+The radiator is on and it is the first warmth you have felt in a week, and you are aware of how absurd it is that you notice. Your left sleeve brushes the pillar. Forty centimetres of air between your coat and the water, and you keep every one of them.
+
+Three seconds in the window. At the second one there is a shape at the bottom of the church steps, and it stops, and it looks up.
+
+Then you are through the inner doors and out of the frame, and whoever it was does not come up after you, and you will spend the next hour deciding whether that is because they did not see you or because they did.
+
+You get into the nave with nothing worse than the feeling of having been looked at by something that did not turn its head.
 
 *goto nave_back
 
@@ -58,7 +70,11 @@ The nave of St. Wenceslaus is twenty-two pews on each side and one light left on
 
 At the far end, up three steps and behind a rail that nobody ever got around to taking out, there is a small brass box in the wall, and above it, hanging on a chain from the ceiling, a wick burning in red glass.
 
-It has been burning since 1897. It goes out only when the box is empty, and the box has not been empty in a hundred and twenty-eight years except once, in a power cut in 1966, and the woman who was here that night is here tonight.
+It has been burning since 1897 and it is not electric. It is a wick standing in oil in a red glass, and it goes out for one reason only, which is that the box is empty.
+
+The box is emptied once a year. On the Thursday night of Holy Week they take Him out of the building altogether, and the lamp is put out, and the doors of the box are left standing open on nothing until the Saturday. Verna Sowka has watched that fifty-eight times and has told two priests to their faces that it is the worst thing she knows.
+
+Every other night of the year it burns. It burned through the blizzard of 1977 when the parish had no power and no heat for nine days, because it is a wick in oil and does not care what the electricity is doing.
 
 You cannot look at it. Not the way you cannot look at the sun — the way you cannot look at somebody you did something to.
 
@@ -193,6 +209,10 @@ She comes back and stands at the end of your pew with her hand on the rail.
 
 "They lock at midnight," she says. "I do it, because I'm the last one out on Thursdays." She is still frightened. It has not gone down at all in the last twenty minutes; if anything it is worse, now that she is close enough to see your hands. "Only I'm not going out. Not with that one standing in the lot."
 
+She does not say *that one* the way you say it about a stranger.
+
+"He came to the fence and he stopped," she says. "Nobody stops at a fence. You stop at a fence if you can't go past it." She holds on to the pew rail. "I've known what was standing out there since about ten past."
+
 She sits down on the end of the pew in front of yours, sideways, so she can see you.
 
 "Sun's up at ten past six," she says. "I looked it up on the phone. Fourteen minutes past, if you want it exact."
@@ -207,9 +227,13 @@ You ask her whether she understands what she has just done. It is the only quest
 
 "I'm not stupid, son." She pulls her coat straight over her knees. "I've a bad valve. Aortic. They told me in June to get my affairs in order and I told them I've had my affairs in order since nineteen ninety-eight." She says it exactly the way she said the sunrise time. "So there isn't a great deal you can threaten me with that isn't already on the calendar."
 
-"That is not the same as being safe."
+"That's not the same as safe."
 
 "No," Verna agrees. "It isn't. I'm frightened half to death and I'd be obliged if you didn't make me say that twice." She looks down the length of the nave at the red glass. "But somebody has to sit with you. There's nobody else in the building and I'm the one that's here, and I've been telling Him for thirty-one years that I'd take whatever He sent on a Thursday."
+
+She thinks about that and evidently decides it was too grand.
+
+"And I'd rather be scared in here," she says, "than scared out there in the dark with the pair of them. That's most of it, if you want it honest."
 
 She puts her hands back in her lap.
 
@@ -224,7 +248,7 @@ She puts her hands back in her lap.
 *label go_home
 *page_break
 
-"Open that door and go home," you say. "I am asking you. You do not understand what is in this pew."
+"Open that door," you say. "Go home. I'm asking you." Your voice comes out wrong; a week unused, and the flat vowels of a mill town that stopped talking like that forty years ago. "You don't know what's sitting in this pew."
 
 "I understand fine." She works the thermos cap loose with both hands, because her hands are not good either. "You came in off the street with your coat on and you went past that font like it bit you, and then you sat in the back like a man at his own mother's funeral." She pours an inch of tea into the cap. "I've been coming here thirty-one years, son. I know what people look like when they've come in to get away from something. It's most of them."
 

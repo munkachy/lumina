@@ -108,7 +108,7 @@ You kneel on the penitent's side. Cracked leather over a board, a lattice screen
 
   So you start anywhere, and it takes what is left, and it is not orderly. You have no name to put to any of it and that is itself the first thing you confess.
 *if (name)
-  "Bless me, Father, for I have sinned. It has been a hundred and two years since my last confession. My name is Ondrej Michal Hlavatý and I was baptised in the font in that vestibule on the twenty-first of August, nineteen hundred and four."
+  "Bless me, Father, for I have sinned. It's been a hundred and two years." A breath. "My name is Ondrej Michal Hlavatý. I was baptised in the font in that vestibule, the twenty-first of August, nineteen four."
 
   There is a long pause behind the screen.
 
@@ -203,19 +203,19 @@ You stop at the glass. He comes to within two metres of the other side of it, wh
 "You look terrible," Marek says. "Come out. There is a car at the end of Talbot and you have ten minutes, which is eight more than you need."
 
 *if (name)
-  "You have not called me by my name all night," you say. "Not since the telephone."
+  "You haven't said my name all night," you say. "Not since the phone."
 
   Marek's face does something. It is the first movement you have seen in it since 1931.
 
   "No," he says. "I have not. You found it, then."
 *if (name = false)
-  "Say it again," you say. "What you called me on the telephone."
+  "Say it again," you say. "What you called me on the phone."
 
   "No," says Marek. "You will only ask what it means, and I do not think I could stand that."
 
 *page_break
 
-"I want to say one thing to you," he says, "and then you will decide, and I will accept whatever it is, because I have never once made you do anything and I am not starting on a Thursday.
+"One thing," he says, "and then you will decide, and I will accept whatever it is, because I have never once made you do anything and I am not starting on a Thursday.
 
 "I found you dying. That is true. I gave you ninety-four years and you have used them, and nothing that happened in them was done by me. Every one of those was yours. I have never told you otherwise and I am not telling you otherwise now."
 
