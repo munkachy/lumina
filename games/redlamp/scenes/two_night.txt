@@ -148,7 +148,11 @@ He is not selling. That is the difficulty. He is doing an inventory, and the inv
 
 You put the phone back on the hook.
 
-It does not ring again. That is worse; it means he has said the part he came to say and is content to wait, and Marek waiting is the oldest fact in your life.
+It does not ring again. That is worse. It means he has said the part he came to say — *come out, or the sun comes in* — and is content to wait for six hours to see which, and Marek waiting is the oldest fact in your life.
+
+He will not come in. He has never in ninety-four years told you why and you have never in ninety-four years asked, and standing in a sacristy at one in the morning with your hand still on a telephone, you find that you have always known the answer and have simply not let yourself have it.
+
+The two at the corner will come in, if he asks them to. They are younger and they do not know yet what they cannot do.
 
 *goto registers_offer
 
@@ -647,6 +651,12 @@ It is not a wall and there is nothing dramatic about it. It is the way a room fe
 
 At the halfway point you are on your knees on the terrazzo, and you are not sure how many pews you have passed.
 
+You want two things and they are pulling in opposite directions on the same rope, and you have wanted both of them since you came in off Braddock Avenue.
+
+You want to be nearer. That is the one you cannot explain and have not been able to explain since the vestibule.
+
+And you want it to stop — the lamp, the room, the being-seen — and the fastest way to make a thing stop being there is the way you have made things stop being there since 1931.
+
 *page_break
 
 From here you can see the whole sanctuary: three steps, the rail nobody removed, the altar, and behind it in the wall a brass box the size of a bread bin with a small key in a lock that has not been turned since Sunday, and above it the lamp.
@@ -694,11 +704,21 @@ Inside there is a linen cloth and a covered vessel, and inside that there is bre
 
 You knew that before you touched the door. That is the thing that will never afterwards be arguable: you did not do this because you thought it was empty. You did it because it was full, and because you have spent ninety-four years being unable to bear that anything was full.
 
-You do not remember the next part. There is a version where you are trying to consume Him and a version where you are trying to destroy Him, and they turn out to be closer together than you would have believed, and neither is available to you.
+What you want, when your hand closes, is to *have* Him.
+
+That is the whole of it and it is not complicated. For ninety-four years you have taken what you wanted into yourself and it has always worked, every time, without exception, and this is the one thing you have ever wanted that you have not been able to take.
+
+It does not work. It cannot be made to work; a person is not had that way, and the wanting turns over in your hands while you are still holding it. By the time your hand comes down you have stopped trying to have Him and started trying to make Him not be there — and the two turn out to be one thing in different coats, and the one thing is taking.
+
+And then nothing happens to you.
+
+That is the sentence to take away from this. *Nothing happens to you.* No fire, no voice, no hand out of the ceiling. You are not struck down. You are not even prevented. You do the worst thing available to anything in this world, on the second step, under a lamp, and the building lets you — the way a man stands still and lets his son hit him.
 
 Fr. Dan Cusack finds the sanctuary at twenty to six. He is thirty-four years old and he has four parishes and he has never had a day like it, and what he does — before the police, before the diocese, before anything — is kneel down on the second step and start to gather up what is on the floor with his hands.
 
-You are in the culvert under the Rankin Bridge by six. You have another ninety-four years.
+You are in the culvert under the Rankin Bridge by six.
+
+You have another ninety-four years, if you want them. You will spend a good many of them working out what kind of thing it is that could have stopped you and did not, and every answer you arrive at will be worse than the one before.
 
 *ending What You Broke
 

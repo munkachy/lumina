@@ -64,6 +64,12 @@ You cannot look at it. Not the way you cannot look at the sun — the way you ca
 
 You take the last pew on the left and sit down in a church for the first time since Coolidge was president.
 
+And here is the thing you cannot account for, then or afterwards: you did not have to sit down.
+
+There is a choir loft over your head, a tower stair behind the curtain, a sacristy with a window in it and a basement with no windows at all. Any of those would hide a man from a car park. You have chosen instead the one bench in the building from which you can see the far end of it, and you have sat down facing that way, and you are not going to move.
+
+You came in here because you were driven in. You are still sitting here for some other reason and you do not have a word for it, and you have not had a word for it since you were seven years old.
+
 *choice
   #Look up at the far end anyway. Get the measure of it.
     *goto looked
@@ -106,6 +112,12 @@ She has turned round on the bench with one arm over the back of it, the way you 
 She has been here since eleven. She is here every Thursday from eleven to midnight and has been for thirty-one years, since the parish signed up for perpetual adoration in 1994 and the roster fell apart inside two years and nobody told her.
 
 She is frightened of you. You can hear it from four metres away: the heart going, the small catch in the breath. She is frightened in the complete physical way that an animal is frightened, and she has not moved, and she is not going to.
+
+She has also, in the eleven seconds since you sat down, worked out what you are. You can watch her do it. Her eyes go to the font behind you, and then to the width of the gap you left going round it, and then to your hands; and then something in her face closes over, the way a ledger closes.
+
+Her mother came out of a village forty kilometres from Trenčín in 1921 with one small vocabulary of things you do not say out loud after dark, and the word for what you are is in it. Verna Sowka has not believed that word since she was about eleven years old.
+
+She believes it now. It took her eleven seconds and she has not screamed and she has not run, and you have been doing this since 1931 and have never once had either of those things not happen.
 
 "You came in fast," she says. "Is somebody after you?"
 
@@ -163,9 +175,13 @@ You move up four pews. It is not much and it puts a pillar between you and the g
 
 Out in the lot, under the sodium light on the pole by the fence, someone is standing.
 
-He is not moving. He has his hands in his coat pockets and his head tipped slightly, the way a man stands when he is waiting for somebody to finish an argument he already knows the end of. He does not come any closer than the chain-link fence.
+He is not moving. He has his hands in his coat pockets and his head tipped slightly, the way a man stands when he is waiting for somebody to finish an argument he already knows the end of. He does not come any closer than the chain-link fence, and he will not come closer all night, and you know exactly why and it is not the reason people think.
 
-You know him. You have known him for ninety-four years.
+His name is Marek. He is the one who made you, in a boarding house on Talbot Avenue in April of 1931, and he has not raised his voice to you in ninety-four years.
+
+He is not here to kill you. He is here to take you home, which he regards as the same errand and a kindness, and he is probably right about the second part.
+
+The two at the corner by the shuttered pharmacy are the ones who would do the other thing, if it came to that. Marek has never done that part himself. He stands at fences and waits, and in ninety-four years you have not once seen it fail to work.
 
 *page_break
 
@@ -185,9 +201,19 @@ She sits down on the end of the pew in front of yours, sideways, so she can see 
 
 She says it the way you would say a bus time.
 
-She has known what you are since the vestibule. She has locked the two of you in together on purpose. She is seventy-nine and her hip is bad and the nearest door she could reach is forty metres away behind a bolt she threw herself.
+She has locked the two of you in together on purpose. She is seventy-nine, her hip is bad, and the nearest door she could reach is forty metres away behind a bolt she threw herself.
 
-"Six hours and something," Verna says. "I'd usually be home by now."
+You ask her whether she understands what she has just done. It is the only question in the building.
+
+"I'm not stupid, son." She pulls her coat straight over her knees. "I've a bad valve. Aortic. They told me in June to get my affairs in order and I told them I've had my affairs in order since nineteen ninety-eight." She says it exactly the way she said the sunrise time. "So there isn't a great deal you can threaten me with that isn't already on the calendar."
+
+"That is not the same as being safe."
+
+"No," Verna agrees. "It isn't. I'm frightened half to death and I'd be obliged if you didn't make me say that twice." She looks down the length of the nave at the red glass. "But somebody has to sit with you. There's nobody else in the building and I'm the one that's here, and I've been telling Him for thirty-one years that I'd take whatever He sent on a Thursday."
+
+She puts her hands back in her lap.
+
+"Six hours and something," she says. "I'd usually be home by now."
 
 *choice
   #"Open the door and go home. I am asking you."

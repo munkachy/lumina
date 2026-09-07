@@ -276,7 +276,12 @@ function step(pushHistory){
     if(['create','set','set_hidden','temp','set_ward'].includes(c)){doSet(arg);S.pc++;continue;}
     if(c==='achieve'){S.vars['ach_'+arg.trim()]=true;S.pc++;continue;}
     if(c==='line_break'){S.page.push({t:'br'});S.pc++;continue;}
-    if(c==='page_break'){S.pc++;return render();}
+    if(c==='page_break'){S.pc++;
+      /* A break with nothing above it is not a screen. This happens whenever an
+         option's body is a bare *goto and the label it lands on opens with a
+         *page_break: the reader would get an empty page and a Continue button. */
+      if(!S.page.length)continue;
+      return render();}
     if(c==='image'){const m=arg.match(/^(\S+)\s*(.*)$/)||[];S.page.push({t:'img',src:m[1]||'',alt:m[2]||''});S.pc++;continue;}
     if(c==='goto'){const i=findLabel(S.scene,arg);S.pc=i<0?S.pc+1:i+1;continue;}
     if(c==='goto_scene'){const p=arg.trim().split(/\s+/);if(gotoScene(p[0])&&p[1]){const i=findLabel(S.scene,p[1]);if(i>=0)S.pc=i+1;}continue;}

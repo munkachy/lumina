@@ -134,6 +134,70 @@ Choices come in four honest kinds:
   decide to follow the light, turn to 85.* Second person, present tense, one
   sentence.
 
+## Mystery and vagueness are not the same thing
+
+This is the failure that survives every structural check. The graph audits
+clean, the numbers are in band, and the reader still finishes a path saying
+*I didn't understand what he wanted* or *who was the man outside?*
+
+**John Gardner's test.** Fiction has to sustain "a vivid and continuous dream,"
+and it fails when the reader cannot say **who** the people are, **where** they
+are, **what they are doing**, **what they are trying to do**, and **why**. Miss
+any of the five and, in his words, "our emotions and judgments must be confused,
+dissipated, or blocked." He also sets the bar for characters: such continuous
+clarity that "nothing they do strikes us as improbable behavior for just that
+character." A character who behaves in a way the reader has not been given
+grounds for does not read as mysterious. She reads as arbitrary.
+
+**Withhold information. Never withhold context.** The distinction is Jane
+Friedman's and it is the practical form of the rule. *Context* is where and when
+the scene is, who is in it, how they got there, how they are related, what the
+world's rules are, and what each person wants. *Information* is how it turns
+out. Context is the floor; information is the door. Take away the door and the
+reader leans forward. Take away the floor and they fall over.
+
+**The puzzle test.** Nathan Bransford: a real mystery is "a puzzle with a few
+key pieces missing in the middle — you can see the outlines, you know roughly
+what you're looking at." Vagueness is a blindfolded search for objects the
+reader cannot name. Ask of every withheld thing: *can the reader describe the
+shape of what they do not know?* If not, you have not made a mystery.
+
+**Why it goes wrong.** The author's burden of knowledge. You know why she stays.
+You know who the man at the fence is. Because you know, the scene reads as
+charged rather than blank — to you, and to nobody else.
+
+### What this costs a branching story specifically
+
+Three consequences that do not apply to a novel:
+
+1. **Second person means the reader chooses as the protagonist.** If what the
+   protagonist wants in the next sixty seconds is unclear, the choice is not
+   hard, it is unanswerable. Vagueness about the viewpoint character's motive
+   does not create atmosphere; it disables the mechanism. **Name the want, in
+   the node, immediately above the choice.**
+2. **Anybody who appears on more than one path must be established on all of
+   them.** A recurring character explained in one branch is an unexplained
+   stranger to every reader who took another. In a draft of *The Red Lamp* the
+   antagonist's identity — the man who made you, ninety-four years ago — was
+   established only inside the branch where you answer the telephone. A reader
+   who hung up finished the story calling him "a vampire hunter or something."
+   The graph was fine. The introduction was in one node instead of four.
+3. **Consequences must be legible even when they are not explained.** If
+   something enormous happens and the text declines to say what it meant, the
+   reader will not read restraint; they will read an author who forgot. You may
+   absolutely leave the meaning open — but say plainly *what occurred*, and let
+   the silence fall on the interpretation, not on the event.
+
+### The four-line check, per node
+
+Before you leave a node, answer these in one line each. If you cannot, the
+reader cannot either.
+
+- **Where am I, and who is here?**
+- **What do I want in the next sixty seconds?**
+- **What is in the way?**
+- **What do I not know, and can I describe its shape?**
+
 ## World-building in a branching story
 
 Branching fights world-building, and the fight is the reason a lot of CYOA feels
@@ -234,3 +298,15 @@ Build with `python3 build.py`; check the graph with
    arbitrary, and they are right.
 5. **A world explained instead of inhabited.** The reader will see a tenth of
    what you wrote. Put the world in the rooms.
+6. **Vagueness wearing mystery's coat.** A reader who cannot name what the
+   protagonist wants, or who the second person in the room is, is not
+   intrigued. Run the four-line check.
+
+## Sources
+
+Structure and measurement: `reference/corpus.md`. Craft of clarity: John
+Gardner, *The Art of Fiction* (the vivid and continuous dream); Jane Friedman,
+*How Not to Confuse Your Readers* (information versus context); Nathan
+Bransford, *Are You Creating a Mystery or Just Being Vague?* (the puzzle test);
+Emily Short, *Small-Scale Structures in CYOA* (the confirmation-required
+choice, and the rest of the node-level patterns).
