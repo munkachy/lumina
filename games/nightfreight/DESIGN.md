@@ -450,6 +450,46 @@ that buying a second one is the right answer, because nothing knows.
 
 ---
 
+## Teaching the game
+
+The first build put a table of ten prices in front of the player and told him
+nothing. A man who has played the source game for years opened it and was lost,
+which is not a difficulty problem, it is a build fault. Four things were wrong:
+
+1. **Nothing said what you were trying to do.** The berth was a number buried on
+   the Log tab.
+2. **The market showed prices with no way to judge them.** Every settlement's
+   *makes* and *wants* were in the data and never on the screen, so buying was
+   guesswork rather than a decision.
+3. **Every number along the top was unlabelled.** Warrant, frame, hold, wages.
+4. **No first move.** Nothing told a new driver what to press.
+
+What is in now:
+
+- **An opening screen.** Four short paragraphs: what you want, how you get it,
+  what the catch is. One button to start and one to read the reference first.
+- **An objective line under the numbers, always visible**, that names the next
+  thing to do and changes as you do it. It walks the first delivery — buy flour
+  where flour is made, take the mill's contract, deliver at Bright's Ford,
+  which is the licence for Vann — and then keeps naming the next goal for the
+  rest of the game.
+- **The market says why.** Each good is marked *cheap*, *usual* or *dear*
+  against what it costs in an average town with nothing going on, and next to
+  it the reason: made here, wanted here, the local event, restricted here.
+- **A "what is in the back, and who wants it" panel** listing, for every good
+  you are carrying, the settlements on roads you can drive that are short of it.
+- **A How to play tab**: the goal, the loop, how to read a market, every number
+  along the top, what each of the four skills does, the Warrant bands with the
+  gate table and everything that moves it, restricted cargo, teeth, the road,
+  the three valleys — and a notebook listing every settlement you can reach
+  with what it makes, what it wants, and where blood and ammunition are open.
+- **The map shows makes and wants** on every place card.
+- **The country starts quiet.** A day-one crop failure at Fenner made the
+  tutorial's first sentence false. Events now begin on day four, and arrive as
+  things that happen.
+
+---
+
 ## What is in the first draft
 
 Thirteen settlements on one continuous map, ten goods, seven local events, six
