@@ -288,6 +288,7 @@ def main():
     ap.add_argument("src"); ap.add_argument("dst")
     ap.add_argument("--accent", default="amber", choices=sorted(ACCENTS))
     ap.add_argument("--kicker", default="")
+    ap.add_argument("--title", default="", help="override the name taken from the h1")
     ap.add_argument("--fragment", action="store_true")
     a = ap.parse_args()
 
@@ -297,7 +298,8 @@ def main():
         name, kind = title.split(" — ", 1)
     else:
         name, kind = title or a.src, ""
-    if name.isupper():            # the h1 is shouted in the source; CSS shouts it
+    if a.title: name = a.title
+    elif name.isupper():          # the h1 is shouted in the source; CSS shouts it
         name = name.title()       # again, so the tab and gallery get the real name
     kicker = a.kicker or kind or "document"
     a1, a2 = ACCENTS[a.accent]
