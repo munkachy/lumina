@@ -227,6 +227,7 @@ You come down. You are not sure why, and you will think about it later.
 *goto after_verna
 
 *label after_verna
+*comment teaches: marek
 *page_break
 
 You move up four pews. It is not much and it puts a pillar between you and the glass of the inner doors, and she watches you do it and then turns back round to face the front, which is the thing that undoes you slightly — that she turns her back.
