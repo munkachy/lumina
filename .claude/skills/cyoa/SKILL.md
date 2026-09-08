@@ -633,7 +633,7 @@ three is plenty.
 Build with `python3 build.py`; check the graph with
 `python3 .claude/skills/cyoa/reference/audit.py games/<name>`.
 
-## The five ways this goes wrong
+## The ten ways this goes wrong
 
 1. **A choice on every page.** Half of a real gamebook's sections are not
    choices. Yours should not be either.
