@@ -543,6 +543,38 @@ The amber pill at the top left of every screen goes back to the town, always in
 the same place. On a phone the hub is a two-column pad and the whole thing sits
 above the fold.
 
+### The map
+
+**One valley at a time**, drawn as inline SVG with no library: the towns as
+nodes, the roads between them as lines, and the number of days on a chip in the
+middle of each road. Where you are standing is an amber ring with a dot in it,
+and the roads leading out of it are lit while the rest of the valley stays grey
+— so the question *where can I go from here, and how long does it take* is
+answered by looking rather than by reading a table.
+
+A road that leaves the valley is drawn dashed, running off to a labelled
+checkpoint: RELL out of Bright's Ford, OSTROW off Marrow and back up out of
+Ossett. That is the whole geography of the country in three pictures, and it
+means a player can see that the Kell hangs south off one road before he has ever
+driven it.
+
+Marks are the three facts that change how a town behaves: a sand square for a
+Bureau post, a rose square for a farm, dimmed for a town that is shut to you at
+your current Warrant, and the local event named under the town in amber when
+there is one.
+
+**Tapping a town selects it** and opens its details underneath — what it makes,
+what it is short of, whether blood and ammunition are open there — with a
+**Drive** button when there is a road from where you stand, and the trip's cost
+in wages and fees. So the map is not a reference page next to the navigation;
+it *is* the navigation.
+
+The viewBox is computed from what is actually drawn, including the outermost
+labels, so a four-town valley is not a field of empty ground and nothing gets
+clipped. The drawing is capped at 30rem so it does not blow up on a laptop, and
+the type is sized in user units large enough to survive being scaled down to a
+phone.
+
 **"Dear" is gone.** It is British for *expensive* and it read as the opposite of
 what it meant. The three price signals are now **CHEAP** (the town makes it —
 buy here), **usual**, and **IN DEMAND** (the town is short of it and pays over
