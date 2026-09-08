@@ -452,41 +452,72 @@ that buying a second one is the right answer, because nothing knows.
 
 ## Teaching the game
 
-The first build put a table of ten prices in front of the player and told him
-nothing. A man who has played the source game for years opened it and was lost,
-which is not a difficulty problem, it is a build fault. Four things were wrong:
+Two attempts. The first put a table of ten prices in front of the player and
+told him nothing. The second added labels, a reference tab and a hint line —
+better, and still not a tutorial, because a hint line is a *hint line*. A man
+who had played the source game for years opened both and was lost.
 
-1. **Nothing said what you were trying to do.** The berth was a number buried on
-   the Log tab.
-2. **The market showed prices with no way to judge them.** Every settlement's
-   *makes* and *wants* were in the data and never on the screen, so buying was
-   guesswork rather than a decision.
-3. **Every number along the top was unlabelled.** Warrant, frame, hold, wages.
-4. **No first move.** Nothing told a new driver what to press.
+So I went and read how this is actually done. Three rules from the literature,
+and I had broken all three.
 
-What is in now:
+**Teach in the order of importance, not the order of complexity.** Gamasutra's
+piece on multi-system games is blunt about it: work out what the player needs in
+the next minute of play and teach only that. For a trading game that is one
+sentence — *the same crate is worth different money in two towns* — and every
+other system in this design can wait until it happens.
 
-- **An opening screen.** Four short paragraphs: what you want, how you get it,
-  what the catch is. One button to start and one to read the reference first.
-- **An objective line under the numbers, always visible**, that names the next
-  thing to do and changes as you do it. It walks the first delivery — buy flour
-  where flour is made, take the mill's contract, deliver at Bright's Ford,
-  which is the licence for Vann — and then keeps naming the next goal for the
-  rest of the game.
-- **The market says why.** Each good is marked *cheap*, *usual* or *dear*
-  against what it costs in an average town with nothing going on, and next to
-  it the reason: made here, wanted here, the local event, restricted here.
-- **A "what is in the back, and who wants it" panel** listing, for every good
-  you are carrying, the settlements on roads you can drive that are short of it.
-- **A How to play tab**: the goal, the loop, how to read a market, every number
-  along the top, what each of the four skills does, the Warrant bands with the
-  gate table and everything that moves it, restricted cargo, teeth, the road,
-  the three valleys — and a notebook listing every settlement you can reach
-  with what it makes, what it wants, and where blood and ammunition are open.
-- **The map shows makes and wants** on every place card.
-- **The country starts quiet.** A day-one crop failure at Fenner made the
-  tutorial's first sentence false. Events now begin on day four, and arrive as
-  things that happen.
+**Limit functionality early.** The Kerbal model: don't hand a new player the
+whole instrument panel. Six tabs of numbers is not difficulty, it is noise.
+
+**Pull, not push.** A lesson triggered by the player's state, at the moment it
+becomes relevant, is retained; a lesson pushed at him up front is skipped and
+forgotten. Gate by relevance, never by a fixed script.
+
+### The guided first run
+
+Four steps, one action each, about three minutes, ending in a delivery that pays.
+
+| | It teaches | The player does |
+|---|---|---|
+| 1 | A town sells what it makes, cheaply | Presses MAX on the flour row at Fenner |
+| 2 | Another town pays over the odds for what it hasn't got | Drives to Tolm |
+| 3 | Contracts exist, and they open roads | Takes the mill's contract |
+| 4 | The loop closes and you get paid | Drives to Bright's Ford |
+
+**The tabs he has not been given a reason to open are not there.** Step one shows
+Market and How to play. Road appears at step two. Everything else appears when
+the run is finished. **The roads are quiet during it** — a raider on day two
+teaches combat while the player is still working out what a price is, and
+teaches it badly.
+
+**One amber ring, on the one thing to press.** Nothing else on the screen moves.
+
+**The payoff is arithmetic, not praise.** The last card says: the flour cost 730
+at Fenner where it is grown, Bright's Ford which grows none paid 1,600, the mill
+added 2,000 for the contract, three days' work. *That is the engine of the whole
+game.* A player who has read that sentence with his own numbers under it knows
+what he is doing here.
+
+### Everything else waits until it happens
+
+Eight lessons, each fired once, by state rather than by script, and each is one
+card of three sentences: what it is, how it works, why it matters.
+
+| Lesson | Fires |
+|---|---|
+| Somebody is trying to rob you | your first raider — before the fight screen opens |
+| A Bureau patrol | your first patrol — before the choice |
+| Somebody wants a seat | first town where a person is available and you have a seat |
+| That cargo is restricted | the first time restricted cargo goes in the truck |
+| Your Warrant has moved | first arrival at anything other than Clean |
+| The truck is hurt | first arrival under 60% frame — where you can mend it |
+| You have teeth | first arrival carrying fangs |
+| Something is happening in a town | first arrival at a town with an event running |
+
+Five of the eight fire on arrival at a settlement rather than on the road,
+because that is where the player can act on what he has just been told.
+
+The walkthrough is skippable from the first screen and from every step.
 
 ---
 

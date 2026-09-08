@@ -54,6 +54,25 @@ h1{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:2rem;
 .objective b{color:#ffd08a;font-weight:600}
 .objective i{color:var(--ink2);font-style:italic}
 
+.tut{background:#17140d;border-left:.4rem solid var(--amber);border-radius:.2rem .6rem .6rem .2rem;
+  padding:.85rem 1rem .95rem;margin:0 0 1.3rem}
+.tutnum{font-family:"Barlow Condensed",sans-serif;letter-spacing:.24em;text-transform:uppercase;
+  font-size:.62rem;color:var(--amber);margin-bottom:.25rem}
+.tut h3{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.05em;
+  font-size:1.24rem;margin:0 0 .4rem;color:#fff}
+.tut p{margin:0 0 .5rem;font-size:.96rem;color:var(--ink2);max-width:40rem;line-height:1.55}
+.tut p.do{color:var(--ink);font-size:1.04rem;margin-bottom:.75rem}
+.tut p.do b{color:var(--amber)}
+.tut i{color:var(--sand);font-style:italic}
+.tut button.skip{background:transparent;border-color:#33302a;color:var(--ink3);font-size:.66rem}
+
+.spot{position:relative;z-index:5;
+  box-shadow:0 0 0 2px var(--amber),0 0 0 7px rgba(240,166,60,.22)!important;
+  animation:sp 1.7s ease-in-out infinite}
+@keyframes sp{0%,100%{box-shadow:0 0 0 2px var(--amber),0 0 0 5px rgba(240,166,60,.14)}
+              50%{box-shadow:0 0 0 2px var(--amber),0 0 0 11px rgba(240,166,60,.30)}}
+@media (prefers-reduced-motion:reduce){.spot{animation:none}}
+
 nav.tabs{display:flex;gap:.3rem;flex-wrap:wrap;margin:1.1rem 0 .1rem}
 nav.tabs button{font-family:"Barlow Condensed",sans-serif;letter-spacing:.16em;
   text-transform:uppercase;font-size:.76rem;background:var(--panel);color:var(--ink2);
@@ -441,6 +460,7 @@ function newGame(){
     flags:{licence:false, ostrow:false, tolmContract:false, tolmDone:false,
            bfordVisits:0, wonFight:false, farmRuns:0, fangsSold:0, vistOffered:false,
            sabotage:0, bloodRuns:0, seenIntro:false},
+    tut:{step:0, done:false, paid:0, got:0}, taught:{},
     log:[], over:null
   };
   GOODS.forEach(g=>{S.cargo[g.id]=0; S.bought[g.id]=0;});
@@ -668,6 +688,8 @@ function arrive(){
   say("Into "+PLACE[to].name+" on day "+S.day+".");
   if(checkTolm()){ save(); return; }
   offerRecruit();
+  if(!veil.hidden){ save(); return; }
+  if(arrivalLesson()){ save(); return; }
   save(); render();
 }
 
@@ -684,6 +706,7 @@ function encounterOdds(){
   return {raider, patrol, hauler};
 }
 function rollEncounter(){
+  if(tutActive()) return false;          // the guided run is quiet on purpose
   const o = encounterOdds(), r = Math.random();
   if(r < o.raider) { startRaider(); return true; }
   if(r < o.raider + o.patrol) { startPatrol(); return true; }
@@ -720,9 +743,17 @@ function foe(kind){
 }
 
 let FIGHT = null;
-function startRaider(){ openFight(foe("raider")); }
+function startRaider(){
+  const f = foe("raider");
+  if(teach("raider", ()=>openFight(f))) return;
+  openFight(f);
+}
 function startPatrol(){
   const f = foe("patrol");
+  if(teach("patrol", ()=>startPatrol2(f))) return;
+  startPatrol2(f);
+}
+function startPatrol2(f){
   const illegal = GOODS.filter(g=>S.cargo[g.id]>0 && !isLegalHere(g.id, TRIP.to));
   FIGHT = {f, shield:f.shield, hull:f.hull, myShield:shieldCap(), log:[], fled:false};
   const opts = [
@@ -1123,6 +1154,16 @@ function offerRecruit(){
   const a = availableHere();
   if(a.length && seatsFree()>0) toast(a[0].name+" is asking after a seat.");
 }
+/* One lesson per arrival, in the order of what the player can do about it
+   right now. The rest keep until the next town. */
+function arrivalLesson(){
+  if(availableHere().length && seatsFree()>0 && teach("crew")) return true;
+  if(S.hull < hullCap()*0.6 && teach("damage")) return true;
+  if(band(S.warrant)!=="Clean" && teach("warrant")) return true;
+  if(S.fangs.length && teach("fangs")) return true;
+  if(S.event[S.at]!=="quiet" && teach("event")) return true;
+  return false;
+}
 
 /* ===================== market actions ===================== */
 function buy(gid, n){
@@ -1134,9 +1175,11 @@ function buy(gid, n){
 }
 function doBuy(gid,n,p){
   S.cash -= p*n; S.cargo[gid]+=n; S.bought[gid]=p;
+  if(gid==="flour" && tutActive() && S.tut.step===1) S.tut.paid = p*n;
   if(gid==="blood"){ S.flags.bloodRuns++; warrant(hasCrew("roan") ? -1 : -2, ""); }
   if(GOOD[gid].restricted && !isLegalHere(gid)) warrant(-1, "");
   save(); render();
+  if(GOOD[gid].restricted) teach("restricted");
 }
 function kwiatStop(gid,n,p){
   modal({eyebrow:PLACE[S.at].name, title:"Fr. Jan Kwiat gets out", c:"--amber",
@@ -1197,7 +1240,9 @@ function tolmContract(){
 }
 function checkTolm(){
   if(S.flags.tolmContract && !S.flags.licence && S.at==="bford" && S.cargo.flour>=10){
-    S.cargo.flour -= 10; S.cash += 10*sellPrice("bford","flour") + 2000;
+    const got = 10*sellPrice("bford","flour") + 2000;
+    S.tut.got = got;
+    S.cargo.flour -= 10; S.cash += got;
     S.flags.licence = true; warrant(+6,"");
     modal({eyebrow:"Bright's Ford", title:"The licence", c:"--sand",
       body:["The mill's man counts ten off the tail and signs the sheet, and then hands you a second sheet you were not expecting.",
@@ -1307,7 +1352,7 @@ const TABS = [["market","Market"],["truck","Truck"],["crew","Crew"],["road","Roa
 /* The one line that says what to do next. Everything else on the screen is a
    number; this is the sentence. */
 function objective(){
-  if(S.over) return "";
+  if(S.over || tutActive()) return "";
   if(!S.flags.licence){
     if(!S.flags.tolmContract){
       if(S.at==="fenner" && S.cargo.flour < 10)
@@ -1340,22 +1385,138 @@ function objective(){
 const INTRO = {
   eyebrow:"Nightfreight", title:"You drive a truck", c:"--amber",
   body:[
-    "The nights here are not safe and they have not been since before you were born. There is a Bureau that pays a bounty on teeth, there are farms in the south that nobody talks about, and there is a boat at Halloway that leaves when it is full.",
-    "<b>What you want:</b> a berth on that boat. It costs 500,000 and they are sold one at a time.",
-    "<b>How you get it:</b> you haul freight. Buy a thing where it is made and cheap, drive it to where it is wanted and dear, and sell it. Every day on the road costs a day of fuel and a day of wages, and something may come out of the dark at you.",
-    "<b>The catch:</b> the cargo that pays is blood, and it is restricted almost everywhere, and nobody will tell you where it comes from. You will find out. It is not a secret. It is on a rate card.",
-    "The <b>How to play</b> tab explains every number on this screen. The amber line under the numbers always tells you what to do next."
+    "There is a boat at Halloway. A berth on it costs <b>500,000</b>, and it is the only way out of this country.",
+    "You get that money by hauling freight from a town that has a thing to a town that wants it — and, sooner or later, by deciding what you are willing to put in the back."
   ],
   opts:[
-    {t:"Start at Fenner", s:"The amber line will tell you what to do.",
-     go:()=>{ S.flags.seenIntro = true; close(); save(); render(); }},
-    {t:"Read How to play first", s:"Every number, what moves it, and the notebook of what each town makes and wants.",
-     go:()=>{ S.flags.seenIntro = true; TAB = "help"; close(); save(); render(); }}
+    {t:"Show me how", s:"Four steps. About three minutes.",
+     go:()=>{ S.flags.seenIntro = true; S.tut.step = 1; close(); save(); render(); }},
+    {t:"I have played games like this", s:"Skip it. Everything is on the How to play tab.",
+     go:()=>{ S.flags.seenIntro = true; S.tut.done = true; close(); save(); render(); }}
   ]
 };
 
+/* ===================================================================
+   The guided first run.
+
+   Ordered by importance rather than complexity: the first thing a trader
+   has to understand is that the same crate is worth different money in
+   two places. Nothing else is on the screen until he has done it once
+   and been paid for it. One action per step, and the tabs he has not
+   been given a reason to open are not there yet.
+   =================================================================== */
+const TUTORIAL = [
+  { title:"Buy something cheap",
+    what:"Every town buys and sells the same ten goods at different prices. Fenner grows flour, so flour is cheaper here than it is anywhere else.",
+    doIt:"Press <b>MAX</b> on the flour row and fill the truck with it.",
+    spot:()=> '#pane button[data-a="buyx"][data-v="flour"]',
+    done:()=> S.cargo.flour >= 10,
+    after:()=> "Ten crates of flour for "+money(S.tut.paid)+". The truck is full."
+  },
+  { title:"Take it to somebody who wants it",
+    what:"Under the table it now says flour is <i>wanted at Bright's Ford</i>. They grow none there, so they pay about half again for it. It is two days away, through Tolm.",
+    doIt:()=> TAB==="road" ? "Press <b>Drive</b> on the Tolm row." : "Open the <b>Road</b> tab.",
+    spot:()=> TAB==="road" ? '#pane button[data-a="go"][data-v^="tolm"]' : '#tabs button[data-t="road"]',
+    done:()=> S.at==="tolm",
+    after:()=> "One day gone. A day on the road costs one day of fuel and one day of wages whether anything happens or not."
+  },
+  { title:"Pick up a job while you are here",
+    what:"Tolm's mill wants ten of flour delivered to Bright's Ford, which is where you were going anyway. They pay a bonus, and they sponsor the licence you need for the road east.",
+    doIt:()=> TAB==="market" ? "Press <b>Take the mill's contract</b>, under <i>The yard</i> at the bottom." : "Open the <b>Market</b> tab.",
+    spot:()=> TAB==="market" ? '#pane button[data-a="tolm"]' : '#tabs button[data-t="market"]',
+    done:()=> S.flags.tolmContract,
+    after:()=> "Taken. Now deliver it."
+  },
+  { title:"Deliver it",
+    what:"Bright's Ford is one more day up the road. Do not sell the flour anywhere else on the way — the contract wants all ten crates.",
+    doIt:()=> TAB==="road" ? "Press <b>Drive</b> on the Bright's Ford row." : "Open the <b>Road</b> tab.",
+    spot:()=> TAB==="road" ? '#pane button[data-a="go"][data-v^="bford"]' : '#tabs button[data-t="road"]',
+    done:()=> S.flags.licence,
+    after:()=> "Delivered."
+  }
+];
+function tutStep(){ return (!S || S.tut.done) ? null : TUTORIAL[S.tut.step-1] || null; }
+function tutActive(){ return !!S && !S.tut.done && S.tut.step >= 1; }
+
+/* Only the tabs he has been given a reason to open. */
+function visibleTabs(){
+  if(!tutActive()) return TABS;
+  const allow = S.tut.step >= 2 ? ["market","road","help"] : ["market","help"];
+  return TABS.filter(t=>allow.includes(t[0]));
+}
+function checkTutorial(){
+  const st = tutStep();
+  if(!st || !st.done()) return;
+  say(typeof st.after==="function" ? st.after() : st.after);
+  S.tut.step++;
+  if(S.tut.step > TUTORIAL.length){ S.tut.done = true; tutFinish(); }
+}
+function tutFinish(){
+  const paid = S.tut.paid, got = S.tut.got;
+  modal({eyebrow:"That is the game", title:"You just made "+money(got-paid), c:"--amber",
+    body:[
+      "The flour cost <b>"+money(paid)+"</b> at Fenner, where it is grown. Bright's Ford, which grows none, paid <b>"+
+        money(got-2000)+"</b> for it, and the mill put <b>2,000</b> on top for the contract. Three days' work.",
+      "<b>That is the engine of the whole game.</b> Buy a thing where it is made and cheap, drive it to a town that is short of it, sell it, and do it again with a bigger truck.",
+      "You have the haulage licence now, so the road east through Rell is open, and every tab is unlocked.",
+      "Nothing else gets explained up front. When something new happens to you — a patrol, a fight, somebody wanting a seat — you get one card about it, once, at the moment it happens."
+    ],
+    opts:[{t:"Get on with it", go:()=>{ close(); save(); render(); }}]});
+}
+
+/* ===================================================================
+   Just-in-time lessons. Each fires the first time the thing actually
+   happens to you, and never again. What it is, how it works, why it
+   matters — in that order, and short.
+   =================================================================== */
+const TEACH = {
+  raider:{ title:"Somebody is trying to rob you", c:"--rose", body:[
+    "<b>Fire</b> puts your <i>Fighting</i> and the power of the mounts on the truck against their plating and their frame. <b>Run</b> is your <i>Driving</i> against theirs. <b>Give them the load</b> ends it now and costs you everything in the back.",
+    "You started with a shotgun rack, which is enough for men on a country road and not much else. Heavier mounts and plating are on the <b>Truck</b> tab.",
+    "Losing is not the end of the game. They take the load and most of the cash, and you drive on slowly."]},
+  patrol:{ title:"A Bureau patrol", c:"--sky", body:[
+    "They want to see what is in the back. If everything in there is legal where you are going, stopping costs you nothing and they think slightly better of you afterwards.",
+    "If it is not, they take it and fine you. <b>Running</b> and <b>shooting</b> both cost you far more than being caught does.",
+    "<i>Warrant</i> is the number at the top that says Clean. It is how the Bureau sees you, and it opens some doors and shuts others."]},
+  crew:{ title:"Somebody wants a seat", c:"--sky", body:[
+    "People are not hired off a list. You find them by driving to where they are, and some will not come out at all until you have done something that makes them willing to get into a truck with you.",
+    "<b>Driving, Dealing and Mending are read off the best person in the cab</b> — a second good driver earns you nothing at all. <b>Fighting is different:</b> the best aboard plus half of everybody else's, because in a fight everyone shoots.",
+    "They cost wages every day you are on the road, and the truck has a fixed number of seats. Both are on the <b>Crew</b> tab."]},
+  restricted:{ title:"That cargo is restricted", c:"--rose", body:[
+    "Restricted does not mean there is no buyer. It means there is a buyer <i>and a risk</i>, so the price carries the risk: dearer where it is restricted, cheaper where it is open.",
+    "Carrying it makes a patrol more likely to stop you, and if they look they take it and fine you and your Warrant drops.",
+    "Blood is restricted in nine of the thirteen towns, and it is the best money on this road by a long way. That is the game asking you a question."]},
+  warrant:{ title:"Your Warrant has moved", c:"--sand", body:[
+    "One number from &minus;70 to +75: how the Bureau sees you. Wanted · Marked · Watched · <b>Clean</b> · Licensed · Bonded · Commended.",
+    "<b>Below Watched</b>, everything you buy costs 11% more. <b>Below Marked</b>, the lawful towns stop trading with you and patrols come at double strength — but the farms in the south open up, and they pay better than anywhere.",
+    "<b>Above Bonded</b> it runs the other way: the lawful towns like you and the farms shut their gates, because a bonded hauler is a Bureau informant and they know it."]},
+  damage:{ title:"The truck is hurt", c:"--sand", body:[
+    "<b>Frame</b> is how much the truck can still take before it stops. At zero you lose the load and most of the cash.",
+    "Mend it in <i>The yard</i>, at the bottom of any <b>Market</b> screen. A good <i>Mending</i> skill in the cab makes it cheaper, and a toolkit fitted to the truck mends it while you drive."]},
+  fangs:{ title:"You have teeth", c:"--rose", body:[
+    "Vampire canines. Any Bureau post — Sennick, Marrow, Halloway — buys them at a published rate: <b>1,200</b> for ten days after they are drawn, <b>700</b> after that. You sell them in <i>The yard</i>.",
+    "It is entirely legal and it puts your Warrant up.",
+    "It also hardens everybody in the cab a little, every single time."]},
+  event:{ title:"Something is happening in a town", c:"--sand", body:[
+    "Towns have weather of their own: a fever, a siege, a hard frost, a crop failure, a strike, a Bureau hunt. Each moves particular prices, sometimes to double.",
+    "They change every few days and the <b>Road</b> tab shows which town has what. A fever three days away is a medicine run, if you get there first."]}
+};
+function teach(id, then){
+  if(!S.taught) S.taught = {};
+  if(S.taught[id] || tutActive() || !TEACH[id]) return false;
+  S.taught[id] = true;
+  const t = TEACH[id];
+  modal({eyebrow:"First time", title:t.title, c:t.c, body:t.body,
+    opts:[{t:then ? "Right — go on" : "Right",
+           go:()=>{ close(); save(); if(then) then(); else render(); }}]});
+  return true;
+}
+
+
 function render(){
   if(!S) return;
+  if(!S.tut) S.tut = {step:0, done:true, paid:0, got:0};
+  if(!S.tut.done) checkTutorial();
   const p = PLACE[S.at];
   document.getElementById("where").innerHTML =
     p.name+' <span class="wheresub">· '+VALLEYS[p.valley]+
@@ -1373,7 +1534,9 @@ function render(){
   const obj = objective();
   document.getElementById("objective").innerHTML = obj ? "&rarr; "+obj : "";
   document.getElementById("objective").hidden = !obj;
-  document.getElementById("tabs").innerHTML = TABS.map(([k,n])=>
+  const tabs = visibleTabs();
+  if(!tabs.some(t=>t[0]===TAB)) TAB = tabs[0][0];
+  document.getElementById("tabs").innerHTML = tabs.map(([k,n])=>
     '<button data-t="'+k+'" aria-current="'+(TAB===k)+'">'+n+"</button>").join("");
   document.getElementById("tabs").querySelectorAll("button").forEach(b=>
     b.onclick = ()=>{ TAB = b.dataset.t; render(); });
@@ -1381,7 +1544,9 @@ function render(){
     TAB==="market" ? paneMarket() : TAB==="truck" ? paneTruck() :
     TAB==="crew" ? paneCrew() : TAB==="road" ? paneRoad() :
     TAB==="help" ? paneHelp() : paneLog();
+  document.getElementById("pane").insertAdjacentHTML("afterbegin", tutCard());
   wire();
+  spotlight();
   save();
 }
 const STAT_MEANS = {
@@ -1394,6 +1559,24 @@ const STAT_MEANS = {
   Wages:"What the people in the cab cost you for every day you are on the road.",
   Teeth:"Vampire canines. Bureau posts buy them: 1,200 for ten days after they are drawn, 700 after that."
 };
+function tutCard(){
+  const st = tutStep();
+  if(!st) return "";
+  const doIt = typeof st.doIt==="function" ? st.doIt() : st.doIt;
+  return '<div class="tut"><div class="tutnum">Step '+S.tut.step+" of "+TUTORIAL.length+"</div>"+
+    "<h3>"+st.title+"</h3><p>"+st.what+'</p><p class="do">'+doIt+"</p>"+
+    '<button class="b skip" data-a="tutskip" data-v="">Skip the walkthrough</button></div>';
+}
+/* One ring, on the one thing to press. Nothing else on the screen moves. */
+function spotlight(){
+  document.querySelectorAll(".spot").forEach(e=>e.classList.remove("spot"));
+  const st = tutStep();
+  if(!st || !st.spot) return;
+  const sel = typeof st.spot==="function" ? st.spot() : st.spot;
+  const el = document.querySelector(sel);
+  if(el) el.classList.add("spot");
+}
+
 function stat(b,v,cls){
   return '<div class="stat" title="'+(STAT_MEANS[b]||"")+'"><b>'+b+"</b><span class=\""+
          (cls||"")+'">'+v+"</span></div>";
@@ -1413,7 +1596,7 @@ function priceWhy(p, gid){
   const w = [];
   if(p.makes.includes(gid)) w.push("made here");
   if(p.wants.includes(gid)) w.push("wanted here");
-  const ev = EVENTS[S.event[p.id]];
+  const ev = S.event[p.id]==="quiet" ? null : EVENTS[S.event[p.id]];
   if(ev && ev.moves[gid]) w.push(ev.name.toLowerCase());
   if(GOOD[gid].restricted) w.push(isLegalHere(gid, p.id)
     ? '<span style="color:var(--sand)">traded openly here</span>'
@@ -1492,7 +1675,7 @@ function paneServices(){
               '<p class="note">'+t.s+"</p>"; }
   if(S.flags.tolmContract && !S.flags.licence)
     h += '<p class="note"><em>Contract in hand:</em> ten of flour to Bright’s Ford. Sell nothing else in the Ford until it is delivered.</p>';
-  const a = availableHere();
+  const a = tutActive() ? [] : availableHere();
   if(a.length) h += '<p class="note">'+a.map(c=>c.name).join(" and ")+
     (a.length>1?" are":" is")+" asking after a seat. See <b>Crew</b>.</p>";
   return h;
@@ -1798,6 +1981,7 @@ function wire(){
 }
 function act(a,v){
   const t = truck();
+  if(a==="tutskip"){ S.tut.done = true; save(); render(); return; }
   if(a==="buy1") buy(v,1);
   else if(a==="buyx") buy(v, cargoCap()-cargoUsed());
   else if(a==="sellx") sell(v, S.cargo[v]);
