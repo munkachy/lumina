@@ -521,6 +521,36 @@ The walkthrough is skippable from the first screen and from every step.
 
 ---
 
+## The layout
+
+The interface was five long scrolling tabs and it was hard to move around in.
+Space Trader's own shape is the fix, and it costs the Trek look nothing:
+**a hub screen you always come back to, with a grid of labelled buttons, and one
+small screen at a time behind each of them.** LCARS is also a grid of labelled
+pills, so the two want the same object.
+
+| Space Trader | Here |
+|---|---|
+| System Information (the hub) | the town screen: what it makes, what it is short of, whether blood is open, and eight buttons |
+| Buy Cargo / Sell Cargo, separate | Buy cargo / Sell cargo, separate |
+| Shipyard + Buy Equipment | The yard — fuel, repairs, trucks, mounts, plating, fittings |
+| Personnel | Crew |
+| Galactic Chart | The country |
+| Warp, with the cost broken out before you commit | Take the road, with wages plus any checkpoint fee shown per destination |
+| Commander Status | Where you stand — skills, standing with the Bureau, and the log |
+
+The amber pill at the top left of every screen goes back to the town, always in
+the same place. On a phone the hub is a two-column pad and the whole thing sits
+above the fold.
+
+**"Dear" is gone.** It is British for *expensive* and it read as the opposite of
+what it meant. The three price signals are now **CHEAP** (the town makes it —
+buy here), **usual**, and **IN DEMAND** (the town is short of it and pays over
+the odds — *sell* here, never buy). The reason column says *made here* and
+*short of it here* to match.
+
+---
+
 ## What is in the first draft
 
 Thirteen settlements on one continuous map, ten goods, seven local events, six
