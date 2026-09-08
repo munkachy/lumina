@@ -379,6 +379,138 @@ Four things that actually work:
    large ones.** Small inconsistencies read as different days. A large one reads
    as an author who lost track.
 
+## Teaching the reader how to read it
+
+A branching book has no controls, so it looks like it needs no tutorial. It
+does. A reader on section 1 does not yet know **what kind of choosing this is**:
+whether they can die, whether the book remembers what they did, whether an
+option is a moral position or just a route, whether they are supposed to be
+keeping track of anything. Every one of those is a rule, and a reader who has
+not been told them is not making choices. They are guessing and calling it
+choosing.
+
+Games solved this problem first, and the four things they know transfer whole.
+
+1. **Establish the promise before you teach anything.** The first thing the
+   reader needs is not a rule, it is a reason to be here — the shape of the
+   trouble and what it will feel like to be in it. One or two sentences.
+2. **Teach only what the next choice needs.** Order by *importance*, not by
+   complexity: work out what the reader must know to choose well one page from
+   now, teach that, and let everything else wait. A world explained before
+   anything happens is a world skipped.
+3. **Deliver a legible first result.** The first choice must visibly change
+   something within a node or two — a door that is now shut, a person who now
+   knows your name. That is how a reader learns their choices are load-bearing.
+   If the first three choices all land on the same paragraph, you have taught
+   them the opposite and they will stop reading carefully.
+4. **Pull, not push.** Teach each rule of the world at the moment it first
+   *constrains a choice*, never in a preface. A rule delivered up front is
+   skipped and forgotten; the same rule delivered at the moment it bites is
+   remembered, because the reader needed it.
+
+### Where this form is harder than a game
+
+A linear game can rely on order. World 1-1 always comes before 1-2, so a
+tutorial can be a sequence. **You have no sequence.** A reader can arrive at
+section 60 down three routes and you do not get to say which.
+
+So the rule that governs everything above:
+
+> **Any fact the reader needs in order to understand a choice must be
+> established on every path that reaches that choice.**
+
+This is the strict version of *repeat the load-bearing facts*, and it is
+stricter for a reason: a missing rule does not read as thin. It reads as a
+scene the reader watched without understanding, and they will blame themselves
+or blame you, and either way they stop trusting the book.
+
+**The worked example.** In *The Red Lamp*, Marek is the player's maker — the
+vampire who made him in 1931 — and the whole confrontation at the fence depends
+on knowing that. His identity was established in the branch where you answer the
+telephone. A reader who let it ring reached the fence not knowing who the man
+was, and read the entire scene as weather. One reader's actual words: *"I guess
+that was a vampire hunter or something."* The fix was not more atmosphere. It was
+naming him in Act One, on the only path there is.
+
+### The audit catches this
+
+`reference/audit.py` reads two markers out of the source. `*comment` is ignored
+by the engine, so they live next to the prose:
+
+```
+*label after_verna
+*comment teaches: marek
+
+*label the_fence
+*comment needs: marek
+```
+
+The tool then computes, for every section, the facts known on **every** path
+that reaches it — intersection over predecessors, iterated to a fixed point —
+and reports any section that needs something the reader might not have:
+
+```
+TOLD TOO LATE (1) — a section that assumes something the reader
+may not have been told, because at least one path arrives here without it:
+    three_dawn:say_nothing_cusack            needs whatmarekis
+```
+
+Mark the six or eight facts the book actually turns on. Not every noun — the
+ones where a reader without them is watching rather than choosing.
+
+### What the first screen owes the reader
+
+Hagen's four questions, plus one this form adds:
+
+- who I am
+- where and when I am
+- what I want, tonight, specifically
+- what is in my way
+- **and what a choice in this book does to me** — moves me, judges me, or kills
+  me
+
+### Order of teaching
+
+| The reader needs to know | Say it |
+|---|---|
+| that they can die | in the node *above* the first choice that can kill them |
+| that the book remembers | at the first place a past choice visibly pays off — make that early |
+| a rule of the world | on every path that reaches the choice it constrains |
+| that an option is irreversible | in the option line itself, never afterwards |
+| how long the book is | never |
+
+### Two more things games know
+
+**Limit what is on the screen at the start.** Three options on section 1, not
+six. The corpus median is two, and the first menu should sit at the low end.
+
+**The first choice should not be the hardest one.** Teach, then test, then
+twist: the first choice teaches what choosing feels like here, the second asks
+the reader to do it under a little pressure, the third breaks the pattern. Do
+not open with the decision the book is about.
+
+### The seven-line check
+
+Take section 1 and the two nodes under it. Cover the rest of the book. Answer
+in one sentence each:
+
+1. Who am I?
+2. Where and when am I?
+3. What do I want before this is over?
+4. What is stopping me?
+5. What do the two options in front of me actually differ about?
+6. What does this book do to me if I choose wrong?
+7. Has anything I have already done changed anything?
+
+If any answer needs the outline, the opening is not finished. If any answer
+takes a paragraph, you are decorating.
+
+**Why this keeps going wrong:** atmosphere reads as complete to whoever already
+knows the answer. The author has the whole world in his head, so a room
+described well *feels* like a scene explained. It is not. Description is not
+exposition and mood is not motive. The question is never "does this read well".
+It is "could a stranger answer the seven lines".
+
 ## Building something: the third mode
 
 Some stories are about assembling a thing and then finding out whether it was
@@ -518,7 +650,14 @@ Build with `python3 build.py`; check the graph with
    intrigued. Run the four-line check.
 7. **One voice in several mouths.** Strip the tags. If you cannot tell them
    apart, neither can the reader.
-8. **A menu with no objective above it.** The reader is the actor; they can
+8. **An opening that does not say what kind of choosing this is.** The reader
+   does not know whether they can die, whether the book remembers, or whether
+   the option in front of them is a route or a verdict. Run the seven-line
+   check.
+9. **A fact the reader needs, established on one branch only.** Invisible on
+   the page, because it reads correctly to you. Mark it `teaches:` / `needs:`
+   and let the audit find it.
+10. **A menu with no objective above it.** The reader is the actor; they can
    only supply the tactic. Give them the want and the obstacle or the choice is
    a coin toss they will resent.
 
@@ -534,6 +673,12 @@ and the tag-strip test, from the working literature on character voice.
 Motivation: Stanislavski's objectives, obstacles and super-objective, and Uta
 Hagen's three questions, borrowed from acting because actors have to solve in
 rehearsal what a reader of this form has to solve at every menu. Short
+Teaching the reader: the game-tutorial literature on first-time user
+experience — teach in order of importance rather than complexity, limit what is
+on the screen early (the Kerbal model), pull rather than push so a lesson fires
+when the player's own state makes it relevant, and deliver a legible first win;
+adapted here to a form that cannot rely on order, which is what makes the
+every-path rule and the `teaches:` / `needs:` audit necessary. Short
 fiction: Poe's unity of effect — one sitting, one effect, every line doing
 double duty — and the modern compression tradition that follows from it, with
 the caveat above about compression that carries nothing.

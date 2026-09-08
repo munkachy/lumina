@@ -63,6 +63,7 @@ Out in the lot, the man at the fence has a phone against his ear and is looking 
     *goto let_ring
 
 *label let_ring
+*comment needs: marek
 *page_break
 
 You let it ring.
@@ -80,6 +81,7 @@ You are in front of her before you have decided to be — across the aisle, four
 *goto answer
 
 *label answer
+*comment needs: marek
 *page_break
 
 The sacristy is behind the sanctuary on the gospel side, through a low door, and you go the long way round the outside of the rail so that you do not have to cross in front of the brass box.

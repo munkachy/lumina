@@ -8,6 +8,18 @@ Reads startup.txt for *scene_list, then every scene in scenes/. Treats each
 *ending or the next *label. Reports the numbers the cyoa skill is written
 against, and names the three faults you cannot see by reading: unreachable
 sections, unintended dead ends, and forced runs longer than three.
+
+It also checks what a reader was told before they had to choose. Mark a
+section that establishes a fact, and a section that assumes it:
+
+    *comment teaches: marek, the-lamp
+    *comment needs: marek
+
+`*comment` is ignored by the engine, so the markers ride in the source next
+to the prose. The audit then reports any section that needs a fact the
+reader might not have, because at least one path reaches it without ever
+passing a section that teaches it. That fault is invisible on the page: the
+scene reads fine to the author, who knows who Marek is.
 """
 import io, os, re, sys, glob, random, statistics, collections
 from collections import deque
@@ -125,6 +137,54 @@ while q:
             depth[v] = depth[u] + 1; q.append(v)
 unreachable = sorted(known - set(depth))
 
+# ---------- what the reader has been told ----------
+# A fact counts as known at a section only if EVERY path from the start to it
+# passes a section that teaches it. Intersection over predecessors, iterated to
+# a fixed point — the standard available-expressions shape.
+FACTS = re.compile(r'^\*comment\s+(teaches|needs)\s*:\s*(.+)$', re.I)
+teaches = {k: set() for k in nodes}
+needs   = {k: set() for k in nodes}
+for si, sc in enumerate(order):
+    L = lines[sc]
+    marks = [(i, cmd(t)[1]) for i, (ind, t) in enumerate(L) if cmd(t)[0] == 'label']
+    bounds = [(0, '__top__')] + marks
+    for k, (st, name) in enumerate(bounds):
+        stop = bounds[k + 1][0] if k + 1 < len(bounds) else len(L)
+        me = nid(sc, name)
+        if me not in nodes: continue
+        for ind, t in L[st:stop]:
+            m = FACTS.match(t)
+            if not m: continue
+            got = {x.strip().lower() for x in m.group(2).split(',') if x.strip()}
+            (teaches if m.group(1).lower() == 'teaches' else needs)[me] |= got
+
+ALLFACTS = set().union(*teaches.values(), *needs.values()) if nodes else set()
+blind = []
+if ALLFACTS:
+    preds = collections.defaultdict(list)
+    for u, n in nodes.items():
+        for v in n['succ']:
+            if v in nodes: preds[v].append(u)
+    start0 = start_at or nid(order[0], '__top__')
+    known_at = {k: set(ALLFACTS) for k in nodes}
+    known_at[start0] = set(teaches.get(start0, ()))
+    for _ in range(len(nodes) + 2):
+        changed = False
+        for v in nodes:
+            if v == start0: continue
+            ps = [u for u in preds[v] if u in known_at]
+            if not ps: newv = set(teaches[v])            # only reachable as a head
+            else:
+                inter = set(known_at[ps[0]])
+                for u in ps[1:]: inter &= known_at[u]
+                newv = inter | teaches[v]
+            if newv != known_at[v]: known_at[v] = newv; changed = True
+        if not changed: break
+    for v in sorted(nodes):
+        if v not in depth: continue                      # unreachable is its own report
+        miss = needs[v] - known_at[v]
+        if miss: blind.append((v, sorted(miss)))
+
 # random walks: playthrough length and forced runs
 random.seed(11)
 steps = []; readwords = []; runs = []
@@ -174,6 +234,15 @@ if unreachable:
 if dangling:
     print('\nBROKEN LINKS (%d) — a goto with no such label:' % len(dangling))
     for d in dangling[:30]: print('   ', d)
+if ALLFACTS:
+    print('\n%-34s %8d  facts tracked' % ('teaches / needs markers',
+          sum(1 for k in nodes if teaches[k] or needs[k])))
+if blind:
+    print('\nTOLD TOO LATE (%d) — a section that assumes something the reader' % len(blind))
+    print('may not have been told, because at least one path arrives here without it:')
+    for v, miss in blind[:30]:
+        print('    %-40s needs %s' % (v, ', '.join(miss)))
+    if len(blind) > 30: print('    ... and %d more' % (len(blind) - 30))
 if term:
     print('\nENDINGS (%d) — every one of these should be a real ending:' % len(term))
     for t in term[:40]: print('   ', t, '(%d words)' % nodes[t]['words'])
