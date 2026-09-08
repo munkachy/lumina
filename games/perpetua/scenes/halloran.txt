@@ -1,0 +1,630 @@
+*comment ============ CHAPTER NINE — HALLORAN ============
+*comment THE CRISIS. Biggest scene in the book, at 72% of the arc. Rule's
+*comment moment of glory: overrule Halloran to his face, on your own bridge.
+*comment Budget: 18 choices, 16 tests, ~5,000 words.
+*comment Ledger: Tessine Station, 9,000 transient. The 906 from Ceyla III were
+*comment resettled here; that is why he stays. Ceyla III's council voted 6-3 to
+*comment stay and defend. He evacuated them anyway, over the recognised
+*comment authority of a world that had asked him not to. Meris Ando voted stay.
+
+Tessine Station is a wheel with eleven spokes and nine thousand people in it, most of whom are leaving.
+
+It sits at the junction of four trade lanes and it exists to move things through: cargo, ships, crews, whole families under Concord resettlement warrants. Nobody is from Tessine. Everybody on it is between somewhere and somewhere else, except for about a thousand people who arrived fourteen months ago in the holds of a survey ship and have not moved since.
+
+The approach is bad. Four lanes, a debris shell from sixty years of traffic, and a station that has been extended twice by people who were not talking to each other. Concord regulation requires a licensed harbour pilot aboard for the final eleven kilometres.
+
+"Pilot boat's away and closing," ${xoname} says. "Two minutes."
+
+*page_break
+
+*comment ---------------- The pilot ----------------
+
+He comes up through the airlock in a worn Survey jacket with the insignia taken off, and he is about sixty, and he has a pilot's case in one hand, and he says, "Harbour pilot for the *Perpetua*," and gives the duty officer his licence.
+
+Then he comes onto the bridge of the ship he had for nine years.
+
+The bridge of a Meridian is nine metres across and everybody in it can hear everything anybody says, and for about four seconds nobody says anything at all.
+
+*if (article_nine != "charged")
+  At the helm, Toma Beye has gone absolutely white and has not turned round.
+*if (article_nine = "charged")
+  At the helm there is a lieutenant from the second watch who has never met the man and does not know what is happening.
+
+**Ivo Halloran** looks at nobody. He crosses to the pilot's position at the back of the bridge, which is where a harbour pilot stands, and he sets his case down, and he says: "Permission to take the con for the approach, Captain."
+
+*page_break
+
+*choice
+  #"Granted, Pilot. The ship is yours."
+    *set rule %+6
+    *set candor %-4
+    You give it to him the way you would give it to any pilot, in the correct words, in front of your crew, and you do not put one gram of anything else into your voice.
+
+    "Thank you, Captain."
+
+    He takes her in.
+    *set halloran_regard %+6
+    *goto hall_approach
+  #"Granted. Welcome aboard, Captain Halloran."
+    *set candor %+12
+    *set crew %+10
+    You use the rank. He has not held it for fourteen months and there is not a person on the bridge who does not hear you do it.
+
+    Halloran's face does not move at all.
+
+    "Thank you, Commander," he says, using yours, precisely, which is a correction and an acknowledgement in the same three words. "The ship is on my hands."
+    *set halloran_regard %+12
+    *set rel_xo %+6
+    *goto hall_approach
+  #"Pilot — stand by. ${xoname}, take her in on instruments."
+    *set rule %+16
+    *set nerve %+10
+    *set candor %+8
+    *set standing %-4
+    You do not let him touch the ship.
+
+    It is entirely within your authority — the regulation requires a pilot aboard, not a pilot at the con — and it has not been done at Tessine in eleven years, and every officer on the bridge understands exactly what has just happened.
+
+    "Standing by," Halloran says, and does, and calls the lanes clearly and correctly for eleven kilometres without once being asked, and ${xoname} brings her in on his numbers.
+    *set halloran_regard %-8
+    *goto hall_approach
+
+*label hall_approach
+*page_break
+
+Whoever has the con, the approach takes forty minutes, and it is the best piece of ship-handling anybody aboard has seen.
+
+He knows this ship. That is the thing that gets under the crew's skin and stays there: he knows that she is nineteen centimetres wider at the sensor block than her plate says, and that she yaws to port under braking because of a weld nobody has ever documented, and he corrects for both without mentioning either.
+
+*if (eng = "osimo")
+  Two decks down, Osimo has the engine spaces on the bridge repeater and is watching the numbers, and does not say a single word for forty minutes, which from Osimo is a shout.
+*if (eng = "kallas")
+  Kallas comes up to the bridge without being called, watches for six minutes, says "That's a hundred and eleven per cent of the book value on the port braking curve," to nobody, and goes below again.
+*if (eng = "dorr")
+  "I am sorry," Dorr says quietly, at your shoulder, "but he is running her four per cent under her rated stress on every axis. I have never managed that. I have been trying since the spring."
+
+At the eleventh kilometre he hands her back. "Ship is on your hands, Captain. Tessine control has you."
+
+And then he picks up his case and asks permission to leave the bridge, and it is granted, and he goes.
+
+*page_break
+
+*choice
+  #Follow him. Now, before he is off the ship.
+    *set nerve %+14
+    *set candor %+10
+    You catch him at the airlock. He is not surprised. He has the patient expression of a man who has been catching people at airlocks for fourteen months.
+
+    "Commander."
+
+    "One hour," you say. "Anywhere you like."
+
+    He looks at you for a while. Then: "There's a place on the six spoke that does eggs. I'll be there at nineteen." And he goes down the tube without saying goodbye to a single member of a crew he had for nine years, which you do not understand until much later.
+    *goto hall_station
+  #Let him go. Send a formal invitation through the station.
+    *set rule %+12
+    *set candor %-8
+    You do it properly: a signal to the harbourmaster's office, an invitation to the master's cabin of CS *Perpetua* at a time of his convenience, from the commanding officer.
+
+    The reply comes back in ninety minutes and it is four words. *Six spoke. Eggs. Nineteen.*
+    *goto hall_station
+  #Let him go entirely. There is nothing I need from him.
+    *set rule %+14
+    *set candor %-14
+    *set crew %-8
+    You let him walk off your ship and you go back to the plot, and you hold that position for eleven hours, and at 0600 you are awake in a cabin three metres by four and you get up and put on a coat.
+
+    The place on the six spoke does eggs from 0500. He is at the counter. He has clearly been there some time.
+    *set halloran_regard %-6
+    *goto hall_station
+
+*label hall_station
+*page_break
+
+*comment ---------------- The nine hundred and six ----------------
+
+Before that, the station.
+
+Tessine's six spoke is residential and cheap and it is where the resettlement warrants put people. Nine hundred and six of them arrived fourteen months ago in the holds of this ship and about eight hundred are still here, because a resettlement warrant gets you a compartment and a stipend and no onward passage at all.
+
+They are not hard to find. Somebody in the harbourmaster's office says *oh, the Ceyla lot* and points, and you walk down a spoke corridor and there is a whole neighbourhood of people from one dead world living within two hundred metres of each other, cooking food nobody else on the station eats.
+
+*if (chap != "none")
+  ${chapname} comes with you.
+  *if (chap = "wren")
+    Wren says nothing for the whole walk and then, at the end of it, "There is a chapel down there, Captain. It is a store cupboard. They have made it very nice."
+  *if (chap = "onu")
+    Onu is stopped four times in three hundred metres by people who do not know her and want to know whether she is from an order, and by the end of the corridor she is carrying somebody's shopping.
+  *if (chap = "serat")
+    "Fourteen months, no onward passage, one origin, high density," Serat says. "That is either a community or a grievance and it will be both by the end of the second year."
+
+A woman about your own age is sitting outside a compartment door mending something.
+
+Her name is **Meris Ando** and she was on the council of Ceyla III, and she voted to stay.
+
+*page_break
+
+"You're off the *Perpetua*," she says. "I know the sound of her."
+
+She does not get up. She looks at the badge on your shoulder for a while.
+
+"You want to know about him." She bites off a thread. "Everyone does, eventually. Here's the part nobody in your service will tell you, Commander, because I don't think your service has ever quite let itself hear it.
+
+"We voted. Nine on the council, six to three, and the six was *stay*. It's our world. We had a militia and four seasons of grain and we'd been there sixty-one years and we said no. Then a Concord ship came into orbit and a man came down and stood in our hall and listened to the vote, and then he went back up and gave the order and his marines put us in the holds of a survey ship."
+
+She holds up the thread.
+
+"He didn't lie to us. He didn't argue. He said, *I have heard you and I am not going to do it.* Nine hundred and six of us. Some of them thanked him on the way up. I did not."
+
+*page_break
+
+*choice
+  #"Do you thank him now?"
+    *set candor %+12
+    *set crew %+6
+    "No," Meris Ando says.
+
+    Then, after a while: "My brother's alive. My brother's two boys are alive. There's forty of us on this corridor who'd be ash." She goes back to the mending. "I'm alive and I'm on a wheel and I don't have a world, and he took the vote away, and I'd have voted the same tomorrow and I'd have been wrong tomorrow too."
+
+    She looks up.
+
+    "You want it tidy. It isn't. That's the whole of what I've got to say to your service."
+    *set ceyla_known 3
+    *goto hall_eggs
+  #"What would have happened if he had obeyed?"
+    *set rule %+10
+    *set candor %+8
+    "We'd have fought," she says, without hesitation. "Two hundred militia, four seasons of grain and a mining charge in every culvert. The Vaunt would have taken eleven days instead of one and lost about ninety people, and then they'd have had it anyway."
+
+    "And the nine hundred and six?"
+
+    Ando looks at her mending. "Some of us. Not most." She says it like a woman who has done this arithmetic several thousand times. "That's not the argument, Commander. The argument is that it was *ours to lose.*"
+    *set ceyla_known 3
+    *goto hall_eggs
+  #"I am sorry."
+    *set candor %+6
+    *set crew %+12
+    You say it standing in a spoke corridor to a woman you have known for four minutes, and you do not qualify it and you do not explain which part you are sorry for.
+
+    Ando stops mending.
+
+    "Right," she says, and then does not say anything for a while, and then: "Nobody's done that." She goes back to it. "Fourteen months. Four delegates, two assessors, and a man from resettlement, and not one of them said that, because saying it means the Concord did something and the Concord's position is that a rule did it." She bites the thread. "Go and see him. Tell him Meris said go and see him."
+    *set standing %-4
+    *set halloran_regard %+10
+    *goto hall_eggs
+
+*label hall_eggs
+*page_break
+
+*comment ---------------- Eggs ----------------
+
+The place on the six spoke has eleven seats and a counter and it does eggs and nothing else, and Ivo Halloran is at the end of the counter with a mug, in the same jacket with the insignia taken off.
+
+Close up he is sixty-one and looks it. He is not diminished. That is the thing you were not prepared for: you came expecting a ruined man, and what is sitting at the counter is a competent professional between shifts.
+
+"Commander." He moves his case off the next stool. "You'll want the eggs. They're the only thing."
+
+*if (halloran_regard > 62)
+  He orders them for you without asking, which is either presumption or an old habit from a ship where he knew what everybody ate.
+
+*page_break
+
+*choice
+  #"Why did you put my name on that form?"
+    *set candor %+14
+    *set rule %+4
+    He puts the mug down.
+
+    "Because they asked for three and I only had one." He says it flatly. "I read every file the Survey would give me and most of them were fine and one of them was you. And then there was a box on the form marked *grounds* and about nine centimetres of space, and I wrote the only true thing I could write that would get you the ship."
+
+    "*She will not do what I did.*"
+    *if (pcthey = "he")
+      "*He will not do what I did.*"
+    *if (pcthey = "they")
+      "*They will not do what I did.*"
+
+    "That's it. That's the whole sentence." He turns the mug round. "I have had fourteen months to decide whether it was a compliment and I have not managed it. I am not going to pretend to you that I have."
+    *set halloran_regard %+10
+    *goto hall_ceyla
+  #"Nine hundred and six people. Tell me about the vote."
+    *set candor %+12
+    *set rule %+8
+    "Six to three," Halloran says. "In a hall with the doors open. I stood at the back and I heard all of it and it was a good debate, better than anything I have heard in the Survey, and then they voted to stay and I went back up to my ship and gave the order."
+
+    He looks at the counter.
+
+    "Standing Order Four says *a world that has not asked.* Ceyla III asked. It asked me, formally, through its recognised council, by six votes to three, to leave it alone." A pause. "I did not break the rule by accident, Commander, and I did not break it in the grey. I broke the clearest possible case of it. If you are going to think about me at all, think about that one and not the easy version."
+    *set ceyla_known 3
+    *set halloran_regard %+8
+    *goto hall_ceyla
+  #"Sar Vehn Oleyo has written to you twice."
+    *set candor %+10
+    *set nerve %+8
+    Halloran is quiet for a moment.
+
+    "Three times," he says. "The third came in the spring." He turns the mug. "He is a serious man and he is not gloating and I have not answered him, and that is not principle, it is that I do not know how to write a letter to somebody who understood it better than my own service did."
+
+    He glances at you.
+
+    "Did he tell you he thanked me? He put it in the first one. *Thank you for the clarity.* Forty-one thousand people. He was not being cruel. That is the trouble with him."
+    *set oleyo %+8
+    *set halloran_regard %+10
+    *goto hall_ceyla
+
+*label hall_ceyla
+*page_break
+
+*comment ---------------- What he actually thinks ----------------
+*comment The theological centre of the book. He does not ask for the rule to be
+*comment changed to accommodate him.
+
+The eggs come. They are, in fact, the only thing.
+
+"You want to know whether I regret it," Halloran says. "Everybody does and nobody asks straight, so I will save you the walk round.
+
+"No. Nine hundred and six people are two hundred metres from this counter and I would do it again in the morning.
+
+"And here is the part your service will not let itself hear, which I have said to four delegates and two assessors and a man from resettlement, and which lands nowhere, so I am going to say it to you and then eat my eggs."
+
+He puts both hands flat on the counter.
+
+"**The rule is right.** Standing Order Four is right and it should stand and the next master should obey it. It has held eleven worlds together for a hundred and forty-three years and it is the only reason the Concord is not a fourth empire, and I broke it, and it should still be there, and I should have been relieved."
+
+*page_break
+
+"That is not humility, Commander. Do not mistake it for humility. It is arithmetic.
+
+"If the Survey changes the rule so that what I did becomes permitted, then every master in two hundred and fourteen ships gets to decide which part of a world is really the world, and inside twenty years the Concord is doing to somebody what the Vaunt do, only worse, because we would be doing it kindly.
+
+"So the rule has to stand, and I have to have broken it, and both of those are true, and the cost of the second one is mine and I am not asking anybody to take any of it off me."
+
+He picks up his fork.
+
+"Fourteen months of people trying to give me half of it. Half of it from a delegate, half from an assessor, half from your Assessor Ivanescu, who is a good woman and who told me that the text was *capable of multiple readings*." He shakes his head. "It was not capable of multiple readings on Ceyla III. It was capable of one reading and I went the other way."
+
+*choice
+  #"Then you think I should have held the line at Sedge."
+    *set rule %+10
+    *set candor %+10
+    "I think you should have obeyed your standing orders," Halloran says, "and I think that if you had been in that hall on Ceyla III you would have done what I did, and I do not think those two sentences contradict each other, and if they do then I have not got a better answer after fourteen months."
+
+    *if (sedge = "held")
+      He turns his mug. "You held it. Three hundred and eighty-one. I read it." A long pause. "Commander — do not let anybody tell you that was the easy one."
+      *set halloran_regard %+14
+    *if (sedge = "gave")
+      He turns his mug. "You did not hold it." No expression at all. "Six thousand two hundred people. And a nine-page protest from an elected man who had a plan." He eats. "Welcome. It does not get lighter and you do not get used to it and anyone who tells you otherwise has not done it."
+      *set halloran_regard %+16
+    *if (sedge = "water")
+      He turns his mug. "The least that answers." Something moves in his face. "That was on my bulkhead for nine years, Commander. I screwed it up there so I would have to read it lying down." He eats. "It is a good sentence and it is not a rule, and the difference nearly killed me."
+      *set halloran_regard %+12
+    *if (sedge = "council")
+      He turns his mug. "You made the government do it and put your hand on top." He almost smiles. "That is the clever answer and it works and it works exactly once per world, and I want you to know I looked for it at Ceyla for four days and there was nothing there to be clever with."
+      *set halloran_regard %+10
+    *goto hall_beye
+  #"You are asking the Concord to punish you and to agree with you. That is not available."
+    *set candor %+16
+    *set nerve %+10
+    *set rule %+8
+    You say it across a counter to a man who has been carrying this for fourteen months, and you do not soften it.
+
+    "Captain Halloran, you want the rule to stand and you want to have been right. If both of those are true then the Survey has to hold a position it cannot hold — that the correct decision was the wrong one — and it will not, and that is why four delegates and two assessors have all handed you back half of it. Not out of kindness. Because you have asked for something that does not exist."
+
+    A very long silence at a counter with eleven seats.
+
+    "Yes," he says at last. "That is right. Nobody has said it in fourteen months." He looks at his hands. "What am I supposed to do with it?"
+
+    "I do not know."
+
+    "No." He picks up the fork. "Nobody does. But thank you for not pretending."
+    *set halloran_regard %+18
+    *set standing %+4
+    *goto hall_beye
+  #"Do the nine hundred and six know you think you should have been relieved?"
+    *set candor %+12
+    *set crew %+10
+    Halloran stops with the fork halfway.
+
+    "No," he says. "God, no. Ando would have my skin." He puts it down. "They think the Concord punished a man for saving them. It is simpler and it is nearly true and it lets them be angry at something that is not themselves, and about a third of them voted to stay, and Commander, I am not taking that away from them for the sake of being understood."
+
+    He picks the fork up again.
+
+    "That is why I pilot freighters here. Not penance. Somebody has to be the thing they can be angry at, and it is not a hard job, and I am good at the lanes."
+    *set halloran_regard %+14
+    *goto hall_beye
+
+*label hall_beye
+*page_break
+
+*comment ---------------- Beye ----------------
+
+*if (article_nine = "charged")
+  There is a young man wiping down the counter at the far end.
+
+  He has been there the whole time. You did not look at him because he is wearing a station apron and you were looking at a man in a Survey jacket, and he has been standing eleven feet away for twenty minutes with his back to you on purpose.
+
+  Toma Beye is twenty-four and he was dismissed from the Survey at Marl Colony in forty minutes and he came to Tessine Station because it was the cheapest onward passage, and Ivo Halloran found him a job in a place that does eggs and has him on the lane boats three days a week learning to be a pilot.
+
+  "He asked me not to tell you he was here," Halloran says. "I have just told you he is here. You may take that up with me."
+
+  *choice
+    #Go and talk to him.
+      *set candor %+14
+      *set crew %+12
+      *set nerve %+10
+      You get up and walk eleven feet down a counter.
+
+      It is the worst four minutes of the year. He is polite. That is the unbearable part: he is completely, correctly polite, and he calls you *Captain* out of habit and then corrects himself to *ma'am* or *sir* and then stops using anything at all.
+
+      At the end he says: "I'd have done it again, you know. Not the — I mean I'd send them again." And then, when you do not say anything: "I'm all right. He's teaching me the lanes. Pilots make more than sub-lieutenants."
+
+      It is even true.
+      *set rel_sec %+6
+      *set halloran_regard %+12
+      *goto hall_plaque
+    #"Captain Halloran. Did you know he was transmitting?"
+      *set candor %+12
+      *set rule %+10
+      "Yes," Halloran says.
+
+      The word sits on the counter.
+
+      "One hundred and nineteen times, at 0410, for four months. I never answered one of them because answering would have made him mine and he was yours." He looks at his plate. "I could have signalled you in the first week. I did not, because I wanted to know how the ship was, and because I told myself he was a grown man making his own choices, and because I am a coward about exactly one thing and that is being cut off from that ship."
+
+      A pause.
+
+      "He was dismissed for something I could have stopped in a week. I have had two months to decide whether to say that to you and I have just said it."
+      *set halloran_regard %+16
+      *goto hall_plaque
+    #Say nothing to either of them. Leave.
+      *set candor %-16
+      *set rule %+12
+      *set crew %-10
+      You finish the eggs. You thank Halloran for his time. You walk out of a place with eleven seats and a counter, past a twenty-four-year-old in a station apron who does not turn round, and you go back to your ship.
+
+      *if (rel_sec > 60)
+        ${secname} asks, later, whether you saw him. You say yes. ${secThey} waits for the rest and there is no rest, and ${secthey} says "Aye, Captain," and that is the end of it, and it is not the end of it.
+        *set rel_sec %-10
+      *goto hall_plaque
+*if (article_nine != "charged")
+  Halloran says, without looking up: "How is Mister Beye?"
+
+  You had not decided whether to raise it. He has raised it in five words, at a counter, over eggs, which is how he has raised every difficult thing today.
+
+  *choice
+    #Tell him everything. Including what you did about it.
+      *set candor %+16
+      *set crew %+8
+      You tell him: the hundred and nineteen, the open band, the folder, the punishment book, the sentence you wrote that is true and not honest.
+
+      Halloran listens all the way through without moving.
+
+      "I never answered one of them," he says at last. "Not one, in four months. I could have signalled you in the first week and stopped it and I did not, because I wanted to know how the ship was." He puts his fork down. "So he did four months of that and you did what you did about it, and the person who should have been standing where you were standing was me, and I was here, piloting freighters."
+      *set halloran_regard %+18
+      *goto hall_plaque
+    #"He is well. He is back on the flight roster. That is all you get."
+      *set rule %+14
+      *set candor %-6
+      "That is all I get," Halloran repeats. He nods slowly. "Yes. That is right." He goes back to the eggs. "Commander, I want you to know that I think that is the correct answer and that I hate it, and that both of those have been true about most things for fourteen months."
+      *set halloran_regard %+8
+      *goto hall_plaque
+    #"He sent you one hundred and nineteen messages. Why did you never answer?"
+      *set candor %+14
+      *set rule %-6
+      "Because answering would have made him mine," Halloran says, "and he was yours."
+
+      He turns the mug round.
+
+      "It is the only decision I have made in fourteen months that I am completely sure of. Everything else I have gone round and round. That one I got right on the first morning and it cost me every morning since." He glances at you. "You will have one of those. Everybody who commands gets one. It is not a comfort."
+      *set halloran_regard %+16
+      *goto hall_plaque
+
+*label hall_plaque
+*page_break
+
+*comment ---------------- Promise #1: who she was ----------------
+
+*if (plaque = false)
+  There is one more thing and you nearly do not ask it, because it is small and because you have been at a counter for two hours.
+
+  "Captain Halloran. Who was she?"
+
+  He looks up. "Who was who?"
+
+  "*Perpetua.* The plaque outside the bridge. *She would not be moved, and she was not consoled, and she did not stop.* Nobody aboard knows. I have asked eleven people."
+
+  Halloran sets down the mug with great care.
+
+  "Nobody has asked me that in twenty years," he says.
+*if (plaque)
+  "One more thing," you say. "The plaque."
+
+  Halloran sets down the mug with great care. "You found out."
+
+  "Some of it."
+
+  "Then let me give you the rest, because I looked it up in my first week and nobody has asked me about it in twenty years."
+
+*page_break
+
+"She was a young woman under arrest, a very long time ago, for something she believed and would not stop saying. She had a child at the breast. She kept a diary in the prison and it survived, which is why we know any of this, and it is one of the oldest things written by a woman that anybody still has.
+
+"Her father came to her three times. He was not a cruel man. He begged her — the third time on his knees, in front of the guards, with the child in his arms — to say one sentence that would have got her out, and she would not say it.
+
+"She wrote down what she said to him. It is not defiant. That is what got me. She said: *It will happen on that platform as God wills. We are not in our own power, but in his.*
+
+"And then she went out and it happened."
+
+He turns the mug.
+
+"The Concord picked her up a hundred and forty years ago for a hull name because we had just finished forty years of killing each other and somebody on the naming board wanted a ship that meant *a person can refuse.* The line on your plaque is not hers. Somebody wrote it about her. It is a paraphrase and it is a good one."
+
+*set plaque true
+*achieve plaque
+
+*page_break
+
+*if (chap = "wren")
+  You tell Wren that evening. He listens to the whole thing and at the end he says, "Yes," and then, after a while, "I could have told you that in the first week." A pause. "Captain, why did you never ask me?" He is not being unkind. It is a real question and you do not have a good answer.
+  *set rel_chap %+8
+*if (chap = "onu")
+  You tell Onu that evening. She says, "That is the one," and goes on folding. "There are two of them with that name and the other one is a bishop and nobody names ships after him." She looks up. "The father is the part, isn't it. On his knees, with the baby. Everybody remembers the arena."
+  *set rel_chap %+10
+*if (chap = "serat")
+  You tell Serat that evening. He is interested, genuinely, and asks three good questions about the manuscript tradition, and then says: "The reason it matters to you is not the woman. It is that the answer existed and was eleven feet from your bunk for nine months." He is right, which is his whole problem.
+  *set rel_chap %+6
+*if (chap = "none")
+  You tell ${xoname} that evening, because there is nobody else on the ship whose business it might be, and ${xoname} listens politely and says it is a good story and goes back to the readiness board.
+
+  There is nothing wrong with that. You notice it anyway.
+
+*goto hall_nadire
+
+*label hall_nadire
+*page_break
+
+*comment ---------------- Nadire ----------------
+*comment Rule's moment of glory: overrule Halloran on your own bridge.
+
+The courier finds you on the station at 2140.
+
+**FROM: C. ADJO, DELEGATE, COLD REACH**
+**TO: MASTER, CS PERPETUA**
+**NADIRE HAS REQUESTED SURVEY CONSULTATION. VAUNT VESSEL ASHAYA IS IN NADIRE SPACE AND HAS MADE AN OFFER OF ASSOCIATION. NADIRE COUNCIL VOTES IN ELEVEN DAYS.**
+**PROCEED NADIRE. OBSERVE. REPORT. TAKE NO ACTION.**
+
+Nadire: independent, eleven thousand people, a hard world with a good harbour and a failing orbital elevator that they cannot repair and cannot live without.
+
+The Vaunt have offered to repair it.
+
+That is the whole thing. No fleet, no ultimatum, no war. An offer, from people who are polite and exact and do not lie, to fix the one thing that is killing a world — and the price is association, which means Vaunt law, Vaunt tax, Vaunt ships in the harbour, forever.
+
+Nadire is nine days away and it has asked the Concord for a consultation and the Concord has sent one ship with orders to watch.
+
+*page_break
+
+You need a pilot to get off Tessine.
+
+Ivo Halloran comes up through the airlock at 0400 in a jacket with the insignia taken off, takes the pilot's position at the back of the bridge of the ship he had for nine years, and cons her out through four lanes and a sixty-year debris shell without a wasted word.
+
+At the eleventh kilometre he hands her back. And then, instead of picking up his case, he says:
+
+"Captain. May I say a thing that is not a pilot's business?"
+
+*page_break
+
+*if (halloran_regard > 55)
+  "You will get there in nine days and the *Ashaya* has been there for four. Oleyo will have surveyed the elevator, costed it, and put a number in front of that council, and it will be a true number, because he does not put false ones in front of people.
+
+  "Your orders say observe and report. If you observe and report, Nadire votes in eleven days and it votes yes, because a true number from a man who can do the work beats a Concord ship sitting at nine astronomical units taking notes.
+
+  "So do not take notes. Go in at your best speed, put the *Perpetua* alongside that elevator on the first day, and get your engineer onto the structure with Oleyo's own survey in ${engtheir} hand. You cannot outbid him. You are not permitted to. But you can make him do it in the open, in front of eleven thousand people, with a Concord officer standing next to him asking questions."
+
+  He picks up his case.
+
+  "That is what I would do. I am aware of what my recommendations are worth."
+*if (halloran_regard <= 55)
+  "Your orders say observe and report," he says. "I want to tell you what observing looks like from the ground, because I have done it for four days in a system and I am the only officer in this service who has.
+
+  "It looks like nothing. It looks like a Concord ship at nine astronomical units, taking notes, while somebody else fixes the thing that is killing you. And after eleven days the vote goes the way it was always going to go, and the report is filed, and it is completely accurate."
+
+  He picks up his case.
+
+  "Go in close. That is all. I am aware of what my recommendations are worth."
+
+*page_break
+
+*comment ---------------- The choice ----------------
+
+The bridge of a Meridian is nine metres across and everybody in it can hear everything anybody says.
+
+*if (article_nine != "charged")
+  At the helm, Toma Beye has not turned round and is not breathing very much.
+
+*choice
+  #"Thank you, Pilot. Log the recommendation. ${xoname} — plot us in close."
+    *set nerve %+14
+    *set crew %+8
+    *set rule %+4
+    *set nadire_close true
+    You take his advice on your own bridge, in front of your crew, and you have it logged under his name so that nobody can later pretend it was yours.
+
+    Halloran's face does not move. "Thank you, Captain."
+
+    ${xoname} plots it.
+    *if (xo = "marand")
+      Marand writes it in the notebook. Time, recommendation, source, decision. Then she says, quietly, only to you: "Captain — the last person who took that advice was him."
+      *set rel_xo %-4
+    *set halloran_regard %+10
+    *goto hall_end
+  #"No."
+    *set rule %+20
+    *set nerve %-6
+    *set standing %+10
+    *set nadire_close false
+    *achieve ruler
+    You say it on your own bridge to a man who had this ship for nine years, in front of eleven people, and you do not soften it and you do not explain it first.
+
+    "No. My orders say observe and report and I am going to observe and report. Not because I think you are wrong about the vote — I think you are almost certainly right about the vote. Because the last time an officer of this ship decided that the orders did not fit the situation, he was right about the situation, and forty-one thousand people are Vaunt subjects, and he is standing on my bridge with the insignia off his jacket."
+
+    Nobody on the bridge moves.
+
+    Halloran does not argue. That is the terrible part. He comes to attention — a civilian harbour pilot, in a jacket with the insignia taken off, on the bridge of a ship he no longer has — and he says:
+
+    "Yes, Captain."
+
+    And then, after a moment, quietly, so that only you hear it: "That is why I wrote the sentence."
+    *set halloran_regard %+20
+    *goto hall_end
+  #"What did you get wrong at Ceyla? Not what it cost. What did you actually get *wrong*?"
+    *set candor %+16
+    *set rule %-8
+    Halloran stops with his case half up.
+
+    It takes him a long time.
+
+    "I went down," he says at last. "That is the mistake. I went down and I stood at the back of that hall and I listened to the vote, and by the time I went back up I had faces. Six to three, and I could have told you the names of all nine.
+
+    "A master four hundred kilometres up with a number in front of him would have held position, and the Survey would still have a rule that means something, and nine hundred and six people would be ash, and I do not know — I have had fourteen months and I do not know — whether going down was the best thing I ever did or the only thing I ever did wrong."
+
+    He gets the case up.
+
+    "Do not go down at Nadire, Commander. Or go down and know that you have decided before you get there."
+    *set halloran_regard %+16
+    *set ceyla_known 3
+    *goto hall_end
+  #"Pilot, that is not a pilot's business. Get off my bridge."
+    *set rule %+16
+    *set candor %+10
+    *set crew %-12
+    *set halloran_regard %-20
+    *set nadire_close false
+    You say it in front of your crew and it lands like a plate dropped.
+
+    Halloran says "Aye, Captain," picks up his case, and goes down the tube without another word, and the pilot boat detaches at 0411.
+
+    *if (article_nine != "charged")
+      Beye holds the helm at exactly the ordered heading for the whole of the next watch and does not speak once.
+      *set rel_sec %-10
+    ${xoname} does not say anything either. Nobody does. The bridge of a Meridian is nine metres across and it is possible for it to be extremely quiet.
+
+    It is entirely within your authority. It is also the only thing you do this year that you cannot make a case for at 0300, and you will try.
+    *set standing %-6
+    *goto hall_end
+
+*label hall_end
+*page_break
+
+Tessine falls astern: a wheel with eleven spokes and nine thousand people in it, most of whom are leaving, and about eight hundred who are not.
+
+*if (halloran_regard > 70)
+  At 0600 a signal comes across from the harbourmaster's office, unclassified, five words.
+
+  *Fair winds. Do not go down. — I.H.*
+*if (halloran_regard <= 70)
+  No signal comes across from the harbourmaster's office.
+
+*if (met_oleyo)
+  Nine days ahead, in a system with a failing elevator and eleven thousand people and a council that votes in eleven days, there is a white ship four hundred metres long with a man aboard who does not lie.
+
+*set met_halloran true
+*finish

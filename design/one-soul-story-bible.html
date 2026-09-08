@@ -1,0 +1,954 @@
+<title>One Soul</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#ebe8e1;
+  --surface:#f7f5f1;
+  --surface-2:#e3dfd6;
+  --ink:#191b1f;
+  --ink-soft:#4e535c;
+  --ink-faint:#7b818c;
+  --lead:#26272b;
+  --rule:#cdc8bc;
+  --rule-soft:#dedace;
+  --cobalt:#20438f;
+  --ruby:#9c2233;
+  --amber:#a86c14;
+  --verdigris:#2b6350;
+  --shadow:0 1px 2px rgba(30,26,18,.06), 0 8px 28px rgba(30,26,18,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#101216;
+    --surface:#171a1f;
+    --surface-2:#1f232a;
+    --ink:#e9e6de;
+    --ink-soft:#a8adb7;
+    --ink-faint:#767c87;
+    --lead:#050608;
+    --rule:#2c313a;
+    --rule-soft:#232830;
+    --cobalt:#6f95e4;
+    --ruby:#e0687c;
+    --amber:#e0a844;
+    --verdigris:#59ac89;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 32px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101216;
+  --surface:#171a1f;
+  --surface-2:#1f232a;
+  --ink:#e9e6de;
+  --ink-soft:#a8adb7;
+  --ink-faint:#767c87;
+  --lead:#050608;
+  --rule:#2c313a;
+  --rule-soft:#232830;
+  --cobalt:#6f95e4;
+  --ruby:#e0687c;
+  --amber:#e0a844;
+  --verdigris:#59ac89;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 32px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:50rem;margin:0 auto;padding:0 1.5rem 6rem}
+
+/* ---------- masthead ---------- */
+header.mast{
+  padding:3.5rem 0 2rem;
+  border-bottom:3px solid var(--lead);
+  margin-bottom:2.5rem;
+}
+.series{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-faint);margin:0 0 1rem;
+}
+h1{
+  font-family:Spectral,Georgia,serif;
+  font-weight:700;font-size:clamp(2.9rem,9vw,4.6rem);
+  line-height:.95;letter-spacing:-.02em;margin:0;
+  text-wrap:balance;
+}
+.tagline{
+  font-family:Spectral,Georgia,serif;
+  font-style:italic;font-size:1.22rem;font-weight:300;
+  color:var(--ink-soft);margin:1.1rem 0 0;max-width:34rem;
+}
+.mast-meta{
+  display:flex;flex-wrap:wrap;gap:0 2.2rem;
+  margin-top:1.8rem;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;
+  color:var(--ink-faint);
+}
+.mast-meta b{color:var(--ink);font-weight:500}
+
+/* ---------- generic type ---------- */
+h2{
+  font-family:Spectral,Georgia,serif;
+  font-weight:600;font-size:1.9rem;line-height:1.15;
+  letter-spacing:-.01em;margin:3.6rem 0 .5rem;text-wrap:balance;
+}
+h2 .num{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;
+  letter-spacing:.2em;color:var(--ink-faint);
+  display:block;margin-bottom:.5rem;font-weight:400;
+}
+h3{
+  font-family:"IBM Plex Sans",sans-serif;
+  font-weight:600;font-size:1.02rem;letter-spacing:.01em;
+  margin:2.2rem 0 .5rem;
+}
+p{margin:0 0 1rem;max-width:34rem}
+.lede{font-size:1.06rem;color:var(--ink-soft);max-width:34rem}
+a{color:var(--cobalt)}
+strong{font-weight:600}
+em{font-style:italic}
+hr.lead{border:0;border-top:3px solid var(--lead);margin:3.5rem 0 0}
+
+/* ---------- data strip ---------- */
+.strip{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(7.5rem,1fr));
+  gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:1.8rem 0 2rem;
+}
+.strip div{background:var(--surface);padding:.85rem 1rem}
+.strip dt{
+  font-family:"IBM Plex Mono",monospace;font-size:.65rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+  margin:0 0 .25rem;
+}
+.strip dd{
+  margin:0;font-family:"IBM Plex Mono",monospace;
+  font-size:1.25rem;font-weight:500;font-variant-numeric:tabular-nums;
+}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:1.4rem 0 2rem}
+table{border-collapse:collapse;width:100%;min-width:30rem;font-size:.9rem}
+th{
+  text-align:left;font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-faint);font-weight:400;
+  padding:0 .9rem .5rem 0;border-bottom:1px solid var(--rule);
+}
+td{padding:.55rem .9rem .55rem 0;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+
+/* ---------- opposed pair bars ---------- */
+.pairs{display:flex;flex-direction:column;gap:1.15rem;margin:1.6rem 0 2rem}
+.pair-labels{
+  display:flex;justify-content:space-between;
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;
+}
+.pair-bar{height:.55rem;background:var(--surface-2);position:relative;overflow:hidden}
+.pair-bar span{position:absolute;inset:0 auto 0 0;display:block}
+.pair-note{font-size:.84rem;color:var(--ink-soft);margin:.4rem 0 0;max-width:34rem}
+
+/* ---------- verbs ---------- */
+.verbs{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.6rem 0 2rem}
+.verb{background:var(--surface);padding:1.1rem 1.2rem}
+.verb h4{
+  margin:0 0 .35rem;font-family:"IBM Plex Mono",monospace;
+  font-size:.82rem;letter-spacing:.18em;font-weight:500;
+}
+.verb p{margin:0;font-size:.9rem;color:var(--ink-soft);max-width:none}
+.verb .cost{
+  display:block;margin-top:.5rem;font-size:.8rem;
+  color:var(--ink-faint);font-style:italic;
+}
+
+/* ---------- timeline ---------- */
+.tl{margin:1.6rem 0 2rem;border-left:2px solid var(--rule);padding-left:0}
+.tl-row{display:grid;grid-template-columns:4.2rem 1fr;gap:1rem;padding:.5rem 0 .5rem 1.1rem;position:relative}
+.tl-row::before{
+  content:"";position:absolute;left:-4px;top:1.15rem;
+  width:6px;height:6px;background:var(--ink-faint);border-radius:50%;
+}
+.tl-row.key::before{background:var(--ruby);width:8px;height:8px;left:-5px}
+.tl-yr{
+  font-family:"IBM Plex Mono",monospace;font-size:.78rem;
+  font-variant-numeric:tabular-nums;color:var(--ink-faint);padding-top:.16rem;
+}
+.tl-yr b{display:block;color:var(--ink-soft);font-weight:400;font-size:.68rem}
+.tl-txt{font-size:.92rem}
+.tl-txt b{font-weight:600}
+
+/* ---------- scene panels ---------- */
+.scene{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-left:5px solid var(--accent,var(--lead));
+  margin:1.5rem 0;
+  box-shadow:var(--shadow);
+}
+.scene.cobalt{--accent:var(--cobalt)}
+.scene.ruby{--accent:var(--ruby)}
+.scene.amber{--accent:var(--amber)}
+.scene.verdigris{--accent:var(--verdigris)}
+.scene-head{padding:1.15rem 1.4rem .9rem;border-bottom:1px solid var(--rule-soft)}
+.scene-no{
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;
+  letter-spacing:.18em;color:var(--accent,var(--ink-faint));font-weight:500;
+}
+.scene-head h3{
+  font-family:Spectral,Georgia,serif;font-weight:600;
+  font-size:1.5rem;margin:.2rem 0 .3rem;letter-spacing:-.01em;
+}
+.scene-when{
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;
+  color:var(--ink-faint);font-variant-numeric:tabular-nums;
+}
+.scene-budget{
+  display:flex;gap:1.4rem;margin-top:.75rem;
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--ink-faint);
+}
+.scene-budget b{color:var(--ink);font-weight:500}
+.scene-body{padding:.4rem 1.4rem 1.3rem}
+.scene-job{
+  font-family:Spectral,Georgia,serif;font-style:italic;
+  font-size:1rem;color:var(--ink-soft);
+  padding:.9rem 0 .2rem;margin:0;max-width:none;
+}
+
+/* beats */
+.beat{padding:1.05rem 0;border-top:1px solid var(--rule-soft)}
+.beat:first-of-type{border-top:none}
+.beat-h{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap}
+.beat-id{
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+  color:var(--ink-faint);font-variant-numeric:tabular-nums;
+}
+.beat-t{font-weight:600;font-size:.98rem}
+.beat-yr{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;
+  color:var(--ink-faint);margin-left:auto;
+}
+.beat p{font-size:.92rem;margin:.4rem 0 0;color:var(--ink-soft);max-width:none}
+.beat p.dil{color:var(--ink)}
+.beat p.dil::before{
+  content:"THE PROBLEM";display:block;
+  font-family:"IBM Plex Mono",monospace;font-size:.62rem;
+  letter-spacing:.16em;color:var(--accent,var(--ink-faint));margin-bottom:.15rem;
+}
+ul.opts{
+  list-style:none;padding:0;margin:.7rem 0 0;
+  display:flex;flex-direction:column;gap:.3rem;
+}
+ul.opts li{
+  font-size:.87rem;padding-left:1.1rem;position:relative;color:var(--ink-soft);
+}
+ul.opts li::before{
+  content:"";position:absolute;left:0;top:.6rem;
+  width:.42rem;height:1px;background:var(--accent,var(--ink-faint));
+}
+ul.opts li b{color:var(--ink);font-weight:500}
+.dl{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-faint);white-space:nowrap}
+.mech{
+  margin-top:.7rem;padding:.6rem .8rem;
+  background:var(--surface-2);
+  font-size:.85rem;color:var(--ink-soft);
+}
+.mech b{
+  display:block;font-family:"IBM Plex Mono",monospace;
+  font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-faint);margin-bottom:.2rem;font-weight:400;
+}
+
+/* thread chips */
+.threads{display:flex;flex-wrap:wrap;gap:.4rem;margin:1.2rem 0 2rem}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;
+  letter-spacing:.06em;padding:.28rem .6rem;
+  border:1px solid var(--rule);background:var(--surface);
+}
+.chip.c1{border-left:3px solid var(--ruby)}
+.chip.c2{border-left:3px solid var(--cobalt)}
+.chip.c3{border-left:3px solid var(--amber)}
+.chip.c4{border-left:3px solid var(--verdigris)}
+
+/* pull quote */
+blockquote{
+  margin:1.6rem 0;padding:0 0 0 1.3rem;
+  border-left:2px solid var(--accent,var(--rule));
+  font-family:Spectral,Georgia,serif;font-size:1.14rem;
+  line-height:1.5;color:var(--ink);max-width:32rem;
+}
+blockquote p{font-size:inherit;color:inherit;max-width:none}
+blockquote cite{
+  display:block;margin-top:.5rem;font-style:normal;
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+}
+
+/* questions */
+ol.q{padding-left:0;list-style:none;counter-reset:q;margin:1.4rem 0 0}
+ol.q li{
+  counter-increment:q;position:relative;padding:0 0 1.3rem 2.6rem;
+  max-width:36rem;
+}
+ol.q li::before{
+  content:counter(q,decimal-leading-zero);position:absolute;left:0;top:.1rem;
+  font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ruby);
+}
+ol.q b{display:block;margin-bottom:.15rem}
+ol.q span{font-size:.92rem;color:var(--ink-soft)}
+
+figure.rose{margin:2rem 0;text-align:center}
+figure.rose figcaption{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;
+  letter-spacing:.12em;color:var(--ink-faint);margin-top:.8rem;
+}
+@media (max-width:34rem){
+  .beat-yr{margin-left:0;width:100%}
+  .tl-row{grid-template-columns:3.6rem 1fr;gap:.7rem}
+}
+</style>
+
+<style>
+.ladder{margin:1.8rem 0 2.2rem;border:1px solid var(--rule);background:var(--surface)}
+.rung{display:grid;grid-template-columns:2.4rem 1fr;gap:1rem;padding:.9rem 1.1rem;border-top:1px solid var(--rule-soft);align-items:start}
+.rung:first-child{border-top:none}
+.rung-n{font-family:"IBM Plex Mono",monospace;font-size:1.1rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;line-height:1.3}
+.rung b{display:block;font-family:Spectral,Georgia,serif;font-size:1.08rem;font-weight:600;margin-bottom:.15rem}
+.rung span{font-size:.9rem;color:var(--ink-soft);display:block}
+.rung i{display:block;margin-top:.35rem;font-style:italic;font-size:.88rem;color:var(--ink)}
+.rung em{display:inline-block;margin-top:.45rem;font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;padding:.15rem .5rem;border:1px solid var(--rule);color:var(--ink-faint)}
+.rung.at{background:var(--surface-2)}
+.rung.at .rung-n{color:var(--ruby)}
+.callout{border:1px solid var(--ruby);padding:1rem 1.2rem;margin:1.6rem 0 2rem;background:var(--surface)}
+.callout.blue{border-color:var(--cobalt)}
+.callout.green{border-color:var(--verdigris)}
+.callout > b:first-child{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ruby);display:block;margin-bottom:.35rem}
+.callout.blue > b:first-child{color:var(--cobalt)}
+.callout.green > b:first-child{color:var(--verdigris)}
+.callout p{margin:0 0 .6rem;font-size:.93rem;color:var(--ink-soft);max-width:none}
+.callout p:last-child{margin-bottom:0}
+.callout code{font-family:"IBM Plex Mono",monospace;color:var(--ink);font-size:.9em}
+.rule-box{border-left:3px solid var(--cobalt);padding:.2rem 0 .2rem 1.1rem;margin:1.5rem 0}
+.rule-box h4{margin:0 0 .3rem;font-size:.99rem;font-weight:600}
+.rule-box p{margin:0 0 .5rem;font-size:.92rem;color:var(--ink-soft)}
+.rule-box p:last-child{margin-bottom:0}
+.cast{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.6rem 0 2rem}
+.who{background:var(--surface);padding:1rem 1.2rem}
+.who h4{margin:0;font-family:Spectral,Georgia,serif;font-size:1.15rem;font-weight:600}
+.who .role{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin:.15rem 0 .5rem}
+.who p{margin:0 0 .5rem;font-size:.91rem;color:var(--ink-soft);max-width:none}
+.who p:last-child{margin-bottom:0}
+.who .good{color:var(--verdigris);font-weight:500}
+.who .flaw{color:var(--ruby);font-weight:500}
+.ends{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.6rem 0 2rem}
+.end{background:var(--surface);padding:1.1rem 1.2rem;border-left:5px solid var(--tone)}
+.end.a{--tone:var(--verdigris)}.end.b{--tone:var(--cobalt)}.end.c{--tone:var(--amber)}.end.d{--tone:var(--ruby)}
+.end h4{margin:0 0 .1rem;font-family:Spectral,Georgia,serif;font-size:1.2rem;font-weight:600}
+.end .cond{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--ink-faint);margin:0 0 .55rem}
+.end p{margin:0;font-size:.91rem;color:var(--ink-soft);max-width:none}
+.end .gauge{display:flex;gap:2px;margin-top:.7rem}
+.end .gauge i{height:.4rem;flex:1;background:var(--surface-2)}
+.end .gauge i.on{background:var(--tone)}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="series">Angelic Orders &nbsp;·&nbsp; Book One &nbsp;·&nbsp; Story Bible, draft 5</p>
+  <h1>One Soul</h1>
+  <p class="tagline">You are an angel, and one life is yours to keep.</p>
+  <div class="mast-meta">
+    <span>Target <b>26,000 words</b></span>
+    <span>Choices <b>154</b></span>
+    <span>Scenes <b>13</b></span>
+    <span>Ward <b>Adam Kowalczyk, 1975&ndash;2024</b></span>
+  </div>
+</header>
+
+<p class="lede">Draft 5 drops the retrospective narration. Everything happens in the present tense, and time is navigable &mdash; she is taken through it the way Scrooge is taken through it, and none of it is being recounted to her. It is happening in front of her, now, and she can ask to go somewhere.</p>
+
+<h2><span class="num">00</span>The frame</h2>
+
+<p><strong>Loretta Boyd is seventy-one years old, and on a Tuesday in October 2024 she sweeps fourteen porcelain angels off a windowsill with her forearm.</strong></p>
+
+<p>She is in a rehabilitation facility in Pittsburgh, four days after her second amputation. Diabetes took the left leg in 2019 and the right one last week. She has been a member of St. Benedict the Moor in the Hill District for fifty years. She has prayed to her guardian angel every single day of her adult life &mdash; out loud, by a name she made up, in the way people actually do it &mdash; and the statues were gifts, from her sister and her sodality and her late husband, accumulated over four decades. Every one of them is a woman in a nightgown with a harp.</p>
+
+<p>None of them looks anything at all like what she is about to meet.</p>
+
+<div class="callout blue">
+<b>The mechanic</b>
+<p>She is taken up &mdash; the game does not over-explain how, and Paul&rsquo;s account of a man caught up and shown things he could not afterwards put into words is the only gesture it makes at it &mdash; and shown the creation of the angels, and their one choice, and then the whole of one ordinary man&rsquo;s life from 1975 to 2024.</p>
+<p>And she is not a spectator. <b>For the duration, God&rsquo;s command to the angel reaches him through her decisions.</b></p>
+<p>So every choice in this game is hers. The angel does not deliberate, does not weigh options, does not reason his way toward a conclusion. <b>He waits, receives, and acts &mdash; freely, out of love, exactly as he always has.</b> The only difference is where the command comes from.</p>
+</div>
+
+<h3>Present tense, and time is a place</h3>
+
+<div class="callout blue">
+<b>Nothing in this game is being remembered</b>
+<p>It is all happening now. She is not shown a recording and the angel is not telling her a story &mdash; <b>she is standing in 1984 and it is 1984.</b> Every scene is present tense, which is also what the form wants: <em>Choice of the Dragon</em> is present tense from its first line, and so is every good interactive novel.</p>
+<p>This also settles a question that dogged three earlier drafts. The narration is human-shaped &mdash; ranks, a throne, a floor like ice &mdash; <b>because a human being is the one perceiving it.</b> That is not a literary device. It is what visionary literature actually is: Isaiah and Ezekiel and John were shown things in the present and wrote them in the only terms they had. Loretta is doing exactly that, in Pittsburgh, in 2024, and she is no better at it than they were.</p>
+</div>
+
+<p>And because time is a place she is being taken to rather than a line she is being told about, <strong>she can ask to go somewhere</strong>, and sometimes she gets taken and sometimes she does not. Three of those matter enough to name.</p>
+
+<div class="verbs">
+<div class="verb"><h4>THE GLIMPSE</h4><p>Early &mdash; scene one, before Adam is even born &mdash; she demands to see how it comes out. And she is taken, immediately, without argument. <b>She gets about four seconds of an October afternoon in 2024:</b> a room, a bed, a shape in it, the angle of the light. Then it is gone and she is back, and she cannot read any of it, and it is the only thing she wants for the rest of the game.</p><span class="cost">Scrooge and the shrouded figure. She spends forty-nine years trying to get back to that room.</span></div>
+<div class="verb"><h4>THE SIDEWAYS JUMP</h4><p>1991. Dennis Wi&sacute;niewski has just spent eleven minutes by a coffee urn destroying something in a sixteen-year-old, and Loretta is <em>incandescent</em>, and she says: who did that to <em>him</em>? <b>And she is taken. 1953. Dennis is fourteen.</b> Thirty seconds, no commentary, and back.</p><span class="cost">It excuses nothing and it changes everything, and it lands at the moment of maximum anger instead of in an explanatory paragraph later.</span></div>
+<div class="verb"><h4>THE DOOR THAT DOES NOT OPEN</h4><p>1986. Halina has just died unreconciled, having kept every rule in the book, and Loretta asks to be taken to wherever she is now. <b>And she is not taken.</b> Not <em>cannot</em> &mdash; the angel says, without any softening at all, that it is not given.</p><span class="cost">She asks twice more across the game and gets the same answer both times. The second unresolved soul is now a refusal she experiences rather than an omission she might not notice.</span></div>
+</div>
+
+<p>The twelve scenes still run in order &mdash; a player who is lost is a player who has stopped caring &mdash; but the order is a choice the angel is making, not a constraint he is under, and roughly four times in the game he departs from it on purpose.</p>
+
+<h3>Why this is not bad theology</h3>
+
+<p>The obvious objection is that God appears to be taking orders from a woman in a rehab facility. He is not, and the distinction matters enough to state plainly.</p>
+
+<div class="rule-box">
+<h4>She is a secondary cause, which is what everybody is</h4>
+<p>God is not learning anything from her and is not constrained by her. He is <em>using</em> her choosing as the means by which the command arrives &mdash; which is what He does with every creature that has ever done anything (<em>ST</em> I q.105 a.5: God works in every agent). A priest absolves and God forgives through him. A prophet speaks and God speaks through him. The creature&rsquo;s act is genuinely the creature&rsquo;s and genuinely free; God&rsquo;s act is genuinely God&rsquo;s; and they are not in competition because they are not on the same level of causality.</p>
+</div>
+
+<div class="rule-box">
+<h4>She is fallible, and that is the whole point</h4>
+<p>God has not made her an oracle. He has given her <b>real latitude inside a permitted range</b> &mdash; and her choices are hers, and some of them are going to be wrong, and the game absolutely depends on that being true. Providence encompasses a wrong choice without endorsing it.</p>
+</div>
+
+<div class="rule-box">
+<h4>The Rule already covers this exactly</h4>
+<p>An abbot&rsquo;s command is obeyed as though it came from God, and the abbot can still be wrong, and he will answer for it (RB 2). Even a command beyond a monk&rsquo;s strength is attempted first and represented afterwards (RB 68). The obedience is real, the fallibility is real, and God&rsquo;s will is done through both without either being cancelled.</p>
+<p><b>For forty-nine years, Loretta is the abbot.</b> She does not know this and would not have volunteered.</p>
+</div>
+
+<div class="rule-box">
+<h4>It is extraordinary, and the game says so</h4>
+<p>The angel states plainly, early, that this is not how it normally goes &mdash; that he is ordinarily moved by an interior light and that this arrangement exists once, for her, because of what she did to the windowsill. Zechariah was struck mute for unbelief. Paul was put on the ground and shown what he could not repeat. <b>Severe interventions that are mercies are not a new idea and she is not the first person to be handled roughly and to her benefit.</b></p>
+</div>
+
+<h3>What it fixes</h3>
+
+<div class="callout green">
+<b>The discursive problem is gone, not mitigated</b>
+<p>The objection was that angels do not reason step by step, so a game about an angel forming theories and being wrong is a game about something that cannot happen.</p>
+<p><b>Now the deliberating happens in a human being, which is where deliberating belongs.</b> Loretta weighs, wonders, guesses and gets things wrong &mdash; because she is a woman, and that is what women do, and it takes her time because she is in time. The angel receives what she decides and obeys it instantly, completely, and without weighing anything. He is exactly what Aquinas says he is. She is exactly what we are.</p>
+<p>And it removes the last reason anyone needed a retrospective frame. <b>Nothing has to be translated for her, because nothing is being reported to her.</b> She is standing in it. The story is shaped like a story because she is a person and that is how a person takes in forty-nine years.</p>
+</div>
+
+<h3>It is also where the comedy lives</h3>
+
+<p>The frame breaks, regularly, and the frame breaking is funny.</p>
+
+<blockquote>
+<p>&ldquo;Well?&rdquo; she says. &ldquo;Do something.&rdquo;</p>
+<p>&ldquo;I am waiting to be told what to do.&rdquo;</p>
+<p>&ldquo;By who?&rdquo;</p>
+<p>A pause that she will remember for the rest of her life.</p>
+<p>&ldquo;You.&rdquo;</p>
+<cite>Scene zero &mdash; the tutorial, and the joke, and the premise</cite>
+</blockquote>
+
+<p>She argues with him. She tells him he is being ridiculous. She asks, more than once, whether he is <em>sure</em> about this arrangement, and he says that he is, and that he has no opinion about it, and that this is also not a thing he has. She takes the birds extremely seriously. She calls him by the wrong name for about a decade of story-time out of sheer habit.</p>
+
+<div class="tw">
+<table>
+<thead><tr><th>Where the frame breaks</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><b>Scene 0</b></td><td>Teaches the mechanic by making it a joke at her expense.</td></tr>
+<tr><td><b>Scene 1, the court</b></td><td>She is looking at real angels for the first time and none of them has a harp. She says so.</td></tr>
+<tr><td><b>Scene 3, the loft</b></td><td>She becomes deeply invested in the pigeons. This is played entirely straight and is very funny.</td></tr>
+<tr><td><b>Scene 6, the dark</b></td><td>She cannot see either, and she is the one who panics out loud, and he tells her what it is, and then neither of them says anything.</td></tr>
+<tr><td><b>Scene 8, the kitchen</b></td><td>She begs him to do something. He explains that he is waiting. She understands, for the first time, what she has been asking God for since 1979.</td></tr>
+<tr><td><b>Scene 11</b></td><td>She stops arguing.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout">
+<b>The theodicy, delivered as an experience instead of an argument</b>
+<p>She smashed the statues because she prayed for fifty years and lost both legs anyway.</p>
+<p>So she is given forty-nine years of standing next to somebody she cannot help, holding the only three tools there are, watching a good thing be destroyed slowly by a man she comes to love, <b>with the power to intervene and no permission to</b> &mdash; and then she is brought back and asked what she thinks now.</p>
+<p>Nobody explains suffering to her. She is made to do the job.</p>
+</div>
+
+<h2><span class="num">01</span>Five rules against becoming a tract</h2>
+
+<div class="callout">
+<b>One &middot; his guilt is never established</b>
+<p>Mortal sin needs grave matter, full knowledge, <em>and</em> deliberate consent (CCC 1857). Consent lives in the interior, and nothing created can see in there. CCC 2352 says affective immaturity, force of habit and conditions of anxiety can lessen culpability <b>or reduce it to a minimum</b>. So his column carries a field reading <code>culpability: unknown</code> that never changes once in forty-nine years.</p>
+</div>
+
+<div class="rule-box">
+<h4>Two &middot; the angel never touches the will</h4>
+<p>Not once, on any branch. Every tool works on <em>circumstances</em>: put a person in his path, put a book on a table, stand on a suggestion so it does not arrive, be somewhere. One beat where the angel moves Adam&rsquo;s choice from inside and the whole thing is a puppet show.</p>
+</div>
+
+<div class="rule-box">
+<h4>Three &middot; no plot punishment</h4>
+<p>Nothing bad happens to Adam <em>because</em> he did something wrong. Every consequence is <b>intrinsic</b> &mdash; the act doing what the act does, visible in how he treats one specific woman. That distinction is the whole thesis.</p>
+</div>
+
+<div class="rule-box">
+<h4>Four &middot; every argument at full strength &mdash; including the relief</h4>
+<p>His question at eighteen gets written at full power. So does the philosophy at twenty-two. <b>And so does the freedom.</b> When he stops going to Mass, the relief is real and the game shows it: he is out from under a man with a clipboard, a liturgy that was genuinely bad on Brereton Street in 1992, and a room full of people he had watched be unkind. <b>Some of his reasons for leaving are good reasons.</b> A story where leaving feels only like loss is a story nobody believes.</p>
+</div>
+
+<div class="rule-box">
+<h4>Five &middot; chastity gets its worst advocate on the page</h4>
+<p>There is a man in this game who has never once done what Adam does, who is disciplined, correct about every fact, and entirely without mercy. <b>He is one of the reasons Adam leaves</b> &mdash; not the priest, not the teaching, a layman with a clipboard. The player has to feel the force of what Adam is rejecting, and it has to be genuinely repellent, or the game is a Chick tract with better typography.</p>
+<p>The point is not that chastity is destructive. It is that <b>a virtue held without charity becomes a weapon</b>, and that the person on the receiving end cannot tell the difference between the virtue and the weapon until much later.</p>
+</div>
+
+<h2><span class="num">02</span>Warmth, comedy, and the birds</h2>
+
+<p>The largest risk left in this outline is not theology. It is that a reader will not spend 24,000 words with a man they only ever see failing. <strong>If Adam is not somebody you would want to know, none of the rest of it lands.</strong></p>
+
+<p>So a hard production constraint: <strong>every scene except 11 and 12 carries at least one beat that is warm, funny, or both, and that does not advance the trial at all.</strong> Those beats are not filler. They are what makes the trial cost something.</p>
+
+<div class="callout green">
+<b>The pigeons</b>
+<p>Stan&rsquo;s father kept a loft on the roof of the Dobson Street house. It has been empty since 1971. In 1985, the week the mill closes, <b>Stan cleans it out and hands it to Adam without saying much of anything</b> &mdash; because he is a man who cannot talk about anything that matters and can give things instead.</p>
+<p>Racing homers. Roof lofts were real in that neighbourhood and the clubs still ran into the eighties. Adam is ten, and then thirteen, and then thirty, and the birds are the one continuous thing in his life.</p>
+<p><b>And here is the mechanic.</b> A pigeon has no free will. So the angel&rsquo;s power over a bird is <em>complete</em>. He can turn it, lift it, bring it home over four hundred miles of Ohio. He can do absolutely nothing about the boy standing on the roof holding the basket.</p>
+<p>An angel of God, ninth choir, present at the creation of the world, spending the afternoon of 12 May 1985 getting a hen named Josie back from Springfield. It is funny. It is the only unambiguous competence he has. <b>And it is the closest thing to affection the story is going to allow itself for a very long time.</b></p>
+<p>Never say out loud that a homing pigeon always comes back.</p>
+</div>
+
+<p>The birds also give the angel somewhere to put Valor and Charity in scenes where he is otherwise helpless &mdash; small, real, low-stakes wins that build stats and buy the player goodwill.</p>
+
+<h3>Where the comedy lives</h3>
+
+<div class="tw">
+<table>
+<thead><tr><th>Source</th><th>Register</th></tr></thead>
+<tbody>
+<tr><td><b>Halina</b></td><td>Blunt, dry, alarmingly superstitious, funny on purpose about half the time. She has opinions about the Pope, the neighbours, and what Ewa puts in the soup.</td></tr>
+<tr><td><b>The loft</b></td><td>Slapstick, weather, an angel outmatched by a bird that simply will not go in.</td></tr>
+<tr><td><b>Legion&rsquo;s committee</b></td><td>Handoffs, wrong departments, &ldquo;that&rsquo;s not my area,&rdquo; a message taken and never passed on. Genuinely funny and genuinely sinister, which is the Kreeft register exactly.</td></tr>
+<tr><td><b>The angel</b></td><td>Baffled by human things at the wrong scale &mdash; unbothered by death, completely thrown by a joke.</td></tr>
+<tr><td><b>Renee</b></td><td>Louder and funnier than Adam and better than him at nearly everything, which he likes about her for fifteen years and then does not.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2><span class="num">03</span>What the angel is not</h2>
+
+<p>The frame does the heavy lifting now &mdash; <strong>the deliberating happens in Loretta, so the angel never reasons discursively at any point in this game.</strong> But three supporting facts still govern how every line about him gets written.</p>
+
+<div class="rule-box">
+<h4>He is not slow. He is short of data.</h4>
+<p>Never write <em>the angel wondered.</em> Write: <b>he saw, instantly and completely, everything that could be seen from outside &mdash; and it was not enough.</b> Not knowing whether Adam consented is not a failure of reasoning. It is the absence of an object. God reserved it.</p>
+<p><b>Loretta wonders. He reports.</b> The difference should be audible in every scene.</p>
+</div>
+
+<div class="rule-box">
+<h4>His obedience is a free act, not a mechanism</h4>
+<p>Angels choose (<em>ST</em> I q.59 a.3), measured not by our flowing time but by <em>aevum</em> &mdash; a succession of complete acts rather than a duration. The world changes; he acts again. Receiving an order and executing it out of love is free, and he must never sound like a machine taking input. <b>He obeys because he wants to.</b> He says so once, flatly, when she asks, and never mentions it again.</p>
+</div>
+
+<div class="rule-box">
+<h4>He is not wrong. He is uninformed &mdash; and that is not a sin.</h4>
+<p>A confirmed angel cannot be deceived about what he knows, but can be ignorant of what has not been given, including free future acts (<em>ST</em> I q.57 a.3, q.58 a.5). So when a choice turns out badly, <b>Loretta</b> was mistaken; he was obedient. Nothing in this game requires an angel to sin and nothing in it should read as though it does.</p>
+<p><em>On 1 Corinthians 6:3 &mdash; &ldquo;know ye not that we shall judge angels?&rdquo; &mdash; the standard reading, and Aquinas&rsquo;s, concerns the fallen. The good angels are confirmed and are not on trial. Loretta asks about this once, in scene 1, and gets exactly that answer.</em></p>
+</div>
+
+<div class="callout blue">
+<b>&ldquo;Where were you?&rdquo; &mdash; the last exchange in the game</b>
+<p>She is about to be sent back. And she asks him the question she actually came with, which was never about Adam at all &mdash; the one she has been holding since 1979, and harder since 2019, and hardest since last Thursday.</p>
+<p><b>&ldquo;Where were you?&rdquo;</b></p>
+<p>It is Job&rsquo;s question and every bereaved person&rsquo;s question and she does not dress it up. And what she gets is not an explanation, because there is no explanation and the game is not going to invent one.</p>
+<p><b>She gets a location.</b> He tells her where he was. Precisely, without apology, without consolation, and without any suggestion that it should have been enough: <em>here. Exactly here. The whole time.</em></p>
+<p>About a hundred and fifty words. No adjectives, no address to God, nothing about a plan. The love is expressed as <b>presence</b> and nothing else, and it pays off eleven minutes later when she is in a room she cannot see him in <b>and knows exactly where he is standing, because it is where he always stands.</b></p>
+</div>
+
+<h2><span class="num">04</span>The needle</h2>
+
+<p>Your note was right &mdash; position four was unclear because I wrote it badly. Here it is properly. The whole game is the angel trying to move this and mostly failing, and <strong>nobody ever states position four as a thesis.</strong></p>
+
+<div class="ladder">
+<div class="rung"><div class="rung-n">1</div><div><b>It is forbidden.</b><span>A rule, from outside, with a penalty attached. That is all he knows and it is all anyone has told him.</span><em>1982 &mdash; age 7</em></div></div>
+<div class="rung at"><div class="rung-n">2</div><div><b>It is forbidden because it is filthy &mdash; and so am I.</b><span>The rule has become a verdict on him. Delivered by one brisk confessor and one man with a clipboard, neither of whom intended it.</span><em>1990 &mdash; age 15</em></div></div>
+<div class="rung at"><div class="rung-n">3</div><div><b>It is a rule made against me.</b><span>God built this into me without asking and then said no. Either He is cruel or people made the rule up, and Adam does not think God is cruel.</span><em>1993&ndash;2018 &mdash; ages 18 to 43</em></div></div>
+<div class="rung"><div class="rung-n">4</div><div><b>It was never a rule. It is a description.</b><span>Not a fence around the body. An account of what a person actually is &mdash; and therefore of what happens when you practise treating one as a thing.</span><i>&ldquo;Don&rsquo;t put your hand in the fire&rdquo; is not a rule about hands. It is a fact about fire. Nobody imagines the fire is oppressing them.</i><em>2018 &mdash; age 43, if at all</em></div></div>
+</div>
+
+<p><strong>The argument for position 4 is never made in words.</strong> It is made by one woman&rsquo;s face across a kitchen table in 1997, and by what has happened to Adam&rsquo;s by 2016. Fr. Nwosu compresses it into about ninety seconds in a confessional, thirty years too late, and it is not new information even then.</p>
+
+<h2><span class="num">05</span>The stat sheet</h2>
+
+<p>Three opposed pairs and <strong>two</strong> free-standing virtues. Hope is new, and it came directly out of your note about the angel loving a soul he has stopped expecting much from.</p>
+
+<div class="pairs">
+  <div><div class="pair-labels"><span style="color:var(--cobalt)">Valor</span><span>Patience</span></div>
+  <div class="pair-bar"><span style="width:58%;background:var(--cobalt)"></span></div>
+  <p class="pair-note">Move now, or keep the long watch.</p></div>
+  <div><div class="pair-labels"><span style="color:var(--ruby)">Severity</span><span>Mercy</span></div>
+  <div class="pair-bar"><span style="width:40%;background:var(--ruby)"></span></div>
+  <p class="pair-note">How you stand next to a failure. Both are real virtues; the wrong one at fifteen does thirty years of damage.</p></div>
+  <div><div class="pair-labels"><span style="color:var(--amber)">Splendor</span><span>Hiddenness</span></div>
+  <div class="pair-bar"><span style="width:30%;background:var(--amber)"></span></div>
+  <p class="pair-note">Manifest, or work entirely through ordinary means &mdash; a late bus, a friend who calls, a book left face up.</p></div>
+  <div><div class="pair-labels"><span style="color:var(--verdigris)">Charity</span><span style="color:var(--ink-faint)">not opposed</span></div>
+  <div class="pair-bar"><span style="width:66%;background:var(--verdigris)"></span></div>
+  <p class="pair-note">Whether you still love him. This one is very hard to lose.</p></div>
+  <div><div class="pair-labels"><span style="color:var(--amber)">Hope</span><span style="color:var(--ink-faint)">not opposed</span></div>
+  <div class="pair-bar"><span style="width:34%;background:var(--amber)"></span></div>
+  <p class="pair-note"><b>Whether you still expect anything of him.</b> Much easier to lose than Charity, and losing it is not a sin. It is damaged by the blind years, by the demons&rsquo; bragging, and &mdash; if you listened to him in the court &mdash; by a reading you accepted before you had anything of your own to compare it to.</p></div>
+</div>
+
+<div class="callout green">
+<b>Why Hope had to be separate</b>
+<p>You can love someone completely and still quietly stop expecting anything of them. That is a real thing people do to each other, it is not the same as ceasing to love, and it is <b>not a sin</b> for the angel &mdash; hope about a free future act is not knowledge, and a creature is allowed to have less of it than it should.</p>
+<p>It is also the stat the endings are keyed to, because the last scene of this game is <em>an act of hope</em>, and how much of it you have left after forty-nine years is the thing the player has actually been playing for.</p>
+</div>
+
+<h3>His column</h3>
+
+<div class="tw">
+<table>
+<thead><tr><th>Reading</th><th>Behaviour</th></tr></thead>
+<tbody>
+<tr><td><b>The needle</b></td><td>1&ndash;4. Moves perhaps four times in a lifetime, mostly downward.</td></tr>
+<tr><td><b>Culpability</b></td><td class="n">unknown &mdash; always</td></tr>
+<tr><td><b>Sight</b></td><td class="n">clear / clouded / dark &mdash; see below</td></tr>
+<tr><td><b>Prayers</b></td><td>Deliberately <b>not</b> a ritual counter. See below.</td></tr>
+<tr><td><b>Consolation</b></td><td>Grace you are permitted to hand on. Spendable, replenished on request, never yours.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout">
+<b>Prayers is not a Mass attendance counter</b>
+<p>Your note fixed this. What it tracks is <em>intercession actually offered for Adam by name</em>, and it moves on sincerity, not on ritual:</p>
+<p>&mdash; <b>Halina</b> raises it from 1975. <b>Stan</b> raises it from November 1993, unexplained, for twenty-three years.<br>
+&mdash; <b>Mass helps &mdash; conditionally.</b> Attendance while bored, doubting, or resentful moves it very little. Going well moves it a great deal. Receiving in grave sin does not raise it at all, and the game does not editorialise about that; the number simply does not move, and the player can work out why.<br>
+&mdash; <b>Protestants count.</b> When Adam&rsquo;s work friend&rsquo;s congregation prays for him in 2001, sincerely, by name, <b>the number goes up.</b> There is no asterisk on it and the game makes no comment. Anyone paying attention will notice, and that is the entire treatment.<br>
+&mdash; <b>The dead count too</b>, which is where Halina gets complicated.</p>
+</div>
+
+<h2><span class="num">06</span>The blind years</h2>
+
+<p>Your best note, and it changes the shape of the whole middle of the game.</p>
+
+<div class="callout">
+<b>The angel cannot see him</b>
+<p>In the hour of grave sin, the angel&rsquo;s sight of Adam goes. Not a punishment and not a withdrawal &mdash; something closes, and where the boy was there is a place the angel&rsquo;s attention will not enter, and he is standing four feet from it and cannot get in.</p>
+<p><b>He panics.</b> The first time, in 1989, an angel who watched a third of creation throw itself away without flinching experiences something he has no name for, and the narration does not name it either.</p>
+<p>And on the other side of the dark, they are <em>delighted</em>. This is the one thing they have that he has not got, and they never stop mentioning it. <em>&ldquo;You&rsquo;ve no idea what&rsquo;s going on in there, have you.&rdquo;</em> It is the only leverage they will ever have over him and they use it for thirty years.</p>
+<p><b>Status:</b> pious tradition, not doctrine, and the bible should be honest about that. Aquinas holds the guardian never forsakes his charge entirely (<em>ST</em> I q.113 a.6). What the game shows is an <em>occlusion</em>, not an abandonment &mdash; the angel never leaves, never once, and says so.</p>
+</div>
+
+<p>Three things this fixes at once:</p>
+
+<p><strong>The content problem, completely.</strong> The narration cannot go into those rooms because the narrator physically cannot. It is not a euphemism. It is the camera being switched off from outside.</p>
+
+<p><strong>The discursive problem.</strong> The angel is not reasoning about what he cannot see. He simply cannot see. That is an absence, not a deduction.</p>
+
+<p><strong>The horror.</strong> A guardian angel who can be shut out of the room is a far more frightening idea than one who watches, and it gives the demons the only genuine advantage they hold in forty-nine years.</p>
+
+<h2><span class="num">07</span>The people</h2>
+
+<p>Everyone gets a virtue and everyone gets a fault, including the ones who do the damage. <strong>Nobody in this game is a device.</strong></p>
+
+<div class="cast">
+
+<div class="who"><h4>Loretta Boyd</h4><div class="role">the player &middot; b. 1953 &middot; the Hill District</div>
+<p><span class="good">Funny, stubborn, and completely without self-pity, which is not the same as being at peace. Fifty years at St. Benedict the Moor. Retired from the county, two grown children, a husband dead in 2011. Prayed to her guardian angel out loud every day of her adult life, by a name she invented in 1979, and meant every word of it.</span></p>
+<p><span class="flaw">Has been the centre of her own suffering for forty years and cannot see past it &mdash; which is not a moral failing, it is what long pain does to people, and the game treats it that way. Argues instead of asking. Decides fast and defends it afterwards.</span></p>
+<p><b>She is the one being converted.</b> Scrooge&rsquo;s story is not about the Cratchits; this one is not about Adam. His life is the instrument, and hers is the subject, and the last decision in the game is hers in her own body in her own room.</p></div>
+
+<div class="who"><h4>Adam Kowalczyk</h4><div class="role">the ward &middot; 1975&ndash;2024</div>
+<p><span class="good">Deadpan funny. Good with old people and hopeless with people his own age. Can fix anything &mdash; it comes from Stan &mdash; and is genuinely, quietly gifted with the birds. Loyal, which is why what he does to Renee in 1998 reads as a betrayal of himself.</span></p>
+<p><span class="flaw">Learned at five that the voice inside can be turned down, and never forgot it. Avoids conflict by leaving. Mistakes a posture for a conviction and holds it for twenty years without re-examining it once.</span></p></div>
+
+<div class="who"><h4>Halina Kowalczyk</h4><div class="role">grandmother &middot; 1898&ndash;1986</div>
+<p><span class="good">Blunt, dry, superstitious in ways that are charming right up until they are not. Prays for Adam by name every day for eleven years. <b>Is mocked for it in her own kitchen</b> &mdash; by Ewa, affectionately, and by a neighbour, less so &mdash; and it makes no difference to her whatsoever.</span></p>
+<p><span class="flaw">Hard about Ewa, for a specific old reason, and never lets it go. Keeps every rule and loses charity somewhere in the last four years, and <b>the Prayers number starts falling in 1984, two years before she dies</b> &mdash; which the player will notice and not be able to explain.</span></p>
+<p><b>Her fate is never resolved.</b> A woman who did everything right and went hard at the end. The game does not say where she is and does not hint. She is the second unresolved soul, and she is there so the player understands early that <em>keeping the rules is not the same as the thing the rules are for.</em></p></div>
+
+<div class="who"><h4>Stan Kowalczyk</h4><div class="role">father &middot; 1937&ndash;2016</div>
+<p><span class="good">Gives things instead of saying them. Hands his son the loft in 1985 the week his own life ends. Prays for him daily from November 1993 to March 2016 and <b>never mentions it once.</b></span></p>
+<p><span class="flaw">Says nine words about the whole subject, in a Buick, badly, and closes it permanently for both of them. His silence is not neglect &mdash; he was raised by a man who never spoke either &mdash; and it does more damage than any cruelty in the story.</span></p></div>
+
+<div class="who"><h4>Ewa Kowalczyk</h4><div class="role">mother &middot; b. 1952</div>
+<p><span class="good">Sharp, funny, works the counter at the bakery on Liberty, swears in Polish on the assumption that nobody is listening. Knows considerably more about her son than she ever says.</span></p>
+<p><span class="flaw">Manages by not looking. Teases her mother-in-law about the praying because it is easier than the alternative, and after 1986 cannot forgive herself for it.</span></p></div>
+
+<div class="who"><h4>Renee Sobek</h4><div class="role">1975&ndash; &middot; three doors down</div>
+<p><span class="good">Loud, funny, better than Adam at nearly everything and cheerfully aware of it. Wants to be a nurse and becomes one. Known him since they were nine.</span></p>
+<p><span class="flaw">A coward about conflict. In 1997 she knows something is wrong, asks once, gets told nothing is wrong, and lets it go &mdash; <b>and she will think about that for twenty years.</b> She is not a victim and the game must never write her as one.</span></p></div>
+
+<div class="who"><h4>Dennis Wi&sacute;niewski</h4><div class="role">the Holy Name Society &middot; the clipboard</div>
+<p><span class="good">Genuinely chaste, genuinely disciplined, has never in his life done what Adam does, and is <b>right about every single fact.</b> Runs the parish festival and does it well. Nobody has ever seen him cut a corner.</span></p>
+<p><span class="flaw">Has no mercy in him at all. Corners Adam in a church hall in 1991 and says a true thing in a way that makes it unusable for thirty years. <b>He is one of the reasons Adam leaves &mdash; not the priest, not the teaching, a layman with a clipboard.</b></span></p>
+<p><b>He gets one moment of pathos, late and brief</b>, that shows what was done to him at fourteen and by whom. Not redemption. Just enough that the player cannot dismiss him, and has to sit with the fact that <em>the man was not wrong.</em></p></div>
+
+<div class="who"><h4>Fr. Emeka Nwosu</h4><div class="role">2018 &middot; ninety seconds</div>
+<p><span class="good">Fifty-ish, Nigerian, in the diocese eleven years, unhurried, funny, and <b>completely unshockable.</b> Nobody ever made him ashamed of this subject, so he can speak about it the way you would speak about a broken arm &mdash; seriously, kindly, and without a trace of embarrassment.</p>
+<p><b>He must read as a breath of fresh air</b>, and the reader should want more of him and not get it. He is in the game for one scene, he says the true thing correctly, and Adam has to sit in a car afterwards.</span></p></div>
+
+<div class="who"><h4>The man at the bar</h4><div class="role">Oakland &middot; 1997 &middot; unnamed</div>
+<p>A graduate student, three drinks in, holding forth. He says one offhand thing about Christian morality being the invention of people who could not do anything else. <b>The philosopher is never named.</b> Adam is not an intellectual and does not read anything; he borrows the sentence, and the culture repeats it back to him for twenty years until it feels like something he worked out himself.</p></div>
+
+</div>
+
+<h2><span class="num">08</span>Legion</h2>
+
+<p>They present as many, and the presentation <em>is</em> the tactic. Different names on different days, different voices, handoffs, <em>that&rsquo;s not my area, you want the other one, I&rsquo;ll take a message.</em> They borrow big names &mdash; <b>Belphegor</b>, <b>Asmodeus</b>, <b>Mammon</b> &mdash; and none of them is entitled to any of them.</p>
+
+<blockquote><p>&ldquo;My name is Legion: for we are many.&rdquo;</p><cite>Mark 5:9 &mdash; a boast, and quite possibly a lie, right there in the Gospel</cite></blockquote>
+
+<p><strong>The angel has to work the bureaucracy</strong>, which is your note and it is funnier and worse than what I had. To get anything done he is routed, deferred, referred and stonewalled &mdash; and every hour of it is an hour he is not standing where he should be. <b>The paperwork is the attack.</b></p>
+
+<p><strong>In 1994 he counts them. There are three.</strong> One does nearly all the work; the other two exist to make it look like a crowd. None of them is Asmodeus and none ever was. Knowing the count does not help him beat them &mdash; it helps him stop being impressed, which turns out to be different and better.</p>
+
+<p>And it rhymes with what is happening to Adam, whose justifications get more elaborate every decade while the thing they are justifying never changes size at all. <strong>Complication is the tactic. The truth stays small.</strong></p>
+
+<h2><span class="num">09</span>The hidden nature of grace</h2>
+
+<p>You named this and it is the right theme for the whole book, so it is now stated as one and every scene is checked against it.</p>
+
+<div class="callout green">
+<b>Everything that works in this story is invisible while it is working</b>
+<p>An old woman is laughed at in her own kitchen for praying, and it is the reason her grandson is alive in 2018. A man writes a name in a notebook for twenty-three years and dies without mentioning it. A congregation in Wilkinsburg prays for a man they met twice. A priest says ninety seconds of something in a box and never learns what it did. A bird comes home.</p>
+<p><b>Nobody in this game ever sees the effect of the thing they did.</b> Not one person, not once. Only the angel sees it, and he cannot tell anybody, and that is his whole life.</p>
+</div>
+
+<h2><span class="num">10</span>Adam</h2>
+
+<div class="tl">
+<div class="tl-row"><div class="tl-yr">1975<b>0</b></div><div class="tl-txt">Born at Magee-Womens. <b>Stan and Ewa</b>, married, Dobson Street, Polish Hill. <b>Halina</b>, 77, in the back room. Baptised at St. Casimir.</div></div>
+<div class="tl-row key"><div class="tl-yr">1980<b>5</b></div><div class="tl-txt">He takes something that is not his &mdash; and <b>turns the voice down to do it.</b> The angel watches a five-year-old discover the volume knob and understands exactly what he is looking at.</div></div>
+<div class="tl-row"><div class="tl-yr">1982<b>7</b></div><div class="tl-txt">First confession and communion. Halina teaches him, in Polish and bad English, and it works. <span style="color:var(--ink-faint)">Needle: 1.</span></div></div>
+<div class="tl-row key"><div class="tl-yr">1984<b>9</b></div><div class="tl-txt"><b>The finger.</b> Forty times a day, four years, nobody notices. The angel reads it as devotion. <b>And the Prayers number begins to fall, quietly, for a reason the player cannot see.</b></div></div>
+<div class="tl-row"><div class="tl-yr">1985<b>10</b></div><div class="tl-txt">The mill closes. Stan cleans out his father&rsquo;s loft and hands his son the birds.</div></div>
+<div class="tl-row key"><div class="tl-yr">1986<b>11</b></div><div class="tl-txt"><b>Halina dies</b> &mdash; hard about Ewa to the last, and unreconciled. The game never says where she went.</div></div>
+<div class="tl-row key"><div class="tl-yr">1988<b>13</b></div><div class="tl-txt">A health class, a filmstrip, a teacher who would rather be anywhere. <b>He walks out knowing a new thing about himself and the angel cannot see what changed.</b></div></div>
+<div class="tl-row key"><div class="tl-yr">1989<b>14</b></div><div class="tl-txt"><b>The first dark hour.</b> The angel is standing four feet away and cannot get in, and something on the other side of it is very pleased.</div></div>
+<div class="tl-row"><div class="tl-yr">1990&ndash;91<b>15&ndash;16</b></div><div class="tl-txt">Father Halakiewicz, forty seconds, brisk and not cruel. <span style="color:var(--ink-faint)">Needle: 2.</span> Then Dennis Wi&sacute;niewski in a church hall, correct about everything. Then Stan, in a Buick, nine words.</div></div>
+<div class="tl-row key"><div class="tl-yr">1993<b>18</b></div><div class="tl-txt">The argument arrives on a bus, fully formed and <b>good</b>. <span style="color:var(--ink-faint)">Needle: 3.</span> He stops going &mdash; and it is a <b>relief</b>, and the game says so. Stan opens a notebook. Renee becomes something else.</div></div>
+<div class="tl-row"><div class="tl-yr">1994<b>19</b></div><div class="tl-txt">Pitt. The angel works the bureaucracy, loses two months to it, and finally counts them. Three.</div></div>
+<div class="tl-row key"><div class="tl-yr">1996&ndash;97<b>21&ndash;22</b></div><div class="tl-txt">The internet. The scale changes overnight. <b>Renee nearly finds out &mdash; the hinge of the game.</b> Then a kitchen table, and a man saying nothing is wrong, and meaning it.</div></div>
+<div class="tl-row"><div class="tl-yr">1997&ndash;98<b>22&ndash;23</b></div><div class="tl-txt">A sentence in a bar that he does not have to think about again for twenty years. He ends it with Renee and calls it honesty.</div></div>
+<div class="tl-row"><div class="tl-yr">2001<b>26</b></div><div class="tl-txt">A work friend takes him to a service in Wilkinsburg. <b>They pray for him by name and the number goes up.</b> On this subject the congregation is split down the middle and Adam leaves with no category for either half of it.</div></div>
+<div class="tl-row"><div class="tl-yr">2001&ndash;13<b>26&ndash;38</b></div><div class="tl-txt">Two long relationships that end the same way &mdash; and not only for one reason. <b>Chastity is at the root and a dozen other things have grown on it since:</b> avoidance, drinking more than he says, work as an alibi, a habit of leaving before he can be left.</div></div>
+<div class="tl-row"><div class="tl-yr">2007<b>32</b></div><div class="tl-txt">A crowd shows up to agree with him and for two years he feels lighter. It is about company, not argument.</div></div>
+<div class="tl-row key"><div class="tl-yr">2016<b>41</b></div><div class="tl-txt"><b>Stan dies.</b> The notebook. The unexplained number resolves in the same beat it goes to zero.</div></div>
+<div class="tl-row key"><div class="tl-yr">2018<b>43</b></div><div class="tl-txt">Fr. Nwosu. Ninety seconds. Twenty-five years. <span style="color:var(--ink-faint)">Needle: 4, on some branches.</span></div></div>
+<div class="tl-row"><div class="tl-yr">2019<b>44</b></div><div class="tl-txt">He writes to Renee. Four paragraphs. It is not about them. She writes back.</div></div>
+<div class="tl-row key"><div class="tl-yr">2024<b>49</b></div><div class="tl-txt">A diagnosis in June, four months, and at the end all three of them in the room with nothing left to pretend.</div></div>
+</div>
+
+<h2><span class="num">11</span>The thirteen scenes</h2>
+
+<p>Proportions still taken from <em>Choice of the Dragon</em> &mdash; two large scenes, a spine of medium ones, a fifteen-word checkpoint &mdash; with a prologue in front and a choice every hundred and seventy words throughout. <strong>All present tense.</strong> The angel departs from chronological order four times, marked below.</p>
+
+<div class="tw">
+<table>
+<thead><tr><th>#</th><th>Scene</th><th>When</th><th>Words</th><th>Ch.</th><th>What happens</th></tr></thead>
+<tbody>
+<tr><td class="n">0</td><td><b>The Windowsill</b></td><td class="n">Oct 2024</td><td class="n">1,100</td><td class="n">3</td><td>Loretta breaks fourteen porcelain angels and meets one. The mechanic is taught as a joke at her expense.</td></tr>
+<tr><td class="n">1</td><td><b>The Assembly</b></td><td class="n">&mdash;</td><td class="n">1,900</td><td class="n">22</td><td>Creation, the vision, the four words, the expulsion, the ninth choir, the commission. <b>&#8617; The Glimpse:</b> she demands to see the end and gets four seconds of 2024.</td></tr>
+<tr><td class="n">2</td><td><b>Four Hours</b></td><td class="n">1975</td><td class="n">900</td><td class="n">4</td><td>Birth, baptism, and every limit hit inside ten minutes. <code>culpability: unknown</code> appears and is explained once.</td></tr>
+<tr><td class="n">3</td><td><b>Ordinary Time</b></td><td class="n">1980&ndash;88</td><td class="n">5,200</td><td class="n">28</td><td>The volume knob, Halina, the finger, the mill, the loft and the birds, her death, the classroom door.</td></tr>
+<tr><td class="n">4</td><td><b>The Other Watch</b></td><td class="n">1988</td><td class="n">1,400</td><td class="n">6</td><td>Renee&rsquo;s guardian. Two goods that do not fit and no arbitration available.</td></tr>
+<tr><td class="n">5</td><td><b>Vigil</b></td><td class="n">&mdash;</td><td class="n">15</td><td class="n">0</td><td>The checkpoint. Fifteen words and a save.</td></tr>
+<tr><td class="n">6</td><td><b>What They Told Him</b></td><td class="n">1988&ndash;93</td><td class="n">3,400</td><td class="n">20</td><td>The first dark hour, the Saturday line, Fr. Halakiewicz, Dennis, Stan in the Buick, the argument, the relief. <b>&#8617; The Sideways Jump:</b> Dennis at fourteen, in 1953, for thirty seconds.</td></tr>
+<tr><td class="n">7</td><td><b>Legion</b></td><td class="n">1994</td><td class="n">900</td><td class="n">8</td><td>The bureaucracy, and then the count. There are three.</td></tr>
+<tr><td class="n">8</td><td><b>What He Doesn&rsquo;t Tell Her</b></td><td class="n">1996&ndash;97</td><td class="n">2,200</td><td class="n">14</td><td>The scale changes. She nearly finds out. The hierarchy forms. The kitchen table.</td></tr>
+<tr><td class="n">9</td><td><b>The Permission Slip</b></td><td class="n">1997&ndash;98</td><td class="n">1,600</td><td class="n">10</td><td>A sentence in a bar. The breakup, described to himself as honesty. Her angel leaves for Columbus.</td></tr>
+<tr><td class="n">10</td><td><b>The Long Middle</b></td><td class="n">1999&ndash;2016</td><td class="n">1,600</td><td class="n">12</td><td>Wilkinsburg. Two relationships, not for one reason. The crowd that agrees with him. Years with nothing to do.</td></tr>
+<tr><td class="n">11</td><td><b>The Hour</b></td><td class="n">2016&ndash;24</td><td class="n">4,400</td><td class="n">26</td><td>The drawer, the checking, Fr. Nwosu, six years, and three of them at a bedside. <b>&#8617; The room from The Glimpse, arrived at properly.</b></td></tr>
+<tr><td class="n">12</td><td><b>The Threshold</b></td><td class="n">2024</td><td class="n">1,400</td><td class="n">6</td><td>He brings him. The name. The window goes dark. Then Loretta, sent back, and the corridor.</td></tr>
+<tr><td class="n"></td><td colspan="5"><b>&#8617; The Door That Does Not Open</b> &mdash; requested in scene 3 and twice more, refused every time.</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>Total: about 26,000 words and 159 choices.</strong> Roughly 2,300 words over the dragon, which the prologue and the frame breaks account for almost exactly.</p>
+
+<h2><span class="num">12</span>Changed beats</h2>
+
+<p>The twelve-scene skeleton stands, with a thirteenth in front of it. These are the beats the frame changed.</p>
+
+<section class="scene amber">
+<div class="scene-head"><div class="scene-no">SCENE ZERO &mdash; NEW</div><h3>The Windowsill</h3>
+<div class="scene-when">Tuesday, 15 October 2024 &middot; Pittsburgh</div>
+<div class="scene-budget"><span>Words <b>1,100</b></span><span>Choices <b>3</b></span><span>Images <b>1</b></span></div></div>
+<div class="scene-body">
+<p class="scene-job">Establish Loretta, break her, and teach the entire mechanic inside one joke.</p>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">0.1</span><span class="beat-t">Fourteen of them</span></div>
+<p>Four days after the second amputation. Her sister has gone home. The window looks at a parking structure. On the sill, brought from the house in two shoeboxes because she asked for them: fourteen porcelain angels, forty years of birthdays and sodality raffles and one from her husband the Christmas before he died.</p>
+<p class="dil">Every one of them is a woman in a nightgown, and most of them have harps, and two of them have their eyes closed in a way that has begun to enrage her.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">0.2</span><span class="beat-t">She sweeps them off</span></div>
+<p class="dil">Not a rampage. One motion with her forearm, and then she sits there in the noise of it with her hand still out.</p>
+<p><b>The prayer she says afterwards is the honest one</b>, and it is four sentences long, and it is not blasphemy &mdash; it is closer to Job, and the game knows the difference and does not flinch from either.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">0.3</span><span class="beat-t">Something is in the room</span><span class="beat-yr">IMAGE</span></div>
+<p class="dil">And it has no face, and it is not a woman, and there is no harp, and the first thing she notices about it is that <b>it is not looking at her with any expression at all</b>, because expression is a thing faces do and it does not have one.</p>
+<p>She is not afraid, which surprises her. She is <em>furious</em>, which does not.</p></div>
+
+<div class="beat"><div class="beat-h"><span class="beat-id">0.4</span><span class="beat-t">The arrangement</span></div>
+<p class="dil">He tells her what is going to happen, briefly, and she does not believe any of it, and then it starts happening. And somewhere in the first minute of the first thing he shows her, this exchange:</p>
+<blockquote><p>&ldquo;Well? Do something.&rdquo;<br>&ldquo;I am waiting to be told what to do.&rdquo;<br>&ldquo;By <em>who</em>?&rdquo;<br><br>&ldquo;You.&rdquo;</p></blockquote>
+<p><b>That is the tutorial.</b> Three choices in this scene, all small, all of which she makes badly, and the game lets her.</p>
+<div class="mech"><b>He states the terms once</b>That this is not how it normally goes. That he is ordinarily moved by an interior light and that this arrangement exists once, for her, because of the windowsill. That she may be wrong and he will obey anyway. And &mdash; when she asks why he would agree to such a thing &mdash; one flat sentence about love that he never repeats and never expands.</div>
+<div class="mech"><b>Her first real demand comes in scene one</b>She wants to see how it ends &mdash; immediately, before she has agreed to any of this &mdash; and she is taken, without argument, and gets four seconds of it, and cannot read a thing. See <b>The Glimpse</b>, above.</div>
+<div class="mech"><b>What she does not know</b>Four doors down the same corridor, a man is dying who has been the object of everything she is about to be shown. She will not learn this until scene twelve. <b>She never meets him.</b></div></div>
+</div>
+</section>
+
+
+<p>The twelve-scene skeleton from draft 2 stands. These are the beats your notes rewrote.</p>
+
+<section class="scene ruby">
+<div class="scene-head"><div class="scene-no">3.1 &mdash; REWRITTEN</div><h3>The volume knob</h3><div class="scene-when">1980 &middot; age five</div></div>
+<div class="scene-body">
+<div class="beat"><p class="dil">You were right that I had this too small. He does not merely take the thing. <b>He hears the voice, and he turns it down, deliberately, because he wants the thing more than he wants the voice</b> &mdash; and it works, and he notices that it works.</p>
+<p>He is five. He has just learned the single most consequential skill of his life, and he learned it in about four seconds, and no adult in the building saw anything happen.</p>
+<p class="dil">And <b>you</b> know exactly what you are looking at. Not by reasoning &mdash; you see the whole of it at once, including what it means, including roughly what it will cost. <b>You know this will take decades to undo and that you have no tool that touches it.</b></p>
+<div class="mech"><b>Why it matters this much</b>This is the mechanism that lets him ignore his conscience about Renee in 1998 while it is screaming at him about a thought he did not choose. It is not that his conscience is loud in one place and silent in the other. <b>It is that he learned, at five, which knob to turn.</b></div></div>
+</div>
+</section>
+
+<section class="scene ruby">
+<div class="scene-head"><div class="scene-no">3.4 &mdash; OPTION REPLACED</div><h3>The finger</h3><div class="scene-when">1984 &middot; age nine</div></div>
+<div class="scene-body">
+<div class="beat"><p class="dil">You were right: an angel would never try to make a child careless. That option is gone. What replaces it is worse and much more interesting.</p>
+<ul class="opts">
+<li><b>Encourage it. This is a boy who cares about God.</b> <span class="dl">severity %+20 &middot; needle &rarr; 2</span></li>
+<li><b>Get an adult to notice.</b> <span class="dl">valor %+15 &middot; in 1984, in that house, an adult who notices says &ldquo;stop being weird&rdquo;</span></li>
+<li><b>They are working on him. <em>Let them.</em></b> <span class="dl">patience %+20 &middot; hope %&minus;10 &middot; overreach +1</span></li>
+<li><b>You do not understand this. Do nothing until you do.</b> <span class="dl">patience %+25 &middot; charity %+15</span></li>
+</ul>
+<div class="mech"><b>The third option, in full</b>They are trying to make him careless. You can see them doing it. And you judge &mdash; and it is a judgement, and you may be wrong &mdash; that <b>the scrupulosity is the deeper injury, and that they are making a mistake</b>, and that this once you will stand aside and let the enemy do a thing because the thing they are doing is smaller than the thing already being done.<br><br>You are not permitting a sin. You are declining to obstruct a pressure whose immediate effect would relieve a nine-year-old who is grinding himself to powder over a hand gesture. <b>And you might be catastrophically wrong, and you will not find out for thirty-four years.</b></div>
+<div class="mech"><b>This is the Star Trek question you were after</b>Is a boy who cares too much in a broken way worse off than a boy who has learned not to care? The game does not answer it. The stat sheet remembers what you decided.</div></div>
+</div>
+</section>
+
+<section class="scene verdigris">
+<div class="scene-head"><div class="scene-no">2.5 + 3.7 &mdash; REVISED</div><h3>Halina</h3><div class="scene-when">1975&ndash;1986</div></div>
+<div class="scene-body">
+<div class="beat"><p class="dil"><b>She is mocked for praying.</b> Ewa does it affectionately, at the stove, in front of Adam. A neighbour does it less kindly. Halina is entirely unbothered, which is funny, and keeps going, which is the point.</p>
+<p>And it is the reason Adam is alive in 2018. <b>Nobody ever tells her. She never finds out. She dies without knowing.</b></p></div>
+<div class="beat"><p class="dil">Your note about the intercession of the dead broke the mechanic open, so here is the harder version. <b>The Prayers number starts falling in 1984 &mdash; two years before she dies.</b> Nothing in the text explains it. She goes hard about Ewa over something old, and stops forgiving it, and something goes out of her prayer that the number can measure and the player cannot see.</p>
+<p>She dies in 1986, unreconciled, having kept every single rule.</p>
+<p class="dil"><b>And the game never says where she went.</b> Not a hint, not an implication, not a consoling line. She is the second unresolved soul, she is there in the first act so the player learns early that <em>keeping the rules is not the same as the thing the rules are for</em> &mdash; and she is the reason the ending&rsquo;s uncertainty does not feel like a trick when it arrives forty years later.</p></div>
+</div>
+</section>
+
+<section class="scene ruby">
+<div class="scene-head"><div class="scene-no">6.3b &mdash; NEW</div><h3>The church hall</h3><div class="scene-when">1991 &middot; age sixteen</div></div>
+<div class="scene-body">
+<div class="beat"><p class="dil">Dennis Wi&sacute;niewski corners him after a Holy Name meeting, by the coffee urn, and talks to him for eleven minutes about purity.</p>
+<p><b>Every fact he says is true.</b> He is not leering, he is not prurient, he has never done any of it himself and it shows. He is disciplined and impressive and completely certain, and there is not one gram of mercy in the entire eleven minutes, and by the end of it a sixteen-year-old has learned that this is what the people who believe it are like.</p>
+<p class="dil">The player should want to hit him. The player should also be unable to find the sentence he got wrong. <b>That is the whole design of the scene.</b></p>
+<div class="mech"><b>His moment, much later</b>2016, at Stan&rsquo;s funeral. Dennis is seventy-eight and says one thing, briefly, about his own father, and it explains everything and excuses nothing. Adam does not soften. <b>Neither does the game.</b></div></div>
+</div>
+</section>
+
+<section class="scene amber">
+<div class="scene-head"><div class="scene-no">6.6 &mdash; EXPANDED</div><h3>The relief</h3><div class="scene-when">1993 &middot; age eighteen</div></div>
+<div class="scene-body">
+<div class="beat"><p class="dil">He stops going, and <b>it is wonderful.</b> The game commits to this completely for about four hundred words.</p>
+<p>No more Dennis by the coffee urn. No more standing in a line on Saturday performing an accounting he cannot get right. No more nine o&rsquo;clock Mass at St. Casimir in 1992, which was genuinely, objectively bad &mdash; a cantor who could not sing, a homily read off a photocopy, a congregation of eighty in a building for six hundred. No more watching people who had been unkind to his mother go up and come back with their hands folded.</p>
+<p class="dil"><b>Some of his reasons are good reasons.</b> The game says so plainly, does not hedge it, and does not sneak a corrective in at the end of the paragraph.</p>
+<div class="mech"><b>Why this must be here</b>A story in which leaving feels only like loss is a story nobody believes, and a reader who has ever left anything will close it. The relief has to be real on the page. What the game does instead is wait <b>twenty-three years</b> and let the reader work out what the relief cost &mdash; without ever once pointing at it.</div></div>
+</div>
+</section>
+
+<section class="scene verdigris">
+<div class="scene-head"><div class="scene-no">10.1b &mdash; NEW</div><h3>Wilkinsburg</h3><div class="scene-when">2001 &middot; age twenty-six</div></div>
+<div class="scene-body">
+<div class="beat"><p class="dil">A work friend takes him to a service. The people are warm and completely sincere and nobody has an angle. <b>They pray for him by name at the end, out loud, and the Prayers number goes up.</b> No asterisk. No comment from the narration. It just goes up, and anyone paying attention will see it.</p>
+<p>And on this one subject the room is split straight down the middle. One man speaks about it in terms more frightening than anything Adam ever heard in a Catholic building &mdash; genuinely terrifying, and meant kindly. Another treats it as a non-issue, warmly, and is faintly puzzled anyone still worries.</p>
+<p class="dil"><b>Adam leaves with no category for either of them</b>, and the game offers him none, and offers the player none either. Both men are trying to help. That is the beat.</p>
+<div class="mech"><b>Why it earns its place</b>It stops the game reading as an attack on Protestants and it stops it reading as an attack on the Church. The problem in this story was never which building Adam was in. <b>It was that nobody in any of them said the true thing in a way he could use.</b> Until 2018.</div></div>
+</div>
+</section>
+
+<h2><span class="num">13</span>The four endings</h2>
+
+<p>Your note: they cannot all be equally murky or the player will be annoyed, and there has to be something to win. Agreed. Here is the spread &mdash; keyed to <strong>Hope</strong>, the needle&rsquo;s final position, whether anything got repaired, and what happened in the last four months.</p>
+
+<p><strong>No ending says Adam was damned.</strong> The Church has never in two thousand years declared one individual to be in hell &mdash; she canonises and has never once done the reverse &mdash; and this game will not be the first thing to do it. But the four are not the same, and nobody will mistake the first for the last.</p>
+
+<div class="ends">
+
+<div class="end a"><h4>The Homing</h4>
+<p class="cond">needle 4 &middot; hope high &middot; anointed &middot; Renee &middot; the notebook shown</p>
+<p><b>Obviously hopeful.</b> He asked for a priest himself, in June, before he was frightened. The notebook is on the bed. He wrote to Renee five years ago and she wrote back and they were kind to each other. The last thing he says is not about himself. <b>The angel&rsquo;s reading is warm and the prose is allowed to be warm</b> &mdash; and it still stops short of a verdict, because that is not the angel&rsquo;s to give, and the reader will not feel cheated because there is so obviously something here.</p>
+<div class="gauge"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+
+<div class="end b"><h4>The Late Hour</h4>
+<p class="cond">needle 3&ndash;4 &middot; hope moderate &middot; returned out of fear &middot; it held</p>
+<p>He came back frightened rather than free, and it held, and holding is not nothing. Six years of going to Mass on time and not knowing why it helped. Real, thin, and enough to hope on &mdash; and the angel knows precisely how thin it is, and hopes anyway, and says so.</p>
+<div class="gauge"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+
+<div class="end c"><h4>Unfinished</h4>
+<p class="cond">returned late &middot; nothing repaired &middot; Renee never heard from him</p>
+<p>He got back inside the door and ran out of time before he got anywhere else. Nothing was mended. Nobody was written to. <b>Genuinely murky</b> &mdash; the angel can point at three things and none of them settles anything, and the last months were mostly about pain management.</p>
+<div class="gauge"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div>
+
+<div class="end d"><h4>The Long Hope</h4>
+<p class="cond">needle stuck at 3 &middot; hope low &middot; forty-nine years of severity &middot; no priest</p>
+<p><b>Obviously bleak, and it still does not say he is lost.</b> It says something considerably harder to sit with: <em>there is very little here. You do not know. You will not know until the resurrection. And you are going to hope anyway, for all of it, for as long as that takes.</em></p>
+<p>Hope is a virtue, not a guess. That distinction is the last thing the game teaches and it does not explain it.</p>
+<div class="gauge"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>
+
+</div>
+
+<h3>And then hers</h3>
+
+<p>The four above are readings of Adam. <strong>The game does not end on any of them</strong>, because Adam was never the subject.</p>
+
+<div class="callout blue">
+<b>She is sent back, and nothing about her has changed</b>
+<p>Same room. Same window. Same parking structure. Fourteen porcelain angels in pieces on the floor and a nurse who has not come in yet, <b>because no time has passed at all.</b></p>
+<p>She does not get her legs back. Nothing is fixed. Scrooge does not wake up younger &mdash; he wakes up on the same Christmas morning in the same house with the same money, and the only thing in the world that is different is him.</p>
+</div>
+
+<p>And then she is told the one thing she was not shown: <strong>that the man she has just spent forty-nine years standing beside is four doors down this corridor, and has about nine hours left, and that nobody is with him.</strong></p>
+
+<div class="callout">
+<b>The last choice in the game</b>
+<p>She has no legs. Going down that corridor means ringing for a nurse she has been rude to all week, being got into a chair, and being wheeled to the room of a man she has never met, to sit with him for no reason she can explain to anybody.</p>
+<p><b>It is genuinely difficult and it is entirely up to her.</b> The game offers it once, in about forty words, with no argument attached, and it accepts either answer without comment.</p>
+</div>
+
+<p>If she goes: she cannot see the angel. She has stood next to him for forty-nine years and she is now in the same room as him and there is nothing there at all &mdash; <strong>and she knows exactly where he is standing, because it is where he always stands.</strong> She does not say anything to Adam. She would not know what to say. She sits down, and puts her hand on the bed, and that is the end of the game.</p>
+
+<p>If she does not go: the game does not punish her, does not editorialise, and does not withhold the afterword. It gives her the same hundred and fifty words, in the same voice, and lets the reader sit with what they chose. <strong>Nothing in this game is ever a trap.</strong></p>
+
+<p>Either way, the last thing on the screen is the corridor, and the door, and the light under it.</p>
+
+<p>Then the rose window, filled. Three pairs, Charity and Hope, and beside it his column &mdash; the needle, the years, the prayers, and <code>culpability: unknown</code>, which has not changed since 1975 and does not change now. <strong>That chart is the only verdict the player is ever given, and it is not a verdict on him.</strong></p>
+
+<p>And then the afterword, and the untranslatable part, and it ends.</p>
+
+<hr class="lead">
+
+<h2><span class="num">14</span>Open questions</h2>
+
+<ol class="q">
+<li><b>One change I made against your note.</b><span>You suggested the Pharisee figure be extremely effeminate. I did not do that, and I want to be straight about why: it would read as a cheap shot, and it would give the player an easy reason to dismiss him &mdash; which destroys the thing you actually wanted, that Adam&rsquo;s rejection be <em>sympathetic</em>. Dennis is far more dangerous as a disciplined, impressive, entirely correct man with no mercy in him. That is the real pastoral failure, it is instantly recognisable to anyone who grew up in a parish, and nobody can wave it away. Overrule me if you disagree.</span></li>
+<li><b>Halina&rsquo;s unresolved fate &mdash; is it one unresolved soul too many?</b><span>It is a strong move and it does real work: it plants the ending&rsquo;s uncertainty in act one, and it makes the point about rules without charity without a word of comment. The risk is that two unresolved souls reads as a tic rather than a theme. I think it holds because hers is quiet and never referred to again.</span></li>
+<li><b>Does the blind mechanic cost too much?</b><span>Going dark solves modesty, discursion and horror in one move &mdash; but it also means the player spends chunks of scenes 6, 8 and 10 unable to see the thing the scene is about. That is the intended experience. It may also be genuinely unpleasant to play. Worth watching in the first draft of scene 6.</span></li>
+<li><b>Loretta&rsquo;s particulars are swappable.</b><span>I made her Black, seventy-one, and a fifty-year member of St. Benedict the Moor in the Hill District &mdash; which is a real and historically significant Black Catholic parish, and it means the game&rsquo;s two central people come from the two Pittsburghs that mostly never met, and meet once, on one floor, in 2024. That is texture rather than theme and I have kept it out of the argument entirely. Change any of it freely.</span></li>
+<li><b>Does the frame swallow the game?</b><span>The risk is that Loretta becomes so interesting that the player resents cutting back to 1991. The defence is rationing: she is fully present in scene 0 and scene 12, and everywhere in between she gets six frame breaks and no more. If the first draft of scene 6 wants a seventh, that is the warning sign.</span></li>
+<li><b>Does she ever learn what she got wrong?</b><span>Currently: only where the story shows her. There is no accounting scene, no tallying of her bad calls, and no rebuke. I think that is right &mdash; the point of the forty-nine years is that she has already felt it &mdash; but the alternative, one short exchange before she is sent back, is available and would be brutal.</span></li>
+<li><b>Fourteen achievements, still undesigned.</b><span>Mostly built on the pairs, plus one for standing aside in 3.4 and being right, one for counting Legion unprompted, one for getting a bird home in a storm, and one that is unwinnable and is meant to be.</span></li>
+</ol>
+
+</div>

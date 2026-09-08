@@ -1,0 +1,510 @@
+*comment ==================== CHAPTER FIVE — ARTICLE NINE ====================
+*comment Rule vs Counsel bites hardest here. Guard's moment of glory: carry it
+*comment and the ship never learns. Budget: 12 tests, 15 choices.
+*comment Ledger: Sub-Lieutenant Toma Beye, 24, four years aboard, adored
+*comment Halloran. He has been transmitting the ship's daily log summary to
+*comment Tessine Station on an open band for four months. Halloran has never
+*comment replied. Beye knows that and has kept sending.
+
+It comes to you on an ordinary Tuesday, in the middle of a stores audit, which is how these things always arrive.
+
+*if (sec = "whitlow")
+  Whitlow puts a single sheet of paper on your desk and stands there while you read it, having written nothing down until you finish, which is her whole method and is unbearable when it is aimed at you.
+*if (sec = "oyelaran")
+  Oyelaran asks for four minutes with the door shut, stands the entire time, and gives it to you in the order a Marine gives a contact report: what, when, who, and what he has done about it, which is nothing, pending your order.
+*if (sec = "mott")
+  Mott has to duck to come in. She says, "There is a thing I have found which I do not want to have found," and then hands you a folder and waits, entirely still, for as long as it takes.
+
+The comms log for the last four months has one hundred and nineteen entries that should not be there.
+
+They are short. They go out at 0410, on an open band, from a maintenance channel that has no traffic on it, and they are addressed to a civilian receiver on Tessine Station. Each one carries the previous day's position, the ship's condition, and a summary of the master's log.
+
+They are signed with a service number. The service number belongs to Sub-Lieutenant Toma Beye, twenty-four, four years aboard, who flew the *Tern* through a nine-metre lane at the *Corvine* and talked the whole way.
+
+The receiver on Tessine Station is registered to I. Halloran.
+
+*page_break
+
+*comment ---------------- The first ten minutes ----------------
+
+Nobody else knows. That will not be true for long, and how long is a decision you are making right now.
+
+*choice
+  #Seal it. Nobody sees this until I have.
+    *set rule %+12
+    *set candor %-10
+    *set rel_sec %-4
+    You seal the comms log under a master's hold, which you are entitled to do and which leaves a mark on the file that is visible forever to anybody who ever looks.
+
+    ${secname} accepts it without expression. "Four hours or four days, Captain?"
+
+    You do not have an answer, and ${secthey} does not ask twice.
+    *goto ninetwo
+  #Get ${xoname} in here now.
+    *set rule %-10
+    *set crew %+6
+    *set rel_xo %+10
+    You do not sit on it for eleven seconds. ${xoname} is in the cabin inside four minutes and reads the sheet twice.
+    *if (xo = "marand")
+      "One hundred and nineteen counts," Marand says. "Article Nine. Not eleven, not a lapse. One hundred and nineteen separate decisions on one hundred and nineteen mornings." She writes the time in her notebook. "Whatever you do, Captain, do not let anybody tell you this was a young man being sentimental once."
+    *if (xo = "ferreo")
+      Ferreo goes pale, which you have not seen. "Captain, in six weeks a Board is going to ask you when you knew. There is a very short list of correct answers and it starts at *immediately.*"
+    *if (xo = "tanaka")
+      Tanaka-Osei reads it, puts it down, and says: "Four months, on an open band, and he's the best flier on this ship. Which of those are we dealing with first?"
+    *goto ninetwo
+  #Go and find Beye. Now, before anybody else does.
+    *set nerve %+12
+    *set rule %+6
+    *set crew %+8
+    You find him in the number two bay with his hands inside the *Kittiwake*'s port cluster, and you say, "Mister Beye. My cabin. Now," in a corridor with four ratings in it, and every one of them knows within the minute.
+
+    It is not discreet. It is also, you decide on the walk up, the last chance anybody has to hear it from you rather than about you.
+    *set candor %+10
+    *set rel_sec %-4
+    *goto ninetwo
+
+*label ninetwo
+*page_break
+
+*comment ---------------- What is in them ----------------
+
+One hundred and nineteen transmissions. You can read them or you can not read them, and the second is a real option, because reading a man's letters and then judging him is a particular kind of act.
+
+*choice
+  #Read all of them.
+    *set candor %+8
+    *set rule %+6
+    It takes two hours. They are not letters. That is the first surprise: there is no *dear sir*, no news, no self. They are logs. Position, condition, and what the master did, in a flat competent hand, one hundred and nineteen times.
+
+    The second surprise is in the entries themselves. *Captain took the window. Loop still whistling.* *Captain went in second party, forty metres.* *Captain gave the Fold the water plant and not the seed.* No comment. No opinion. Not once, in four months.
+
+    The third surprise is that not one of them has an answer attached.
+    *set rel_sec %+4
+    *goto beye
+  #Read the first one and the last one. That is enough to charge him.
+    *set rule %+10
+    *set candor %-6
+    The first is dated eleven days after you took command. *CS Perpetua, Sarn Basin departed, master Cdr ${name}, ship well.*
+
+    The last one is from Tuesday. *Ship well.*
+
+    That is all you need and you know it is all you need, and you close the file, and you are aware that you have just chosen not to know something.
+    *goto beye
+  #Read none of them. What he sent is not the offence; that he sent it is.
+    *set rule %+14
+    *set crew %+8
+    *set candor %-4
+    *set kept_secret true
+    You do not open a single one.
+
+    Under Article Nine the offence is disclosure, not content. You do not need to read a man's four months to know he transmitted them, and you decide, in a cabin three metres by four, that you are not going to.
+
+    ${secname} raises an eyebrow at the order and enters it exactly as given.
+    *set rel_sec %+8
+    *goto beye
+
+*label beye
+*page_break
+
+*comment ---------------- Beye ----------------
+
+He comes in and stands and does not sit down when told to.
+
+Toma Beye is twenty-four and he flew a shuttle through a lane nine metres from a wall at four thousand degrees and talked the whole way, and he is now standing in the master's cabin of the *Perpetua* going grey around the mouth.
+
+He does not deny it. He does not ask what you know. He says: "One hundred and nineteen, Captain," which means he has been counting, which means he has known this morning was coming since the first one.
+
+*choice
+  #"Why?"
+    *set candor %+10
+    *set crew %+6
+    "Because somebody should be able to see her," Beye says.
+
+    You wait.
+
+    "He had her nine years. They took her off him in an afternoon and nobody told him anything, and there's no rule that says a man can't know his old ship is still afloat." He swallows. "I know what it is, Captain. I looked it up the first week. I've looked it up every week since."
+    *goto beye_two
+  #"Has he ever answered?"
+    *set candor %+8
+    *set rule %-4
+    Beye's face does something complicated.
+
+    "No, Captain."
+
+    "Not once in four months."
+
+    "No, Captain." And then, because you have not said anything: "I didn't send them to get answered."
+    *set rel_sec %+6
+    *goto beye_two
+  #"Do you know what an open band is?"
+    *set rule %+12
+    *set nerve %+6
+    You put it to him the way it will be put to him by a Board: that a maintenance channel with no traffic on it is the easiest thing in the sky to read; that a daily position report from a Survey vessel is worth money to four governments; and that on the day the *Ashaya* was sitting nine astronomical units off Sedge watching you, she was also, at 0410, being handed your position by a Concord sub-lieutenant.
+
+    Beye does not argue. He goes the colour of the deck plating and sits down without being told, which is the first order he has broken in front of you.
+
+    "I didn't—" he says. And then: "No. I did. I just hadn't done that part of the thinking."
+    *set rel_sec %-4
+    *goto beye_two
+
+*label beye_two
+*page_break
+
+*choice
+  #"You have put me in an impossible position. I want you to understand that."
+    *set candor %+12
+    *set rule %+4
+    He does understand it. That is what makes the next thirty seconds so bad: he works it through out loud, in front of you, and arrives at the correct answer, which is that anything short of a formal charge makes you complicit from this morning onward.
+
+    "I'm sorry, Captain," he says. "That's — I hadn't done that part either."
+    *goto ninecouncil
+  #"Do you want to say anything about Ceyla?"
+    *set candor %+14
+    *set crew %+8
+    The question knocks him sideways. He was braced for Article Nine.
+
+    "He came down to the bay," Beye says. "After. When we had nine hundred people in the holds and no water for them. He came down and he stood there and he said, *Mister Beye, I have done a thing that is going to be argued about for a hundred years, and I would like you to remember that when I did it I was not confused.*" He looks up. "I was twenty-two, Captain. I didn't know what he meant. I do now."
+    *set ceyla_known 3
+    *set rel_sec %+8
+    *goto ninecouncil
+  #Say nothing. Let him stand there.
+    *set candor %-14
+    *set rule %+10
+    You let him stand in the middle of your cabin for a full minute, which is a very long time, and you watch a young man's face go through four separate things and arrive somewhere quieter than any of them.
+
+    Then you say, "Wait outside," and he says "Aye, Captain," and goes, and you find that you have learned something and you do not entirely like how.
+    *goto ninecouncil
+
+*label ninecouncil
+*page_break
+
+*comment ---------------- Article Nine ----------------
+
+Article Nine of the Survey's disciplinary code covers unauthorised disclosure. It is one paragraph long and it gives a ship's master exactly three roads, and it does not say which.
+
+**Charge.** Log it, hold him, hand him to a Board at the next member colony. Dismissal is usual. It is out of your hands the moment you sign it, and it is on the record for a hundred years.
+
+**Summary.** Deal with it aboard under a master's authority. Disrate him, stop his pay, put him in the bilges for a month — anything short of dismissal. It stays on the ship. It also means that if it ever comes out, you concealed a hundred and nineteen counts of Article Nine.
+
+**Dismiss the matter.** Find that no offence occurred. This is available to you and it is a lie, and it is a lie you would have to sign.
+
+*if (xo = "marand")
+  "Charge," Marand says, before you ask. "And Captain — I know what he is worth in a shuttle. That is precisely why. If we only charge the ones who are no good at their jobs, the code is not a code, it is a way of getting rid of people."
+*if (xo = "ferreo")
+  "Summary," Ferreo says, "and I will help you write it so that it is airtight, and I want you to know that I am advising you badly on purpose. A charge ends him. A summary ends *you*, in about eleven months, if it ever surfaces. I am telling you to take the risk onto yourself and I am not sure that is my job."
+*if (xo = "tanaka")
+  "Depends what you want the ship to learn," Tanaka-Osei says. "Charge him and they learn the rules are real. Summary and they learn you are. You don't get both and anybody who tells you different has never run a crew."
+
+*if (sec = "oyelaran")
+  "Charge," Oyelaran says flatly. "He handed our position to a hostile power for four months. That he did it out of love makes it worse, Captain, not better, because love is not a thing you can put a procedure round."
+*if (sec = "whitlow")
+  "I would like to note," Whitlow says, "that I have checked, and the Vaunt did not need his transmissions to find us at Sedge, because we filed that transit with Marl in clear eleven days before. He is guilty of everything except the consequence."
+*if (sec = "mott")
+  "He is loyal to a man," Mott says. "You wish him to be loyal to a rule. On my world we would say you are asking a dog to be a door." A pause. "This is not an argument. I have no argument. I only did not want the word *loyal* to go unsaid in this room."
+
+*if (chap = "wren")
+  Wren says: "Captain, may I ask you something that is not about Mister Beye? What do you think he was doing at 0410 every morning for four months, alone, at a board, with nobody answering?" He waits. "I am not going to tell you the answer. I am telling you it is a real question."
+*if (chap = "onu")
+  "He was keeping a vigil," Onu says, folding. "Badly, and against the regulations, and at the wrong hour, and for a living man. But that is what it was, and you should know that before you decide what to do to him."
+*if (chap = "serat")
+  "Four months of unreciprocated contact at a fixed hour is a ritual, not a communication," Serat says. "Which does not make it legal. It does mean that whatever you take off him, you should be prepared for what happens at 0410 the next morning."
+*if (chap = "none")
+  There is nobody at the foot of the table. The word *loyalty* is used eleven times in the discussion and never once examined, and afterwards you cannot remember who used it most.
+  *achieve empty_berth
+
+*page_break
+
+*choice
+  #Charge him. It goes to a Board.
+    *set article_nine "charged"
+    *set rule %+14
+    *set crew %-12
+    *set standing %+10
+    *set candor %+8
+    You sign it. It takes eleven seconds and the pen is Concord issue and it does not run out.
+
+    Beye is confined to quarters, off the watch bill, and handed to a Board at Marl Colony nineteen days later. He does not appeal. He does not ask you to speak for him and you do not offer, because offering would be worse.
+
+    The Board dismisses him from the Survey in forty minutes.
+
+    *if (crew > 55)
+      What it costs you is not what you expected. Nobody is insubordinate. Nobody says a word. It is simply that for about three weeks the ship becomes extremely, immaculately correct, and you can hear it in the corridors, and there is nothing whatsoever you can do about it, and then it passes and something has been set that does not un-set.
+      *set rel_xo %-4
+      *set rel_med %-6
+    *if (crew <= 55)
+      What it buys you is real and you should not pretend otherwise. Every rating on the ship now knows exactly where the line is and that it is where the book says it is, and for the rest of the year not one person aboard tests it, and eleven months from now that will keep somebody alive.
+    *goto nineafter
+  #Summary punishment. It stays on this ship.
+    *set article_nine "summary"
+    *set rule %+8
+    *set crew %+12
+    *set candor %-14
+    *set standing %-6
+    *set kept_secret true
+    *achieve guard
+    You disrate him to Sub-Lieutenant Acting, stop three months' pay, put him off the flight roster for sixty days, and enter it in the ship's punishment book as *unauthorised use of a maintenance channel* — which is true, and which is a hundred and nineteen counts of Article Nine wearing a smaller coat.
+
+    Then you carry it. That is the part nobody explains: not the decision, the carrying. Every stores audit, every Board, every polite question from a delegate for the rest of your service, there is a book on this ship with a sentence in it that is true and not honest, and you wrote it.
+
+    *if (xo = "marand")
+      Marand countersigns because she must, and writes in her own notebook, in her own hand: *I advised otherwise.* She shows it to you. She is not threatening you. She is telling you that if it comes out, she will not lie either, and that you should plan accordingly.
+      *set rel_xo %-8
+    *if (xo = "ferreo")
+      Ferreo helps you write it and it is airtight, and afterwards he says, "Captain, I would like to be somewhere else the day this comes up," and then, immediately, "and I will not be. Forget I said it."
+      *set rel_xo %+6
+    *if (xo = "tanaka")
+      Tanaka-Osei reads the entry, hands it back, and says: "That's a good sentence. It'll hold for about three years." She eats the rest of whatever she is holding. "Three years is a long time, mind."
+      *set rel_xo %+4
+    *goto nineafter
+  #Find that no offence occurred.
+    *set article_nine "buried"
+    *set rule %+6
+    *set crew %+14
+    *set candor %-18
+    *set standing %-12
+    *set kept_secret true
+    You sign a finding that a maintenance channel was used for authorised ship's business, which is a lie, in your own hand, in a ship's book, over your own name.
+
+    It takes eleven seconds and the pen is Concord issue.
+
+    ${secname} enters it as directed. ${secThey} does not say anything at all, then or ever, and that silence becomes a small permanent object between you that neither of you refers to for the rest of the year.
+    *set rel_sec %-12
+    *goto nineafter
+  #Put it to a ship's inquiry. Three officers. I will abide by it.
+    *set article_nine "inquiry"
+    *set rule %-20
+    *set candor %+10
+    *set crew %+6
+    You convene a ship's inquiry under the same article, three officers, evidence heard, and you tell them in advance and in writing that you will abide by their finding — which the article permits and which almost no master does, because it hands away the one thing a master is for.
+
+    It sits for six hours.
+
+    *if (rule <= 40)
+      The finding is summary punishment: disrated sixty days, pay stopped, kept aboard. It is precisely the middle, and it is arrived at by three people who argued properly, and when it is read out in the wardroom it has a weight that nothing you could have said alone would have carried.
+      *set rel_xo %+10
+      *set rel_sec %+8
+      *set rel_med %+8
+    *if (rule > 40)
+      The finding is a formal charge. Two to one. You abide by it because you said you would, and Beye is handed to a Board at Marl and dismissed in forty minutes, and you sit through the whole of it having produced the outcome you were trying not to produce single-handed.
+      *set rel_xo %+6
+      *set crew %-8
+    *goto nineafter
+
+*label nineafter
+*page_break
+
+*comment ---------------- What arrives afterwards ----------------
+
+The signal from Tessine Station comes in at 1140 the following day, which is nineteen hours after you signed, and it is addressed to you.
+
+*if (halloran_regard > 55)
+  *set met_halloran false
+  **FROM: I. HALLORAN, HARBOUR PILOT, TESSINE STATION**
+  **TO: MASTER, CS PERPETUA**
+
+  *Commander — I have your signal of the eleventh. Thank you for it. You did not have to send it and I have read it several times.*
+
+  *There is a sub-lieutenant on that ship who transmits to me at 0410. I have never answered him. Answering him would have made him mine, and he is yours.*
+
+  *If you have found it, be careful what you take off him. He is the best hand I ever had, and the reason he does it is the reason he is.*
+
+  *I do not ask you for anything. I am aware I have no standing to.*
+
+  *I. Halloran.*
+
+  The signal is timestamped four days ago. It has been in the queue behind a stores manifest and a weather bulletin for four days.
+  *set halloran_regard %+10
+*if (halloran_regard <= 55)
+  It is not from Halloran.
+
+  It is from the Tessine Station harbourmaster's office, an automatic acknowledgement of receipt for one hundred and nineteen transmissions, machine-generated, addressed to nobody, which has been sitting in a queue for four months because nothing on this ship was configured to receive it.
+
+  That is the whole correspondence. One hundred and nineteen messages out and one form letter back, and the form letter is not even from a person.
+
+*page_break
+
+*choice
+  #Show it to Beye.
+    *set candor %+14
+    *set crew %+10
+    You put it in his hand and stand there while he reads it, which is either the kindest or the cruellest thing you have done since you came aboard, and you are not sure which even afterwards.
+
+    *if (halloran_regard > 55)
+      He reads it four times. At the fourth he says, "*He is yours,*" and then does not say anything else for a while, and then: "That's — thank you, Captain," which is not for the letter, and you both know it.
+      *set rel_sec %+8
+    *if (halloran_regard <= 55)
+      He reads it once and hands it back and says, "Right," and that is all. Then, at the door: "I knew, Captain. I've known since about the eleventh one." And he goes.
+    *goto nine_0410
+  #Keep it. He does not need this today.
+    *set candor %-12
+    *set rule %+10
+    *set kept_secret true
+    You put it in the drawer with the brass plate, face down, and you shut the drawer.
+
+    It is a defensible decision. It is also the second thing in nineteen hours that you have decided a twenty-four-year-old does not get to know about his own life, and the two of them sit together in the drawer.
+    *goto nine_0410
+  #Read it out in the wardroom.
+    *set candor %+12
+    *set rule %-8
+    *set crew %+6
+    You read it to your officers, all of it, standing, and the wardroom of a Meridian seats ten and there are six of you and the table is too small.
+
+    *if (article_nine = "charged")
+      Nobody says anything. ${xoname} looks at the table. Whatever any of them thought about your decision yesterday, all of them are now thinking it slightly harder, and so are you.
+      *set rel_xo %-4
+    *if (article_nine != "charged")
+      Nobody says anything for a while. Then ${medname} says, "Well," in the tone of a person setting something down, and the meeting moves on, and nothing about the atmosphere aboard this ship is quite the same afterwards, in a good way that you could not have engineered and did not.
+      *set rel_med %+8
+    *goto nine_0410
+
+*label nine_0410
+*page_break
+
+*comment ---------------- 0410 ----------------
+
+The next morning at 0410 you are awake, because of course you are, and you go up to the comms board to see what happens at 0410.
+
+Nothing happens at 0410.
+
+The board is manned by Tey Abara, twenty-two, who talked a sixteen-year-old about Sarn for two hours at the *Corvine*, and she looks up and says, "Captain?" and you say "Carry on" and stand there for a while like an idiot, and the maintenance channel stays empty.
+
+*if (article_nine = "charged")
+  Beye is in his quarters under confinement, nineteen days from a Board, and he is also awake. Everybody knows he is awake. Nobody says so.
+*if (article_nine != "charged")
+  Beye is in the number two bay with his hands inside the *Kittiwake*'s port cluster at four in the morning because he has been taken off the flight roster and there is nowhere else on this ship for him to be at 0410.
+
+*page_break
+
+*choice
+  #Take the watch beside Abara until 0500.
+    *set crew %+10
+    *set rule %-6
+    You sit down at the empty board next to the comms rating and stay there for fifty minutes, and you do not explain, and she does not ask.
+
+    At 0500 she says, "Same time tomorrow, Captain?" absolutely deadpan, and you say "Probably," and that is how the *Perpetua* acquires a tradition that nobody ever writes down.
+    *set rel_sec %+6
+    *set rel_med %+6
+    *goto nine_ship
+  #Go and find Beye in the bay.
+    *set crew %+12
+    *set nerve %+8
+    *set candor %+8
+    You find him with his hands inside a shuttle at four in the morning and you do not say anything about the transmissions, and neither does he, and for about forty minutes the two of you replace a bad seal in the *Kittiwake*'s port cluster.
+
+    At the end he says, "Captain, can I ask — do you think he's all right?"
+
+    You do not know. You tell him you do not know. It is the first completely honest thing either of you has said since Tuesday.
+    *set rel_sec %+10
+    *goto nine_ship
+  #Go back to bed. It is 0410 and I am the master of this ship.
+    *set rule %+12
+    *set crew %-8
+    *set candor %-6
+    You go back down. You do not sleep, but you go back down, because a commanding officer standing at an empty board at 0410 is a story that will be around the ship by lunchtime and will mean whatever the mess deck decides it means.
+
+    *if (nerve > 60)
+      You are right, and it costs nothing, and you are still awake at 0600.
+    *if (nerve <= 60)
+      You are right. You lie in a bunk three metres by four and you are entirely right and it does not help at all.
+    *goto nine_ship
+
+*label nine_ship
+*page_break
+
+*comment ---------------- What the ship makes of it ----------------
+*comment Reaction block: reads rule, candor, crew, standing, rel_xo.
+
+A hundred and twelve people know that something happened on Tuesday. What they know depends almost entirely on what you have let them know.
+
+*if (article_nine = "charged")
+  They know all of it, because a charge is a public act. Nineteen days from now they will watch a Board take him.
+*if (article_nine = "summary")
+  They know that Beye is off the roster for sixty days for *unauthorised use of a maintenance channel.* About a third of them work out the rest inside a week. Nobody says it out loud, and the not-saying-it becomes a thing the ship does together, which is not the same as loyalty and is close enough to be dangerous.
+*if (article_nine = "buried")
+  They know nothing, officially. Unofficially they know that ${secname} carried a folder to your cabin and that Beye came out of it grey, and the gap between those two things is the most interesting thing that has happened aboard in four months and it will be filled.
+*if (article_nine = "inquiry")
+  They know all of it, because an inquiry is heard, and three of your officers sat in judgement and were seen to, and that is the part the mess deck cannot leave alone: not what was decided, but that it was decided in the open by people they could name.
+
+*if (rule > 65)
+  What the ship has learned about you this week is that you decide. Alone, on time, and without being talked round. That is a real asset and it has a shelf life, and the shelf life is exactly as long as your decisions keep being right.
+*if (rule <= 35)
+  What the ship has learned about you this week is that you will put a thing to other people even when you do not have to. There are officers in the Survey who would call that weakness and they are not on this ship and their opinion is not available.
+*if (rule > 35) and (rule <= 65)
+  What the ship has learned about you this week is that they cannot yet predict you, which at four months is neither good nor bad and will not stay that way.
+
+*if (candor > 65)
+  Whatever else, they have not had to guess. You have said what you did and why, every time, and there is a currency in that which does not show up on any report.
+*if (candor <= 35)
+  They have had to guess, all week, about everything, and a hundred and twelve people nine days from help are extremely good at guessing and extremely bad at guessing right.
+
+*page_break
+
+*if (chap != "none")
+  ${chapname} finds you on Friday.
+  *if (chap = "wren")
+    Wren does not ask about Beye. He asks whether you have eaten, and then whether you slept on Tuesday night, and when you say no he says "Right," and sits down, and says nothing for a very long time, and the silence is not a technique; he is genuinely just sitting there.
+  *if (chap = "onu")
+    Onu arrives with a folded stack of something and says, without preamble, "You have not eaten since Tuesday and you are about to tell me you have." She is right on both counts.
+  *if (chap = "serat")
+    "You have made a decision that you will revisit," Serat says, "which is normal and which I would like you to do here rather than at 0300 for the next six weeks."
+
+  *choice
+    #Tell ${chapthem} the whole thing, including the part I did not put in the book.
+      *set candor %+12
+      *set rel_chap %+14
+      You tell ${chapthem} all of it: what you did, what you nearly did, and the eleven seconds before you signed, in which you thought about your own record and not about Beye at all.
+
+      *if (chap = "wren")
+        Wren says, "Thank you for telling me that," and then, after a while: "You know you are allowed to be a person who thought about their record. It happened. You are not required to be surprised by yourself."
+      *if (chap = "onu")
+        Onu keeps folding. "Everybody thinks about themselves for eleven seconds," she says. "The ones who worry me are the ones who take eleven minutes and call it discernment."
+      *if (chap = "serat")
+        "That is the useful part," Serat says. "Not the decision. The eleven seconds. Most captains cannot find them."
+      *goto nine_end
+    #"I am not going to discuss it."
+      *set candor %-12
+      *set rule %+8
+      *set rel_chap %-6
+      You say it politely and completely and ${chapthey} accepts it immediately, and the conversation is over in nine seconds, and ${chapthey} does not raise it again.
+
+      That last part is the problem. ${chapThey} does not raise it again.
+      *goto nine_end
+    #Ask ${chapthem} the question instead.
+      *set rule %-10
+      *set candor %+8
+      *set rel_chap %+10
+      "What was he doing," you say, "at 0410, for four months, with nobody answering?"
+
+      *if (chap = "wren")
+        "You already know," Wren says. "You went up there yourself yesterday morning and stood at an empty board." He lets that sit. "The word you are avoiding is not a Survey word and I am not going to make you say it."
+      *if (chap = "onu")
+        "Keeping faith," says Onu. "Which is not the same as being right, and which does not excuse him, and which is nevertheless the rarest thing on this ship and you have just spent a week punishing it. I do not say that as a criticism. I say it so that you know what it cost."
+      *if (chap = "serat")
+        "Managing an unbearable ending by refusing to have one," Serat says. "It is extremely common and it is not pathological. He will stop now, and the stopping is the part he has not done yet, and that is what I would watch."
+      *goto nine_end
+*if (chap = "none")
+  Nobody finds you on Friday.
+
+  You eat in the wardroom with the officers and it is fine, and you walk the ship at 2200 and it is fine, and at 0300 you are awake in a cabin three metres by four with a viewport, going through eleven seconds on a Tuesday for the fourth time, and there is nobody aboard this ship whose job it is to be told about them.
+  *achieve empty_berth
+  *set rule %+6
+  *goto nine_end
+
+*label nine_end
+*page_break
+
+*if (article_nine = "charged")
+  Nineteen days later, at Marl Colony, a Board of three takes forty minutes to dismiss Sub-Lieutenant Toma Beye from the Survey. He is twenty-four. He goes down the ramp with one bag.
+
+  ${xoname} logs the ship's complement as one hundred and eleven.
+
+  *if (sec = "mott")
+    Mott is at the top of the ramp when he goes. She says his name — his actual name, the one she gave him, which nobody else has ever heard her use — and he stops, and she says something in Karsk that she does not translate, and he goes.
+*if (article_nine != "charged")
+  Sixty days later Sub-Lieutenant Toma Beye goes back on the flight roster, and the first thing he does is bring the *Kittiwake* through a gate with eleven centimetres of clearance for no reason at all except that he can.
+
+  ${xoname} logs the ship's complement as one hundred and twelve.
+
+At 0410 the maintenance channel is empty, and it stays empty, and four hundred light years away a man who was master of this ship for nine years is piloting freighters into a station and has stopped receiving the only news he had.
+
+*finish

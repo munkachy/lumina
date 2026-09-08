@@ -1,0 +1,667 @@
+*comment ==================== CHAPTER ONE — ORDERS ====================
+*comment Establishing only. Nothing here is tested; everything here is set.
+*comment Ledger: Sarn Basin, third watch, four degrees. Halloran's name in
+*comment pencil on the particulars board. The ship is 26 years old, 112 berths.
+
+The graving dock at Sarn Basin is kept at four degrees to save power, and your breath is going out in front of you in the gallery lights.
+
+Through the glass she is eighty metres of scuffed grey and one long welded seam where somebody, years ago, put a hole in her and somebody else closed it. Two of her hull letters have been repainted and do not match. There is a scaffold up against her dorsal sensor block with nobody on it, because it is the third watch and the yard is asleep.
+
+CS *Perpetua*. Meridian class. Twenty-six years old. A hundred and twelve berths. Yours in nine hours.
+
+A dock hand goes past behind you pushing a cart with one bad wheel and does not look up. On the gallery wall there is a board with the ship's particulars stencilled on it, and a line at the bottom that reads MASTER: VACANT, and somebody has written a name over the blank in pencil and then rubbed most of it out again.
+
+You can still read it. It says Halloran.
+
+Fourteen months ago Ivo Halloran took this ship into the Ceyla system, disobeyed an order to hold and observe, and came out with nine hundred and six colonists in his cargo bays. The Survey held an inquiry. The inquiry did not publish a finding. Halloran retired at his own request, and the *Perpetua* has been in dock ever since, and now she is being given to you.
+
+You have nine hours. You could spend them asleep in the transit hostel, like a sensible officer.
+
+*page_break
+
+*choice
+  #I want to walk her before there is anybody aboard to watch me do it.
+    *set rule %+12
+    *set candor %-8
+    You take the yard's freight lift down and go aboard through the cargo hatch, which is open because nothing on this ship is worth stealing.
+
+    She is dark and she smells of cold metal and old coffee. You go the length of her twice, forward and back, with a hand light. In the aft corridor the deck plating rings differently underfoot than everywhere else — a dead note, like knocking on a full box — and you stop and do it again, and then a third time, and you decide you will find out why later and you never quite do.
+
+    By the time the yard wakes up you know where every hatch is and which ones stick. Nobody knows you were aboard. You prefer it that way and you notice that you prefer it.
+    *goto named
+  #I want to read the last two years of her log tonight. All of it.
+    *set nerve %-12
+    *set crew %-8
+    The yard office gives you a reader and a chair in a room with a broken heater. Two years is four thousand pages and you do not finish, but you get far enough.
+
+    What you find is a ship that was run well. Halloran wrote short entries in a plain hand. Fuel, weather, repairs, a birthday. Twice a year he recorded that he had heard a grievance and settled it, and did not say what it was. The entries stop being short exactly once, in the Ceyla system, and then there are eleven pages, and then a gap of six days where nothing is written at all, and then the handwriting starts again and it is the same handwriting and it is not the same man.
+
+    At 0500 you put the reader down and rub your eyes and think: whatever else is true, he was not careless.
+    *goto named
+  #I want to find whoever is still awake in this yard and ask them what they make of her.
+    *set rule %-12
+    *set crew %+10
+    You find three of them in a heated shed at the foot of the dock, eating out of tins.
+
+    They are wary for about ninety seconds and then they are not, because you sit down on a crate and let them talk. What they tell you is this: the coolant loops are original and the number two loop whistles, and every yard in the Concord has tried to stop it whistling, and the correct thing to do is nothing. Her hull is thicker than the newer ships because they built her in a bad decade. And she has been sitting here fourteen months with her power off, which is worse for a ship than a war.
+
+    One of them, an old woman with burn scars up one forearm, says: "You her new master?" You say yes. She looks at you for a while and says, "Well," and goes back to her tin, and you cannot tell whether that was a blessing.
+    *goto named
+
+*label named
+*page_break
+
+At 0800 a Concord courier finds you and asks for your name to check against the commissioning order.
+
+*input_text name
+
+Commander ${name}. Thirty-four days ago you were a lieutenant commander with a competent record and no ship. There are two hundred and fourteen ships in the Survey and eleven worlds who argue about them, and one of the two hundred and fourteen is now yours.
+
+*choice
+  #She. That is how the record reads and how the crew will say it.
+    *set pcthey "she"
+    *set pcthem "her"
+    *set pctheir "her"
+    *set pcThey "She"
+    *goto adjo
+  #He. That is how the record reads and how the crew will say it.
+    *set pcthey "he"
+    *set pcthem "him"
+    *set pctheir "his"
+    *set pcThey "He"
+    *goto adjo
+  #They. The Survey has carried the form on its rolls for sixty years.
+    *set pcthey "they"
+    *set pcthem "them"
+    *set pctheir "their"
+    *set pcThey "They"
+    *goto adjo
+
+*label adjo
+*page_break
+
+Ceron Adjo is the Concord's Delegate for the Cold Reach and he has come up from the surface in person, which is either an honour or a warning.
+
+He is sixty, tired, beautifully dressed, and he does not sit down. He gives you a folder with a real paper cover because the Concord still does that for a first command, and inside it is one page.
+
+**CS PERPETUA. STANDING ORDERS.**
+**Patrol the Cold Reach. Three member colonies, eleven independent settlements, forty light years, no other Survey vessel within nine days of any of them. Chart what is uncharted. Answer what asks. Observe Standing Order Four.**
+**You are relieved of the requirement to seek confirmation before acting. There is nobody out there to confirm you.**
+
+"That last line," Adjo says, "is not a compliment. It is a description of the budget."
+
+He looks through the gallery glass at your ship the way a man looks at a bill.
+
+*page_break
+
+There is a thing you want to ask him and about nine hours until you stop being able to.
+
+*choice
+  #"What actually happened at Ceyla?"
+    *set candor %+15
+    *set standing %-4
+    Adjo does not blink. "Nine hundred and six people are alive on Tessine Station who would otherwise be dead. Eleven weeks later the Vaunt annexed the Ceyla system, including forty-one thousand people on the second world, because Captain Halloran's ship was seen where it was not supposed to be and the Vaunt learned that the Concord had nothing out there."
+
+    "And the inquiry?"
+
+    "The inquiry established the facts and published none of them." He straightens his cuff. "Commander, I have been asked that question by better-connected people than you and I have given them a worse answer. Take the compliment."
+    *set ceyla_known 1
+    *goto why
+  #"Why is the Reach unguarded? Really."
+    *set candor %+8
+    *set rule %-6
+    "Because eleven worlds vote on where the ships go," Adjo says, "and the Reach has one delegate, and that is me, and I am not very good at it."
+
+    He says it without self-pity, which is worse.
+
+    "Ilium wants ships at Ilium. Sarn wants ships at Sarn. Every world in the Concord will tell you with total sincerity that it is defending the whole, and every one of them is defending itself, and the arithmetic of that is the Cold Reach. You are the arithmetic, Commander. Try not to take it personally."
+    *set standing %+3
+    *goto why
+  #"What am I not being told?"
+    *set candor %-6
+    *set rule %+8
+    Adjo turns and looks at you properly for the first time.
+
+    "That is a better question than the one I expected." He thinks about it. "You are not being told why you were chosen. You are not being told what the inquiry found. And you are not being told that the Vaunt have moved a cruiser into the Reach in the last five weeks, because that is in your folder on page two, which you have not read yet, because there is no page two." He almost smiles. "There will be by the time you sail. Read it."
+    *set standing %+2
+    *goto why
+  #Nothing. I will find out in my own time.
+    *set candor %-14
+    *set nerve %-6
+    You say nothing, and Adjo waits three seconds longer than is comfortable, and then nods as though you have told him something.
+
+    "Good," he says. "The ones who ask everything at the dock stop asking in the field."
+
+    You cannot tell whether he means it or whether it is a thing he says.
+    *goto why
+
+*label why
+*page_break
+
+Before he goes he says: "You will be asked, at some point, why you were given this ship. It is worth deciding what you believe about that before somebody else decides for you."
+
+*choice
+  #Because I earned it.
+    *set why "earned"
+    *set standing %+6
+    *set nerve %+6
+    You have a good record. You have never lost anyone. You sat the board twice and the second time you were better than the man who passed. That is not arrogance; it is the file.
+    *goto background
+  #Because somebody owed somebody a favour.
+    *set why "favour"
+    *set standing %+3
+    *set candor %-8
+    You are not naive about how the Survey works. Eleven worlds, two hundred and fourteen ships, and every posting in the service is a sentence in a conversation between people who have known each other for forty years. You are somewhere in that sentence. You would like to know where.
+    *goto background
+  #Because nobody else wanted the Cold Reach.
+    *set why "nobody"
+    *set standing %-6
+    *set crew %+8
+    Nine days from help. A twenty-six-year-old hull. A crew that has been sitting in dock for over a year watching their careers go cold. If this posting were desirable it would not be yours, and you find that you do not much mind, and you file that away as something to watch in yourself.
+    *goto background
+  #Because they needed somebody who would not do what Halloran did.
+    *set why "halloran"
+    *set rule %+8
+    *set crew %-8
+    Somebody in the Survey looked at your file and saw an officer who follows orders. That is why the ship is yours. It is not flattering and it is probably true, and the crew of the *Perpetua* will work it out in about a week.
+    *goto background
+
+*label background
+*page_break
+
+Adjo goes. The dock begins to wake. At 1100 you will read yourself in on the quarterdeck in front of a hundred and twelve people, most of whom served under another master for nine years.
+
+Before that, there is the small matter of who you are.
+
+*choice
+  #I came up through the science branch. I have never commanded in a fight.
+    *set background "science"
+    *set nerve %-14
+    *set rule %-10
+    *set candor %+6
+    Eleven years of survey work: spectrography, xenobiology, two seasons on an ice moon so cold the sampling rig had to be thawed with your hands. You have written forty-one papers and been shot at twice, both times by accident.
+
+    What you have is patience and a habit of not concluding early. What you do not have is the thing that happens to a person the first time they give an order that kills somebody.
+    *goto motive
+  #I was a line officer in the Border Patrol. I have.
+    *set background "line"
+    *set nerve %+16
+    *set rule %+10
+    *set crew %+4
+    Six years on the Sarn frontier in ships smaller than this one. You have boarded, been boarded, and buried four people, and you know exactly what your voice sounds like when you are frightened, because you have heard the recordings.
+
+    What you have is the ability to decide in the four seconds available. What you do not have is much practice at the other thing, the long thing, where nobody is shooting and you have to be right anyway.
+    *goto motive
+  #I was seconded to the Concord's diplomatic service for six years.
+    *set background "diplomatic"
+    *set candor %-16
+    *set rule %-6
+    *set standing %+5
+    Six years in rooms where nothing was said and everything was decided. You have sat at four treaty tables and drafted the language for two of them, and you know that a sentence can be a weapon and that the most dangerous person present is usually the one being pleasant.
+
+    What you have is the ear for it. What you do not have is any illusion left about how the Concord actually holds together, which is: barely, and by people agreeing to pretend.
+    *goto motive
+
+*label motive
+*page_break
+
+*comment ---------------- Halloran's cabin ----------------
+
+The master's cabin is three metres by four with a bunk, a desk bolted to the deck, and a viewport. Halloran left it clean. He also left it not quite empty.
+
+On the shelf above the desk there is a row of paper books, worn, none of them regulations. In the desk drawer there is a folded chart of the Ceyla system with pencil on it. And screwed to the bulkhead over the bunk, where you cannot miss it lying down, there is a small brass plate that says: *THE LEAST THAT ANSWERS.*
+
+Somebody was supposed to clear this out fourteen months ago and did not.
+
+*choice
+  #Box it all up and send it on to him. It is his.
+    *set crew %+10
+    *set candor %+6
+    You find a crate. It takes eleven minutes. You write the shipping label yourself — *I. Halloran, Tessine Station* — and when you carry it down to the cargo hatch three separate people see you doing it and nobody says a word, and by 1030 the whole ship knows.
+
+    You have no idea yet whether that was good or bad. You will find out.
+    *set rel_xo %+6
+    *goto crewpick
+  #Leave the books. Take down the brass plate.
+    *set rule %+12
+    *set nerve %+6
+    The books can stay; a ship should have books. The plate comes off with a coin.
+
+    You hold it a moment. *The least that answers.* It is the second sentence of Standing Order Four and it is the sentence that ended his career, and he screwed it to the wall where he would read it every night of nine years.
+
+    You put it in the drawer, face down, and you shut the drawer, and you do not throw it away.
+    *goto crewpick
+  #Leave everything exactly where it is.
+    *set nerve %-10
+    *set candor %-8
+    You leave the books. You leave the chart. You leave the plate on the bulkhead.
+
+    That night, and for a long time afterwards, the last thing you see before the lights go down is four words in brass, twenty centimetres from your face.
+    *set plaque true
+    *goto crewpick
+
+*label crewpick
+*page_break
+
+*comment ---------------- The senior staff ----------------
+
+At 0900 the ship's yeoman brings you the personnel slate on a reader and then stands there, because nobody has told her whether she is supposed to leave.
+
+A Meridian carries five senior posts. All five are vacant: when a master goes, the Survey scatters the wardroom, partly for good reasons and partly because it is easier than deciding which of them agreed with him. What you have instead is a candidate list — officers available in this yard, this week, who can be aboard by 1400.
+
+You get to choose them. Almost nobody in the Survey gets to choose them.
+
+"Yeoman," you say. "Sit down. You are going to be here a while."
+
+*page_break
+
+**FIRST OFFICER.** Three names.
+
+*choice
+  #Lieutenant Commander Elu Marand. Fifty-one. Passed over three times.
+    *set xo "marand"
+    *set xoname "Marand"
+    *set xothey "she"
+    *set xothem "her"
+    *set xotheir "her"
+    *set xoThey "She"
+    *set rel_xo 42
+    *set rule %-6
+    Her record is faultless and she has never been given a ship, and one of the three boards that turned her down was chaired by a man she had reported for falsifying a fuel return. She wanted the *Perpetua*. She was not offered it. She has accepted the first officer's berth within forty minutes of being asked.
+
+    When she comes aboard at 1350 she is carrying a paper notebook, and for the next year every order you give her will go into it in her own handwriting, with the time.
+    *goto engpick
+  #Lieutenant Ilya Ferreo. Thirty-four. The Survey's favourite.
+    *set xo "ferreo"
+    *set xoname "Ferreo"
+    *set xothey "he"
+    *set xothem "him"
+    *set xotheir "his"
+    *set xoThey "He"
+    *set rel_xo 62
+    *set standing %+8
+    *set candor %-6
+    Son of a Concord delegate, top of his year, and genuinely charming in the way that is not a trick — he likes people and they can tell. Every commodore in the Survey knows his first name. He has turned down two better postings to come out to the Reach, which either means he is serious or means somebody told him it would look good.
+
+    Within a day of coming aboard he knows the name of every rating on the ship, and their mothers' names, and he is not pretending.
+    *goto engpick
+  #Lieutenant Commander Bel Tanaka-Osei. Forty-three. Twelve years hauling cargo before the Survey took her.
+    *set xo "tanaka"
+    *set xoname "Tanaka-Osei"
+    *set xothey "she"
+    *set xothem "her"
+    *set xotheir "her"
+    *set xoThey "She"
+    *set rel_xo 55
+    *set crew %+8
+    *set standing %-4
+    She came into the Survey at thirty-one from the independent trade, which the Survey does not often do and does not often admit works. Her efficiency reports are a war between two kinds of officer: the ones who write *outstanding* and the ones who write *does not appear to have read the regulation.*
+
+    She eats standing up, always, at any hour, and she will offer you half of whatever it is, and it is rude to refuse.
+    *goto engpick
+
+*label engpick
+*page_break
+
+**CHIEF ENGINEER.** The number two coolant loop whistles. Somebody is going to have to live with that.
+
+*choice
+  #Warrant Officer Wen Osimo. Sixty-three. Nineteen years aboard this ship.
+    *set eng "osimo"
+    *set engname "Osimo"
+    *set engthey "he"
+    *set engthem "him"
+    *set engtheir "his"
+    *set engThey "He"
+    *set rel_eng 58
+    *set crew %+6
+    He has been aboard the *Perpetua* longer than anyone alive, through three masters, and he spent the fourteen months of the layup coming up to the dock on his own time to run her generators for an hour a week so her lines would not seize. Nobody asked him to. Nobody paid him.
+
+    He calls the ship *she* and the crew *the passengers*. He is not joking and it is not entirely a joke.
+    *goto medpick
+  #Lieutenant Priya Kallas. Twenty-nine. Brilliant, and knows the number.
+    *set eng "kallas"
+    *set engname "Kallas"
+    *set engthey "she"
+    *set engthem "her"
+    *set engtheir "her"
+    *set engThey "She"
+    *set rel_eng 50
+    *set nerve %+8
+    Two commendations and one formal reprimand, all three for the same incident. She will get you a miracle at 0300 and then explain to you, at length, in front of witnesses, the seven decisions that made the miracle necessary.
+
+    She talks faster when she is frightened. By the end of the year you will be able to tell how bad it is by her syllables per second and nothing else.
+    *goto medpick
+  #Lieutenant Anselm Dorr. Forty-four. Eight years in the Concord. Born in the Vaunt.
+    *set eng "dorr"
+    *set engname "Dorr"
+    *set engthey "he"
+    *set engthem "him"
+    *set engtheir "his"
+    *set engThey "He"
+    *set rel_eng 48
+    *set oleyo %-8
+    He is the best engineer on the list and it is not close. He is also a Vaunt defector with a Concord passport, and the Vaunt do not recognise the concept, and every conversation you ever have with a Vaunt officer will be conducted across the fact of him.
+
+    He apologises before he disagrees with you. *I am sorry — no.* You will come to hate the apology and rely absolutely on the *no*.
+    *goto medpick
+
+*label medpick
+*page_break
+
+**SHIP'S SURGEON.** Nine beds and no hospital inside nine days.
+
+*choice
+  #Surgeon Commander Hadiya Nour. Fifty-eight. Ilium famine relief.
+    *set med "nour"
+    *set medname "Nour"
+    *set medthey "she"
+    *set medthem "her"
+    *set medtheir "her"
+    *set medThey "She"
+    *set rel_med 52
+    *set crew %-4
+    *set standing %+4
+    Four years of field surgery in the Ilium camps, where at the worst of it she was signing off on who got treated by walking down a line of people and pointing. She does not talk about it and she does not pretend it did not happen.
+
+    She asks a patient's name twice — once at the start and once at the end. Ask her why and she will tell you it is a check on the anaesthetic. It is not.
+    *goto secpick
+  #Lieutenant Kip Sorrel. Thirty-one. Everybody's confessor.
+    *set med "sorrel"
+    *set medname "Sorrel"
+    *set medthey "he"
+    *set medthem "him"
+    *set medtheir "his"
+    *set medThey "He"
+    *set rel_med 66
+    *set crew %+8
+    Competent, not exceptional, and the best-liked officer you will ever have. People tell him things. Within a month he will know more about the state of your ship than you do, and he will not tell you any of it, and he will be right not to.
+
+    He remembers birthdays. The whole ship knows he remembers birthdays, which ruins the surprise and does not reduce the effect at all.
+    *goto secpick
+  #Surgeon Lieutenant Commander Teodor Vasi. Forty-nine. A researcher.
+    *set med "vasi"
+    *set medname "Vasi"
+    *set medthey "he"
+    *set medthem "him"
+    *set medtheir "his"
+    *set medThey "He"
+    *set rel_med 44
+    *set standing %+6
+    *set crew %-8
+    He took the berth for the samples. He says so in the interview, unprompted, as though it would be strange to pretend otherwise. Fifty-one published papers, two of which changed how the Concord treats burns.
+
+    He narrates his own work aloud while he does it, for the record, in a level voice. In an emergency this is the calmest sound on the ship, and afterwards, when you play the recording back, it is the worst.
+    *goto secpick
+
+*label secpick
+*page_break
+
+**SECURITY AND TACTICAL.** A survey ship is not a warship. It has four guns.
+
+*choice
+  #Lieutenant Rennick Oyelaran. Forty. Concord Marines, eleven years.
+    *set sec "oyelaran"
+    *set secname "Oyelaran"
+    *set secthey "he"
+    *set secthem "him"
+    *set sectheir "his"
+    *set secThey "He"
+    *set rel_sec 50
+    *set nerve %+6
+    He left the Marines for the Survey and he has an argument about it that he will make to anyone: that the Survey is a navy which lies to itself about what it is, and that the lie gets people killed at a rate the Concord does not publish. He is not bitter. He thinks he is being useful.
+
+    He stands when you enter a compartment. Every time. You will ask him to stop and he will say *ma'am* or *sir* or *Captain* and go on doing it.
+    *goto chappick
+  #Lieutenant Sena Whitlow. Thirty-seven. A civil investigator, not a soldier.
+    *set sec "whitlow"
+    *set secname "Whitlow"
+    *set secthey "she"
+    *set secthem "her"
+    *set sectheir "her"
+    *set secThey "She"
+    *set rel_sec 50
+    *set nerve %-8
+    *set rule %-6
+    Nine years in the Sarn magistracy investigating fraud and two homicides, then the Survey, because the Survey needed somebody who could tell whether a settlement's books were honest. She can shoot. She would rather establish what happened.
+
+    She writes nothing down while you are talking. She waits until you have completely finished, including the part you add after you think you have finished, and then she writes.
+    *goto chappick
+  #Master-at-Arms Mott. A Karsk. She will not end a life.
+    *set sec "mott"
+    *set secname "Mott"
+    *set secthey "she"
+    *set secthem "her"
+    *set sectheir "her"
+    *set secThey "She"
+    *set rel_sec 54
+    *set crew %+6
+    *set nerve %-4
+    Two and a half metres, grey, and slow to speak in any of the four languages she has. The Karsk have been in the Concord for sixty years and there are fewer than nine hundred of them in the Survey, and every one of them is under a vow that they do not explain and do not break: they will not end a life.
+
+    She names things. The corridors have names on her deck plan. The shuttles have names she gave them that are not the names painted on them. You will find out what she calls you and it will take you a week to decide how you feel about it.
+    *goto chappick
+
+*label chappick
+*page_break
+
+**CHAPLAIN.** A Meridian carries the berth. It does not require you to fill it.
+
+The compartment is on the second deck, aft of the laboratory, and it was a scanner bay until somebody cut a door in the other side of it. There are eighteen seats. Halloran filled the berth for nine years. Roughly a third of the Survey's masters do not fill it at all, and the Concord does not ask why, because on four of the eleven worlds the question would start an argument that took a generation to finish.
+
+*choice
+  #Father Tobias Wren. Forty-seven. Mass at 0600 in the old scanner bay.
+    *set chap "wren"
+    *set chapname "Wren"
+    *set chapthey "he"
+    *set chapthem "him"
+    *set chaptheir "his"
+    *set chapThey "He"
+    *set rel_chap 50
+    A parish on Sarn for eleven years and then the Survey, which he asked for twice. He is not what you expected. He is quiet, badly shaved, and interested in the ship's water reclamation to a degree that seems excessive until you understand that he is going to be aboard for a year and intends to be useful.
+
+    He will not tell you what to do. You will discover this the hard way, at about the worst possible moment, when you ask him what to do and he says nothing for eleven seconds and then asks you a question instead.
+    *goto readin
+  #Sister Adaeze Onu. Fifty-five. A nursing order. Not a priest.
+    *set chap "onu"
+    *set chapname "Onu"
+    *set chapthey "she"
+    *set chapthem "her"
+    *set chaptheir "her"
+    *set chapThey "She"
+    *set rel_chap 50
+    *set crew %+6
+    Thirty years in her order's hospitals, the last nine of them on ships. She holds a Concord medical qualification and will stand a watch in sickbay, which makes her the only officer on the list who is two people for the price of one.
+
+    She works while she talks, always — folding, sorting, checking a line, moving. She will never sit down before you do, and she will never fail to notice that you have not eaten.
+    *goto readin
+  #Counsellor Loman Serat. Thirty-eight. Survey psychological corps.
+    *set chap "serat"
+    *set chapname "Serat"
+    *set chapthey "he"
+    *set chapthem "him"
+    *set chaptheir "his"
+    *set chapThey "He"
+    *set rel_chap 50
+    *set standing %+4
+    The modern answer, and a good one: fourteen years of shipboard practice, a specialism in isolated postings, and hard numbers behind him — crews with a counsellor aboard lose fewer people to the long dark than crews without.
+
+    He has a habit of saying back to you what you just said, slightly improved. It is disarming for a month. After that you will start listening for the improvement.
+    *goto readin
+  #Nobody. The berth stays empty and the compartment stays a scanner bay.
+    *set chap "none"
+    *set chapname "—"
+    *set rule %+8
+    *set standing %-3
+    You have a hundred and twelve berths and forty light years and a ship that has been cold for fourteen months, and you would rather have another sensor technician.
+
+    The yeoman does not react. She enters it, and then she says, without looking up: "Captain Halloran kept it filled," and then she keeps typing, and you understand that this is the first thing anyone aboard has said to you about Halloran and it will not be the last.
+    *goto readin
+
+*label readin
+*page_break
+
+*comment ---------------- Reading in ----------------
+
+At 1100 you stand on the quarterdeck of your own ship and read the commissioning order aloud to a hundred and twelve people who are standing very straight and have been at sea longer than you have.
+
+It takes ninety seconds. The words are two hundred years old and most of them are about the Concord and none of them are about you. At the end you say *I relieve you* to a duty officer you have never met, and she says *I stand relieved*, and that is all there is to it. There is no music. Nobody claps. Somebody at the back coughs.
+
+Then a hundred and twelve people look at you, and it is 1101, and the rest is yours.
+
+*page_break
+
+Behind you, on the bulkhead in the corridor outside the bridge, there is a brass plaque the size of a book. Every Survey ship has one. It carries the name and one line about the person the name belongs to.
+
+**PERPETUA** — *She would not be moved, and she was not consoled, and she did not stop.*
+
+*choice
+  #Ask, right now, in front of everyone, who she was.
+    *set candor %+10
+    *set rule %-6
+    You turn around and ask.
+
+    A hundred and twelve people look at each other. Nobody knows. The ship has been in commission for twenty-six years and it turns out that this is not the kind of thing anybody asks, and now that you have asked it, everyone would like to know, and it is going to be a while before anybody finds out.
+    *if (chap != "none")
+      In the second rank, ${chapname} opens ${chaptheir} mouth and then closes it again. Not here. Not in front of the ship.
+      *set rel_chap %+6
+    *goto firstorder
+  #Read it, and say nothing, and find out later.
+    *set candor %-8
+    *set rule %+4
+    You read it twice and go on to the bridge.
+
+    It stays with you the way a line of verse stays with you, coming back at bad hours in the wrong order. *She did not stop.* You do not know who she was. There is no reason a ship's name should mean anything at all, and yet.
+    *goto firstorder
+  #It is a plaque. There is a ship to take out.
+    *set nerve %+8
+    *set candor %-6
+    Two hundred and fourteen ships, two hundred and fourteen plaques, most of them commemorating somebody who died in the Fracture for a reason that made sense at the time. You have a coolant loop that whistles and a Vaunt cruiser somewhere in your patrol area.
+
+    You go to the bridge.
+    *goto firstorder
+
+*label firstorder
+*page_break
+
+*comment ---------------- The first order ----------------
+
+The bridge of a Meridian is nine metres across and everyone in it can hear everything anybody says, which is the single most important fact about commanding one.
+
+Your helmsman is a Sub-Lieutenant named Toma Beye, twenty-four, four years aboard, and he is the only officer on the bridge who served with Halloran. He has the departure plot up and he is waiting.
+
+${xoname} is at your left shoulder with the readiness board. Eleven items green. One amber: the number two coolant loop, which whistles, and which every yard in the Concord has failed to fix, and which the correct procedure is to ignore.
+
+"Yard control has us in the window for another twenty-two minutes," ${xoname} says. "After that we wait six hours for the next one."
+
+*choice
+  #Take her out now. The loop whistles. Let it whistle.
+    *set nerve %+12
+    *set rule %+6
+    "Now, Mister Beye."
+
+    Beye takes her out of the graving dock at Sarn Basin at eleven minutes past noon, and he does it beautifully, and the number two coolant loop whistles all the way, a thin clean note somewhere under the deck, exactly the pitch of a kettle. Half the bridge hears it. Nobody says anything.
+    *if (eng = "osimo")
+      Two decks down, Osimo puts his hand flat on the housing the way you would put your hand on a horse.
+      *set rel_eng %+5
+    *goto address
+  #Hold the window. I want the loop looked at before we are nine days from a yard.
+    *set nerve %-12
+    *set rule %-4
+    *set strain -4
+    "We will take the six hours."
+
+    You watch ${xoname} decide what to write. Beye's shoulders come down half a centimetre. In the six hours ${engname} pulls the housing, finds nothing, replaces two seals that did not need replacing, and reports that the loop is in better condition than it has any right to be and will go on whistling until the ship is broken up.
+
+    You take her out at 1815 and it whistles.
+    *set rel_eng %+8
+    *goto address
+  #Ask ${xoname} what ${xothey} would do.
+    *set rule %-14
+    *set crew %+6
+    You ask. On your first day, on your own bridge, in front of the helmsman.
+
+    ${xoname} does not hesitate. "Take the window, Captain. The loop has whistled for twenty-six years, and a ship that misses her first departure window gets a name for it inside a week."
+
+    "Then take the window, Mister Beye."
+    *set rel_xo %+10
+    *if (xo = "marand")
+      Marand writes it down. The time, the question, and the answer. You will see the page a year from now and it will not say what you expect.
+    *goto address
+
+*label address
+*page_break
+
+*comment ---------------- The address ----------------
+
+Three hours out from Sarn Basin, with the world gone to a blue thumbprint astern and forty light years of thin badly charted nothing ahead, you take the intercom.
+
+A hundred and twelve people stop what they are doing. This is the one they will remember. Halloran's, nine years ago, is still quoted on the mess deck; you have heard it twice already today, and it was four sentences long and one of them was a joke.
+
+*choice
+  #Tell them the truth about where they are going and how little help there is.
+    *set candor %+15
+    *set crew %+6
+    "This is the Captain. We are going to the Cold Reach. There are three member colonies and eleven independent settlements out there and no other Survey ship within nine days of any of them, which means that when somebody out there is in trouble, the answer is this ship or there is no answer.
+
+    "I am not going to tell you that is an honour. It is arithmetic. Eleven worlds voted and this is what was left over.
+
+    "But it does mean that everything we do for the next year, we do because we did it, and not because somebody signed it. I have never had that before. Neither have most of you. Carry on."
+    *set told_crew "truth"
+    *goto endch1
+  #Tell them about Halloran.
+    *set candor %+10
+    *set crew %+10
+    *set standing %-5
+    "This is the Captain. There is a name on this ship that nobody has said out loud since I came aboard, so I am going to say it. Ivo Halloran had this bridge for nine years. Some of you would follow him through a wall. Some of you would not. Both of those are allowed on my ship.
+
+    "What is not allowed is pretending he never existed. Fourteen months of that is enough. Say his name in the mess if you want to. I have nothing to prove against a man who is not here.
+
+    "Carry on."
+
+    Later, ${xoname} tells you that the mess deck was completely silent for four seconds and then somebody laughed, once, with relief, and that you will never know who or why, and that it was the best thing that could have happened.
+    *set told_crew "halloran"
+    *set rel_xo %+8
+    *goto endch1
+  #Keep it short, correct, and about the work.
+    *set candor %-12
+    *set rule %+6
+    "This is the Captain. We are bound for the Cold Reach on a twelve-month patrol. Watch bill is posted. Departmental readiness reports to the first officer by 2000 daily. I will walk the ship at irregular hours and I would rather find things wrong than be told they are right.
+
+    "Carry on."
+
+    Forty seconds. On the mess deck somebody says, *Well, that's that,* and gets back to work, which is exactly the effect you wanted and slightly less than you hoped.
+    *set told_crew "short"
+    *goto endch1
+  #Say nothing yet. Let them wonder for a week.
+    *set candor %-18
+    *set nerve %-6
+    *set rule %+10
+    You put the handset back in its clip.
+
+    ${xoname} looks at you. You look at the plot. Forty light years of thin badly charted nothing.
+
+    On the mess deck, at 1900, a hundred and twelve people work out that there is not going to be an address, and begin — without malice, and with enormous energy — to make one up.
+    *set told_crew "silence"
+    *set standing %-4
+    *goto endch1
+
+*label endch1
+*page_break
+
+*set commissioned true
+
+At 2200 you are in the master's cabin, three metres by four, with a viewport and a desk bolted to the deck.
+
+*if (plaque)
+  Above the bunk there is a small brass plate that says *THE LEAST THAT ANSWERS*, twenty centimetres from your face.
+*if (chap != "none")
+  Somewhere aft, on the second deck, in a compartment that used to be a scanner bay, ${chapname} is finding out where the light switches are.
+*if (chap = "none")
+  Somewhere aft, on the second deck, there is a compartment with eighteen seats in it and nobody's name on the door.
+
+Under the deck, faintly, the number two coolant loop is whistling.
+
+You have a ship.
+
+*finish

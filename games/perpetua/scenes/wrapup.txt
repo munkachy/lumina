@@ -1,0 +1,318 @@
+*comment ==================== CHAPTER TWELVE — WHAT FOLLOWED ====================
+*comment No choices. Per the corpus, all three long Choice of Games titles end
+*comment with a choice-free wrap-up of 1,700-2,900 words that only reports what
+*comment the player's stats produced. The deciding is over. This chapter is
+*comment nothing but stat reads, which is also where the test budget is met.
+
+Eleven days after the ribbon came down, the council of Nadire voted.
+
+*if (nadire = "burn") or (nadire = "both")
+  *if (standing > 55)
+    Six to five against association. Warden Sela Ruys did not vote and did not need to.
+  *if (standing <= 55)
+    Six to five against association, on a division so close that the Warden had to read the count twice, and two councillors asked for their names to be recorded as having changed them in the last hour.
+*if (nadire = "station")
+  Seven to four in favour of association. The Vaunt began work on the climber track ninety-one days later and finished it in a hundred and thirty-eight, three days inside the offer, and Nadire has been an associated world ever since.
+
+  Two thousand one hundred and fifty-nine people are alive, of whom nineteen came off Station Nine in a Concord shuttle, and the other two thousand one hundred and forty came off a plot that a Vaunt cruiser burned for seventy-one minutes.
+
+  The record of that morning is complete and public in both services' archives, and it will be read for a hundred years, and it does not say what anybody expected it to say.
+
+*if (nadire_track)
+  Whatever the vote, the Vaunt built the track.
+
+  Sar Vehn Oleyo put it to his government eleven times over three years and it failed ten times, and the eleventh time it did not, and the climber ran again on the two thousand and ninth day. There is no association agreement. There is a plaque at the nine-hundred-kilometre station in two languages and it does not explain anything.
+
+*page_break
+
+*comment ---------------- The ship ----------------
+
+The *Perpetua* was surveyed at Marl Colony and again at Sarn Basin.
+
+*if (strain >= 70)
+  The finding was that the number three grapple mount and eleven metres of primary frame were beyond economical repair on a twenty-six-year-old Meridian, and that the cost of putting her right exceeded her replacement value by a factor of four.
+
+  She was paid off eleven months later. The Survey does not scrap Meridians; it sells them, and she went to a Sarnese ore consortium who took the guns off, put a bigger reactor in, and are running her still.
+
+  The plaque came off the bulkhead outside the bridge before she went, as the regulation requires, and was sent to the Survey's naming board on Ilium, where it sits in a drawer with two hundred and nine others waiting for a hull.
+*if (strain >= 40) and (strain < 70)
+  The finding was that she could be repaired and that it would take nineteen months in a yard she could not reach under her own power.
+
+  She was towed to Sarn Basin, which took eleven weeks, and she came out of the graving dock with a new frame section, a number three grapple mount from a class that had not been built for eleven years, and a number two coolant loop that still whistles.
+*if (strain < 40)
+  The finding was that she had been worked hard and honestly and would go on for another decade.
+
+  She came out of the Marl yard in seven weeks with a straightened mount, two new frame members, and a number two coolant loop which the Marl yard also failed to stop whistling, bringing the total number of yards in the Concord that have failed to stop it whistling to eleven.
+
+*page_break
+
+*comment ---------------- Your officers ----------------
+
+*if (rel_xo > 70)
+  ${xoname} was given a command of ${xotheir} own within the year and asked for the Cold Reach and got it, and the two of you have overlapped in the same system four times since, and on each occasion have found something that needed doing together.
+  *if (xo = "marand")
+    Marand's notebook — the paper one, in her own hand, with every order you ever gave her and the time — was submitted whole to the Survey's archive when she took her own ship, with a covering note eleven words long: *This is how a first command actually looks. It should be kept.*
+  *if (xo = "ferreo")
+    Ferreo refused a staff appointment on Ilium that his father had arranged and did not tell his father why, and told you instead, at a dock, in one sentence, and then changed the subject and would not go back to it.
+  *if (xo = "tanaka")
+    Tanaka-Osei's first act as a master was to abolish the wardroom's seating order on her own ship, which the Survey has been arguing about ever since, and which she attributes entirely to a meeting on the *Perpetua* that ran eleven minutes over.
+*if (rel_xo > 45) and (rel_xo <= 70)
+  ${xoname} served out the commission, wrote you a correct and generous efficiency report, and took a berth on another ship. You exchange signals at the turn of the year. Neither of you has ever raised Sedge.
+*if (rel_xo <= 45)
+  ${xoname} applied for transfer at the end of the commission and gave *personal* as the reason on the form, which is what the form is for and which tells you nothing, and you have not asked.
+  *if (xo = "marand")
+    Marand's notebook went with her. You have wondered about the marginal marks for years.
+
+*if (rel_eng > 70)
+  ${engname} would not leave the ship.
+  *if (eng = "osimo")
+    Osimo had nineteen years aboard when you arrived and he has more now, and when she was surveyed he stood at the number three mount with the yard's inspector and argued for four hours, and won, or did not, and either way he was still aboard the day she left the dock.
+  *if (eng = "kallas")
+    Kallas was offered a design berth at Sarn Basin at twenty-nine, which is unheard of, and turned it down twice, and the second refusal is on the file and says only: *The ship is not finished.*
+  *if (eng = "dorr")
+    Dorr took Concord citizenship in the spring. He asked you to stand for him, which requires a serving officer, and at the moment in the ceremony where the candidate is asked to state what he is leaving he said, "A very good service that has nowhere to put certain things," and the registrar had to ask him to repeat it for the record.
+*if (rel_eng <= 70)
+  ${engname} served out the commission and moved on, and the number two coolant loop went on whistling, and that is the sum of what can honestly be said.
+
+*if (rel_med > 70)
+  ${medname} finished the commission with no deaths from illness aboard in twelve months, which on a ship nine days from a hospital is not luck.
+  *if (med = "nour")
+    Nour retired at sixty and teaches field triage on Ilium, and begins the first lecture of every course by making a hall of two hundred students say a patient's name out loud twice, once at the start and once at the end, and does not explain why until the last lecture.
+  *if (med = "sorrel")
+    Sorrel is still remembering birthdays, on a bigger ship, where it has become a minor institution and a considerable administrative problem.
+  *if (med = "vasi")
+    Vasi published four papers off the commission and the third one is the reason Concord field surgery changed in the Reach, and its acknowledgements name every officer of the *Perpetua* by rank and post and not one of them by their first name.
+*if (rel_med <= 70)
+  ${medname} served out the commission competently and reported twice daily and left at Sarn Basin, and you never had a conversation with ${medthem} that was not a report.
+
+*if (rel_sec > 70)
+  ${secname} stayed with the ship as long as there was a ship.
+  *if (sec = "oyelaran")
+    Oyelaran never stopped standing when you came into a compartment. On the last day of the commission he did it in an empty corridor, alone, with nobody to see it, and then went down the ramp.
+  *if (sec = "whitlow")
+    Whitlow's report on the Fold's flooded seed store at Sedge — eleven pages, no conclusions, every fact checked twice — is still the document the Concord cites when anybody argues about what happened on that world.
+  *if (sec = "mott")
+    Mott gave you your name in the last week, out loud, in Karsk, in front of the ship. She translated it once and only once and you have never repeated it to anybody.
+*if (rel_sec <= 70)
+  ${secname} served out the commission, filed everything correctly, and went to another ship, and the two of you shook hands at the ramp.
+
+*if (chap != "none")
+  *if (rel_chap > 70)
+    ${chapname} stayed to the end and then asked for another survey ship in the Reach, which nobody asks for.
+    *if (chap = "wren")
+      Wren said Mass at 0600 in the old scanner bay for the whole commission, most mornings to four people and once, after Nadire, to sixty-one, and he never once mentioned the sixty-one.
+    *if (chap = "onu")
+      Onu's order recalled her twice and she wrote back twice, and the second letter is quoted in her order's chapter records: *There are a hundred and twelve of them and nine days to anywhere. I am where I was sent.*
+    *if (chap = "serat")
+      Serat's report on isolated-posting psychology in the Cold Reach ran to ninety pages and named no individuals, and the Survey adopted eleven of its fourteen recommendations, and the three it declined were the three about masters.
+  *if (rel_chap <= 70)
+    ${chapname} served the commission and was transferred at its end, and the compartment aft of the laboratory went back to being a scanner bay for eleven weeks until the next one arrived.
+*if (chap = "none")
+  The compartment aft of the laboratory was a scanner bay for the whole of the commission.
+
+  It had eighteen seats in it, because nobody ever took them out, and by the end of the year the ship had worked out on its own what the compartment was for: a place with hard walls where the Long Note sounded well, and where people went at odd hours and sat, and where nobody organised anything and nobody was in charge.
+
+  You did not put a stop to it. That is the most you ever did about it.
+  *achieve empty_berth
+
+*page_break
+
+*comment ---------------- Beye ----------------
+
+*if (article_nine = "charged")
+  Toma Beye is a harbour pilot on Tessine Station. He took his second-grade licence at twenty-six and his first at thirty, which is fast, and he cons ships through four lanes and a sixty-year debris shell and he is very good at it.
+
+  He has never applied for reinstatement. The Survey has a procedure and he knows it exists.
+
+  He brings the *Perpetua* in every time she calls at Tessine, and hands her back at the eleventh kilometre, and says *ship is on your hands, Captain* in exactly the voice his teacher uses.
+*if (article_nine = "summary") or (article_nine = "buried")
+  Toma Beye made lieutenant at twenty-seven, which is on time, and has a ship's flight department of his own now, and there is a sentence in a punishment book on a hull that belongs to a Sarnese ore consortium — or in a Survey archive, or in a drawer on Ilium — which is true and not honest, and which you wrote.
+
+  *if (board_verdict = "referred")
+    You told the Board. It is in the open, it cost you what it cost you, and it is finished.
+  *if (board_verdict != "referred")
+    Nobody has ever asked. It has been eleven years. Nobody is going to ask.
+
+    That is not the same as it being over, and you have had a long time to find out how it is different.
+*if (article_nine = "inquiry")
+  Toma Beye's ship's inquiry is cited in the Survey's disciplinary commentary as the only recorded instance in forty years of a master binding himself to a finding in advance under Article Nine.
+
+  The commentary is not entirely approving. It uses the word *irregular* twice and the word *courageous* once, and it does not say which of the three officers wrote it.
+
+*page_break
+
+*comment ---------------- Halloran ----------------
+
+*if (halloran_regard > 75)
+  Ivo Halloran answered Sar Vehn Oleyo's fourth letter.
+
+  He never told you what he said. Oleyo never told you what he said. What is known is that eleven months after Nadire, Halloran left the harbourmaster's office at Tessine Station and took a post at the Survey's academy on Sarn teaching one course, on Standing Order Four, which he had been offered four times and refused four times.
+
+  The course is compulsory. It runs eleven weeks. He begins it, every year, by telling two hundred cadets that the rule is right, that he broke it, that he would break it again, that it should still stand and that he should have been relieved — and then he stops talking and lets them argue, and does not settle it, and has never settled it, and says at the end of the eleventh week that if any of them has settled it they have not understood the question.
+
+  He has never once mentioned your name in that hall. You know this because a cadet wrote to tell you so, assuming it was an oversight.
+*if (halloran_regard > 45) and (halloran_regard <= 75)
+  Ivo Halloran piloted freighters at Tessine Station for another four years and then took a compartment on the six spoke among the eight hundred and stopped renewing his contract.
+
+  He writes to you at the turn of the year. Four lines, position and condition and the state of the lanes, in a plain hand, like a log.
+
+  He has never asked how the ship is. He does not need to; it is in the bulletins, and he reads them.
+*if (halloran_regard <= 45)
+  Ivo Halloran is a harbour pilot, third grade, on Tessine Station, on a contract he renews every six months.
+
+  You have not spoken since the eleventh kilometre.
+
+*if (ceyla_known >= 3)
+  The nine hundred and six are still on the six spoke. Meris Ando died at sixty-eight without ever having forgiven him and without ever having said he was wrong, which she considered two separate positions and held both to the end.
+*if (ceyla_known < 3)
+  The nine hundred and six are still on the six spoke, and the Survey's official account of the Ceyla evacuation still does not mention that the council of Ceyla III voted six to three to stay.
+
+*page_break
+
+*comment ---------------- Sedge, Kem, Ossa ----------------
+
+*if (sedge = "held")
+  Sedge came through the blight smaller and independent. Three hundred and eighty-one people died in the consolidation winter. The Fold rejoined the Landing in the spring on the council's terms and Cassa Doon left the world entirely.
+
+  Nobody on Sedge has ever thanked the Concord and nobody on Sedge has ever been governed by it, and both of those are still true, and will be in a hundred years.
+*if (sedge = "water")
+  Sedge came through. A hundred and ninety people died. The water plant at the Fold ran for nineteen years and was replaced by a better one built on the world.
+
+  Speaker Vane's note of thanks is in your file. It is still the most uncomfortable piece of paper you have ever received.
+*if (sedge = "gave")
+  Sedge came through and the Fold is still there, watered, fed, and separate, eleven years on, and the council of Sedge can still name the ship.
+
+  Forty people died that winter. Speaker Idris Vane's nine-page protest is in the Concord's archive and every fact in it is correct, and it is taught, and you have read the teaching notes.
+*if (sedge = "council")
+  Sedge came through. Ninety-six people died. The Fold voted narrowly to rejoin in the spring and Cassa Doon voted against and lost and stayed.
+
+  Sedge believes it made a plan and the plan worked. That is the outcome you engineered and it has given you nothing to hold, and you have noticed that this is what a rule that works actually feels like from the inside.
+
+*if (kem_burn)
+  Kem Station is eleven thousand tonnes of scrap in a decaying orbit and the Concord is still arguing about who clears it. The colony below lost two hundred and forty people over two winters and has a temporary plant now and a permanent one costed and unfunded.
+
+  Four hundred and eleven people came off that station. Ovan Rask never spoke to you again and wrote, eleven years later, a memoir in which he says, in one sentence on page two hundred and nine, that you were right.
+*if (kem_burn = false)
+  Kem Station's number one separator hall was rebuilt in eleven months and the colony below did not go cold.
+  *if (kem_pc)
+    The Survey's regulations were amended two years later to prohibit the commanding officer of a vessel from entering a hazardous space in a rescue where a qualified subordinate is available. It is not named after you. Everybody knows.
+  *if (kem_vol)
+    Ines Halloway, pipe fitter, got the valve replaced. It took her four more years and a change of station council.
+
+*if (quiet_named)
+  Ossa still rings, at exactly the pitch it has held for three hundred million years, once every eleven days, for sixty hours, with nobody in the system.
+
+  The recording made at 0410 on a Tuesday is in the Survey's general library and has been played, at the last count, four hundred and eleven thousand times.
+  *achieve least
+*if (quiet_named = false)
+  Ossa still rings, one part in nine thousand flat, and the data from the bore is cited in eighty-one papers, and the *before* recording made at 0410 on a Tuesday is the only object in the Concord that knows the difference.
+
+*page_break
+
+*comment ---------------- The four lines ----------------
+*comment The service record, read back. Neither end of a pair is the good end.
+
+Eleven years later, somebody at the Survey's academy will pull your first commission out of the archive to make a point to two hundred cadets, and this is what they will find.
+
+*if (nerve > 78)
+  **Nerve.** A master who moved. Every time, first, and usually before the instruments had finished. It worked, mostly. The file does not record what it cost the people who had to keep up, because files do not.
+  *achieve nerve
+*if (nerve < 22)
+  **Restraint.** A master who waited. The file is full of fourteen-minute pauses and structural reads and second opinions, and of things that did not go wrong, which is the hardest kind of achievement to see in an archive.
+  *achieve restraint
+*if (nerve >= 22) and (nerve <= 78)
+  **Nerve and Restraint.** A master who moved when it was worth it and waited when it was not, which reads in an archive as inconsistency and was not.
+
+*if (candor > 78)
+  **Candour.** Everything is in the logs. The doubts, the eleven seconds before signing, the parts that damage you. Four assessors have called it reckless and two have called it the most useful set of documents in the Reach.
+  *achieve candour
+*if (candor < 22)
+  **Guard.** The logs are complete, accurate, and airless, and there is not one sentence in twelve months from which a reader could tell what the master of this ship thought about anything. Some of what you carried, you carried alone the whole way, and it is not in the archive because you put it nowhere.
+  *achieve guard
+*if (candor >= 22) and (candor <= 78)
+  **Candour and Guard.** You said what could be said and kept what had to be kept, and the line between them moved, and you moved it, and the file cannot show that.
+
+*if (crew > 78)
+  **Crew.** A hundred and twelve people, and you brought them. The file records four commendations, one transfer request, and an anomalous figure in the twelve-month personnel return: not one voluntary separation from a survey ship nine days from anywhere.
+  *achieve crewfirst
+*if (crew < 22)
+  **Mission.** The work got done. Every time, completely, at whatever it cost, and the archive is full of finished things, and somebody in the wardroom of another ship is still telling a story about you that is not entirely affectionate and is not wrong.
+  *achieve missionfirst
+*if (crew >= 22) and (crew <= 78)
+  **Crew and Mission.** You spent the year finding out that these are the same axis and that no captain gets to stand at one end of it, which is the thing the academy cannot teach and sends people to the Reach to learn.
+
+*if (rule > 78)
+  **Rule.** You decided. Alone, on time, in the dark, and you signed all of it, and the wardroom of the *Perpetua* was a place where five very good officers were listened to and overruled.
+  *achieve ruler
+*if (rule < 22)
+  **Counsel.** You asked. The first officer, the engineer, the chaplain, a comms rating of twenty-two, three hundred and forty refugees, and once a whole ship in writing — and then you signed, because that part does not transfer, and the archive shows only the signature.
+  *achieve counsel
+*if (rule >= 22) and (rule <= 78)
+  **Rule and Counsel.** You took it round the table and then you decided, and on the four occasions that mattered you did one of those much better than the other, and the file does not say which.
+
+*page_break
+
+*comment ---------------- You ----------------
+
+*if (board_verdict = "referred") and (standing > 55)
+  The disciplinary file opened at Marl Colony was closed after four years without a finding, which is what happens to a file about an officer who brought the matter forward voluntarily and then did something at Nadire.
+
+  You were given a second command.
+*if (board_verdict = "referred") and (standing <= 55)
+  The disciplinary file opened at Marl Colony was closed after six years without a finding.
+
+  You were not given a second command for nine years, and then you were, and it was a good one, and by then you had stopped expecting it, which people who know you say was the making of you.
+*if (board_verdict != "referred") and (standing > 70)
+  You were given a second command inside the year and a third after that, and at forty-nine you were asked to sit on the Survey's naming board on Ilium, which is a nothing post that everybody wants, and you took it.
+
+  There are two hundred and nine plaques in a drawer on Ilium waiting for hulls. You have read all of them.
+*if (board_verdict != "referred") and (standing > 45) and (standing <= 70)
+  You were given a second command in the ordinary course, and then another, and you served twenty-two more years, and the Cold Reach got its heavy yard vessel in the nineteenth of them, and you were at four sessions where the argument was made and you made it at two.
+*if (board_verdict != "referred") and (standing <= 45)
+  You served out three more commissions in the Reach and were never posted anywhere else, which was not a punishment and was not entirely an accident either.
+
+  There are eleven settlements out there and three colonies and every one of them knows your ship. That turns out to be a career. It is not the one the academy describes.
+
+*page_break
+
+*if (plaque)
+  On the bulkhead in the corridor outside the bridge, for as long as there was a bridge, there was a brass plaque the size of a book.
+
+  **PERPETUA** — *She would not be moved, and she was not consoled, and she did not stop.*
+
+  A young woman under arrest a very long time ago, whose father came to her three times and begged, the third time on his knees with her child in his arms, and who would not say the sentence that would have freed her, and who wrote down what she said to him instead.
+
+  Somebody on a naming board a hundred and forty years ago wanted a ship that meant *a person can refuse.*
+
+  You found out who she was. It took you nine months and it took asking, out loud, in front of people, which is the only way anybody ever finds out anything.
+*if (plaque = false)
+  On the bulkhead in the corridor outside the bridge there was a brass plaque the size of a book.
+
+  **PERPETUA** — *She would not be moved, and she was not consoled, and she did not stop.*
+
+  You never found out who she was.
+
+  You asked eleven people over twelve months and none of them knew, and one man four hundred light years away had looked it up in his first week and would have told you in a sentence, and you did not ask him, and the plaque went into a drawer on Ilium with two hundred and nine others.
+
+*if (rel_xo > 60) and (rel_eng > 60) and (rel_med > 60) and (rel_sec > 60)
+  *if (chap = "none")
+    *achieve whole_crew
+  *if (rel_chap > 60)
+    *achieve whole_crew
+
+*if (oleyo > 78)
+  *achieve oleyo_respect
+*if (ceyla_known >= 3) and (met_halloran)
+  *achieve halloran
+*if (nadire_saved >= 2159) and (kem_dead = 0) and (sedge_dead <= 96)
+  *achieve noone_lost
+
+*page_break
+
+The *Perpetua* was in commission for twenty-six years before you and for as long afterwards as she was allowed, and eleven masters had her, and you were the ninth.
+
+She was eighty metres of scuffed grey with one long welded seam where somebody put a hole in her and somebody else closed it, and she yawed to port under braking because of that weld, and her number two coolant loop whistled at exactly the pitch of a kettle, and every yard in the Concord failed to stop it.
+
+You had her for a year.
+
+*ending

@@ -1,0 +1,277 @@
+*comment ============================================================
+*comment SCENE NINE — THE PERMISSION SLIP
+*comment 1997–98, ages 22–23. ~1,700 words, 10 choices.
+*comment Job: he does not read his way into contempt. He is already
+*comment contemptuous and goes looking for something that dignifies it.
+*comment The philosopher is never named.
+*comment ============================================================
+
+*comment ---- 9.1 : forty seconds in a bar ----
+
+There is a bar on Forbes with a shuffleboard table nobody uses and it is the second week of November, 1997.
+
+Adam is there with three other people, one of whom he half knows, and one of whom is a graduate student in something, twenty-six, teaching two sections of an introductory course and holding forth about it, three drinks in.
+
+He is not a bad man. He is not even wrong about most of what he says. He is twenty-six and he has just been given an idea to hold and he is holding it the way you hold a new tool, turning it over, showing it to people.
+
+*page_break
+
+And at some point in the evening he says a sentence.
+
+It is about Christian morality. It is roughly that the whole apparatus was put together by people who could not do anything and needed a reason why not doing it was better — that what gets called virtue is very often just an inability with a flag stuck in it.
+
+He says it as an aside. He is not making an argument; he is repeating one, and he is repeating it slightly wrong, and he will not think about it again after Thursday.
+
+*page_break
+
+Adam Kowalczyk is twenty-two years old and is not, and never becomes, an intellectual.
+
+He does not read the book. He never reads the book. He could not tell you the name of the man who wrote it and by 2003 he could not tell you the name of the graduate student either.
+
+*page_break
+
+What he takes home is the *sentence.*
+
+And the sentence fits — not into an argument, because he does not have one, but into a shape that has been sitting empty in him since about April of 1996, waiting for exactly this size of thing.
+
+*page_break
+
+*comment ---- what she can see, and what it costs to see it ----
+
+"He didn't even —" you say. "He wasn't *convinced* of anything. He was standing next to a man with a beer."
+
+"No."
+
+"That's it? That's the whole conversion? A *pub*?"
+
+"He was not converted," your angel says. "Nothing about him changed on the ninth of November. He has believed the substance of that sentence since he was twenty-one and could not say it out loud, because when you say it out loud without a philosopher behind it, it sounds like what it is."
+
+*page_break
+
+"Which is what?"
+
+"*I am better than the people who do not do what I do.*"
+
+*page_break
+
+You think about that for a while, standing in a bar on Forbes Avenue in 1997.
+
+"That's it," you say. "That's the whole of the thing you told me about at the kitchen table."
+
+"Yes."
+
+"He got the contempt first and the reason afterwards."
+
+"Two years afterwards," your angel says. "Nearly to the week."
+
+*page_break
+
+*choice
+  #"Get him out of this bar."
+    You get him out. He leaves at eleven with a headache.
+    *line_break
+    *line_break
+    Two years later a television programme says roughly the same thing, better, at nine o'clock on a Tuesday, to a man sitting alone on a sofa. And in 2003 a coworker says a cruder version of it in a break room. And in 2007 it comes at him from four directions in one year and by then it is simply the water.
+    *line_break
+    *line_break
+    "You cannot take him out of a country," your angel says.
+    *set valor %+20
+    *set hope %-10
+    *goto slip_two
+
+  #"Can we argue with it?"
+    "With what? He has not made a claim. He has acquired a posture."
+    *line_break
+    *line_break
+    "So we can't —"
+    *line_break
+    *line_break
+    "You cannot refute a posture," it says. "You can only outlast one, and I would like you to hear how long that sentence is."
+    *set severity %+15
+    *goto slip_two
+
+  #"Is any of it true?"
+    You did not expect to ask that. It comes out anyway.
+    *line_break
+    *line_break
+    "Some of it describes something real," your angel says, without any hesitation at all. "There are people who call their limits virtues. You have met several. One of them ran the September festival."
+    *line_break
+    *line_break
+    "So the man in the bar —"
+    *line_break
+    *line_break
+    "Has correctly identified a thing that exists, and has drawn from it a conclusion about the whole world, and that second part is where it goes wrong, and nobody in that bar is going to say so, including me, because it is not my office and I have no mouth."
+    *set charity %+20
+    *set hope %+5
+    *goto slip_two
+
+*label slip_two
+
+*page_break
+
+*comment ---- 9.2 : what Legion does with it ----
+
+And here is the part that takes you a while to notice.
+
+They do almost nothing.
+
+*page_break
+
+They did not put the graduate student in the bar. They did not write the book, or the television programme, or the thing the coworker said in 2003. They did not construct one sentence of the argument and they could not have; they are not clever enough and they never were.
+
+What they have done, since 1975, is one thing, patiently, over and over, in the dark, at four in the morning, and they have let a young man build every single other part of it himself.
+
+*page_break
+
+"That's not fair," you say. "That's — he's *building his own*."
+
+"Yes."
+
+"They're barely *doing* anything."
+
+"They have never had to do very much," your angel says. "That is the thing about them that nobody believes until they have watched it for twenty years."
+
+*page_break
+
+*comment ---- 9.3 : the breakup. 1998, age twenty-three ----
+
+He ends it in June.
+
+He does it cleanly. He does it in a car outside her mother's house on a Sunday afternoon, and he is not cruel, and he does not lie, and he does not drag it out, and he says several things that are true.
+
+He says that he is not the person she thinks. He says that she deserves somebody who is actually there. He says that stringing her along would be worse and that he is not going to do that to her.
+
+*page_break
+
+And for the rest of his life — for the next twenty-six years, in three apartments and two other relationships — this is going to be the thing Adam Kowalczyk tells himself when he needs to feel like a decent man.
+
+*I told her the truth. It cost me everything and I told her the truth.*
+
+*page_break
+
+Renee Sobek is twenty-three years old and has known him since she was nine and she sits in a car outside her mother's house and cannot work out what she is being told or why it is happening today.
+
+*page_break
+
+*comment ---- and the machine does not make a sound ----
+
+And now look at the panel.
+
+Look at the boy who went to confession four Saturdays running in 1990 because he was not sure he had said it properly. Look at the boy who pointed at the floor forty times a day for four years so that an accident would not go on a list.
+
+*page_break
+
+Nothing. Not one thing. Not that afternoon, not that week, not once in twenty-six years.
+
+*page_break
+
+"He feels *fine*," you say. "He feels — my God, he feels *good* about it."
+
+"Yes."
+
+"After all that. After four years of grinding himself into powder over —"
+
+"Over something he did not choose and may not be answerable for," your angel says. "And nothing at all over this, which he chose entirely, in a car, in the afternoon, awake."
+
+*page_break
+
+"It's broken," you say. "The whole thing in him is broken."
+
+"It is not broken. It was bent, when he was nine, in a direction, and it has been very loud ever since about the things it was bent toward and silent about everything else." A pause. "You have been calling it a conscience. It is closer to a compass with a magnet next to it."
+
+*page_break
+
+*choice
+  #"Then it's not his fault."
+    "Some of it is not. Some of it is entirely his and it is the part he feels best about." Your angel does not soften it. "That is the shape of nearly everybody, ${name}. You are not looking at anything unusual. You are looking at a man."
+    *set severity %+15
+    *set charity %+10
+    *goto breakup_end
+
+  #"Can we fix a conscience?"
+    "Not from out here. It gets straightened by another person, over time, saying true things kindly, and being believed." A pause. "There is a man who will do it in 2018 and it will take him ninety seconds and he will never know he did it."
+    *line_break
+    *line_break
+    "*Twenty years.*"
+    *line_break
+    *line_break
+    "Twenty years," it agrees.
+    *set hope %-10
+    *set charity %+15
+    *goto breakup_end
+
+  #Look at Renee.
+    She goes inside. Her mother is out. She does not cry for about forty minutes and then she does, in a bathroom, with the taps on, which is a thing she learned to do in her father's house.
+    *line_break
+    *line_break
+    Her angel is in there with her, and it has been in there with her since 1975, and it is doing something you cannot see and would not be able to describe if you could.
+    *set charity %+25
+    *set hope %-5
+    *goto breakup_end
+
+*label breakup_end
+
+*page_break
+
+*comment ---- 9.4 : her angel goes ----
+
+In September she takes a post in Columbus, because a friend from the programme is going and because there is nothing keeping her in Pittsburgh, and that second part is new.
+
+Her angel goes with her. Obviously. That is where she is.
+
+*page_break
+
+It stops in a doorway on the way out — the same doorway, on Dobson Street, where the two of them stood in 1985 and nodded and said nothing for four years.
+
+And it hands one thing over.
+
+*page_break
+
+It is not an accusation. That is what undoes you. There is nothing in it of blame at all — it is simply the fact, handed over entire, the way they do, and it is:
+
+*line_break
+*line_break
+*She would have stayed.*
+*line_break
+*line_break
+
+*page_break
+
+*choice
+  #"I know."
+    You know. You have known since the ninth of March, 1996.
+    *set severity %+10
+    *set hope %-15
+    *goto gone
+
+  #"So would we."
+    Your angel says it for you and the other angel receives it and there is a moment there — you will never be sure of this and you will think about it for twenty-six years — where something passes between the two of them that is not information.
+    *set charity %+25
+    *set hope %+10
+    *goto gone
+
+  #"Tell it I'm sorry."
+    "It knows," your angel says. "It knew before you did. It cannot be lied to and it cannot be apologised to either, not usefully, because it already has the whole of it."
+    *line_break
+    *line_break
+    "Tell it anyway."
+    *line_break
+    *line_break
+    Your angel tells it anyway.
+    *set charity %+20
+    *set splendor %-10
+    *goto gone
+
+  #Say nothing.
+    You say nothing. The other angel waits a moment, which it did not have to do, and then it goes.
+    *set valor %-20
+    *set hope %-10
+    *goto gone
+
+*label gone
+
+*page_break
+
+And then there is one angel on Dobson Street instead of two, and there has been one angel on Dobson Street instead of two for twenty-six years, and the roof is empty because the last of the birds went in 1994.
+
+*finish

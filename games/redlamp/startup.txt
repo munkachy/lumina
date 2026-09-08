@@ -1,0 +1,63 @@
+*title The Red Lamp
+*subtitle St. Wenceslaus, Braddock Avenue
+*author Scriptorium
+
+*scene_list
+  one_door
+  two_night
+  three_dawn
+
+*comment ---------------- THE ONLY STATE THIS STORY KEEPS ----------------
+*comment No stats. No character sheet. Three facts, and the reader's memory.
+
+*comment You found the 1900-1909 register in the sacristy and read your own name.
+*create name false
+
+*comment You drank tonight. Irreversible. Locks every good ending.
+*create fed false
+
+*comment You made an act of perfect contrition. Changes the dawn and nothing else.
+*create contrite false
+
+*comment ---------------- ACHIEVEMENTS ----------------
+*achievement ondrej visible 50 Ondrej
+  Find out what you were called.
+  Found your own name in a green cloth book, written in 1904 by a man with good handwriting.
+
+*achievement stole visible 25 The Purple Stole
+  Sit in the box on the wrong side of the screen.
+  Sat where the priest sits, in the dark, with a stole on a nail beside you.
+
+*achievement rope visible 25 Ninety-One Steps
+  Go all the way up.
+  Went up ninety-one steps to look at a bell nobody has rung since 1974.
+
+*achievement kubica visible 25 Fr. Kubica
+  Find the man behind the plywood.
+  Found the founding pastor where they left him in 1931, which was a busy year for you both.
+
+*achievement thermos visible 25 Half the Thermos
+  Accept something from Verna Sowka.
+  Accepted tea from a seventy-nine-year-old woman who was frightened of you and poured it anyway.
+
+*achievement decade visible 50 One Decade
+  Say something with her.
+  Said ten of them with a woman whose beads are worn to the string on exactly one decade.
+
+*achievement contrition visible 100 Perfect Contrition
+  Be sorry for the right reason.
+  Was sorry because of who was offended, and not because of what was coming.
+
+*achievement absolved visible 100 Absolved
+  Reach 5:40 and go to the man with the keys.
+  Confessed ninety-four years to a tired priest in thirty-four minutes and was forgiven.
+
+*achievement dawn visible 100 A Happy Death
+  Be in the nave at 6:14 with nothing owing.
+  Was in the fourth pew on the Mary side when the light came down Braddock Avenue.
+
+*achievement allnight hidden 50 Nothing Owing
+  ---
+  Went the whole night without taking anything from anybody.
+
+*goto_scene one_door
