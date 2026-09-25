@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lumina — Holy Bible &amp; Catechism</title>
-<meta name="description" content="Lumina: a contemplative Catholic reader. Six Bible translations and the Grail Psalms, the Psalm Tree, the Catechism, daily Mass readings, favorites, highlights, search, summaries, and reading plans.">
+<meta name="description" content="Lumina: a contemplative Catholic reader. Six Bible translations and the Grail Psalms, the Psalm and Gospel Trees, the Catechism, daily Mass readings, favorites, highlights, search, summaries, and reading plans.">
 <meta name="theme-color" content="#f3ead8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f3ead8'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%238a6d1f' font-family='Georgia'%3E%E2%9C%A0%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -276,6 +276,8 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
   font-family:"Cormorant Garamond",Georgia,serif}
 .v.hl{background:var(--highlight); box-shadow:inset 0 0 0 1px var(--gold-line)}
 .v.stz{margin-top:1.5em}
+.gl{white-space:normal}
+.gl::before{content:"·"; color:var(--ink-faint); margin:0 .15em 0 .3em; font-weight:600}
 .v .inbrief{font-variant:small-caps; letter-spacing:.14em; color:var(--rubric); font-size:.8em; margin-right:.4em}
 .subhead{font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.12em;
   color:var(--gold); text-align:center; margin:1.2em 0 .6em; font-size:1.08rem}
@@ -362,6 +364,14 @@ mark.q{background:var(--hl-gold); border-radius:.2em}
 .leaf:hover{border-color:var(--gold-line); background:var(--panel2)}
 .leaf .l-cite{display:block; font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
 .leaf .l-text{display:block; white-space:pre-line; font-size:1.02rem}
+.leaf .l-title{display:block; font-family:"Cormorant Garamond",Georgia,serif; font-weight:600; font-size:1.12rem; color:var(--ink); margin:.05rem 0 .15rem}
+.leaf.scene{border-left-color:var(--rubric)}
+.leaf.scene .l-text{color:var(--ink-soft); font-style:italic; font-size:.98rem}
+.leaf .pslink{margin-top:.4rem; font-size:.82rem; padding:.2rem .6rem}
+.tree-switch, .tellings{display:flex; justify-content:center; gap:.4rem; flex-wrap:wrap; margin:.2rem 0 .9rem}
+.tree-switch .btn.on, .tellings .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
+.tellings{margin:.6rem 0 .2rem}
+.t-group{margin:.8rem 0 .2rem; font-variant:small-caps; letter-spacing:.12em; color:var(--ink-faint); font-size:.86rem}
 :root[data-theme="lcars"] .tree, :root[data-theme="lcars"] .twigs{border-left-color:#cc6699}
 :root[data-theme="lcars"] .tree details::before{border-top-color:#cc6699}
 :root[data-theme="lcars"] .tb .t-name{font-family:"Antonio",sans-serif; text-transform:uppercase; letter-spacing:.05em; font-size:1.1rem}
@@ -1749,7 +1759,7 @@ const LuminaCore = (function () {
         '<div class="ornament">❦</div>' +
         '<div class="citation">' + esc(C.citation(b, c, C.vnum(ch, j))) +
           '<span class="tx-tag">' + (fell ? "DR" : meta.abbr) + '</span></div>' +
-        '<p class="verse-text dropcap" id="vtext">' + renderTextWithHls(ch.v[j], hlTx, D.books[b].id, c, j) + '</p>' +
+        '<p class="verse-text dropcap" id="vtext">' + (!isDrb && state.tx === "grail" ? flowGrail(renderTextWithHls(ch.v[j], hlTx, D.books[b].id, c, j)) : renderTextWithHls(ch.v[j], hlTx, D.books[b].id, c, j)) + '</p>' +
         (fell ? '<p class="ch-notice">' + fallNote(meta, err) + '</p>' : '') +
         (note ? '<details class="note"><summary>Challoner’s note</summary><p>' + esc(note) + '</p></details>' : '') +
         '<div class="compare" id="cmp"></div>' +
@@ -1809,7 +1819,7 @@ const LuminaCore = (function () {
     else if (!ch) body = '<p class="cmp-text absent">Not contained in this translation.</p>';
     else {
       const j = t.id === "drb" ? i : C.mapToTx(ch, i);
-      body = '<p class="cmp-text">' + esc(ch.v[j]) +
+      body = '<p class="cmp-text">' + (t.id === "grail" ? flowGrail(esc(ch.v[j])) : esc(ch.v[j])) +
              ' <span class="tx-tag" style="font-size:.75em;color:var(--ink-faint)">v' + C.vnum(ch, j) + '</span></p>';
     }
     return '<div class="cmp-item"><div class="cmp-tx">' + esc(t.name) + '</div>' + body + '</div>';
@@ -1844,12 +1854,13 @@ const LuminaCore = (function () {
       const hlTx = fell ? "drb" : activeHlTx();
       let vs = "";
       const stz = new Set(!isDrb && ch.sb || []);
+      const grailFlow = !isDrb && state.tx === "grail";
       ch.v.forEach((t, j) => {
         const note = isDrb && ch.notes && ch.notes[String(j)];
         if (!isDrb && ch.h && ch.h[j]) vs += '<p class="subhead">' + esc(ch.h[j]) + '</p>';
         vs += '<p class="v' + (j === hlJ ? " hl" : "") + (stz.has(j) ? " stz" : "") + '" id="v' + j + '">' +
               '<sup class="vn">' + C.vnum(ch, j) + '</sup><span class="vt" data-i="' + j + '">' +
-              renderTextWithHls(t, hlTx, bk.id, c, j) + '</span>' +
+              (grailFlow ? flowGrail(renderTextWithHls(t, hlTx, bk.id, c, j)) : renderTextWithHls(t, hlTx, bk.id, c, j)) + '</span>' +
               (note ? '<button class="notemark" data-n="' + j + '" title="Challoner’s note">✝</button>' +
                       '<span class="note-inline" id="n' + j + '">' + esc(note) + '</span>' : '') +
               '</p>';
@@ -2374,7 +2385,7 @@ const LuminaCore = (function () {
                 if (p.v1 && num < p.v1) return;
                 if (p.v2 && num > p.v2) return;
                 html += '<p class="v"><sup class="vn">' + num + '</sup><span class="vt" data-b="' + p.b + '" data-c="' + p.c + '" data-i="' + j + '">' +
-                        renderTextWithHls(t, hlTx, bkid, p.c, j) + '</span></p>';
+                        (!fell && state.tx === "grail" ? flowGrail(renderTextWithHls(t, hlTx, bkid, p.c, j)) : renderTextWithHls(t, hlTx, bkid, p.c, j)) + '</span></p>';
               });
               html += '</div></div>';
             });
@@ -2400,10 +2411,13 @@ const LuminaCore = (function () {
     }).catch(() => showToast("Could not load the plan data"));
   }
 
-  /* ---------- the Psalm Tree ---------- */
-  /* Branches and twigs open by choice, never by chance; each leaf is a Grail verse,
-     numbered after the Vulgate, that opens its psalm in the current translation. */
+  /* ---------- the Trees: the Psalms, and the Gospels & Acts ---------- */
+  /* Branches and twigs open by choice, never by chance. Psalm leaves are Grail verses,
+     numbered after the Vulgate; Gospel leaves are scenes (every telling of an event)
+     or single verses, shown in the current translation where it is built in. */
   const loadTree = () => loadTx("grail").then(() => loadScript("data-tree.js", () => !!window.LUMINA_TREE));
+  const loadGTree = () => loadScript("data-gtree.js", () => !!window.LUMINA_GTREE);
+  const NT_BOOK = { mt:"matthew", mk:"mark", lk:"luke", jn:"john", ac:"acts" };
   let treeOpen = new Set(), treeScroll = 0;
   const TREE_ART =
     '<svg class="tree-art" viewBox="0 0 120 110" fill="none" stroke="currentColor" stroke-width="2.2" ' +
@@ -2413,66 +2427,197 @@ const LuminaCore = (function () {
     [[32,49],[28,39],[36,30],[45,23],[56,19],[67,19],[77,23],[86,30],[92,39],[89,49],[80,41],[71,30],[50,30],[42,40],[61,27],[74,37],[53,43],[66,42]]
       .map(p => '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.6"/>').join("") + '</g>' +
     '<g class="water"><path d="M16 101q7-4 14 0t14 0t14 0t14 0t14 0t14 0t14 0"/><path d="M30 107q7-4 14 0t14 0t14 0t14 0t14 0"/></g></svg>';
+  /* the Grail's chanting lines flow as one paragraph, a faint dot where each line ends */
+  function flowGrail(html){ return html.replace(/\n/g, '<span class="gl">\n</span>'); }
+  /* a New Testament verse [bk, c, v] (Douay numbering) in the current translation when built in */
+  function ntVerse(bk, c, v){
+    const b = C.bookIdxById(NT_BOOK[bk]), drb = D.books[b].ch[c - 1], i = v - 1;
+    const tx = state.tx, meta = txMeta(tx);
+    if (tx !== "drb" && meta.kind === "local" && !meta.only && txData(tx)){
+      const ch = C.txChapter(txData(tx), b, c - 1);
+      if (ch){ const j = C.mapToTx(ch, i); if (j >= 0 && ch.v[j]) return ch.v[j]; }
+    }
+    return drb.v[i] || "";
+  }
+  function ntCite(bk, c, v1, c2, v2){
+    const name = NT_BOOK[bk] === "acts" ? "Acts" : C.bookByIdx(C.bookIdxById(NT_BOOK[bk])).name;
+    if (c2 == null) return name + " " + c + ":" + v1;
+    return name + " " + c + ":" + v1 + (c2 !== c ? "–" + c2 + ":" + v2 : v2 !== v1 ? "–" + v2 : "");
+  }
+  const NT_ABBR = { mt:"Mt", mk:"Mk", lk:"Lk", jn:"Jn", ac:"Acts" };
+  function sceneCite(sc){
+    if (sc.tl.length > 1) return "Told in " + sc.tl.map(t => NT_ABBR[t[0]]).join(" · ");
+    const [bk, parts] = sc.tl[0], p = parts[0], q = parts[parts.length - 1];
+    return ntCite(bk, p[0], p[1], q[2], q[3]);
+  }
   function renderTree(opts){
     const restore = opts && opts.restore;
     if (!restore) treeOpen = new Set();
-    cur = { kind:"tree" };
+    const kind = state.treeKind === "gospels" ? "gospels" : "psalms";
+    cur = { kind:"tree", t: kind };
     record(cur);
     selCtx = null;
     const seq = ++renderSeq;
-    loadTree().then(() => {
+    (kind === "gospels" ? loadGTree() : loadTree()).then(() => {
       if (seq !== renderSeq) return;
-      const T = window.LUMINA_TREE, psB = C.bookIdxById("psalms");
-      const gps = txData("grail").books[psB].ch;
-      const leaves = tw => tw.refs.map(([ps, n]) => {
-        const ch = gps[ps - 1], j = ch.n ? ch.n.indexOf(n) : n - 1;
-        return '<button class="leaf" data-ps="' + ps + '" data-j="' + j + '">' +
-          '<span class="l-cite">Psalm ' + ps + ':' + n + '</span>' +
-          '<span class="l-text">' + esc(ch.v[j]) + '</span></button>';
-      }).join("");
-      let html = '<div class="view"><div class="tree-head">' + TREE_ART +
-        '<h2 class="ch-title">The Psalm Tree</h2>' +
-        '<p class="tree-motto">“He is like a tree that is planted beside the flowing waters.” ' +
-        '<span class="cite">Psalm 1:3</span></p>' +
-        '<p class="tree-hint">Open whatever the Spirit draws you to. Every psalm hangs somewhere on this tree.</p>' +
-        '</div><div class="tree">';
+      const psB = C.bookIdxById("psalms");
+      let T, head, leaves, count;
+      if (kind === "psalms"){
+        T = window.LUMINA_TREE;
+        const gps = txData("grail").books[psB].ch;
+        head = { title:"The Psalm Tree", motto:"He is like a tree that is planted beside the flowing waters.",
+          cite:"Psalm 1:3", hint:"Open whatever the Spirit draws you to. Every psalm hangs somewhere on this tree." };
+        count = tw => tw.refs.length;
+        leaves = tw => tw.refs.map(([ps, n]) => {
+          const ch = gps[ps - 1], j = ch.n ? ch.n.indexOf(n) : n - 1;
+          return '<div class="leaf" role="button" tabindex="0" data-ps="' + ps + '" data-j="' + j + '">' +
+            '<span class="l-cite">Psalm ' + ps + ':' + n + '</span>' +
+            '<span class="l-text">' + flowGrail(esc(ch.v[j])) + '</span></div>';
+        }).join("");
+      } else {
+        T = window.LUMINA_GTREE;
+        head = { title:"The Gospels & Acts", motto:"I am the vine: you the branches.",
+          cite:"John 15:5", hint:"Open whatever the Spirit draws you to. Every chapter of the Gospels and Acts hangs here; a scene opens every telling of it." };
+        count = tw => tw.items.length;
+        leaves = tw => tw.items.map(it => {
+          if (typeof it === "string"){
+            const sc = T.scenes[it.slice(2)];
+            return '<div class="leaf scene" role="button" tabindex="0" data-s="' + it.slice(2) + '">' +
+              '<span class="l-cite">' + esc(sceneCite(sc)) + '</span>' +
+              '<span class="l-title">' + esc(sc.t) + '</span>' +
+              '<span class="l-text">' + esc(ntVerse(...sc.k)) + '</span></div>';
+          }
+          const [bk, c, v, ps] = it;
+          return '<div class="leaf" role="button" tabindex="0" data-bk="' + bk + '" data-c="' + c + '" data-v="' + v + '">' +
+            '<span class="l-cite">' + esc(ntCite(bk, c, v)) + '</span>' +
+            '<span class="l-text">' + esc(ntVerse(bk, c, v)) + '</span>' +
+            (ps ? '<button class="btn small pslink" data-ps="' + ps + '">↔ Psalm ' + ps + '</button>' : '') + '</div>';
+        }).join("");
+      }
+      let html = '<div class="view"><div class="tree-switch" role="tablist">' +
+          '<button class="btn small' + (kind === "psalms" ? " on" : "") + '" data-k="psalms">The Psalms</button>' +
+          '<button class="btn small' + (kind === "gospels" ? " on" : "") + '" data-k="gospels">Gospels &amp; Acts</button></div>' +
+        '<div class="tree-head">' + TREE_ART +
+        '<h2 class="ch-title">' + head.title + '</h2>' +
+        '<p class="tree-motto">“' + head.motto + '” <span class="cite">' + head.cite + '</span></p>' +
+        '<p class="tree-hint">' + head.hint + '</p></div><div class="tree">';
       T.branches.forEach(br => {
-        html += '<details class="tb" data-id="' + br.id + '"' + (treeOpen.has(br.id) ? " open" : "") + '><summary>' +
+        const bid = kind[0] + ":" + br.id;
+        html += '<details class="tb" data-id="' + bid + '"' + (treeOpen.has(bid) ? " open" : "") + '><summary>' +
           '<span class="t-ic">' + br.icon + '</span>' +
           '<span class="t-main"><span class="t-name">' + esc(br.name) + '</span>' +
           '<span class="t-desc">' + esc(br.desc) + '</span></span>' +
           '<span class="t-caret">▸</span></summary><div class="twigs">';
         br.twigs.forEach(tw => {
-          const id = br.id + "/" + tw.id, open = treeOpen.has(id);
+          const id = bid + "/" + tw.id, open = treeOpen.has(id);
+          if (tw.group) html += '<p class="t-group">' + esc(tw.group) + '</p>';
           html += '<details class="tt" data-id="' + id + '"' + (open ? " open" : "") + '><summary>' +
             '<span class="t-name">' + esc(tw.name) + '</span>' +
-            '<span class="t-count">' + tw.refs.length + '</span><span class="t-caret">▸</span></summary>' +
+            '<span class="t-count">' + count(tw) + '</span><span class="t-caret">▸</span></summary>' +
             '<div class="leaves">' + (open ? leaves(tw) : "") + '</div></details>';
         });
         html += '</div></details>';
       });
       view.innerHTML = html + '</div></div>';
+      const twigOf = id => { const [bid, tid] = id.split("/"); return T.branches.find(x => x.id === bid.slice(2)).twigs.find(x => x.id === tid); };
       view.querySelectorAll(".tree details").forEach(d => d.addEventListener("toggle", () => {
         const id = d.dataset.id;
         if (d.open) treeOpen.add(id); else treeOpen.delete(id);
         const box = d.classList.contains("tt") && d.querySelector(".leaves");
-        if (box && d.open && !box.childElementCount){
-          const [bid, tid] = id.split("/");
-          box.innerHTML = leaves(T.branches.find(x => x.id === bid).twigs.find(x => x.id === tid));
-        }
+        if (box && d.open && !box.childElementCount) box.innerHTML = leaves(twigOf(id));
       }));
-      view.querySelector(".tree").addEventListener("click", e => {
-        const leaf = e.target.closest(".leaf");
-        if (!leaf) return;
-        treeScroll = scrollY;
-        const c = +leaf.dataset.ps - 1;
-        const i = C.mapFromTx(D.books[psB].ch[c], gps[c], +leaf.dataset.j);
-        if (state.corpus === "ccc"){ state.corpus = "bible"; txSel.value = state.tx; save(); applyMode(); }
-        renderChapter(psB, c, i);
+      view.querySelectorAll(".tree-switch button").forEach(b => b.onclick = () => {
+        if (b.dataset.k === kind) return;
+        state.treeKind = b.dataset.k; save(); renderTree();
       });
+      const toBible = () => { if (state.corpus === "ccc"){ state.corpus = "bible"; txSel.value = state.tx; save(); applyMode(); } };
+      const act = e => {
+        const pl = e.target.closest(".pslink");
+        const leaf = e.target.closest(".leaf");
+        if (!pl && !leaf) return;
+        treeScroll = scrollY;
+        toBible();
+        if (pl){ e.stopPropagation(); return openPsalmVerse(pl.dataset.ps); }
+        if (leaf.dataset.s) return renderScene(leaf.dataset.s);
+        if (leaf.dataset.bk){
+          const b = C.bookIdxById(NT_BOOK[leaf.dataset.bk]);
+          return renderChapter(b, +leaf.dataset.c - 1, +leaf.dataset.v - 1);
+        }
+        const c = +leaf.dataset.ps - 1, gps = txData("grail").books[psB].ch;
+        renderChapter(psB, c, C.mapFromTx(D.books[psB].ch[c], gps[c], +leaf.dataset.j));
+      };
+      const tree = view.querySelector(".tree");
+      tree.addEventListener("click", act);
+      tree.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("leaf")){ e.preventDefault(); act(e); } });
       if (restore) setTimeout(() => scrollTo({ top: treeScroll }), 30);
       else scrollTo({ top: 0, behavior: "smooth" });
-    }).catch(() => showToast("Could not load the Psalm Tree"));
+    }).catch(() => showToast("Could not load the tree"));
+  }
+  /* "21:2" — a Psalm (Vulgate) and Grail verse — opened with the verse lit */
+  function openPsalmVerse(ref){
+    const [ps, n] = ref.split(":").map(Number), psB = C.bookIdxById("psalms");
+    loadTx("grail").then(() => {
+      const g = txData("grail").books[psB].ch[ps - 1], j = g.n ? g.n.indexOf(n) : n - 1;
+      renderChapter(psB, ps - 1, C.mapFromTx(D.books[psB].ch[ps - 1], g, Math.max(0, j)));
+    });
+  }
+  /* a scene: every telling of it, one tab each, the key verse lit */
+  function renderScene(id, k){
+    const seq = ++renderSeq;
+    loadGTree().then(() => {
+      const sc = window.LUMINA_GTREE.scenes[id];
+      if (!sc) return;
+      /* open on the telling that holds the key verse unless one was chosen */
+      if (k == null) k = Math.max(0, sc.tl.findIndex(t => t[0] === sc.k[0]));
+      k = Math.min(k, sc.tl.length - 1);
+      cur = { kind:"scene", id, k };
+      record(cur);
+      const [bk, parts] = sc.tl[k], b = C.bookIdxById(NT_BOOK[bk]), bkid = D.books[b].id;
+      const chaps = [];
+      parts.forEach(p => { for (let c = p[0]; c <= p[2]; c++) if (!chaps.includes(c)) chaps.push(c); });
+      if (txMeta(state.tx).kind === "api") loadingView();
+      return Promise.all(chaps.map(c => activeChapterAsync(b, c - 1).then(r => [c, r]))).then(pairs => {
+        if (seq !== renderSeq) return;
+        const res = Object.fromEntries(pairs), hlTx0 = activeHlTx();
+        let fellAny = false, body = "";
+        parts.forEach(p => {
+          body += '<p class="ch-book" style="margin:.3rem 0 .2rem;text-align:center">' + esc(ntCite(bk, p[0], p[1], p[2], p[3])) + '</p>' +
+            '<div class="card" style="margin-bottom:1rem"><div class="verses">';
+          for (let c = p[0]; c <= p[2]; c++){
+            const r = res[c], ch = r.ch, hlTx = r.fell ? "drb" : hlTx0;
+            if (r.fell) fellAny = true;
+            ch.v.forEach((t, j) => {
+              const num = C.vnum(ch, j);
+              if ((c === p[0] && num < p[1]) || (c === p[2] && num > p[3])) return;
+              const key = bk === sc.k[0] && c === sc.k[1] && num === sc.k[2];
+              body += '<p class="v' + (key ? " hl" : "") + '"' + (key ? ' id="sceneKey"' : '') + '><sup class="vn">' + num + '</sup>' +
+                '<span class="vt" data-b="' + b + '" data-c="' + (c - 1) + '" data-i="' + j + '" data-tx="' + hlTx + '">' +
+                renderTextWithHls(t, hlTx, bkid, c - 1, j) + '</span></p>';
+            });
+          }
+          body += '</div></div>';
+        });
+        const meta = txMeta(state.tx);
+        view.innerHTML = '<div class="view"><div class="ch-head">' +
+          '<p class="ch-book">The Gospels &amp; Acts</p><h2 class="ch-title">' + esc(sc.t) + '</h2>' +
+          (sc.tl.length > 1 ? '<div class="tellings" role="tablist">' + sc.tl.map((t, i) =>
+            '<button class="btn small' + (i === k ? " on" : "") + '" data-k="' + i + '">' +
+            esc(t[0] === "ac" ? "Acts" : C.bookByIdx(C.bookIdxById(NT_BOOK[t[0]])).name) + '</button>').join("") + '</div>' : '') +
+          (fellAny && state.tx !== "drb" ? '<p class="ch-notice">' + fallNote(meta) + '</p>' : '') +
+          '</div>' + body +
+          '<div class="verse-actions"><button class="btn" id="scTree">🌳 Back to the tree</button>' +
+          '<button class="btn" id="scChapter">Open the whole chapter</button></div></div>';
+        view.querySelectorAll(".tellings button").forEach(x => x.onclick = () => renderScene(id, +x.dataset.k));
+        $("scTree").onclick = () => { state.treeKind = "gospels"; renderTree({ restore:true }); };
+        $("scChapter").onclick = () => renderChapter(b, parts[0][0] - 1, parts[0][1] - 1);
+        selCtx = { tx: hlTx0, book: null, c: null,
+          list: [...view.querySelectorAll(".vt")].map(el => ({ el, i: +el.dataset.i, book: bkid, c: +el.dataset.c })) };
+        applyMode();
+        const key = $("sceneKey");
+        if (key) setTimeout(() => key.scrollIntoView({ block:"center", behavior:"smooth" }), 60);
+        else scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }).catch(() => showToast("Could not load the scene"));
   }
 
   /* ---------- universal history + dispatch ---------- */
@@ -2510,7 +2655,8 @@ const LuminaCore = (function () {
       case "readings": return renderReadings(desc.date);
       case "plan": return renderPlan(desc.day);
       case "planDay": return renderPlanDay(desc.planId, desc.day);
-      case "tree": return renderTree({ restore:true });
+      case "tree": if (desc.t) state.treeKind = desc.t; return renderTree({ restore:true });
+      case "scene": return renderScene(desc.id, desc.k);
       default: return begin();
     }
   }
