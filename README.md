@@ -30,6 +30,16 @@ is the licensed way to display these copyrighted translations.
   Shepherd, Thirst & longing, Dawn & morning, The Passion…), and each twig holds
   the Grail verses that carry that image. Every one of the 150 psalms hangs on the
   tree. Tap a verse to open its psalm with the verse illuminated. Key **T**.
+- **🌳 The Gospels & Acts Tree** — the same Tree button, switched to *Gospels & Acts*.
+  Fourteen branches: *The Life of Christ & His Church* (the Rosary mysteries, then
+  every scene in order from the Word before all ages to Paul in Rome) · *What He Does* ·
+  *What He Says* · *His Questions* · *Parables* · *Names of Jesus* · *People* · *Places* ·
+  *States of the Soul* · *Touch & Gesture* · *Hours & Feasts* · *Bread, Wine & Water* ·
+  *Creation & Things* · *Scripture Fulfilled*. Leaves are **scenes** — 261 of them, each
+  gathering every Evangelist's telling ("Told in Mt · Mk · Lk · Jn") with its key verse
+  lit — or single verses, shown in your chosen translation. Verses that quote a Psalm
+  carry a link straight to that Psalm. Every chapter of the four Gospels and Acts is on
+  the tree.
 - **Random Verse** — uniform across the whole Bible, or a chosen *Focus*
   (Old/New Testament, Gospels, Epistles, Psalms, Deuterocanonical Books,
   Prophetic Books, Wisdom Literature, Pentateuch).
@@ -77,7 +87,7 @@ Open the folder and **double-click `index.html`**. Entirely offline.
 2. **+** (top-right) → **New repository** → name it `lumina`, Public → **Create repository**.
 3. Click **"uploading an existing file"** (or **Add file → Upload files**).
 4. Drag in all the files: **`index.html`**, **`bible-data.js`**, **`data-grail.js`**,
-   **`data-tree.js`**, **`data-cpdv.js`**, **`data-webc.js`**, **`data-summaries.js`**,
+   **`data-tree.js`**, **`data-gtree.js`**, **`data-cpdv.js`**, **`data-webc.js`**, **`data-summaries.js`**,
    **`data-catechism.js`** → **Commit changes** (~18 MB total; allow a minute).
 5. **Settings → Pages** → Source: *Deploy from a branch* → branch **main**, folder **/ (root)** → **Save**.
 6. After about a minute, your Bible lives at
@@ -93,6 +103,7 @@ To update later, upload the changed files again the same way.
 | `bible-data.js` | Douay-Rheims text (loads at start; defines the canonical structure) |
 | `data-grail.js` | Grail Psalms, Vulgate-numbered (loads when first selected, or with the Tree) |
 | `data-tree.js` | The Psalm Tree: branches, twigs and their verses (loads on first Tree tap) |
+| `data-gtree.js` | The Gospels & Acts tree: scenes, branches, twigs (loads when first opened) |
 | `data-cpdv.js` | CPDV text (loads only when first selected) |
 | `data-webc.js` | WEBBE text (loads only when first selected) |
 | `data-summaries.js` | AI chapter summaries (loads on first Summary tap) |
@@ -109,7 +120,8 @@ The Grail text comes from a Word copy of the Psalter used in choir. It follows t
 Hebrew psalter; Lumina files it under the Vulgate numbering of the Douay-Rheims so the
 two line up psalm for psalm and verse for verse (Grail 10 is Vulgate 9:22–39, Grail
 114–115 is Vulgate 113, Grail 116 is Vulgate 114–115, Grail 147 is Vulgate 146–147).
-Each psalm shows its Latin incipit; Psalm 118 carries its Hebrew-letter stanzas.
+Each psalm shows its Latin incipit; Psalm 118 carries its Hebrew-letter stanzas. The
+Grail's chanting lines flow as one paragraph, a faint dot marking where each line ends.
 
 The `tools/` folder rebuilds both data files (`node tools/build-grail.js`, then
 `node tools/build-tree.js`):
@@ -122,6 +134,13 @@ The `tools/` folder rebuilds both data files (`node tools/build-grail.js`, then
 - `tree-edits.txt` — verses placed or removed by hand after reading each psalm.
 
 `build-tree.js` refuses to finish if any psalm is left off the tree.
+
+The Gospels & Acts tree is rebuilt with `node tools/build-gtree.js`, from
+`gospel-scenes.js` (the scenes and their tellings), `gospel-tree-rules.js` (branches,
+twigs, hand-picked verses, patterns and the corrections made after reading every
+twig) and `nt-refs.js` (modern → Douay verse numbering, which differs in a handful of
+chapters). It refuses to finish if a scene or a chapter is left off the tree, or a
+Psalm link points nowhere.
 
 ## The API translations & your key
 
