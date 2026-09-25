@@ -1,0 +1,243 @@
+# Hand corrections to the Psalm Tree, made while reading every psalm in the Grail.
+# add <branch>/<twig> <psalm:verse>...   — place verses the patterns miss
+# drop <branch>/<twig> <psalm:verse>...  — remove verses a pattern catches wrongly
+# Psalm numbers are Vulgate (as in the Douay-Rheims); verse numbers are the Grail's.
+
+# Psalms 1-24 (Vulgate)
+drop places/exile 17:15 9:26 21:2
+drop names/portion 9:27
+drop soul/mortal 16:8 18:5 17:16 17:43
+drop soul/distress 17:43
+drop gestures/lifteyes 9:29
+drop gestures/watch 9:29 16:11
+drop places/bed 17:16
+drop names/keeper 14:4
+drop names/warrior 24:2
+drop soul/lonely 4:9 15:2 14:3 23:4
+drop soul/humble 8:6
+drop soul/enemies 5:13
+drop soul/anger 6:2
+drop nature/desert 6:8
+drop body/womb 21:15
+drop sounds/deep 21:14
+drop hours/always 11:7
+drop nature/springs 9:31
+add nature/sea 17:17
+add nature/rivers 22:2
+add soul/lovegod 17:2
+add names/rock 17:3
+add names/king 2:6 23:10
+add soul/trust 22:1 22:4
+add names/shepherd 22:1 22:2 22:3 22:4
+add places/pit 12:4
+add soul/forsaken 21:3
+add gestures/cry 21:3
+# Psalms 24-43
+drop soul/lonely 27:3
+drop soul/peace 27:3 38:3 41:6 41:12 42:5
+drop sounds/silence 41:6 41:12 42:5
+drop gestures/bow 30:7
+drop body/tears 34:15
+drop names/father 34:14
+drop names/portion 39:16
+drop names/warrior 37:17 40:12
+drop food/table 32:5 37:19
+drop soul/humble 36:10
+drop soul/weary 34:10 40:2
+drop soul/mortal 32:6 38:14
+drop nature/wind 38:14
+drop objects/stones 37:5
+drop body/hand 36:13
+drop gestures/walk 38:13
+drop places/bed 36:27
+drop creatures/bulls 35:7
+add nature/sea 35:7 31:6 28:3 28:10
+add soul/lovegod 25:8 30:24 17:2
+add places/pit 29:10
+add soul/mortal 38:5 38:6 38:7 38:12
+add places/exile 38:13 41:7
+add gestures/walk 41:5 42:4 23:3
+add names/savior 33:5 33:8
+add hours/night 29:6
+add soul/lonely 37:12 40:10 30:12
+add food/tears 41:4
+add gestures/still 36:7 38:3 38:10
+add soul/trust 26:1 26:3
+add names/light 26:1
+add soul/joy 42:4
+add names/king 28:10
+add sounds/voice 28:3 28:4 28:5 28:7 28:8 28:9
+add nature/storm 28:3 28:9
+# Psalms 43-67
+drop soul/peace 43:24 54:3 64:8 66:8
+drop sounds/silence 66:8 64:8
+drop gestures/bow 44:6
+drop names/father 44:11 49:20
+drop soul/lonely 44:15 50:6 51:11 59:7
+drop places/temple 48:12
+drop places/tent 48:2 48:12
+drop places/bed 48:15 54:7 61:2 61:6 67:13 67:14
+drop names/savior 48:8 48:9
+drop objects/gold 48:8 48:9 48:16
+drop soul/trust 48:7 48:14 51:9 61:11
+drop names/warrior 58:11
+drop names/maker 59:4 59:5
+drop food/water 49:13 59:5
+drop food/bread 49:13 58:7 58:16
+drop objects/shield 64:13
+drop nature/light 58:9
+drop soul/humble 48:3
+drop soul/guilt 49:8
+drop names/portion 67:14 67:24
+drop gestures/cry 54:4
+drop sounds/shout 54:4
+drop nature/rock 45:3
+drop nature/wind 46:6
+drop objects/bow 65:4 21:30 5:8
+drop body/bones 49:13
+drop objects/throne 67:22
+add places/zion 45:5
+add soul/forsaken 43:24
+add nature/desert 62:2
+add soul/awe 65:3 65:5 45:9
+add names/savior 67:21
+add places/pit 67:21
+add soul/trust 54:23
+add gestures/sleep 43:24
+add names/warrior 45:10
+# Psalms 67-83
+drop objects/bow 67:31
+drop places/tent 67:31 74:4
+drop soul/joy 67:31 69:3 39:15
+drop body/head 67:28
+drop names/healer 68:5
+drop food/bread 68:5
+drop places/bed 68:23 73:20 77:19
+drop soul/weary 68:14 71:7
+drop names/portion 69:4 72:5
+drop soul/lonely 72:15
+drop soul/peace 76:5 77:65
+drop soul/mortal 71:9 71:16 77:27
+drop food/table 71:19 82:16
+drop soul/distress 72:26 73:14
+drop food/water 72:10
+drop nature/rock 74:4
+drop names/rock 77:16 77:20 80:16
+drop nature/grass 73:1 77:31 77:51 78:13
+drop gestures/walk 78:11
+drop gestures/bow 80:10
+drop places/exile 80:10
+drop names/maker 79:7
+drop objects/altar 79:17
+drop hours/always 78:12
+drop gestures/watch 70:10
+add nature/sea 68:2
+add soul/distress 68:2 76:4
+add soul/lonely 68:21
+add soul/thirst 68:4
+add soul/lovegod 72:25 72:26 72:28
+add names/portion 72:26
+add gestures/lifthands 76:3
+add sounds/groan 76:4
+add names/shepherd 76:21 77:52 77:71
+add places/exodus 73:13 76:17 76:20 77:13 77:15 77:16 77:44 77:45 77:46 77:47 77:48 77:49 77:50 77:52 77:53
+add creatures/birds 77:27
+add names/savior 77:42
+add names/rock 77:35
+add nature/storm 76:18
+# Psalms 83-103
+drop soul/lonely 84:9 85:10 88:20 93:20 100:3 100:5 100:6
+drop gestures/lifteyes 85:4
+drop names/maker 87:9
+drop soul/peace 91:15 103:22
+drop sounds/silence 91:15
+drop objects/throne 102:4
+drop places/way 88:44
+drop names/warrior 91:12 93:3
+drop objects/gold 91:11 103:24
+drop body/hand 91:13
+drop nature/springs 89:5 89:6 91:8
+drop nature/rain 94:1 94:2
+drop objects/bow 94:6 98:5 98:9
+drop soul/humble 100:5 103:25
+drop places/bed 100:7 103:17 103:18
+drop soul/mortal 101:15 102:4
+drop sounds/deep 103:21
+drop names/keeper 102:18
+drop names/shield 75:4
+add soul/mortal 89:5 89:6 89:9 89:12 88:48
+add soul/forsaken 87:6 87:19
+add soul/distress 87:4 87:17 101:4
+add names/keeper 90:3
+add nature/sea 92:3
+add sounds/deep 92:3
+add names/love 85:5 88:25 88:34
+add soul/peace 93:19
+# Psalms 103-118
+drop names/portion 105:5
+drop names/king 104:13 104:20
+drop places/temple 104:21 111:3
+drop places/ends 104:35
+drop names/rock 104:41 113:8
+drop soul/lonely 105:24 108:17
+drop soul/weary 105:32
+drop names/maker 105:19
+drop food/bread 105:20 105:28 106:18
+drop nature/grass 104:36 108:23 111:10
+drop names/judge 108:6 108:7
+drop names/father 108:9 108:12 108:14
+drop places/bed 108:10
+drop nature/harvest 108:11 104:44
+drop objects/oil 108:18
+drop food/oil 108:18
+drop soul/mortal 112:7
+drop body/head 109:6
+drop nature/mount 112:6
+drop soul/distress 117:10 117:11 117:12
+drop soul/trust 113:16 115:11
+drop names/keeper 110:5
+add soul/weary 106:5
+add places/exodus 104:29 104:30 104:31 104:32 104:33 104:34 104:35 104:36 104:37 104:39 104:40 104:41 105:10 105:11 113:3 113:5
+add places/desert 104:39 104:40
+add creatures/birds 104:40
+add nature/sea 105:11
+add places/pit 105:17
+add soul/lovegod 114:1
+add places/exile 106:3 105:27 105:47
+add names/light 117:27
+add body/womb 112:9
+add soul/enemies 117:10 117:11 117:12
+# Psalms 118-150
+drop soul/lonely 118:63 121:8 144:10
+drop names/keeper 118:33 118:115 118:134 118:145
+drop soul/peace 120:3 124:3 131:3 131:4 138:2 138:3
+drop gestures/walk 118:169 118:170
+drop names/rock 136:9 140:6
+drop nature/grass 136:5
+drop soul/joy 136:8
+drop names/maker 142:3
+drop places/tent 142:3 138:9
+drop gestures/sackcloth 147:16
+drop soul/distress 139:10
+drop soul/trust 139:2 139:5 140:9
+drop names/portion 140:4
+drop soul/mortal 134:17 147:18 146:6
+drop soul/waiting 118:95 5:9 9:29 58:4
+drop gestures/lifteyes 142:8
+drop objects/throne 149:4
+drop places/temple 127:3
+drop places/pit 138:15
+drop hours/always 139:3
+add soul/lovegod 118:97 118:127 118:159 118:163 118:167
+add names/shepherd 118:176
+add gestures/lifthands 140:2
+add places/exodus 135:10 135:11 135:12 135:14 135:16 134:8
+add body/heart 146:3 33:19
+add soul/distress 146:3
+add nature/rain 147:17
+add christ/passion 21:15 21:16 68:21
+add food/tears 79:6 101:10
+drop soul/thirst 103:11 106:33 106:35
+drop soul/peace 67:13
+drop places/bed 128:6
+drop gestures/bow 67:31
