@@ -1,7 +1,7 @@
 /* Parse the Grail Psalms source text (extracted from the .docx) into one part per heading.
    Each part: { heb, vg, inc, vs:[{n,t}], marks:{index:label}, stanza:{index:1} } */
-const fs = require("fs");
-const FIXES = require("./grail-fixes.js");
+const fs = require("fs"), path = require("path");
+const FIXES = require(path.join(__dirname, "..", "private", "grail-fixes.js"));   // your private copy
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 function corrected(file){
   let src = fs.readFileSync(file, "utf8")

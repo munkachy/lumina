@@ -3,7 +3,8 @@
    Usage: node tools/build-tree.js [--review file]  (review: every verse with its twigs) */
 const fs = require("fs"), path = require("path");
 global.window = {};
-require(path.join(__dirname, "..", "data-grail.js"));
+/* the Grail text is private: run node tools/build-grail.js first (see its notes) */
+require(path.join(__dirname, "..", "private", "data-grail.js"));
 const G = window.LUMINA_TX.grail;
 const PS = G.books.find(b => b.ch.length).ch;
 const RULES = require("./tree-rules.js");

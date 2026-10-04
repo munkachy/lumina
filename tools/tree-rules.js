@@ -139,7 +139,7 @@ module.exports = [
 { id:"gestures", name:"Gestures & Postures", icon:"🙌", desc:"Prayer that moves from the head into the body",
   twigs:[
   { id:"lifthands", name:"Lifting up hands",      re:/\b(lift(ing)? up (my|your) hands|raise[ds]? (my|your) hands|hands (lifted|raised)|stretch(ed)? out my hands|hands to you|lifting of my hands|spread out my hands)\b/ },
-  { id:"lifteyes",  name:"Lifting up eyes",       re:/\b(lift up my eyes|eyes are (turned|always|on)|my eyes (are|look|are always)|eyes of servants|to you i lift|to you have i lifted up my eyes|my eyes to)\b/ },
+  { id:"lifteyes",  name:"Lifting up eyes",       re:/\b(lift up my eyes|eyes are (turned|always|on)|my eyes (are|look|are always)|eyes of servants|to you i lift|lifted up my eyes|my eyes to)\b/ },
   { id:"bow",       name:"Bowing & kneeling",     re:/\b(bow(s|ed|ing)? (down|low)|kneel|knees|prostrate|fall down|worship|bend the knee|pay him your homage|homage)\b/ },
   { id:"dance",     name:"Dancing & clapping",    re:/\b(danc(e|es|ing)|clap(s|ping)?|leap(s|ed)?|skip(ped)?)\b/ },
   { id:"sleep",     name:"Lying down & sleeping", re:/\b(lie down|sleep(s)?|slept|asleep|slumber(s)?|on my bed|upon my bed|awake|wake)\b/ },

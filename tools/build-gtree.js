@@ -9,9 +9,9 @@ const RULES = require("./gospel-tree-rules.js");
 global.window = {};
 require(path.join(__dirname, "..", "bible-data.js"));
 require(path.join(__dirname, "..", "data-cpdv.js"));
-require(path.join(__dirname, "..", "data-grail.js"));
-const GRAIL = window.LUMINA_TX.grail.books.find(b => b.ch.length).ch;
-const grailHas = ref => { const [p, v] = ref.split(":").map(Number); const ch = GRAIL[p - 1]; return !!ch && (ch.n ? ch.n.includes(v) : v >= 1 && v <= ch.v.length); };
+require(path.join(__dirname, "..", "data-grail-map.js"));        // the Grail's verse numbers (no text)
+const GRAIL = window.LUMINA_GRAIL_MAP;
+const grailHas = ref => { const [p, v] = ref.split(":").map(Number); const ch = GRAIL[p - 1]; return !!ch && (ch.n ? ch.n.includes(v) : v >= 1 && v <= ch.d.length); };
 const D = window.LUMINA_DATA, CP = window.LUMINA_TX.cpdv;
 const ORDER = ["matthew", "mark", "luke", "john", "acts"];
 const SHORT = { matthew:"mt", mark:"mk", luke:"lk", john:"jn", acts:"ac" };
