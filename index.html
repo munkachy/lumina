@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lumina — Holy Bible &amp; Catechism</title>
-<meta name="description" content="Lumina: a contemplative Catholic reader. Six Bible translations and the Grail Psalms, the Psalm and Gospel Trees, the Catechism, daily Mass readings, favorites, highlights, search, summaries, and reading plans.">
+<meta name="description" content="Lumina: a contemplative Catholic reader. Six Bible translations and the Grail Psalms from your own copy, the Psalm and Gospel Trees, the Catechism, daily Mass readings, favorites, highlights, search, summaries, and reading plans.">
 <meta name="theme-color" content="#f3ead8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f3ead8'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%238a6d1f' font-family='Georgia'%3E%E2%9C%A0%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -875,8 +875,8 @@ const LuminaCore = (function () {
   const TRANSLATIONS = [
     { id:"drb",  kind:"local", abbr:"DR",    name:"Douay-Rheims", file:null,
       credit:"Douay-Rheims Bible, Challoner Revision · with Challoner's notes" },
-    { id:"grail", kind:"local", abbr:"Grail", name:"Grail Psalms", file:"data-grail.js", only:"psalms",
-      credit:"The Grail Psalms © 1963 The Grail (England) · used by permission · numbered after the Vulgate" },
+    { id:"grail", kind:"local", abbr:"Grail", name:"Grail Psalms", file:null, imported:true, only:"psalms",
+      credit:"The Grail Psalms © 1963 The Grail (England) · your own copy, kept on this device only · numbered after the Vulgate" },
     { id:"cpdv", kind:"local", abbr:"CPDV",  name:"Catholic Public Domain Version", file:"data-cpdv.js",
       credit:"Catholic Public Domain Version (2009), translated from the Latin Vulgate · public domain" },
     { id:"webc", kind:"local", abbr:"WEBBE", name:"World English Bible (British)",  file:"data-webc.js",
@@ -928,7 +928,78 @@ const LuminaCore = (function () {
   function loadTx(id){
     const m = txMeta(id);
     if (!m || m.kind === "api" || id === "drb") return Promise.resolve();
+    if (m.imported) return loadGrail();
     return loadScript(m.file, () => !!window.LUMINA_TX[id]);
+  }
+
+  /* ---------- the Grail Psalms: your own file, kept on this device ----------
+     The Grail is under copyright, so Lumina does not carry it. You import your own Grail
+     file (grail.selah-pack.v1.json, made by tools/build-grail.js from your private copy);
+     it is kept in this browser on this device and never sent anywhere. Without it, the
+     Trees show the Douay, through data-grail-map.js (verse numbers only, no text).
+     grailFromPack must stay in step with fromPack in tools/grail-pack.js. */
+  const GRAIL_MAX = 4 * 1024 * 1024;
+  function grailDb(mode, fn){
+    return new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error("no storage"));
+      const r = indexedDB.open("lumina", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("files");
+      r.onerror = () => rej(r.error);
+      r.onsuccess = () => {
+        const db = r.result, t = db.transaction("files", mode), q = fn(t.objectStore("files"));
+        t.oncomplete = () => { db.close(); res(q.result); };
+        t.onerror = t.onabort = () => { db.close(); rej(t.error); };
+      };
+    });
+  }
+  const grailGet = () => grailDb("readonly", st => st.get("grail"));
+  const grailPut = text => grailDb("readwrite", st => st.put(text, "grail"));
+  const grailDel = () => grailDb("readwrite", st => st.delete("grail"));
+  function grailCheck(p){
+    const bad = "This file is damaged, or it is not a Grail file.";
+    if (!p || p.selahPack !== 1 || !Array.isArray(p.psalms) || !p.psalms.length) return bad;
+    if (p.id !== "grail") return "This is not the Grail Psalms (it is \u201c" + String(p.displayName || p.id) + "\u201d).";
+    if (p.numbering !== "vulgate") return "This file numbers the psalms the Hebrew way; Lumina needs a Grail file numbered after the Vulgate.";
+    const seen = new Set();
+    for (const ps of p.psalms){
+      if (!ps || !Number.isInteger(ps.n) || ps.n < 1 || ps.n > 150 || seen.has(ps.n) || !Array.isArray(ps.verses) || !ps.verses.length) return bad;
+      seen.add(ps.n);
+      for (const x of ps.verses)
+        if (!x || !Number.isInteger(x.v) || x.v < 1 || (x.douay != null && !Number.isInteger(x.douay)) ||
+            !Array.isArray(x.lines) || !x.lines.length || x.lines.some(l => typeof l !== "string")) return bad;
+    }
+    if (seen.size < 150) return "This Grail file has only " + seen.size + " of the 150 psalms.";
+    return "";
+  }
+  function grailFromPack(p){
+    const books = D.books.map(b => ({ id: b.id, name: b.name, ch: [] }));
+    const ch = books.find(b => b.id === "psalms").ch;
+    for (let i = 0; i < 150; i++) ch.push({ v: [], d: [], missing: true });
+    p.psalms.forEach(ps => {
+      const c = { v: [], d: [] }, nums = [];
+      ps.verses.forEach((x, j) => {
+        c.v.push(x.lines.join("\n")); c.d.push((x.douay || x.v) - 1); nums.push(x.v);
+        if (x.heading != null) (c.h = c.h || {})[j] = String(x.heading);
+        if (x.sectionStart) (c.sb = c.sb || []).push(j);
+      });
+      if (ps.incipit) c.title = String(ps.incipit);
+      if (nums.some((n, j) => n !== j + 1)) c.n = nums;
+      ch[ps.n - 1] = c;
+    });
+    return { id: "grail", name: p.name || "The Grail Psalms", abbr: "Grail", books };
+  }
+  function loadGrail(){
+    if (window.LUMINA_TX.grail) return Promise.resolve();
+    return grailGet().catch(() => null).then(text => {
+      if (!text) throw Object.assign(new Error("no Grail file on this device"), { noGrail: true });
+      window.LUMINA_TX.grail = grailFromPack(JSON.parse(text));
+    });
+  }
+  /* the Grail if it is here, else only its verse numbers (for the Trees and Psalm links) */
+  const loadGrailOrMap = () => loadGrail().catch(() => loadScript("data-grail-map.js", () => !!window.LUMINA_GRAIL_MAP));
+  function grailPsalm(ps){
+    const g = txData("grail");
+    return g ? g.books[C.bookIdxById("psalms")].ch[ps - 1] : window.LUMINA_GRAIL_MAP[ps - 1];
   }
   const loadCcc = () => loadScript("data-catechism.js", () => !!window.LUMINA_CCC);
   const loadSums = () => loadScript("data-summaries.js", () => !!window.LUMINA_SUMMARIES);
@@ -1033,20 +1104,75 @@ const LuminaCore = (function () {
   focusSel.onchange = () => { state.focus = focusSel.value; save(); };
   TRANSLATIONS.forEach(t => { const o = document.createElement("option"); o.value = t.id; o.textContent = t.name; txSel.appendChild(o); });
   const oc = document.createElement("option"); oc.value = "ccc"; oc.textContent = "✠ Catechism (CCC)"; txSel.appendChild(oc);
+  const og = document.createElement("option"); og.value = "grailfile"; og.textContent = "Grail Psalms file…"; txSel.appendChild(og);
   txSel.value = state.corpus === "ccc" ? "ccc" : state.tx;
+  const txBack = () => { txSel.value = state.corpus === "ccc" ? "ccc" : state.tx; };
+  function useTx(val){
+    const wasCcc = state.corpus === "ccc";
+    state.tx = val; state.corpus = "bible"; txSel.value = val; save(); applyMode();
+    if (wasCcc) begin(); else rerender();
+  }
   txSel.onchange = () => {
     const val = txSel.value;
+    if (val === "grailfile"){ txBack(); return grailSheet(); }
     if (val === "ccc"){
       loadCcc().then(() => { state.corpus = "ccc"; save(); applyMode(); beginCcc(); })
         .catch(() => { showToast("Could not load the Catechism data"); txSel.value = state.corpus === "ccc" ? "ccc" : state.tx; });
       return;
     }
-    loadTx(val).then(() => {
-      const wasCcc = state.corpus === "ccc";
-      state.tx = val; state.corpus = "bible"; save(); applyMode();
-      if (wasCcc) begin(); else rerender();
-    }).catch(() => { showToast("Could not load that translation"); txSel.value = state.corpus === "ccc" ? "ccc" : state.tx; });
+    loadTx(val).then(() => useTx(val)).catch(e => {
+      txBack();
+      if (e && e.noGrail) grailSheet(() => useTx("grail"));
+      else showToast("Could not load that translation");
+    });
   };
+  /* Import your Grail file, or remove it: it lives only in this browser, on this device. */
+  function grailSheet(onImported){
+    loadGrail().then(() => true, () => false).then(has => {
+      const back = modal('<h3>Grail Psalms</h3>' + (has
+        ? '<p style="text-align:center">Your Grail file is on this device. Lumina keeps it here, in this browser only, and never sends it anywhere.</p>' +
+          '<div class="rowbtns"><button class="btn" id="gRemove">Remove</button><button class="btn" id="gChoose">Replace…</button><button class="btn primary" id="gClose">Close</button></div>'
+        : '<p style="text-align:center">The Grail Psalms are under copyright, so Lumina does not include them. If you have your own Grail file, choose it here. It stays on this device and is never sent anywhere.</p>' +
+          '<div class="rowbtns"><button class="btn" id="gClose">Cancel</button><button class="btn primary" id="gChoose">Choose your Grail file</button></div>') +
+        '<p class="g-msg" style="text-align:center;color:#b33;display:none"></p><input type="file" id="gFile" style="display:none">');
+      const q = sel => back.querySelector(sel), file = q("#gFile");
+      const say = t => { const m = q(".g-msg"); m.textContent = t; m.style.display = ""; };
+      q("#gClose").onclick = () => back.remove();
+      q("#gChoose").onclick = () => { file.value = ""; file.click(); };
+      if (has) q("#gRemove").onclick = () => {
+        back.remove();
+        const sure = modal('<h3>Remove the Grail?</h3><p style="text-align:center">This removes your Grail file from this device. You can import it again at any time.</p>' +
+          '<div class="rowbtns"><button class="btn" id="rCancel">Cancel</button><button class="btn danger" id="rGo">Remove</button></div>');
+        sure.querySelector("#rCancel").onclick = () => sure.remove();
+        sure.querySelector("#rGo").onclick = () => grailDel().catch(() => {}).then(() => {
+          delete window.LUMINA_TX.grail;
+          sure.remove(); showToast("The Grail is removed from this device");
+          if (state.tx === "grail"){ state.tx = "drb"; if (state.corpus !== "ccc") txSel.value = "drb"; save(); applyMode(); }
+          rerender();
+        });
+      };
+      file.onchange = () => {
+        const f = file.files[0];
+        if (!f) return;
+        if (f.size > GRAIL_MAX) return say("That file is too large to be a Grail file.");
+        const rd = new FileReader();
+        rd.onerror = () => say("Could not read that file.");
+        rd.onload = () => {
+          let p;
+          try { p = JSON.parse(rd.result); } catch(e){ return say("This file is damaged, or it is not a Grail file."); }
+          const why = grailCheck(p);
+          if (why) return say(why);
+          grailPut(rd.result).then(() => {
+            window.LUMINA_TX.grail = grailFromPack(p);
+            try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch(e){}
+            back.remove(); showToast("The Grail Psalms are on this device");
+            if (onImported) onImported(); else rerender();
+          }).catch(() => say("This browser would not keep the file. (Is it in private browsing?)"));
+        };
+        rd.readAsText(f);
+      };
+    });
+  }
   function applyMode(){
     const ccc = state.corpus === "ccc";
     $("focusLbl").style.display = ccc ? "none" : "";
@@ -1804,7 +1930,7 @@ const LuminaCore = (function () {
       Promise.allSettled(apis.map(t => apiSlotChapter(t, b, c)))
     ).then(apiResults => {
       let html = "";
-      locals.forEach(t => { html += cmpItem(t, C.txChapter(txData(t.id), b, c), b, c, i, false); });
+      locals.forEach(t => { if (t.imported && !txData(t.id)) return; html += cmpItem(t, C.txChapter(txData(t.id), b, c), b, c, i, false); });
       apis.forEach((t, k) => {
         const r = apiResults[k];
         const ch = r.status === "fulfilled" ? r.value : undefined;
@@ -2413,9 +2539,10 @@ const LuminaCore = (function () {
 
   /* ---------- the Trees: the Psalms, and the Gospels & Acts ---------- */
   /* Branches and twigs open by choice, never by chance. Psalm leaves are Grail verses,
-     numbered after the Vulgate; Gospel leaves are scenes (every telling of an event)
-     or single verses, shown in the current translation where it is built in. */
-  const loadTree = () => loadTx("grail").then(() => loadScript("data-tree.js", () => !!window.LUMINA_TREE));
+     numbered after the Vulgate (the Douay's same verses when no Grail file is imported);
+     Gospel leaves are scenes (every telling of an event) or single verses, shown in the
+     current translation where it is built in. */
+  const loadTree = () => loadGrailOrMap().then(() => loadScript("data-tree.js", () => !!window.LUMINA_TREE));
   const loadGTree = () => loadScript("data-gtree.js", () => !!window.LUMINA_GTREE);
   const NT_BOOK = { mt:"matthew", mk:"mark", lk:"luke", jn:"john", ac:"acts" };
   let treeOpen = new Set(), treeScroll = 0;
@@ -2464,15 +2591,25 @@ const LuminaCore = (function () {
       let T, head, leaves, count;
       if (kind === "psalms"){
         T = window.LUMINA_TREE;
-        const gps = txData("grail").books[psB].ch;
-        head = { title:"The Psalm Tree", motto:"He is like a tree that is planted beside the flowing waters.",
+        const g = txData("grail"), dps = D.books[psB].ch;
+        /* without the Grail, each leaf is the Douay verse it answers to (once, if two Grail verses share it) */
+        const refsOf = tw => {
+          if (g) return tw.refs;
+          const seen = new Set();
+          return tw.refs.filter(([ps, n]) => { const m = grailPsalm(ps), k = ps + ":" + m.d[m.n ? m.n.indexOf(n) : n - 1]; return !seen.has(k) && seen.add(k); });
+        };
+        const g13 = g && g.books[psB].ch[0].v[2];
+        head = { title:"The Psalm Tree",
+          motto: g13 ? g13.split("\n").slice(0, 2).join(" ").replace(/[,;:]$/, ".") : "And he shall be like a tree which is planted near the running waters.",
           cite:"Psalm 1:3", hint:"Open whatever the Spirit draws you to. Every psalm hangs somewhere on this tree." };
-        count = tw => tw.refs.length;
-        leaves = tw => tw.refs.map(([ps, n]) => {
-          const ch = gps[ps - 1], j = ch.n ? ch.n.indexOf(n) : n - 1;
+        count = tw => refsOf(tw).length;
+        leaves = tw => refsOf(tw).map(([ps, n]) => {
+          const ch = grailPsalm(ps), j = ch.n ? ch.n.indexOf(n) : n - 1;
+          const num = g ? n : C.vnum(dps[ps - 1], ch.d[j]);
+          const text = g ? flowGrail(esc(ch.v[j])) : esc(dps[ps - 1].v[ch.d[j]]);
           return '<div class="leaf" role="button" tabindex="0" data-ps="' + ps + '" data-j="' + j + '">' +
-            '<span class="l-cite">Psalm ' + ps + ':' + n + '</span>' +
-            '<span class="l-text">' + flowGrail(esc(ch.v[j])) + '</span></div>';
+            '<span class="l-cite">Psalm ' + ps + ':' + num + '</span>' +
+            '<span class="l-text">' + text + '</span></div>';
         }).join("");
       } else {
         T = window.LUMINA_GTREE;
@@ -2543,8 +2680,8 @@ const LuminaCore = (function () {
           const b = C.bookIdxById(NT_BOOK[leaf.dataset.bk]);
           return renderChapter(b, +leaf.dataset.c - 1, +leaf.dataset.v - 1);
         }
-        const c = +leaf.dataset.ps - 1, gps = txData("grail").books[psB].ch;
-        renderChapter(psB, c, C.mapFromTx(D.books[psB].ch[c], gps[c], +leaf.dataset.j));
+        const c = +leaf.dataset.ps - 1;
+        renderChapter(psB, c, C.mapFromTx(D.books[psB].ch[c], grailPsalm(c + 1), +leaf.dataset.j));
       };
       const tree = view.querySelector(".tree");
       tree.addEventListener("click", act);
@@ -2556,8 +2693,8 @@ const LuminaCore = (function () {
   /* "21:2" — a Psalm (Vulgate) and Grail verse — opened with the verse lit */
   function openPsalmVerse(ref){
     const [ps, n] = ref.split(":").map(Number), psB = C.bookIdxById("psalms");
-    loadTx("grail").then(() => {
-      const g = txData("grail").books[psB].ch[ps - 1], j = g.n ? g.n.indexOf(n) : n - 1;
+    loadGrailOrMap().then(() => {
+      const g = grailPsalm(ps), j = g.n ? g.n.indexOf(n) : n - 1;
       renderChapter(psB, ps - 1, C.mapFromTx(D.books[psB].ch[ps - 1], g, Math.max(0, j)));
     });
   }
@@ -2753,7 +2890,10 @@ const LuminaCore = (function () {
   if (state.corpus === "ccc"){
     loadCcc().then(beginCcc).catch(() => { state.corpus = "bible"; txSel.value = state.tx; applyMode(); begin(); });
   } else if (txMeta(state.tx).kind === "local" && state.tx !== "drb"){
-    loadTx(state.tx).then(begin).catch(() => { state.tx = "drb"; txSel.value = "drb"; applyMode(); begin(); });
+    loadTx(state.tx).then(begin).catch(e => {
+      state.tx = "drb"; txSel.value = "drb"; applyMode(); begin();
+      if (e && e.noGrail) setTimeout(() => showToast("Your Grail file is not on this device"), 400);
+    });
   } else begin();
 })();
 </script>

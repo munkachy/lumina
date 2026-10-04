@@ -1,0 +1,9 @@
+# The Grail Psalms are under copyright: never commit them. Keep your copy in private/
+# (grail-source.txt, grail-fixes.js) and import grail.selah-pack.v1.json into Lumina
+# on each device. See README, "The Grail Psalms".
+private/
+*grail*.json
+*Grail*.json
+data-grail.js
+grail-source.txt
+grail-fixes.js

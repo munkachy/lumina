@@ -6,14 +6,15 @@ A contemplative reader for the complete Catholic Bible — all 73 books,
 | Translation | Source | Character |
 |---|---|---|
 | **Douay-Rheims** (Challoner) | built in | The classic — with Challoner's 1,222 chapter summaries and 1,749 notes |
-| **Grail Psalms** (1963) | built in | The Psalms as chanted in the Divine Office; Psalms only (other books show the Douay) |
+| **Grail Psalms** (1963) | your own file | The Psalms as chanted in the Divine Office; Psalms only (other books show the Douay). Under copyright, so not included: import your own copy (see below) |
 | **Catholic Public Domain Version** (2009) | built in | Modern English from the same Latin Vulgate |
 | **World English Bible, British Edition** | built in | Very easy modern English, complete with Deuterocanon |
 | **Good News Translation** | API.Bible, live | The easiest reading of all (incl. Sirach via your GNT license) |
 | **Amplified Bible** | API.Bible, live | Expanded renderings that unfold each phrase |
 | **NASB 2020** | API.Bible, live | The most literal modern English |
 
-The Douay, Grail, CPDV and WEBBE are embedded and work **offline**; the last three are fetched
+The Douay, CPDV and WEBBE are embedded and work **offline**, and so does the Grail once you import
+your own copy; the last three are fetched
 live from **API.Bible** (American Bible Society) under your personal key, which
 is the licensed way to display these copyrighted translations.
 
@@ -28,7 +29,8 @@ is the licensed way to display these copyrighted translations.
   The Hours · Food & Drink · Sounds & Silence · Christ in the Psalms*.
   Each branch holds twigs (Rivers & streams, Bow & arrow, Deer & wild goats,
   Shepherd, Thirst & longing, Dawn & morning, The Passion…), and each twig holds
-  the Grail verses that carry that image. Every one of the 150 psalms hangs on the
+  the verses that carry that image: the Grail's, once you have imported your Grail
+  file, and otherwise the same verses in the Douay. Every one of the 150 psalms hangs on the
   tree. Tap a verse to open its psalm with the verse illuminated. Key **T**.
 - **🌳 The Gospels & Acts Tree** — the same Tree button, switched to *Gospels & Acts*.
   Fourteen branches: *The Life of Christ & His Church* (the Rosary mysteries, then
@@ -48,7 +50,7 @@ is the licensed way to display these copyrighted translations.
   gently illuminated.
 - **Books menu** — choose any book and chapter by hand.
 - **Bible selector** — switch among all the translations anywhere; your place is kept.
-- **⇄ Compare** — on any verse, view every translation side by side (the Grail joins in the Psalms).
+- **⇄ Compare** — on any verse, view every translation side by side (the Grail joins in the Psalms once imported).
 - **Text size** — A− / A+ buttons (or keyboard − / +) scale the whole app; remembered.
 - **Catechism of the Catholic Church** — choose it in the Book selector: all 2,865
   paragraphs, random paragraph, random chapter, full table of contents.
@@ -86,7 +88,7 @@ Open the folder and **double-click `index.html`**. Entirely offline.
 1. Create a free account at **github.com** (or sign in).
 2. **+** (top-right) → **New repository** → name it `lumina`, Public → **Create repository**.
 3. Click **"uploading an existing file"** (or **Add file → Upload files**).
-4. Drag in all the files: **`index.html`**, **`bible-data.js`**, **`data-grail.js`**,
+4. Drag in all the files: **`index.html`**, **`bible-data.js`**, **`data-grail-map.js`**,
    **`data-tree.js`**, **`data-gtree.js`**, **`data-cpdv.js`**, **`data-webc.js`**, **`data-summaries.js`**,
    **`data-catechism.js`** → **Commit changes** (~18 MB total; allow a minute).
 5. **Settings → Pages** → Source: *Deploy from a branch* → branch **main**, folder **/ (root)** → **Save**.
@@ -101,7 +103,7 @@ To update later, upload the changed files again the same way.
 |---|---|
 | `index.html` | The entire application |
 | `bible-data.js` | Douay-Rheims text (loads at start; defines the canonical structure) |
-| `data-grail.js` | Grail Psalms, Vulgate-numbered (loads when first selected, or with the Tree) |
+| `data-grail-map.js` | The Grail's verse numbers against the Douay's (numbers only, no text), so the Trees work without a Grail file |
 | `data-tree.js` | The Psalm Tree: branches, twigs and their verses (loads on first Tree tap) |
 | `data-gtree.js` | The Gospels & Acts tree: scenes, branches, twigs (loads when first opened) |
 | `data-cpdv.js` | CPDV text (loads only when first selected) |
@@ -116,24 +118,47 @@ browser's local storage — private to each device, no account required.
 
 ## The Grail Psalms and the Psalm Tree
 
-The Grail text comes from a Word copy of the Psalter used in choir. It follows the
+**The Grail Psalms are under copyright, so they are not in this repository** or on the
+public site. Each reader brings their own copy, as a file, and Lumina keeps it on that
+device only:
+
+1. Keep your Grail file (`grail.selah-pack.v1.json`) somewhere your phone can reach it:
+   the Files app, iCloud Drive or Google Drive.
+2. In Lumina, open the **Book** menu and choose **Grail Psalms file…** (or simply choose
+   **Grail Psalms**), then **Choose your Grail file**.
+3. That is all. The file is kept in this browser on this device, and never sent anywhere.
+   Do it once on each phone or computer. **Grail Psalms file…** also replaces or removes it.
+
+On an iPhone, Safari may clear a site's storage if the site is not opened for about a week;
+adding Lumina to the Home Screen (Share → Add to Home Screen) keeps it. If the Grail is ever
+gone, Lumina opens on the Douay and says so; import the file again.
+
+The same file works in SELAH, the psalm rhythm game in
+[munkachy/monastic-games](https://github.com/munkachy/monastic-games) (`selah/PLAN.md`).
+
+The Grail text came from a Word copy of the Psalter used in choir. It follows the
 Hebrew psalter; Lumina files it under the Vulgate numbering of the Douay-Rheims so the
 two line up psalm for psalm and verse for verse (Grail 10 is Vulgate 9:22–39, Grail
 114–115 is Vulgate 113, Grail 116 is Vulgate 114–115, Grail 147 is Vulgate 146–147).
 Each psalm shows its Latin incipit; Psalm 118 carries its Hebrew-letter stanzas. The
 Grail's chanting lines flow as one paragraph, a faint dot marking where each line ends.
 
-The `tools/` folder rebuilds both data files (`node tools/build-grail.js`, then
-`node tools/build-tree.js`):
+**Rebuilding the Grail file and the Psalm Tree.** The sources stay private, in a
+`private/` folder at the top of your Lumina folder, which git ignores (see `.gitignore`):
+`private/grail-source.txt` (the text as extracted from the .docx) and
+`private/grail-fixes.js` (corrections made while reading every psalm: hyphens the .docx
+had lost, a stray line break after each, and typing slips checked against the printed
+Grail). Then:
 
-- `grail-source.txt` — the text as extracted from the .docx;
-- `grail-fixes.js` — corrections made while reading every psalm: hyphens the .docx
-  had lost (*evil-doers, ten-stringed, red-hot…*), a stray line break after each,
-  and typing slips checked against the printed Grail;
-- `tree-rules.js` — the branches and twigs, and the words that gather verses to them;
-- `tree-edits.txt` — verses placed or removed by hand after reading each psalm.
+- `node tools/build-grail.js` writes `private/grail.selah-pack.v1.json` (the file to
+  import), `private/data-grail.js` (for the tools) and the public `data-grail-map.js`
+  (verse numbers only);
+- `node tools/build-tree.js` rebuilds `data-tree.js` from `tree-rules.js` (the branches
+  and twigs, and the words that gather verses to them) and `tree-edits.txt` (verses
+  placed or removed by hand after reading each psalm). It refuses to finish if any psalm
+  is left off the tree.
 
-`build-tree.js` refuses to finish if any psalm is left off the tree.
+`tools/grail-pack.js` converts between Lumina's Grail data and the file.
 
 The Gospels & Acts tree is rebuilt with `node tools/build-gtree.js`, from
 `gospel-scenes.js` (the scenes and their tellings), `gospel-tree-rules.js` (branches,
@@ -162,7 +187,7 @@ dashboard (scripture.api.bible) and replace it in `index.html` (the
 ## Sources & rights
 
 Douay-Rheims text from your Nexus project files (public domain); the Grail
-Psalms © 1963 The Grail (England), used by permission; CPDV by
+Psalms © 1963 The Grail (England), not included: each reader imports their own copy; CPDV by
 Ronald L. Conte Jr. (sacredbible.org, public domain); World English Bible from
 eBible.org (public domain). GNT © American Bible Society; Amplified and NASB
 2020 © The Lockman Foundation — both displayed under license via API.Bible.

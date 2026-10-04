@@ -1,14 +1,27 @@
-/* Build data-grail.js from tools/grail-source.txt.
+/* Build the Grail from your private copy.
+   The Grail Psalms are under copyright, so their text is not in this repository. Keep your
+   copy in private/ (which git ignores): private/grail-source.txt and private/grail-fixes.js.
+   This writes, all from that copy:
+     private/grail.selah-pack.v1.json  the file to import into Lumina on each device
+     private/data-grail.js             the same, as the tools below read it
+     data-grail-map.js                 public: only the Grail's verse numbers and the Douay
+                                       verse each answers to, so the Trees work without it
    The Grail follows the Hebrew psalter; Lumina files it under the Vulgate numbering
    of the Douay-Rheims so the two line up psalm for psalm.
    Usage: node tools/build-grail.js */
 const fs = require("fs"), path = require("path");
+const PRIV = path.join(__dirname, "..", "private");
+if (!fs.existsSync(path.join(PRIV, "grail-source.txt")) || !fs.existsSync(path.join(PRIV, "grail-fixes.js"))){
+  console.error("The Grail is not in this repository. Put your copy in private/ (grail-source.txt, grail-fixes.js).");
+  process.exit(1);
+}
 const parseGrail = require("./grail-parse.js");
+const { toPack } = require("./grail-pack.js");
 global.window = {};
 require(path.join(__dirname, "..", "bible-data.js"));
 const D = window.LUMINA_DATA;
 const PS = D.books.findIndex(b => b.id === "psalms");
-const parts = parseGrail(path.join(__dirname, "grail-source.txt"));
+const parts = parseGrail(path.join(PRIV, "grail-source.txt"));
 
 /* Where the Vulgate joins two Hebrew psalms, the second continues the Vulgate verse count */
 const JOIN_OFFSET = { "9:10": 21, "113:115": 8 };
@@ -58,8 +71,14 @@ const books = D.books.map((bk, b) => b === PS
   ? { id: bk.id, name: "Psalms", ch: chapters }
   : { id: bk.id, name: bk.name, ch: [] });
 const out = { id: "grail", name: "The Grail Psalms", abbr: "Grail", books };
-fs.writeFileSync(path.join(__dirname, "..", "data-grail.js"),
+fs.writeFileSync(path.join(PRIV, "data-grail.js"),
   "window.LUMINA_TX = window.LUMINA_TX || {};\n" +
   "window.LUMINA_TX['grail'] = " + JSON.stringify(out) + ";\n");
+fs.writeFileSync(path.join(PRIV, "grail.selah-pack.v1.json"), JSON.stringify(toPack(out), null, 1));
+/* numbers only: for each psalm, the Douay index of each Grail verse (d) and the Grail's own
+   verse numbers where they are not 1, 2, 3... (n) */
+fs.writeFileSync(path.join(__dirname, "..", "data-grail-map.js"),
+  "/* The Grail's verse numbers against the Douay's, for the Trees when no Grail file is imported. No text. */\n" +
+  "window.LUMINA_GRAIL_MAP = " + JSON.stringify(chapters.map(c => c.n ? { d: c.d, n: c.n } : { d: c.d })) + ";\n");
 const nv = chapters.reduce((s, c) => s + c.v.length, 0);
-console.log("data-grail.js: 150 psalms, " + nv + " verses");
+console.log("private/grail.selah-pack.v1.json and private/data-grail.js: 150 psalms, " + nv + " verses; data-grail-map.js");
