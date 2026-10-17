@@ -87,8 +87,11 @@
 :root[data-theme="lcars"] footer{font-style:normal; text-transform:uppercase;
   letter-spacing:.15em; font-size:.7rem; color:#9999cc}
 
-/* ---------- icon toolbar ---------- */
-.actions.main-bar{gap:.35rem}
+/* ---------- icon toolbar: two rows of five, big buttons ---------- */
+.actions.main-bar{display:grid; grid-template-columns:repeat(5, 1fr); gap:.4rem}
+.actions.main-bar .btn.ib{max-width:none; min-width:0; padding:.7rem 0; gap:.25rem}
+.actions.main-bar .btn.ib .ic{font-size:2.3rem}
+.actions.main-bar .btn.ib .lb{font-size:1.15rem}
 .btn.ib{
   display:flex; flex-direction:column; align-items:center; gap:.1rem;
   padding:.35rem .55rem; min-width:3.2rem; letter-spacing:.03em;
@@ -102,12 +105,12 @@
   font-size:.86rem; letter-spacing:.1em; line-height:1.1}
 :root[data-theme="lcars"] .menu-btn .mi{display:none}
 @media(max-width:699px){
-  .actions.main-bar{flex-wrap:nowrap; gap:.2rem}
-  .actions.main-bar .btn.ib{flex:1 1 0; max-width:none; min-width:0; padding:.4rem 0; font-size:1rem}
-  .btn.ib .lb{font-size:.56rem; letter-spacing:.02em}
+  .actions.main-bar{gap:.3rem}
+  .actions.main-bar .btn.ib{padding:.6rem 0; font-size:1rem}
+  .actions.main-bar .btn.ib .lb{font-size:1.1rem; letter-spacing:.02em}
   @media(max-width:380px){ .btn.ib .lb{letter-spacing:0} }
   :root[data-theme="lcars"] .actions.main-bar .btn.ib{padding:.5rem .15rem}
-  :root[data-theme="lcars"] .btn.ib .lb{font-size:.6rem; letter-spacing:0}
+  :root[data-theme="lcars"] .btn.ib .lb{font-size:1.1rem; letter-spacing:0}
   :root[data-theme="lcars"] .actions.main-bar .btn.ib{overflow:hidden}
 }
 
@@ -133,7 +136,7 @@
 .hi-note .lbl{font-style:normal; font-variant:small-caps; letter-spacing:.1em;
   color:var(--gold); font-size:.8rem; display:block}
 :root[data-theme="lcars"] .hi-note .lbl{font-variant:normal; text-transform:uppercase}
-.note-view{font-size:1.12rem; line-height:1.7; margin:.6rem 0; white-space:pre-wrap}
+.note-view{font-size:calc(1.12rem * var(--ts, 1)); line-height:1.7; margin:.6rem 0; white-space:pre-wrap}
 .meta-text{font-style:italic; color:var(--ink-soft); font-size:.95rem; margin:.15rem 0 0; white-space:pre-wrap}
 .verse-pick{max-width:8rem}
 
@@ -155,7 +158,7 @@ body{
   background-image:radial-gradient(ellipse at 50% -10%, var(--panel) 0%, var(--bg) 55%, var(--bg2) 100%);
   background-attachment:fixed;
 }
-.wrap{max-width:46rem; margin:0 auto; padding:1.2rem 1.1rem 6.5rem}
+.wrap{max-width:46rem; margin:0 auto; padding:1.2rem 1.1rem 14rem}
 @media(min-width:700px){.wrap{padding-bottom:3rem}}
 
 header{text-align:center; margin:0.6rem 0 0.2rem}
@@ -210,7 +213,7 @@ select:disabled{opacity:.45}
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
     border-top:1px solid var(--border-soft);
   }
-  .actions.main-bar .btn{flex:1; max-width:9.5rem; padding:.55rem .3rem; font-size:.9rem}
+  .actions.main-bar .btn{font-size:.9rem}
 }
 
 .view{animation:fade .3s ease}
@@ -228,7 +231,7 @@ select:disabled{opacity:.45}
   font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
 }
 .citation .tx-tag{font-size:.78em; color:var(--ink-faint); letter-spacing:.1em; margin-left:.5em}
-.verse-text{font-size:1.42rem; line-height:1.75; margin:0; hyphens:none; white-space:pre-line}
+.verse-text{font-size:calc(1.42rem * var(--ts, 1)); line-height:1.75; margin:0; hyphens:none; white-space:pre-line}
 .verse-text.dropcap::first-letter{
   font-family:"Cormorant Garamond",Georgia,serif;
   float:left; font-size:3.1em; line-height:.82; font-weight:600;
@@ -270,7 +273,7 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .sum-panel .lbl{font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
 .ch-nav{display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin:1rem 0 .6rem}
 .ch-nav .mid{flex:1; text-align:center; color:var(--ink-faint); font-style:italic; font-size:.92rem}
-.verses{margin-top:.6rem}
+.verses{margin-top:.6rem; font-size:calc(1em * var(--ts, 1))}
 .v{margin:0 0 .85em; padding:.15em .4em; border-radius:.35rem; scroll-margin:6rem; white-space:pre-line}
 .v sup.vn{color:var(--gold-bright); font-size:.68em; font-weight:600; margin-right:.35em;
   font-family:"Cormorant Garamond",Georgia,serif}
@@ -296,8 +299,8 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .lib-doc:hover{background:var(--hover, rgba(160,120,40,.07))}
 .lib-t{font-weight:600}
 .lib-y{font-weight:400; font-size:.82rem; color:var(--ink-faint); margin-left:.3rem}
-.lib-s{font-size:.9rem; color:var(--ink-soft); line-height:1.4; margin-top:.15rem}
-.doc-sum{max-width:34rem; margin:.5rem auto; font-size:.95rem; line-height:1.45; color:var(--ink-soft)}
+.lib-s{font-size:calc(.9rem * var(--ts, 1)); color:var(--ink-soft); line-height:1.4; margin-top:.15rem}
+.doc-sum{max-width:34rem; margin:.5rem auto; font-size:calc(.95rem * var(--ts, 1)); line-height:1.45; color:var(--ink-soft)}
 .doc-tr{display:flex; gap:.4rem; justify-content:center; flex-wrap:wrap; margin:.2rem 0 .3rem}
 .doc-jump{display:flex; gap:.4rem; justify-content:center; align-items:center; flex-wrap:wrap; margin:.4rem 0 .8rem}
 .doc-jump input{width:4.5rem}
@@ -333,7 +336,7 @@ mark.q{background:var(--hl-gold); border-radius:.2em}
 .list-item:hover{border-color:var(--gold-line)}
 .list-item .li-main{flex:1; min-width:0}
 .list-item .li-cite{font-variant:small-caps; letter-spacing:.1em; color:var(--gold); font-size:.92rem}
-.list-item .li-snip{color:var(--ink-soft); font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.list-item .li-snip{color:var(--ink-soft); font-size:calc(.92rem * var(--ts, 1)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .list-item .li-x{border:none; background:none; color:var(--ink-faint); cursor:pointer; font-size:1rem; padding:.2rem}
 .list-item .li-x:hover{color:var(--rubric)}
 .fav-list-head{display:flex; align-items:center; gap:.6rem; margin:1.2rem 0 .3rem}
@@ -383,10 +386,10 @@ mark.q{background:var(--hl-gold); border-radius:.2em}
   border-radius:.4rem; padding:.45rem .7rem; margin:.35rem 0; line-height:1.5}
 .leaf:hover{border-color:var(--gold-line); background:var(--panel2)}
 .leaf .l-cite{display:block; font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
-.leaf .l-text{display:block; white-space:pre-line; font-size:1.02rem}
+.leaf .l-text{display:block; white-space:pre-line; font-size:calc(1.02rem * var(--ts, 1))}
 .leaf .l-title{display:block; font-family:"Cormorant Garamond",Georgia,serif; font-weight:600; font-size:1.12rem; color:var(--ink); margin:.05rem 0 .15rem}
 .leaf.scene{border-left-color:var(--rubric)}
-.leaf.scene .l-text{color:var(--ink-soft); font-style:italic; font-size:.98rem}
+.leaf.scene .l-text{color:var(--ink-soft); font-style:italic; font-size:calc(.98rem * var(--ts, 1))}
 .leaf .pslink{margin-top:.4rem; font-size:.82rem; padding:.2rem .6rem}
 .tree-switch, .tellings{display:flex; justify-content:center; gap:.4rem; flex-wrap:wrap; margin:.2rem 0 .9rem}
 .tree-switch .btn.on, .tellings .btn.on, .doc-tr .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
@@ -1115,7 +1118,11 @@ const LuminaCore = (function () {
     save(); applyTheme();
   };
   const FMIN = 0.8, FMAX = 1.45, FSTEP = 0.075;
-  function applyFont(){ document.documentElement.style.fontSize = (16 * (state.font || 1)) + "px"; }
+  /* The interface always stays at the smallest size; A− / A+ scale only the reading text (--ts). */
+  function applyFont(){
+    document.documentElement.style.fontSize = (16 * FMIN) + "px";
+    document.documentElement.style.setProperty("--ts", ((state.font || 1) / FMIN).toFixed(3));
+  }
   $("fontMinus").onclick = () => { state.font = Math.max(FMIN, +(state.font - FSTEP).toFixed(3)); save(); applyFont(); };
   $("fontPlus").onclick  = () => { state.font = Math.min(FMAX, +(state.font + FSTEP).toFixed(3)); save(); applyFont(); };
 
@@ -1934,7 +1941,19 @@ const LuminaCore = (function () {
 
   /* ---------- verse view (bible) ---------- */
   let cur = null, renderSeq = 0;
+  /* Opening the Psalms (coming from another book) switches to the Grail, if this device has it. */
+  let lastBookB = null;
+  function grailForPsalms(b){
+    const was = lastBookB; lastBookB = b;
+    if (D.books[b].id !== "psalms" || was === b || state.corpus !== "bible" || state.tx === "grail") return;
+    const use = () => { state.tx = "grail"; txSel.value = "grail"; save(); applyMode(); };
+    if (window.LUMINA_TX && window.LUMINA_TX.grail) return use();
+    loadTx("grail").then(() => {
+      if (cur && (cur.kind === "chapter" || cur.kind === "verse") && cur.b === b && state.tx !== "grail"){ use(); rerenderInPlace(); }
+    }).catch(() => {});
+  }
   function renderVerse(b, c, i, opts){
+    grailForPsalms(b);
     const drbch = D.books[b].ch[c];
     i = Math.max(0, Math.min(i, drbch.v.length - 1));
     cur = { kind:"verse", b, c, i };
@@ -2035,6 +2054,7 @@ const LuminaCore = (function () {
 
   /* ---------- chapter view (bible) ---------- */
   function renderChapter(b, c, highlightI){
+    grailForPsalms(b);
     const bk = C.bookByIdx(b);
     cur = { kind:"chapter", b, c, i: highlightI == null ? null : highlightI };
     state.last = { kind:"chapter", book: bk.id, c, i: cur.i }; save();
