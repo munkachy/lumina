@@ -22,6 +22,16 @@ is the licensed way to display these copyrighted translations.
 
 ## Features
 
+- **✠ Church Documents** — choose it from the **Book** menu. A library ranked by
+  authority: Vatican II's dogmatic constitutions (*Lumen Gentium*, *Dei Verbum*), its
+  constitutions (*Sacrosanctum Concilium*, *Gaudium et Spes*), decrees (*Unitatis
+  Redintegratio*, *Perfectae Caritatis*, *Ad Gentes*, *Presbyterorum Ordinis*) and
+  declarations (*Dignitatis Humanae*, *Nostra Aetate*), then St John Paul II's
+  *Veritatis Splendor* and *Reconciliatio et Paenitentia*. Each level carries a short note
+  on what kind of assent it asks. The reader has numbered paragraphs, section headings,
+  a Contents menu and a jump to any ¶; highlights, notes, favorites and search all work.
+  **¶** gives a random paragraph, **Chapter** a random section, **Library** the list.
+  Texts © Libreria Editrice Vaticana.
 - **🌳 The Psalm Tree** — a way into the Psalter by choice instead of chance.
   Twelve branches open like a flow chart, each closed until you open it:
   *Earth, Sky & Water · Things Made by Hands · Creatures · Places of the Soul ·
@@ -110,6 +120,7 @@ To update later, upload the changed files again the same way.
 | `data-webc.js` | WEBBE text (loads only when first selected) |
 | `data-summaries.js` | AI chapter summaries (loads on first Summary tap) |
 | `data-catechism.js` | The Catechism, 2,865 ¶ (loads when first selected) |
+| `data-docs.js` | Church documents: ten of Vatican II, *Veritatis Splendor*, *Reconciliatio et Paenitentia* (loads when first selected; built by `tools/build-docs.py` from vatican.va) |
 
 Favorites, highlights, notes, search history, and plan progress live in your
 browser's local storage — private to each device, no account required.
