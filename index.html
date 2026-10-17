@@ -309,6 +309,7 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .vs-chk{display:block; margin:.35rem 0; font-size:.95rem}
 .fun-voices{margin-top:.8rem; border-top:1px solid var(--border-soft); padding-top:.5rem}
 .fun-voices summary{cursor:pointer; color:var(--gold); text-align:center}
+.vs-note{font-size:.85rem; color:var(--ink-faint); text-align:center; margin:.2rem 0}
 .fv-msg{text-align:center; font-size:.9rem; color:var(--ink-soft); min-height:1.2em; margin:.3rem 0 0}
 .bk-row{display:flex; gap:.7rem; align-items:center; margin:.55rem 0}
 .bk-row .btn{flex:0 0 8.5rem}
@@ -947,6 +948,8 @@ const LuminaCore = (function () {
   } catch(e){}
   if (!TRANSLATIONS.some(t => t.id === state.tx)) state.tx = "drb";
   function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+  /* ask the browser to keep Lumina's saved data rather than clear it when space runs low */
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
   function txMeta(id){ return TRANSLATIONS.find(t => t.id === id); }
@@ -1706,7 +1709,8 @@ const LuminaCore = (function () {
         sl("gap", "Word spacing", 0, 20, 1) + sl("vowel", "Vowel length", 1, 2, 0.05) + sl("pause", "Pause between verses", 0, 2, 0.1) +
         '<label class="vs-chk"><input type="checkbox" data-k="clarity"' + (s.clarity ? " checked" : "") + '> Clarity filter (lifts the consonants)</label>' +
         '<label class="vs-chk"><input type="checkbox" data-k="follow"' + (s.follow !== false ? " checked" : "") + '> Follow along on the page</label>' +
-        '<div class="rowbtns"><button class="btn" id="vsReset">Clearest</button><button class="btn" id="vsTest">▶ Test</button><button class="btn primary" id="vsClose">Done</button></div>');
+        '<p class="vs-note">Changes save themselves.</p>' +
+        '<div class="rowbtns"><button class="btn" id="vsReset">Reset to default</button><button class="btn" id="vsTest">▶ Test</button><button class="btn primary" id="vsClose">Done</button></div>');
       const q = sel => back.querySelector(sel);
       const show = () => back.querySelectorAll("[data-o]").forEach(o => { o.textContent = FMT[o.dataset.o](q('[data-k="' + o.dataset.o + '"]').value); });
       const read = () => {
@@ -1716,7 +1720,7 @@ const LuminaCore = (function () {
       };
       show();
       back.addEventListener("input", () => { show(); read(); });
-      q("#vsReset").onclick = () => { state.voice = Object.assign({}, m.READ_DEFAULTS); save(); back.remove(); openVoiceSheet(); };
+      q("#vsReset").onclick = () => { state.voice = Object.assign({}, m.READ_DEFAULTS); save(); back.remove(); openVoiceSheet(); showToast("Voice reset to the default"); };
       q("#vsClose").onclick = () => back.remove();
       q("#vsTest").onclick = () => {
         m.unlock();
@@ -1764,7 +1768,7 @@ const LuminaCore = (function () {
   /* ---------- back up, restore, readable export ---------- */
   /* Everything stays on this device; these only hand the person a file (on a phone, the share sheet
      offers Save to Files → Google Drive), or read one back in. */
-  const BACKUP_KEYS = ["favLists", "favs", "chapLists", "chapFavs", "hls", "plans", "activePlan", "searches"];
+  const BACKUP_KEYS = ["favLists", "favs", "chapLists", "chapFavs", "hls", "plans", "activePlan", "searches", "voice", "funPreset", "funRobot"];
   function fileDate(){ return new Date().toISOString().slice(0, 10); }
   function giveFile(name, type, text){
     const file = new File([text], name, { type });
@@ -1797,6 +1801,8 @@ const LuminaCore = (function () {
     if (!state.activePlan && d.activePlan) state.activePlan = d.activePlan;
     if (Array.isArray(d.searches))
       state.searches = state.searches.concat(d.searches.filter(q => !state.searches.includes(q))).slice(0, 15);
+    /* voice settings: taken from the backup only if this device has none of its own yet */
+    ["voice", "funPreset", "funRobot"].forEach(k => { if (d[k] != null && state[k] == null) state[k] = d[k]; });
     if (!state.lastFavList && state.favLists[0]) state.lastFavList = state.favLists[0].id;
     if (!state.lastChapList && state.chapLists[0]) state.lastChapList = state.chapLists[0].id;
     save();
