@@ -284,7 +284,21 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .subhead.art{color:var(--rubric)}
 .doc .vt{white-space:pre-line}
 .doc-pre{font-style:italic}
-.lvl-note{font-size:.9rem; color:var(--ink-soft); font-style:italic; margin:-.2rem .2rem .7rem; line-height:1.45}
+.lib-about,.lib-level{display:flex; width:100%; align-items:center; justify-content:space-between; gap:.5rem; background:none; border:none;
+  border-bottom:1px solid var(--gold-line); padding:.75rem .2rem .45rem; margin-top:.6rem; cursor:pointer; text-align:left;
+  font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.08em; font-size:1.05rem; color:var(--rubric)}
+.lib-about{font-size:.95rem; color:var(--ink-soft); margin-top:0}
+.lib-i{font-variant:normal; font-size:.9rem; opacity:.7; transition:transform .2s}
+.lib-about.open .lib-i,.lib-level.open .lib-i{opacity:1}
+.lib-note{display:none; font-size:.92rem; color:var(--ink-soft); font-style:italic; margin:.5rem .2rem .3rem; line-height:1.5}
+.lib-note.open{display:block}
+.lib-doc{padding:.55rem .3rem; border-bottom:1px dotted var(--gold-line); cursor:pointer}
+.lib-doc:hover{background:var(--hover, rgba(160,120,40,.07))}
+.lib-t{font-weight:600}
+.lib-y{font-weight:400; font-size:.82rem; color:var(--ink-faint); margin-left:.3rem}
+.lib-s{font-size:.9rem; color:var(--ink-soft); line-height:1.4; margin-top:.15rem}
+.doc-sum{max-width:34rem; margin:.5rem auto; font-size:.95rem; line-height:1.45; color:var(--ink-soft)}
+.doc-tr{display:flex; gap:.4rem; justify-content:center; flex-wrap:wrap; margin:.2rem 0 .3rem}
 .doc-jump{display:flex; gap:.4rem; justify-content:center; align-items:center; flex-wrap:wrap; margin:.4rem 0 .8rem}
 .doc-jump input{width:4.5rem}
 .doc-jump select{max-width:100%}
@@ -375,7 +389,7 @@ mark.q{background:var(--hl-gold); border-radius:.2em}
 .leaf.scene .l-text{color:var(--ink-soft); font-style:italic; font-size:.98rem}
 .leaf .pslink{margin-top:.4rem; font-size:.82rem; padding:.2rem .6rem}
 .tree-switch, .tellings{display:flex; justify-content:center; gap:.4rem; flex-wrap:wrap; margin:.2rem 0 .9rem}
-.tree-switch .btn.on, .tellings .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
+.tree-switch .btn.on, .tellings .btn.on, .doc-tr .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
 .tellings{margin:.6rem 0 .2rem}
 .t-group{margin:.8rem 0 .2rem; font-variant:small-caps; letter-spacing:.12em; color:var(--ink-faint); font-size:.86rem}
 :root[data-theme="lcars"] .tree, :root[data-theme="lcars"] .twigs{border-left-color:#cc6699}
@@ -1374,7 +1388,7 @@ const LuminaCore = (function () {
     if (f.ref.corpus === "ccc"){
       loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(f.ref.n); });
     } else if (f.ref.corpus === "doc"){
-      toDocs(() => renderDoc(f.ref.id, f.ref.n));
+      toDocs(() => docShow(f.ref.id, f.ref.n));
     } else {
       const b = C.bookIdxById(f.ref.book);
       if (state.corpus !== "bible"){ state.corpus = "bible"; txSel.value = state.tx; applyMode(); }
@@ -1699,7 +1713,7 @@ const LuminaCore = (function () {
       if (h.tx === "ccc" || h.book === "ccc"){
         loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(h.i); });
       } else if (h.tx === "doc"){
-        toDocs(() => renderDoc(h.book, h.i));
+        toDocs(() => docShow(h.book, h.i));
       } else {
         const b = C.bookIdxById(h.book);
         if (b < 0) return;
@@ -2232,23 +2246,46 @@ const LuminaCore = (function () {
   }
 
   /* ---------- Church documents ---------- */
-  function docById(id){ const L = window.LUMINA_DOCS; return L ? L.docs.find(d => d.id === id) : null; }
-  function docPara(d, n){ return d ? d.p.find(p => p[0] === n) : null; }
-  function docParaText(id, n){ const p = docPara(docById(id), n); return p ? p[1] : ""; }
-  function docCite(id, n){
-    const d = docById(id), t = d ? d.title : id;
-    return n ? t + " " + n : t + " (opening)";
+  /* A "book" key is the document id, plus "~old" for its older public-domain translation. */
+  function docById(id){ const L = window.LUMINA_DOCS; return L ? L.docs.find(d => d.id === id.replace(/~old$/, "")) : null; }
+  function docIsOld(key){ return /~old$/.test(key); }
+  function docParas(key){ const d = docById(key); return !d ? [] : docIsOld(key) && d.alt ? d.alt.p : d.p; }
+  function docPara(key, n){ return docParas(key).find(p => p[0] === n); }
+  function docParaText(key, n){ const p = docPara(key, n); return p ? p[1] : ""; }
+  function docLabel(d, n){ const p = d && d.p.find(x => x[0] === n); return p && p[2] ? p[2] : String(n); }
+  function docCite(key, n){
+    const d = docById(key); if (!d) return key;
+    let c;
+    if (!n) c = d.title + " (opening)";
+    else if (!d.unit) c = d.title + " " + n;
+    else {
+      const l = docLabel(d, n);
+      c = d.title + ", " + (/^\d+$/.test(l) ? d.unit + " " + l
+        : /^Can\. /.test(l) ? "can. " + l.slice(5)
+        : /^Pr\. /.test(l) ? "prologue " + l.slice(4)
+        : { Proem:"proem", Canons:"before the canons", End:"conclusion" }[l] || l);
+    }
+    return docIsOld(key) && d.alt ? c + " (" + d.alt.name + ")" : c;
   }
   function docLevel(d){ return window.LUMINA_DOCS.levels.find(l => l.id === d.level); }
+  function docKeyFor(d){ return d.alt && state.docOld && state.docOld[d.id] ? d.id + "~old" : d.id; }
+  function docShow(key, n){
+    const d = docById(key); if (!d) return;
+    if (d.alt){ state.docOld = state.docOld || {}; state.docOld[d.id] = docIsOld(key); save(); }
+    renderDoc(d.id, n);
+  }
   function toDocs(then){
     loadDocs().then(() => { state.corpus = "docs"; txSel.value = "docs"; save(); applyMode(); then(); })
       .catch(() => showToast("Could not load the Church documents"));
   }
   function searchDocs(q, limit){
     const terms = q.toLowerCase().split(/\s+/).filter(Boolean), out = [];
-    for (const d of window.LUMINA_DOCS.docs) for (const p of d.p){
-      const low = p[1].toLowerCase();
-      if (terms.every(t => low.includes(t))){ out.push([d.id, p[0]]); if (out.length >= limit) return out; }
+    for (const d of window.LUMINA_DOCS.docs){
+      const key = docKeyFor(d);
+      for (const p of docParas(key)){
+        const low = p[1].toLowerCase();
+        if (terms.every(t => low.includes(t))){ out.push([key, p[0]]); if (out.length >= limit) return out; }
+      }
     }
     return out;
   }
@@ -2259,86 +2296,109 @@ const LuminaCore = (function () {
     selCtx = null;
     let html = '<div class="view"><div class="ch-head"><h2 class="ch-title">Church Documents</h2>' +
       '<p class="ch-notice">Ranked by authority, highest first</p></div>' +
-      '<div class="card"><p style="margin:0;line-height:1.55">' + esc(L.intro) + '</p></div>';
+      '<button class="lib-about" data-open="intro">How to read this order <span class="lib-i">ⓘ</span></button>' +
+      '<p class="lib-note" id="ln-intro">' + esc(L.intro) + '</p>';
     L.levels.forEach(lv => {
       const ds = L.docs.filter(d => d.level === lv.id);
       if (!ds.length) return;
-      html += '<h3 class="t-head">' + esc(lv.name) + '</h3><p class="lvl-note">' + esc(lv.note) + '</p>';
+      html += '<button class="lib-level" data-open="' + lv.id + '">' + esc(lv.name) + ' <span class="lib-i">ⓘ</span></button>' +
+        '<p class="lib-note" id="ln-' + lv.id + '">' + esc(lv.note) + '</p>';
       ds.forEach(d => {
-        html += '<div class="list-item" data-doc="' + d.id + '"><div class="li-main">' +
-          '<div class="li-cite">' + esc(d.title) + '</div>' +
-          '<div class="li-snip">' + esc(d.sub) + ' · ' + esc(d.by) + ', ' + esc(d.date.slice(-4)) +
-          ' · ' + d.p.filter(p => p[0]).length + ' ¶</div></div></div>';
+        html += '<div class="lib-doc" data-doc="' + d.id + '"><div class="lib-t">' + esc(d.title) +
+          ' <span class="lib-y">' + esc(d.date.slice(-4)) + '</span></div>' +
+          '<div class="lib-s">' + esc(d.sum || d.sub) + '</div></div>';
       });
     });
-    html += '<p class="ch-notice" style="margin:1.2rem 0">' + esc(L.credit) + '</p></div>';
+    html += '<p class="ch-notice" style="margin:1.2rem 0">Vatican II and papal texts: ' + esc(L.credit) +
+      '. Older councils: translated for Lumina, with a public-domain translation alongside.</p></div>';
     view.innerHTML = html;
+    view.querySelectorAll("[data-open]").forEach(b => b.onclick = () => {
+      const n = $("ln-" + b.dataset.open); n.classList.toggle("open"); b.classList.toggle("open");
+    });
     view.querySelectorAll("[data-doc]").forEach(el => el.onclick = () => renderDoc(el.dataset.doc));
     scrollTo({ top: 0, behavior: "smooth" });
   }
   function renderDoc(id, n, opts){
     const d = docById(id); if (!d) return renderDocLibrary();
+    id = d.id;
     n = n == null ? null : n;
     cur = { kind:"doc", id, n };
     state.docLast = { kind:"doc", id, n }; save();
     record(cur);
+    const key = docKeyFor(d), old = docIsOld(key), ps = docParas(key);
     const lv = docLevel(d);
     const heads = Object.keys(d.h).map(Number).sort((a, b) => a - b);
+    const labelled = !!d.unit;
     let html = '<div class="view doc"><div class="crumb"><button class="btn" id="docLib">← Library</button></div>' +
       '<div class="ch-head"><p class="ch-book">' + esc(d.kind) + ' · ' + esc(d.by) + ' · ' + esc(d.date) + '</p>' +
       '<h2 class="ch-title">' + esc(d.title) + '</h2>' +
       '<p class="ch-notice" style="font-style:italic">' + esc(d.sub) + '</p>' +
+      (d.sum ? '<p class="doc-sum">' + esc(d.sum) + '</p>' : '') +
       '<p class="ch-notice">' + esc(lv ? lv.name : "") + '</p></div>' +
-      '<div class="doc-jump"><label>¶ <input type="number" id="docN" min="1" max="' + d.p[d.p.length - 1][0] + '" inputmode="numeric"></label>' +
-      '<button class="btn small" id="docGo">Go</button>' +
+      (d.alt ? '<div class="doc-tr"><button class="btn small' + (old ? "" : " on") + '" data-tr="new">Lumina translation</button>' +
+        '<button class="btn small' + (old ? " on" : "") + '" data-tr="old">' + esc(d.alt.name) + '</button></div>' : '') +
+      '<div class="doc-jump">' +
+      (labelled ? '' : '<label>¶ <input type="number" id="docN" min="1" max="' + ps[ps.length - 1][0] + '" inputmode="numeric"></label>' +
+        '<button class="btn small" id="docGo">Go</button>') +
       (heads.length ? '<select id="docToc"><option value="">Contents…</option>' +
-        heads.map(k => '<option value="' + d.p[k][0] + '">' + esc(shorten(d.h[k], 70)) + '</option>').join("") + '</select>' : '') +
+        heads.map(k => '<option value="' + ps[k][0] + '">' + esc(shorten(d.h[k], 70)) + '</option>').join("") + '</select>' : '') +
       '</div><div class="card"><div class="verses">';
-    d.p.forEach((p, k) => {
+    ps.forEach((p, k) => {
       if (d.h[k]) html += '<div class="subhead">' + esc(d.h[k]) + '</div>';
+      const lab = labelled ? docLabel(d, p[0]) : p[0];
       html += '<p class="v' + (p[0] === n ? " hl" : "") + (p[0] ? "" : " doc-pre") + '" id="dp' + p[0] + '">' +
-        (p[0] ? '<sup class="vn">' + p[0] + '</sup>' : '') +
-        '<span class="vt" data-i="' + p[0] + '">' + renderTextWithHls(p[1], "doc", id, 0, p[0]) + '</span></p>';
+        (p[0] ? '<sup class="vn">' + esc(String(lab)) + '</sup>' : '') +
+        '<span class="vt" data-i="' + p[0] + '">' + renderTextWithHls(p[1], "doc", key, 0, p[0]) + '</span></p>';
     });
-    html += '</div></div><p class="ch-notice" style="margin:1rem 0">' + esc(window.LUMINA_DOCS.credit) + '</p></div>';
+    const credit = d.alt ? (old ? d.alt.credit : d.tr + ". Tap “" + d.alt.name + "” above for the older translation.") : window.LUMINA_DOCS.credit;
+    html += '</div></div><p class="ch-notice" style="margin:1rem 0">' + esc(credit) + '</p></div>';
     view.innerHTML = html;
     $("docLib").onclick = renderDocLibrary;
+    view.querySelectorAll("[data-tr]").forEach(b => b.onclick = () => {
+      state.docOld = state.docOld || {};
+      state.docOld[id] = b.dataset.tr === "old"; save();
+      nav.suppress = true;
+      try { renderDoc(id, cur.n, { restore:true }); } finally { nav.suppress = false; }
+    });
     const go = k => {
-      if (!docPara(d, k)) return showToast("No paragraph " + k + " in " + d.title);
+      if (!docPara(key, k)) return showToast("No paragraph " + k + " in " + d.title);
       view.querySelectorAll(".v.hl").forEach(x => x.classList.remove("hl"));
       const el = $("dp" + k); el.classList.add("hl");
       el.scrollIntoView({ block:"start", behavior:"smooth" });
       cur.n = k; state.docLast.n = k; save();
       if (nav.idx >= 0 && nav.stack[nav.idx] && nav.stack[nav.idx].kind === "doc") nav.stack[nav.idx].n = k;
     };
-    $("docGo").onclick = () => go(parseInt($("docN").value, 10));
-    $("docN").addEventListener("keydown", e => { if (e.key === "Enter") go(parseInt($("docN").value, 10)); });
+    if ($("docGo")){
+      $("docGo").onclick = () => go(parseInt($("docN").value, 10));
+      $("docN").addEventListener("keydown", e => { if (e.key === "Enter") go(parseInt($("docN").value, 10)); });
+    }
     if ($("docToc")) $("docToc").onchange = e => { if (e.target.value) go(parseInt(e.target.value, 10)); e.target.value = ""; };
     view.querySelectorAll(".v").forEach(el => el.addEventListener("dblclick", () => {
       const k = parseInt(el.id.slice(2), 10);
-      copy("“" + docParaText(id, k) + "” — " + docCite(id, k));
+      copy("“" + docParaText(key, k) + "” — " + docCite(key, k));
     }));
-    selCtx = { tx:"doc", book:id, c:0,
+    selCtx = { tx:"doc", book:key, c:0,
       list: [...view.querySelectorAll(".vt")].map(el => ({ el, i: parseInt(el.dataset.i, 10) })) };
     if (n != null && $("dp" + n)) setTimeout(() => $("dp" + n).scrollIntoView({ block: opts && opts.restore ? "start" : "center", behavior:"smooth" }), 60);
     else scrollTo({ top: 0, behavior: "smooth" });
   }
   function renderDocPara(id, n, opts){
     const d = docById(id); if (!d) return renderDocLibrary();
-    const k = Math.max(0, d.p.findIndex(p => p[0] === n)), p = d.p[k];
+    const key = docKeyFor(d), ps = docParas(key);
+    const k = Math.max(0, ps.findIndex(p => p[0] === n)), p = ps[k];
     n = p[0];
-    cur = { kind:"docPara", id, n };
+    cur = { kind:"docPara", id: d.id, n };
     record(cur);
-    const ref = { corpus:"doc", id, n };
+    const ref = { corpus:"doc", id: key, n };
     const isFav = favsFor(ref).length > 0;
     let head = ""; for (let j = k; j >= 0 && !head; j--) head = d.h[j] || "";
     view.innerHTML =
       '<div class="view doc"><div class="card" id="verseCard">' +
       '<div class="ornament">✠</div>' +
-      '<div class="citation">' + esc(docCite(id, n)) + '</div>' +
+      '<div class="citation">' + esc(docCite(key, n)) + '</div>' +
       '<p style="text-align:center;font-style:italic;color:var(--ink-faint);font-size:.9rem;margin:-.4rem 0 .8rem">' +
         esc(d.sub) + (head ? " · " + esc(shorten(head, 90)) : "") + '</p>' +
-      '<p class="verse-text dropcap vt" id="vtext">' + renderTextWithHls(p[1], "doc", id, 0, n) + '</p>' +
+      '<p class="verse-text dropcap vt" id="vtext">' + renderTextWithHls(p[1], "doc", key, 0, n) + '</p>' +
       '<div class="verse-actions">' +
         '<button class="btn nav-arrow" id="vPrev">←</button>' +
         '<button class="btn" id="vChapter">Read in full</button>' +
@@ -2346,19 +2406,20 @@ const LuminaCore = (function () {
         '<button class="btn" id="vCopy">Copy</button>' +
         '<button class="btn nav-arrow" id="vNext">→</button>' +
       '</div></div></div>';
-    $("vPrev").disabled = k <= 0; $("vNext").disabled = k >= d.p.length - 1;
+    $("vPrev").disabled = k <= 0; $("vNext").disabled = k >= ps.length - 1;
     $("vPrev").onclick = () => stepDocPara(-1);
     $("vNext").onclick = () => stepDocPara(1);
-    $("vChapter").onclick = () => renderDoc(id, n);
-    $("vCopy").onclick = () => copy("“" + p[1] + "” — " + docCite(id, n));
+    $("vChapter").onclick = () => renderDoc(d.id, n);
+    $("vCopy").onclick = () => copy("“" + p[1] + "” — " + docCite(key, n));
     $("vFav").onclick = () => openFavModal(ref);
-    selCtx = { tx:"doc", book:id, c:0, list: [{ el: $("vtext"), i: n }] };
+    selCtx = { tx:"doc", book:key, c:0, list: [{ el: $("vtext"), i: n }] };
     if (!opts || !opts.keepScroll) scrollTo({ top: 0, behavior: "smooth" });
   }
   function stepDocPara(delta){
     const d = docById(cur.id); if (!d) return;
-    const k = d.p.findIndex(p => p[0] === cur.n) + delta;
-    if (k >= 0 && k < d.p.length) renderDocPara(d.id, d.p[k][0]);
+    const ps = docParas(docKeyFor(d));
+    const k = ps.findIndex(p => p[0] === cur.n) + delta;
+    if (k >= 0 && k < ps.length) renderDocPara(d.id, ps[k][0]);
   }
   function randomDocPara(){
     const all = [];
@@ -2490,7 +2551,7 @@ const LuminaCore = (function () {
         }
         res.innerHTML = html;
         res.querySelectorAll(".list-item").forEach(el => el.onclick = () => {
-          if (isDocs) renderDoc(el.dataset.doc, parseInt(el.dataset.n, 10));
+          if (isDocs) docShow(el.dataset.doc, parseInt(el.dataset.n, 10));
           else if (isCcc) renderCccPara(parseInt(el.dataset.n, 10));
           else {
             const b = +el.dataset.b, c = +el.dataset.c, i = +el.dataset.i;
