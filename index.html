@@ -301,6 +301,15 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .lib-y{font-weight:400; font-size:.82rem; color:var(--ink-faint); margin-left:.3rem}
 .lib-s{font-size:calc(.9rem * var(--ts, 1)); color:var(--ink-soft); line-height:1.4; margin-top:.15rem}
 .doc-sum{max-width:34rem; margin:.5rem auto; font-size:calc(.95rem * var(--ts, 1)); line-height:1.45; color:var(--ink-soft)}
+.speaking{background:color-mix(in srgb, var(--gold) 13%, transparent); border-radius:.35rem}
+#listenBtn.on{border-color:var(--gold-line); background:var(--panel2)}
+.vs-sel{display:flex; gap:.4rem; margin:.3rem 0 .5rem} .vs-sel select{flex:1; min-width:0}
+.vs-row{display:grid; grid-template-columns:7.5rem 1fr 3.6rem; gap:.5rem; align-items:center; margin:.25rem 0; font-size:.95rem}
+.vs-row output{font-size:.85rem; color:var(--ink-soft); text-align:right}
+.vs-chk{display:block; margin:.35rem 0; font-size:.95rem}
+.fun-voices{margin-top:.8rem; border-top:1px solid var(--border-soft); padding-top:.5rem}
+.fun-voices summary{cursor:pointer; color:var(--gold); text-align:center}
+.fv-msg{text-align:center; font-size:.9rem; color:var(--ink-soft); min-height:1.2em; margin:.3rem 0 0}
 .bk-row{display:flex; gap:.7rem; align-items:center; margin:.55rem 0}
 .bk-row .btn{flex:0 0 8.5rem}
 .bk-row span{font-size:.92rem; color:var(--ink-soft); line-height:1.35}
@@ -479,6 +488,8 @@ noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
       <button class="round-btn fminus" id="fontMinus">A−</button>
       <button class="round-btn fplus" id="fontPlus">A+</button>
     </span>
+    <button class="round-btn" id="listenBtn" title="Read aloud">▶</button>
+    <button class="round-btn" id="voiceBtn" title="Reading voice">⚙</button>
     <button class="round-btn" id="themeBtn" title="Toggle light / dark">☾</button>
   </div>
 
@@ -1628,6 +1639,128 @@ const LuminaCore = (function () {
     scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  /* ---------- reading aloud (Vox Machina's eSpeak NG voice, made on the device) ---------- */
+  let voxMod = null;
+  const vox = () => voxMod || (voxMod = import("./vox/lumina-voice.js"));
+  let voxReady = false, readingNow = false;
+  function voxEngine(){                       /* the 18 MB voice engine, fetched once */
+    return vox().then(m => voxReady ? m : (showToast("Loading the voice (first time only)…"), m.preload().then(() => { voxReady = true; return m; })));
+  }
+  function voiceSettings(){ return Object.assign({}, state.voice || {}); }
+  function setListenBtn(on){
+    readingNow = on;
+    const b = $("listenBtn"); b.textContent = on ? "■" : "▶"; b.title = on ? "Stop reading" : "Read aloud";
+    b.classList.toggle("on", on);
+    if (!on) document.querySelectorAll(".speaking").forEach(x => x.classList.remove("speaking"));
+  }
+  /* what is on screen to read: the verses / paragraphs of this view, from the first one visible */
+  function readingItems(){
+    if (!selCtx || !selCtx.list || !selCtx.list.length) return null;
+    const list = selCtx.list.filter(it => it.el && it.el.textContent.trim());
+    const top = (document.querySelector(".actions.main-bar") || {}).offsetHeight ? 70 : 70;
+    let k = list.findIndex(it => it.el.getBoundingClientRect().bottom > top);
+    if (k < 0) k = 0;
+    return { ctx: selCtx, list: list.slice(k) };
+  }
+  function findNow(it, ctx){              /* the same verse after a redraw (e.g. a new highlight) */
+    if (it.el.isConnected) return it.el;
+    if (!selCtx || selCtx.book !== ctx.book || selCtx.tx !== ctx.tx) return null;
+    const m = selCtx.list.find(x => x.i === it.i && (x.c === undefined || x.c === it.c) && (x.book === undefined || x.book === it.book));
+    return m ? m.el : null;
+  }
+  function toggleReading(){
+    if (readingNow){ vox().then(m => m.stop()); setListenBtn(false); return; }
+    const got = readingItems();
+    if (!got) return showToast("Open a chapter, verse or document to hear it read");
+    if (voxMod && voxReady) voxMod.then(m => m.unlock());
+    setListenBtn(true);
+    voxEngine().then(m => {
+      m.unlock();
+      let lit = null;
+      return m.read(got.list.map(it => ({ text: it.el.textContent })), voiceSettings(), {
+        onStart: k => {
+          const el = findNow(got.list[k], got.ctx);
+          if (!el){ m.stop(); setListenBtn(false); return; }
+          if (lit) lit.classList.remove("speaking");
+          lit = el.closest(".v") || el; lit.classList.add("speaking");
+          if ((state.voice || {}).follow !== false){
+            const r = lit.getBoundingClientRect();
+            if (r.top < 60 || r.bottom > innerHeight - 170) lit.scrollIntoView({ block: "center", behavior: "smooth" });
+          }
+        },
+        onDone: () => setListenBtn(false),
+      });
+    }).catch(e => { console.error(e); setListenBtn(false); showToast("The voice could not play. Tap ▶ again."); });
+  }
+  function openVoiceSheet(){
+    vox().then(m => {
+      const s = Object.assign({}, m.READ_DEFAULTS, state.voice || {});
+      const sl = (k, label, min, max, step, fmt) => '<label class="vs-row"><span>' + label + '</span>' +
+        '<input type="range" data-k="' + k + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + s[k] + '"><output data-o="' + k + '"></output></label>';
+      const FMT = { speed: v => v + " wpm", pitch: v => v, range: v => v == 0 ? "flat" : v, gap: v => v * 10 + " ms",
+        vowel: v => Math.round(v * 100) + "%", pause: v => (+v).toFixed(1) + " s" };
+      const back = modal('<h3>Reading voice</h3>' +
+        '<div class="vs-sel"><select data-k="variant">' + m.READ_VOICES.map(([v, n]) => '<option value="' + v + '"' + (v === s.variant ? " selected" : "") + '>' + n + '</option>').join("") + '</select>' +
+        '<select data-k="voice">' + m.ACCENTS.map(([v, n]) => '<option value="' + v + '"' + (v === s.voice ? " selected" : "") + '>' + n + '</option>').join("") + '</select></div>' +
+        sl("speed", "Speed", 80, 260, 5) + sl("pitch", "Pitch", 0, 99, 1) + sl("range", "Intonation", 0, 99, 1) +
+        sl("gap", "Word spacing", 0, 20, 1) + sl("vowel", "Vowel length", 1, 2, 0.05) + sl("pause", "Pause between verses", 0, 2, 0.1) +
+        '<label class="vs-chk"><input type="checkbox" data-k="clarity"' + (s.clarity ? " checked" : "") + '> Clarity filter (lifts the consonants)</label>' +
+        '<label class="vs-chk"><input type="checkbox" data-k="follow"' + (s.follow !== false ? " checked" : "") + '> Follow along on the page</label>' +
+        '<div class="rowbtns"><button class="btn" id="vsReset">Clearest</button><button class="btn" id="vsTest">▶ Test</button><button class="btn primary" id="vsClose">Done</button></div>');
+      const q = sel => back.querySelector(sel);
+      const show = () => back.querySelectorAll("[data-o]").forEach(o => { o.textContent = FMT[o.dataset.o](q('[data-k="' + o.dataset.o + '"]').value); });
+      const read = () => {
+        const o = {};
+        back.querySelectorAll("[data-k]").forEach(i => { o[i.dataset.k] = i.type === "checkbox" ? i.checked : i.type === "range" ? +i.value : i.value; });
+        state.voice = o; save();
+      };
+      show();
+      back.addEventListener("input", () => { show(); read(); });
+      q("#vsReset").onclick = () => { state.voice = Object.assign({}, m.READ_DEFAULTS); save(); back.remove(); openVoiceSheet(); };
+      q("#vsClose").onclick = () => back.remove();
+      q("#vsTest").onclick = () => {
+        m.unlock();
+        voxEngine().then(mm => mm.read([{ text: "In the beginning was the Word, and the Word was with God, and the Word was God." }], voiceSettings()))
+          .catch(() => showToast("The voice could not play"));
+      };
+      voxEngine().catch(() => {});      /* start fetching the engine while the settings are open */
+    });
+  }
+  $("listenBtn").onclick = toggleReading;
+  $("voiceBtn").onclick = openVoiceSheet;
+  setTimeout(() => { vox().catch(() => {}); }, 2000);    /* the small script now; the engine waits for the first ▶ */
+
+  /* the playful voices, for a highlighted passage */
+  function voicePanelHtml(){
+    return '<details class="fun-voices"><summary>🎛 Hear it in other voices</summary>' +
+      '<div class="vs-sel"><select id="fvPreset"></select><button class="btn small" id="fvTune" title="Another melody">♪ Tune</button></div>' +
+      '<label class="vs-row"><span>Robot</span><input type="range" id="fvRobot" min="0" max="1" step="0.05" value="' + (state.funRobot != null ? state.funRobot : 0.5) + '"><output id="fvRobotO"></output></label>' +
+      '<div class="rowbtns"><button class="btn" id="fvStop">■ Stop</button><button class="btn primary" id="fvPlay">▶ Play</button></div>' +
+      '<p class="fv-msg"></p></details>';
+  }
+  function wireVoicePanel(back, text){
+    const q = s => back.querySelector(s);
+    let seed = 1;
+    vox().then(m => {
+      q("#fvPreset").innerHTML = Object.keys(m.PRESETS).map(n => '<option' + (n === state.funPreset ? " selected" : "") + '>' + esc(n) + '</option>').join("");
+      const tuneBtn = () => { q("#fvTune").style.visibility = m.presetSings(q("#fvPreset").value) ? "" : "hidden"; };
+      tuneBtn();
+      q("#fvPreset").onchange = () => { state.funPreset = q("#fvPreset").value; save(); seed = 1; tuneBtn(); };
+      q("#fvTune").onclick = () => { seed++; q(".fv-msg").textContent = "Melody " + seed + ". Tap ▶ Play."; };
+    });
+    const ro = () => { q("#fvRobotO").textContent = Math.round(q("#fvRobot").value * 100) + "%"; };
+    ro();
+    q("#fvRobot").oninput = () => { ro(); state.funRobot = +q("#fvRobot").value; save(); };
+    q("#fvStop").onclick = () => vox().then(m => m.stop());
+    q("#fvPlay").onclick = () => {
+      if (voxReady) voxMod.then(m => m.unlock());
+      const msg = q(".fv-msg"); msg.textContent = "Making the sound…";
+      voxEngine().then(m => { m.unlock(); return m.play(text, q("#fvPreset").value, +q("#fvRobot").value, seed); })
+        .then(() => { if (msg.isConnected) msg.textContent = ""; })
+        .catch(e => { console.error(e); if (msg.isConnected) msg.textContent = "Could not play. Tap ▶ again."; });
+    };
+  }
+
   /* ---------- back up, restore, readable export ---------- */
   /* Everything stays on this device; these only hand the person a file (on a phone, the share sheet
      offers Save to Files → Google Drive), or read one back in. */
@@ -2079,7 +2212,9 @@ const LuminaCore = (function () {
       '<div class="hl-colors">' + HLCOLORS.map(c => '<span class="hl-dot ' + c + (c === color ? " sel" : "") + '" data-c="' + c + '"></span>').join("") + '</div>' +
       '<textarea id="ehNote" placeholder="Note">' + esc(h.note || "") + '</textarea>' +
       '<div class="rowbtns"><button class="btn danger" id="ehDel">Delete</button>' +
-      '<button class="btn" id="ehCancel">Cancel</button><button class="btn primary" id="ehSave">Save</button></div>');
+      '<button class="btn" id="ehCancel">Cancel</button><button class="btn primary" id="ehSave">Save</button></div>' +
+      voicePanelHtml());
+    wireVoicePanel(back, group.map(x => x.t || "").join(" "));
     back.querySelectorAll(".hl-dot").forEach(d => d.onclick = () => {
       color = d.dataset.c;
       back.querySelectorAll(".hl-dot").forEach(x => x.classList.toggle("sel", x === d));
