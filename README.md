@@ -126,6 +126,10 @@ To update later, upload the changed files again the same way.
 
 Favorites, highlights, notes, search history, and plan progress live in your
 browser's local storage — private to each device, no account required.
+**⇪ Back up & export** (on the Favorites screen) saves them as a file you can keep anywhere;
+on a phone the share sheet offers *Save to Files → Google Drive*. **Restore** reads a backup
+back in on this or another device, adding what is missing and never removing anything.
+**Readable copy** gives your highlights and notes as a page in Bible order, to read or print.
 
 *Keys: R = random verse · C = random chapter · T = Psalm Tree · ← / → = previous / next.*
 
