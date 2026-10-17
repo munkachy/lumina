@@ -22,6 +22,16 @@ is the licensed way to display these copyrighted translations.
 
 ## Features
 
+- **▶ Read aloud** — the ▶ button by A−/A+ reads what is on screen, from the first verse or
+  paragraph you can see: a chapter, a Psalm, the Catechism, a Church document. Each verse is
+  lit up as it is read and the page follows along; ■ stops. **⚙** sets the voice: voice and
+  accent, speed, pitch, intonation, word spacing, vowel length, the pause between verses, and
+  a clarity filter. The defaults (American Male 3, 160 words a minute, 40 ms between words)
+  were chosen by measurement: see [`tools/voice-clarity.md`](tools/voice-clarity.md).
+  **Tap a highlight** and open *Hear it in other voices* for Vox Machina's 22 presets
+  (Gregorian Machine, Cold Cathedral, Kraftwerk, West Coast Talkbox…), with the robot amount
+  at 50% to start; *♪ Tune* gives a sung preset a new melody. The voice is eSpeak NG, made on
+  the device (the 18 MB engine downloads on the first ▶); no recorded human voice is used.
 - **✠ Church Documents** — choose it from the **Book** menu. A compact library ranked by
   authority, each document with a one-sentence summary; tap a level's name to read what
   kind of assent it asks. At the top, the solemn definitions of councils: *Constantinople III*
@@ -122,6 +132,7 @@ To update later, upload the changed files again the same way.
 | `data-webc.js` | WEBBE text (loads only when first selected) |
 | `data-summaries.js` | AI chapter summaries (loads on first Summary tap) |
 | `data-catechism.js` | The Catechism, 2,865 ¶ (loads when first selected) |
+| `vox/` | The voice: Vox Machina's eSpeak NG engine and effects (GPL v3, see `vox/lib/ESPEAK-NG-LICENSE.txt`), and `lumina-voice.js`, which reads Lumina aloud |
 | `data-docs.js` | Church documents: ten of Vatican II, *Veritatis Splendor*, *Reconciliatio et Paenitentia* (loads when first selected; built by `tools/build-docs.py` from vatican.va and `tools/councils/`) |
 
 Favorites, highlights, notes, search history, and plan progress live in your
