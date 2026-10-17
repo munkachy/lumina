@@ -1787,7 +1787,7 @@ const LuminaCore = (function () {
     fresh.forEach(t => state.hls.push({ id: uid(), g, tx: selCtx.tx, book: t.book, c: t.c, i: t.i,
       s: t.s, e: t.e, color: "gold", note: "", added: Date.now(), t: t.el.textContent.slice(t.s, t.e) }));
     save(); sel.removeAllRanges();
-    const y = scrollY; rerender(); setTimeout(() => scrollTo({ top: y }), 80);
+    rerenderInPlace();
     showToast("Highlighted — tap it to change or remove");
   }
   function maybeShowHlPop(){
@@ -1847,7 +1847,7 @@ const LuminaCore = (function () {
         c: t.c, i: t.i, s: t.s, e: t.e, color, note, added: Date.now(),
         t: (t.el ? t.el.textContent.slice(t.s, t.e) : "") }));
       save(); hideHlPop(); getSelection().removeAllRanges();
-      showToast("Highlighted"); rerender();
+      showToast("Highlighted"); rerenderInPlace();
     };
   }
   function hideHlPop(){ hlpop.style.display = "none"; hlpop.innerHTML = ""; }
@@ -1892,12 +1892,12 @@ const LuminaCore = (function () {
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
-      save(); back.remove(); showToast("Highlight removed"); rerender();
+      save(); back.remove(); showToast("Highlight removed"); rerenderInPlace();
     };
     back.querySelector("#ehSave").onclick = () => {
       const note = back.querySelector("#ehNote").value.trim();
       group.forEach(x => { x.color = color; x.note = note; });
-      save(); back.remove(); rerender();
+      save(); back.remove(); rerenderInPlace();
     };
   }
   view.addEventListener("click", e => {
@@ -3086,6 +3086,36 @@ const LuminaCore = (function () {
   $("navBack").onclick = () => navGo(-1);
   $("navFwd").onclick = () => navGo(1);
   function navBack(){ nav.idx > 0 ? navGo(-1) : begin(); }
+  /* Redraw without moving the reader (used after highlighting). Views scroll to their target when
+     drawn, some smoothly and after a delay, and some draw in two steps (a loading card, then the text),
+     which shrinks the page for a moment. So while the view redraws, scrolling is switched off, the page
+     keeps its height, and the reader is put back in place whenever the content changes, until the
+     redraw settles or the reader touches or scrolls the page themselves. */
+  const realScrollTo = window.scrollTo, realScrollIntoView = Element.prototype.scrollIntoView;
+  let holdFinish = null;
+  function rerenderInPlace(){
+    if (holdFinish) holdFinish();
+    const y = scrollY, st = realScrollTo, si = realScrollIntoView;
+    const put = () => st.call(window, { top: y, behavior: "instant" });
+    window.scrollTo = () => {}; Element.prototype.scrollIntoView = () => {};
+    view.style.minHeight = view.offsetHeight + "px";
+    const mo = new MutationObserver(put);
+    mo.observe(view, { childList: true, subtree: true });
+    let done = false;
+    const finish = holdFinish = () => {
+      if (done) return; done = true; holdFinish = null;
+      mo.disconnect();
+      window.scrollTo = st; Element.prototype.scrollIntoView = si;
+      view.style.minHeight = "";
+      ["touchstart", "wheel", "keydown"].forEach(ev => removeEventListener(ev, finish, true));
+    };
+    try { rerender(); } finally {
+      put();
+      setTimeout(() => { put(); finish(); }, 1200);
+      /* after the redraw starts, so the tap that made the selection does not count */
+      setTimeout(() => { if (!done) ["touchstart", "wheel", "keydown"].forEach(ev => addEventListener(ev, finish, true)); }, 0);
+    }
+  }
   function rerender(){
     if (!cur) return begin();
     nav.suppress = true;
