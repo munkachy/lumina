@@ -87,8 +87,11 @@
 :root[data-theme="lcars"] footer{font-style:normal; text-transform:uppercase;
   letter-spacing:.15em; font-size:.7rem; color:#9999cc}
 
-/* ---------- icon toolbar ---------- */
-.actions.main-bar{gap:.35rem}
+/* ---------- icon toolbar: two rows of five, big buttons ---------- */
+.actions.main-bar{display:grid; grid-template-columns:repeat(5, 1fr); gap:.4rem}
+.actions.main-bar .btn.ib{max-width:none; min-width:0; padding:.7rem 0; gap:.25rem}
+.actions.main-bar .btn.ib .ic{font-size:2.3rem}
+.actions.main-bar .btn.ib .lb{font-size:1.15rem}
 .btn.ib{
   display:flex; flex-direction:column; align-items:center; gap:.1rem;
   padding:.35rem .55rem; min-width:3.2rem; letter-spacing:.03em;
@@ -102,12 +105,12 @@
   font-size:.86rem; letter-spacing:.1em; line-height:1.1}
 :root[data-theme="lcars"] .menu-btn .mi{display:none}
 @media(max-width:699px){
-  .actions.main-bar{flex-wrap:nowrap; gap:.2rem}
-  .actions.main-bar .btn.ib{flex:1 1 0; max-width:none; min-width:0; padding:.4rem 0; font-size:1rem}
-  .btn.ib .lb{font-size:.56rem; letter-spacing:.02em}
+  .actions.main-bar{gap:.3rem}
+  .actions.main-bar .btn.ib{padding:.6rem 0; font-size:1rem}
+  .actions.main-bar .btn.ib .lb{font-size:1.1rem; letter-spacing:.02em}
   @media(max-width:380px){ .btn.ib .lb{letter-spacing:0} }
   :root[data-theme="lcars"] .actions.main-bar .btn.ib{padding:.5rem .15rem}
-  :root[data-theme="lcars"] .btn.ib .lb{font-size:.6rem; letter-spacing:0}
+  :root[data-theme="lcars"] .btn.ib .lb{font-size:1.1rem; letter-spacing:0}
   :root[data-theme="lcars"] .actions.main-bar .btn.ib{overflow:hidden}
 }
 
@@ -133,7 +136,7 @@
 .hi-note .lbl{font-style:normal; font-variant:small-caps; letter-spacing:.1em;
   color:var(--gold); font-size:.8rem; display:block}
 :root[data-theme="lcars"] .hi-note .lbl{font-variant:normal; text-transform:uppercase}
-.note-view{font-size:1.12rem; line-height:1.7; margin:.6rem 0; white-space:pre-wrap}
+.note-view{font-size:calc(1.12rem * var(--ts, 1)); line-height:1.7; margin:.6rem 0; white-space:pre-wrap}
 .meta-text{font-style:italic; color:var(--ink-soft); font-size:.95rem; margin:.15rem 0 0; white-space:pre-wrap}
 .verse-pick{max-width:8rem}
 
@@ -155,7 +158,7 @@ body{
   background-image:radial-gradient(ellipse at 50% -10%, var(--panel) 0%, var(--bg) 55%, var(--bg2) 100%);
   background-attachment:fixed;
 }
-.wrap{max-width:46rem; margin:0 auto; padding:1.2rem 1.1rem 6.5rem}
+.wrap{max-width:46rem; margin:0 auto; padding:1.2rem 1.1rem 14rem}
 @media(min-width:700px){.wrap{padding-bottom:3rem}}
 
 header{text-align:center; margin:0.6rem 0 0.2rem}
@@ -210,7 +213,7 @@ select:disabled{opacity:.45}
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
     border-top:1px solid var(--border-soft);
   }
-  .actions.main-bar .btn{flex:1; max-width:9.5rem; padding:.55rem .3rem; font-size:.9rem}
+  .actions.main-bar .btn{font-size:.9rem}
 }
 
 .view{animation:fade .3s ease}
@@ -228,7 +231,7 @@ select:disabled{opacity:.45}
   font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
 }
 .citation .tx-tag{font-size:.78em; color:var(--ink-faint); letter-spacing:.1em; margin-left:.5em}
-.verse-text{font-size:1.42rem; line-height:1.75; margin:0; hyphens:none; white-space:pre-line}
+.verse-text{font-size:calc(1.42rem * var(--ts, 1)); line-height:1.75; margin:0; hyphens:none; white-space:pre-line}
 .verse-text.dropcap::first-letter{
   font-family:"Cormorant Garamond",Georgia,serif;
   float:left; font-size:3.1em; line-height:.82; font-weight:600;
@@ -270,7 +273,7 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .sum-panel .lbl{font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
 .ch-nav{display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin:1rem 0 .6rem}
 .ch-nav .mid{flex:1; text-align:center; color:var(--ink-faint); font-style:italic; font-size:.92rem}
-.verses{margin-top:.6rem}
+.verses{margin-top:.6rem; font-size:calc(1em * var(--ts, 1))}
 .v{margin:0 0 .85em; padding:.15em .4em; border-radius:.35rem; scroll-margin:6rem; white-space:pre-line}
 .v sup.vn{color:var(--gold-bright); font-size:.68em; font-weight:600; margin-right:.35em;
   font-family:"Cormorant Garamond",Georgia,serif}
@@ -284,7 +287,21 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .subhead.art{color:var(--rubric)}
 .doc .vt{white-space:pre-line}
 .doc-pre{font-style:italic}
-.lvl-note{font-size:.9rem; color:var(--ink-soft); font-style:italic; margin:-.2rem .2rem .7rem; line-height:1.45}
+.lib-about,.lib-level{display:flex; width:100%; align-items:center; justify-content:space-between; gap:.5rem; background:none; border:none;
+  border-bottom:1px solid var(--gold-line); padding:.75rem .2rem .45rem; margin-top:.6rem; cursor:pointer; text-align:left;
+  font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.08em; font-size:1.05rem; color:var(--rubric)}
+.lib-about{font-size:.95rem; color:var(--ink-soft); margin-top:0}
+.lib-i{font-variant:normal; font-size:.9rem; opacity:.7; transition:transform .2s}
+.lib-about.open .lib-i,.lib-level.open .lib-i{opacity:1}
+.lib-note{display:none; font-size:.92rem; color:var(--ink-soft); font-style:italic; margin:.5rem .2rem .3rem; line-height:1.5}
+.lib-note.open{display:block}
+.lib-doc{padding:.55rem .3rem; border-bottom:1px dotted var(--gold-line); cursor:pointer}
+.lib-doc:hover{background:var(--hover, rgba(160,120,40,.07))}
+.lib-t{font-weight:600}
+.lib-y{font-weight:400; font-size:.82rem; color:var(--ink-faint); margin-left:.3rem}
+.lib-s{font-size:calc(.9rem * var(--ts, 1)); color:var(--ink-soft); line-height:1.4; margin-top:.15rem}
+.doc-sum{max-width:34rem; margin:.5rem auto; font-size:calc(.95rem * var(--ts, 1)); line-height:1.45; color:var(--ink-soft)}
+.doc-tr{display:flex; gap:.4rem; justify-content:center; flex-wrap:wrap; margin:.2rem 0 .3rem}
 .doc-jump{display:flex; gap:.4rem; justify-content:center; align-items:center; flex-wrap:wrap; margin:.4rem 0 .8rem}
 .doc-jump input{width:4.5rem}
 .doc-jump select{max-width:100%}
@@ -319,7 +336,7 @@ mark.q{background:var(--hl-gold); border-radius:.2em}
 .list-item:hover{border-color:var(--gold-line)}
 .list-item .li-main{flex:1; min-width:0}
 .list-item .li-cite{font-variant:small-caps; letter-spacing:.1em; color:var(--gold); font-size:.92rem}
-.list-item .li-snip{color:var(--ink-soft); font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.list-item .li-snip{color:var(--ink-soft); font-size:calc(.92rem * var(--ts, 1)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .list-item .li-x{border:none; background:none; color:var(--ink-faint); cursor:pointer; font-size:1rem; padding:.2rem}
 .list-item .li-x:hover{color:var(--rubric)}
 .fav-list-head{display:flex; align-items:center; gap:.6rem; margin:1.2rem 0 .3rem}
@@ -369,13 +386,13 @@ mark.q{background:var(--hl-gold); border-radius:.2em}
   border-radius:.4rem; padding:.45rem .7rem; margin:.35rem 0; line-height:1.5}
 .leaf:hover{border-color:var(--gold-line); background:var(--panel2)}
 .leaf .l-cite{display:block; font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
-.leaf .l-text{display:block; white-space:pre-line; font-size:1.02rem}
+.leaf .l-text{display:block; white-space:pre-line; font-size:calc(1.02rem * var(--ts, 1))}
 .leaf .l-title{display:block; font-family:"Cormorant Garamond",Georgia,serif; font-weight:600; font-size:1.12rem; color:var(--ink); margin:.05rem 0 .15rem}
 .leaf.scene{border-left-color:var(--rubric)}
-.leaf.scene .l-text{color:var(--ink-soft); font-style:italic; font-size:.98rem}
+.leaf.scene .l-text{color:var(--ink-soft); font-style:italic; font-size:calc(.98rem * var(--ts, 1))}
 .leaf .pslink{margin-top:.4rem; font-size:.82rem; padding:.2rem .6rem}
 .tree-switch, .tellings{display:flex; justify-content:center; gap:.4rem; flex-wrap:wrap; margin:.2rem 0 .9rem}
-.tree-switch .btn.on, .tellings .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
+.tree-switch .btn.on, .tellings .btn.on, .doc-tr .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
 .tellings{margin:.6rem 0 .2rem}
 .t-group{margin:.8rem 0 .2rem; font-variant:small-caps; letter-spacing:.12em; color:var(--ink-faint); font-size:.86rem}
 :root[data-theme="lcars"] .tree, :root[data-theme="lcars"] .twigs{border-left-color:#cc6699}
@@ -1101,7 +1118,11 @@ const LuminaCore = (function () {
     save(); applyTheme();
   };
   const FMIN = 0.8, FMAX = 1.45, FSTEP = 0.075;
-  function applyFont(){ document.documentElement.style.fontSize = (16 * (state.font || 1)) + "px"; }
+  /* The interface always stays at the smallest size; A− / A+ scale only the reading text (--ts). */
+  function applyFont(){
+    document.documentElement.style.fontSize = (16 * FMIN) + "px";
+    document.documentElement.style.setProperty("--ts", ((state.font || 1) / FMIN).toFixed(3));
+  }
   $("fontMinus").onclick = () => { state.font = Math.max(FMIN, +(state.font - FSTEP).toFixed(3)); save(); applyFont(); };
   $("fontPlus").onclick  = () => { state.font = Math.min(FMAX, +(state.font + FSTEP).toFixed(3)); save(); applyFont(); };
 
@@ -1374,7 +1395,7 @@ const LuminaCore = (function () {
     if (f.ref.corpus === "ccc"){
       loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(f.ref.n); });
     } else if (f.ref.corpus === "doc"){
-      toDocs(() => renderDoc(f.ref.id, f.ref.n));
+      toDocs(() => docShow(f.ref.id, f.ref.n));
     } else {
       const b = C.bookIdxById(f.ref.book);
       if (state.corpus !== "bible"){ state.corpus = "bible"; txSel.value = state.tx; applyMode(); }
@@ -1699,7 +1720,7 @@ const LuminaCore = (function () {
       if (h.tx === "ccc" || h.book === "ccc"){
         loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(h.i); });
       } else if (h.tx === "doc"){
-        toDocs(() => renderDoc(h.book, h.i));
+        toDocs(() => docShow(h.book, h.i));
       } else {
         const b = C.bookIdxById(h.book);
         if (b < 0) return;
@@ -1773,7 +1794,7 @@ const LuminaCore = (function () {
     fresh.forEach(t => state.hls.push({ id: uid(), g, tx: selCtx.tx, book: t.book, c: t.c, i: t.i,
       s: t.s, e: t.e, color: "gold", note: "", added: Date.now(), t: t.el.textContent.slice(t.s, t.e) }));
     save(); sel.removeAllRanges();
-    const y = scrollY; rerender(); setTimeout(() => scrollTo({ top: y }), 80);
+    rerenderInPlace();
     showToast("Highlighted — tap it to change or remove");
   }
   function maybeShowHlPop(){
@@ -1833,7 +1854,7 @@ const LuminaCore = (function () {
         c: t.c, i: t.i, s: t.s, e: t.e, color, note, added: Date.now(),
         t: (t.el ? t.el.textContent.slice(t.s, t.e) : "") }));
       save(); hideHlPop(); getSelection().removeAllRanges();
-      showToast("Highlighted"); rerender();
+      showToast("Highlighted"); rerenderInPlace();
     };
   }
   function hideHlPop(){ hlpop.style.display = "none"; hlpop.innerHTML = ""; }
@@ -1878,12 +1899,12 @@ const LuminaCore = (function () {
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
-      save(); back.remove(); showToast("Highlight removed"); rerender();
+      save(); back.remove(); showToast("Highlight removed"); rerenderInPlace();
     };
     back.querySelector("#ehSave").onclick = () => {
       const note = back.querySelector("#ehNote").value.trim();
       group.forEach(x => { x.color = color; x.note = note; });
-      save(); back.remove(); rerender();
+      save(); back.remove(); rerenderInPlace();
     };
   }
   view.addEventListener("click", e => {
@@ -1920,7 +1941,19 @@ const LuminaCore = (function () {
 
   /* ---------- verse view (bible) ---------- */
   let cur = null, renderSeq = 0;
+  /* Opening the Psalms (coming from another book) switches to the Grail, if this device has it. */
+  let lastBookB = null;
+  function grailForPsalms(b){
+    const was = lastBookB; lastBookB = b;
+    if (D.books[b].id !== "psalms" || was === b || state.corpus !== "bible" || state.tx === "grail") return;
+    const use = () => { state.tx = "grail"; txSel.value = "grail"; save(); applyMode(); };
+    if (window.LUMINA_TX && window.LUMINA_TX.grail) return use();
+    loadTx("grail").then(() => {
+      if (cur && (cur.kind === "chapter" || cur.kind === "verse") && cur.b === b && state.tx !== "grail"){ use(); rerenderInPlace(); }
+    }).catch(() => {});
+  }
   function renderVerse(b, c, i, opts){
+    grailForPsalms(b);
     const drbch = D.books[b].ch[c];
     i = Math.max(0, Math.min(i, drbch.v.length - 1));
     cur = { kind:"verse", b, c, i };
@@ -2021,6 +2054,7 @@ const LuminaCore = (function () {
 
   /* ---------- chapter view (bible) ---------- */
   function renderChapter(b, c, highlightI){
+    grailForPsalms(b);
     const bk = C.bookByIdx(b);
     cur = { kind:"chapter", b, c, i: highlightI == null ? null : highlightI };
     state.last = { kind:"chapter", book: bk.id, c, i: cur.i }; save();
@@ -2232,23 +2266,46 @@ const LuminaCore = (function () {
   }
 
   /* ---------- Church documents ---------- */
-  function docById(id){ const L = window.LUMINA_DOCS; return L ? L.docs.find(d => d.id === id) : null; }
-  function docPara(d, n){ return d ? d.p.find(p => p[0] === n) : null; }
-  function docParaText(id, n){ const p = docPara(docById(id), n); return p ? p[1] : ""; }
-  function docCite(id, n){
-    const d = docById(id), t = d ? d.title : id;
-    return n ? t + " " + n : t + " (opening)";
+  /* A "book" key is the document id, plus "~old" for its older public-domain translation. */
+  function docById(id){ const L = window.LUMINA_DOCS; return L ? L.docs.find(d => d.id === id.replace(/~old$/, "")) : null; }
+  function docIsOld(key){ return /~old$/.test(key); }
+  function docParas(key){ const d = docById(key); return !d ? [] : docIsOld(key) && d.alt ? d.alt.p : d.p; }
+  function docPara(key, n){ return docParas(key).find(p => p[0] === n); }
+  function docParaText(key, n){ const p = docPara(key, n); return p ? p[1] : ""; }
+  function docLabel(d, n){ const p = d && d.p.find(x => x[0] === n); return p && p[2] ? p[2] : String(n); }
+  function docCite(key, n){
+    const d = docById(key); if (!d) return key;
+    let c;
+    if (!n) c = d.title + " (opening)";
+    else if (!d.unit) c = d.title + " " + n;
+    else {
+      const l = docLabel(d, n);
+      c = d.title + ", " + (/^\d+$/.test(l) ? d.unit + " " + l
+        : /^Can\. /.test(l) ? "can. " + l.slice(5)
+        : /^Pr\. /.test(l) ? "prologue " + l.slice(4)
+        : { Proem:"proem", Canons:"before the canons", End:"conclusion" }[l] || l);
+    }
+    return docIsOld(key) && d.alt ? c + " (" + d.alt.name + ")" : c;
   }
   function docLevel(d){ return window.LUMINA_DOCS.levels.find(l => l.id === d.level); }
+  function docKeyFor(d){ return d.alt && state.docOld && state.docOld[d.id] ? d.id + "~old" : d.id; }
+  function docShow(key, n){
+    const d = docById(key); if (!d) return;
+    if (d.alt){ state.docOld = state.docOld || {}; state.docOld[d.id] = docIsOld(key); save(); }
+    renderDoc(d.id, n);
+  }
   function toDocs(then){
     loadDocs().then(() => { state.corpus = "docs"; txSel.value = "docs"; save(); applyMode(); then(); })
       .catch(() => showToast("Could not load the Church documents"));
   }
   function searchDocs(q, limit){
     const terms = q.toLowerCase().split(/\s+/).filter(Boolean), out = [];
-    for (const d of window.LUMINA_DOCS.docs) for (const p of d.p){
-      const low = p[1].toLowerCase();
-      if (terms.every(t => low.includes(t))){ out.push([d.id, p[0]]); if (out.length >= limit) return out; }
+    for (const d of window.LUMINA_DOCS.docs){
+      const key = docKeyFor(d);
+      for (const p of docParas(key)){
+        const low = p[1].toLowerCase();
+        if (terms.every(t => low.includes(t))){ out.push([key, p[0]]); if (out.length >= limit) return out; }
+      }
     }
     return out;
   }
@@ -2259,86 +2316,109 @@ const LuminaCore = (function () {
     selCtx = null;
     let html = '<div class="view"><div class="ch-head"><h2 class="ch-title">Church Documents</h2>' +
       '<p class="ch-notice">Ranked by authority, highest first</p></div>' +
-      '<div class="card"><p style="margin:0;line-height:1.55">' + esc(L.intro) + '</p></div>';
+      '<button class="lib-about" data-open="intro">How to read this order <span class="lib-i">ⓘ</span></button>' +
+      '<p class="lib-note" id="ln-intro">' + esc(L.intro) + '</p>';
     L.levels.forEach(lv => {
       const ds = L.docs.filter(d => d.level === lv.id);
       if (!ds.length) return;
-      html += '<h3 class="t-head">' + esc(lv.name) + '</h3><p class="lvl-note">' + esc(lv.note) + '</p>';
+      html += '<button class="lib-level" data-open="' + lv.id + '">' + esc(lv.name) + ' <span class="lib-i">ⓘ</span></button>' +
+        '<p class="lib-note" id="ln-' + lv.id + '">' + esc(lv.note) + '</p>';
       ds.forEach(d => {
-        html += '<div class="list-item" data-doc="' + d.id + '"><div class="li-main">' +
-          '<div class="li-cite">' + esc(d.title) + '</div>' +
-          '<div class="li-snip">' + esc(d.sub) + ' · ' + esc(d.by) + ', ' + esc(d.date.slice(-4)) +
-          ' · ' + d.p.filter(p => p[0]).length + ' ¶</div></div></div>';
+        html += '<div class="lib-doc" data-doc="' + d.id + '"><div class="lib-t">' + esc(d.title) +
+          ' <span class="lib-y">' + esc(d.date.slice(-4)) + '</span></div>' +
+          '<div class="lib-s">' + esc(d.sum || d.sub) + '</div></div>';
       });
     });
-    html += '<p class="ch-notice" style="margin:1.2rem 0">' + esc(L.credit) + '</p></div>';
+    html += '<p class="ch-notice" style="margin:1.2rem 0">Vatican II and papal texts: ' + esc(L.credit) +
+      '. Older councils: translated for Lumina, with a public-domain translation alongside.</p></div>';
     view.innerHTML = html;
+    view.querySelectorAll("[data-open]").forEach(b => b.onclick = () => {
+      const n = $("ln-" + b.dataset.open); n.classList.toggle("open"); b.classList.toggle("open");
+    });
     view.querySelectorAll("[data-doc]").forEach(el => el.onclick = () => renderDoc(el.dataset.doc));
     scrollTo({ top: 0, behavior: "smooth" });
   }
   function renderDoc(id, n, opts){
     const d = docById(id); if (!d) return renderDocLibrary();
+    id = d.id;
     n = n == null ? null : n;
     cur = { kind:"doc", id, n };
     state.docLast = { kind:"doc", id, n }; save();
     record(cur);
+    const key = docKeyFor(d), old = docIsOld(key), ps = docParas(key);
     const lv = docLevel(d);
     const heads = Object.keys(d.h).map(Number).sort((a, b) => a - b);
+    const labelled = !!d.unit;
     let html = '<div class="view doc"><div class="crumb"><button class="btn" id="docLib">← Library</button></div>' +
       '<div class="ch-head"><p class="ch-book">' + esc(d.kind) + ' · ' + esc(d.by) + ' · ' + esc(d.date) + '</p>' +
       '<h2 class="ch-title">' + esc(d.title) + '</h2>' +
       '<p class="ch-notice" style="font-style:italic">' + esc(d.sub) + '</p>' +
+      (d.sum ? '<p class="doc-sum">' + esc(d.sum) + '</p>' : '') +
       '<p class="ch-notice">' + esc(lv ? lv.name : "") + '</p></div>' +
-      '<div class="doc-jump"><label>¶ <input type="number" id="docN" min="1" max="' + d.p[d.p.length - 1][0] + '" inputmode="numeric"></label>' +
-      '<button class="btn small" id="docGo">Go</button>' +
+      (d.alt ? '<div class="doc-tr"><button class="btn small' + (old ? "" : " on") + '" data-tr="new">Lumina translation</button>' +
+        '<button class="btn small' + (old ? " on" : "") + '" data-tr="old">' + esc(d.alt.name) + '</button></div>' : '') +
+      '<div class="doc-jump">' +
+      (labelled ? '' : '<label>¶ <input type="number" id="docN" min="1" max="' + ps[ps.length - 1][0] + '" inputmode="numeric"></label>' +
+        '<button class="btn small" id="docGo">Go</button>') +
       (heads.length ? '<select id="docToc"><option value="">Contents…</option>' +
-        heads.map(k => '<option value="' + d.p[k][0] + '">' + esc(shorten(d.h[k], 70)) + '</option>').join("") + '</select>' : '') +
+        heads.map(k => '<option value="' + ps[k][0] + '">' + esc(shorten(d.h[k], 70)) + '</option>').join("") + '</select>' : '') +
       '</div><div class="card"><div class="verses">';
-    d.p.forEach((p, k) => {
+    ps.forEach((p, k) => {
       if (d.h[k]) html += '<div class="subhead">' + esc(d.h[k]) + '</div>';
+      const lab = labelled ? docLabel(d, p[0]) : p[0];
       html += '<p class="v' + (p[0] === n ? " hl" : "") + (p[0] ? "" : " doc-pre") + '" id="dp' + p[0] + '">' +
-        (p[0] ? '<sup class="vn">' + p[0] + '</sup>' : '') +
-        '<span class="vt" data-i="' + p[0] + '">' + renderTextWithHls(p[1], "doc", id, 0, p[0]) + '</span></p>';
+        (p[0] ? '<sup class="vn">' + esc(String(lab)) + '</sup>' : '') +
+        '<span class="vt" data-i="' + p[0] + '">' + renderTextWithHls(p[1], "doc", key, 0, p[0]) + '</span></p>';
     });
-    html += '</div></div><p class="ch-notice" style="margin:1rem 0">' + esc(window.LUMINA_DOCS.credit) + '</p></div>';
+    const credit = d.alt ? (old ? d.alt.credit : d.tr + ". Tap “" + d.alt.name + "” above for the older translation.") : window.LUMINA_DOCS.credit;
+    html += '</div></div><p class="ch-notice" style="margin:1rem 0">' + esc(credit) + '</p></div>';
     view.innerHTML = html;
     $("docLib").onclick = renderDocLibrary;
+    view.querySelectorAll("[data-tr]").forEach(b => b.onclick = () => {
+      state.docOld = state.docOld || {};
+      state.docOld[id] = b.dataset.tr === "old"; save();
+      nav.suppress = true;
+      try { renderDoc(id, cur.n, { restore:true }); } finally { nav.suppress = false; }
+    });
     const go = k => {
-      if (!docPara(d, k)) return showToast("No paragraph " + k + " in " + d.title);
+      if (!docPara(key, k)) return showToast("No paragraph " + k + " in " + d.title);
       view.querySelectorAll(".v.hl").forEach(x => x.classList.remove("hl"));
       const el = $("dp" + k); el.classList.add("hl");
       el.scrollIntoView({ block:"start", behavior:"smooth" });
       cur.n = k; state.docLast.n = k; save();
       if (nav.idx >= 0 && nav.stack[nav.idx] && nav.stack[nav.idx].kind === "doc") nav.stack[nav.idx].n = k;
     };
-    $("docGo").onclick = () => go(parseInt($("docN").value, 10));
-    $("docN").addEventListener("keydown", e => { if (e.key === "Enter") go(parseInt($("docN").value, 10)); });
+    if ($("docGo")){
+      $("docGo").onclick = () => go(parseInt($("docN").value, 10));
+      $("docN").addEventListener("keydown", e => { if (e.key === "Enter") go(parseInt($("docN").value, 10)); });
+    }
     if ($("docToc")) $("docToc").onchange = e => { if (e.target.value) go(parseInt(e.target.value, 10)); e.target.value = ""; };
     view.querySelectorAll(".v").forEach(el => el.addEventListener("dblclick", () => {
       const k = parseInt(el.id.slice(2), 10);
-      copy("“" + docParaText(id, k) + "” — " + docCite(id, k));
+      copy("“" + docParaText(key, k) + "” — " + docCite(key, k));
     }));
-    selCtx = { tx:"doc", book:id, c:0,
+    selCtx = { tx:"doc", book:key, c:0,
       list: [...view.querySelectorAll(".vt")].map(el => ({ el, i: parseInt(el.dataset.i, 10) })) };
     if (n != null && $("dp" + n)) setTimeout(() => $("dp" + n).scrollIntoView({ block: opts && opts.restore ? "start" : "center", behavior:"smooth" }), 60);
     else scrollTo({ top: 0, behavior: "smooth" });
   }
   function renderDocPara(id, n, opts){
     const d = docById(id); if (!d) return renderDocLibrary();
-    const k = Math.max(0, d.p.findIndex(p => p[0] === n)), p = d.p[k];
+    const key = docKeyFor(d), ps = docParas(key);
+    const k = Math.max(0, ps.findIndex(p => p[0] === n)), p = ps[k];
     n = p[0];
-    cur = { kind:"docPara", id, n };
+    cur = { kind:"docPara", id: d.id, n };
     record(cur);
-    const ref = { corpus:"doc", id, n };
+    const ref = { corpus:"doc", id: key, n };
     const isFav = favsFor(ref).length > 0;
     let head = ""; for (let j = k; j >= 0 && !head; j--) head = d.h[j] || "";
     view.innerHTML =
       '<div class="view doc"><div class="card" id="verseCard">' +
       '<div class="ornament">✠</div>' +
-      '<div class="citation">' + esc(docCite(id, n)) + '</div>' +
+      '<div class="citation">' + esc(docCite(key, n)) + '</div>' +
       '<p style="text-align:center;font-style:italic;color:var(--ink-faint);font-size:.9rem;margin:-.4rem 0 .8rem">' +
         esc(d.sub) + (head ? " · " + esc(shorten(head, 90)) : "") + '</p>' +
-      '<p class="verse-text dropcap vt" id="vtext">' + renderTextWithHls(p[1], "doc", id, 0, n) + '</p>' +
+      '<p class="verse-text dropcap vt" id="vtext">' + renderTextWithHls(p[1], "doc", key, 0, n) + '</p>' +
       '<div class="verse-actions">' +
         '<button class="btn nav-arrow" id="vPrev">←</button>' +
         '<button class="btn" id="vChapter">Read in full</button>' +
@@ -2346,19 +2426,20 @@ const LuminaCore = (function () {
         '<button class="btn" id="vCopy">Copy</button>' +
         '<button class="btn nav-arrow" id="vNext">→</button>' +
       '</div></div></div>';
-    $("vPrev").disabled = k <= 0; $("vNext").disabled = k >= d.p.length - 1;
+    $("vPrev").disabled = k <= 0; $("vNext").disabled = k >= ps.length - 1;
     $("vPrev").onclick = () => stepDocPara(-1);
     $("vNext").onclick = () => stepDocPara(1);
-    $("vChapter").onclick = () => renderDoc(id, n);
-    $("vCopy").onclick = () => copy("“" + p[1] + "” — " + docCite(id, n));
+    $("vChapter").onclick = () => renderDoc(d.id, n);
+    $("vCopy").onclick = () => copy("“" + p[1] + "” — " + docCite(key, n));
     $("vFav").onclick = () => openFavModal(ref);
-    selCtx = { tx:"doc", book:id, c:0, list: [{ el: $("vtext"), i: n }] };
+    selCtx = { tx:"doc", book:key, c:0, list: [{ el: $("vtext"), i: n }] };
     if (!opts || !opts.keepScroll) scrollTo({ top: 0, behavior: "smooth" });
   }
   function stepDocPara(delta){
     const d = docById(cur.id); if (!d) return;
-    const k = d.p.findIndex(p => p[0] === cur.n) + delta;
-    if (k >= 0 && k < d.p.length) renderDocPara(d.id, d.p[k][0]);
+    const ps = docParas(docKeyFor(d));
+    const k = ps.findIndex(p => p[0] === cur.n) + delta;
+    if (k >= 0 && k < ps.length) renderDocPara(d.id, ps[k][0]);
   }
   function randomDocPara(){
     const all = [];
@@ -2490,7 +2571,7 @@ const LuminaCore = (function () {
         }
         res.innerHTML = html;
         res.querySelectorAll(".list-item").forEach(el => el.onclick = () => {
-          if (isDocs) renderDoc(el.dataset.doc, parseInt(el.dataset.n, 10));
+          if (isDocs) docShow(el.dataset.doc, parseInt(el.dataset.n, 10));
           else if (isCcc) renderCccPara(parseInt(el.dataset.n, 10));
           else {
             const b = +el.dataset.b, c = +el.dataset.c, i = +el.dataset.i;
@@ -3025,6 +3106,36 @@ const LuminaCore = (function () {
   $("navBack").onclick = () => navGo(-1);
   $("navFwd").onclick = () => navGo(1);
   function navBack(){ nav.idx > 0 ? navGo(-1) : begin(); }
+  /* Redraw without moving the reader (used after highlighting). Views scroll to their target when
+     drawn, some smoothly and after a delay, and some draw in two steps (a loading card, then the text),
+     which shrinks the page for a moment. So while the view redraws, scrolling is switched off, the page
+     keeps its height, and the reader is put back in place whenever the content changes, until the
+     redraw settles or the reader touches or scrolls the page themselves. */
+  const realScrollTo = window.scrollTo, realScrollIntoView = Element.prototype.scrollIntoView;
+  let holdFinish = null;
+  function rerenderInPlace(){
+    if (holdFinish) holdFinish();
+    const y = scrollY, st = realScrollTo, si = realScrollIntoView;
+    const put = () => st.call(window, { top: y, behavior: "instant" });
+    window.scrollTo = () => {}; Element.prototype.scrollIntoView = () => {};
+    view.style.minHeight = view.offsetHeight + "px";
+    const mo = new MutationObserver(put);
+    mo.observe(view, { childList: true, subtree: true });
+    let done = false;
+    const finish = holdFinish = () => {
+      if (done) return; done = true; holdFinish = null;
+      mo.disconnect();
+      window.scrollTo = st; Element.prototype.scrollIntoView = si;
+      view.style.minHeight = "";
+      ["touchstart", "wheel", "keydown"].forEach(ev => removeEventListener(ev, finish, true));
+    };
+    try { rerender(); } finally {
+      put();
+      setTimeout(() => { put(); finish(); }, 1200);
+      /* after the redraw starts, so the tap that made the selection does not count */
+      setTimeout(() => { if (!done) ["touchstart", "wheel", "keydown"].forEach(ev => addEventListener(ev, finish, true)); }, 0);
+    }
+  }
   function rerender(){
     if (!cur) return begin();
     nav.suppress = true;
