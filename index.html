@@ -1720,7 +1720,36 @@ const LuminaCore = (function () {
     }
     return start >= 0 && end > start ? { s: start, e: end } : null;
   }
-  document.addEventListener("selectionchange", () => { clearTimeout(window._selT); window._selT = setTimeout(maybeShowHlPop, 350); });
+  /* a selection becomes a gold highlight by itself once the finger or mouse lets go and
+     the selection has stopped moving — no box to compete with the browser's own menu.
+     Tap a highlight afterwards to change its colour, add a note or remove it. */
+  let selTouching = false;
+  addEventListener("touchstart", () => { selTouching = true; }, { passive: true });
+  addEventListener("touchend", () => { selTouching = false; armAutoHl(); }, { passive: true });
+  addEventListener("mouseup", () => armAutoHl());
+  function armAutoHl(){ clearTimeout(window._selT); window._selT = setTimeout(autoHighlight, 900); }
+  document.addEventListener("selectionchange", armAutoHl);
+  function autoHighlight(){
+    if (!selCtx || selTouching) return;
+    const sel = getSelection();
+    if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0), touched = [];
+    selCtx.list.forEach(item => {
+      if (!range.intersectsNode(item.el)) return;
+      const off = offsetsWithin(item.el, range);
+      if (off && off.e > off.s) touched.push({ i: item.i, el: item.el,
+        book: item.book !== undefined ? item.book : selCtx.book,
+        c: item.c !== undefined ? item.c : selCtx.c, ...off });
+    });
+    const fresh = touched.filter(t => !C.rangesOverlap(hlsFor(selCtx.tx, t.book, t.c, t.i), t.s, t.e));
+    if (!fresh.length) return;
+    const g = uid();
+    fresh.forEach(t => state.hls.push({ id: uid(), g, tx: selCtx.tx, book: t.book, c: t.c, i: t.i,
+      s: t.s, e: t.e, color: "gold", note: "", added: Date.now(), t: t.el.textContent.slice(t.s, t.e) }));
+    save(); sel.removeAllRanges();
+    const y = scrollY; rerender(); setTimeout(() => scrollTo({ top: y }), 80);
+    showToast("Highlighted — tap it to change or remove");
+  }
   function maybeShowHlPop(){
     if (!selCtx) return;
     const sel = getSelection();
