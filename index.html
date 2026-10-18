@@ -309,6 +309,11 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .vs-chk{display:block; margin:.35rem 0; font-size:.95rem}
 .fun-voices{margin-top:.8rem; border-top:1px solid var(--border-soft); padding-top:.5rem}
 .fun-voices summary{cursor:pointer; color:var(--gold); text-align:center}
+#vsDevVoice{width:100%; flex:1 1 100%}
+.vs-engine{display:flex; gap:.4rem; justify-content:center; margin:.2rem 0 .4rem}
+.vs-engine .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
+.vs-about{font-size:.86rem; color:var(--ink-soft); text-align:center; margin:.2rem 0 .5rem; line-height:1.4}
+.modal-back[data-engine="device"] .es-only, .modal-back[data-engine="espeak"] .dev-only{display:none}
 .vs-note{font-size:.85rem; color:var(--ink-faint); text-align:center; margin:.2rem 0}
 .fv-msg{text-align:center; font-size:.9rem; color:var(--ink-soft); min-height:1.2em; margin:.3rem 0 0}
 .bk-row{display:flex; gap:.7rem; align-items:center; margin:.55rem 0}
@@ -1671,47 +1676,119 @@ const LuminaCore = (function () {
     const m = selCtx.list.find(x => x.i === it.i && (x.c === undefined || x.c === it.c) && (x.book === undefined || x.book === it.book));
     return m ? m.el : null;
   }
+  /* the device's own voice (the browser's speech synthesis): on an iPhone, Apple's voices,
+     recorded by voice actors who were hired for it. Always presented as a machine voice. */
+  const synth = window.speechSynthesis || null;
+  let voxM = null;                                   /* the loaded voice module, for speakable() */
+  function deviceVoices(){ return synth ? synth.getVoices().filter(v => /^en/i.test(v.lang)) : []; }
+  function bestDeviceVoice(){
+    const score = v => (/premium/i.test(v.name) ? 4 : /enhanced/i.test(v.name) ? 3 : 0) + (v.localService ? 1 : 0) + (/en[-_]US/i.test(v.lang) ? 0.5 : 0);
+    return deviceVoices().sort((a, b) => score(b) - score(a))[0] || null;
+  }
+  if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", () => {});
+  let devSession = 0;
+  function devicePieces(texts){
+    const clean = t => voxM ? voxM.speakable(t) : t.replace(/·/g, ",").replace(/\s+/g, " ").trim();
+    const out = [];
+    texts.forEach((t, item) => {
+      const parts = []; let cur = "";
+      clean(t).split(/(?<=[.!?;:])\s+/).forEach(s => { if (cur && (cur + " " + s).length > 240){ parts.push(cur); cur = s; } else cur = cur ? cur + " " + s : s; });
+      if (cur) parts.push(cur);
+      parts.forEach((p, j) => out.push({ text: p, item, first: j === 0, last: j === parts.length - 1 }));
+    });
+    return out;
+  }
+  /* speak pieces one after another; the first is started inside the tap, as iPhone requires */
+  function deviceRead(texts, s, { onStart = () => {}, onDone = () => {} } = {}){
+    const me = ++devSession, q = devicePieces(texts);
+    synth.cancel();
+    const voice = deviceVoices().find(v => v.voiceURI === s.deviceVoice) || bestDeviceVoice();
+    const next = k => {
+      if (me !== devSession) return;
+      if (k >= q.length) return onDone();
+      const u = new SpeechSynthesisUtterance(q[k].text);
+      if (voice){ u.voice = voice; u.lang = voice.lang; }
+      u.rate = Math.min(2, Math.max(0.5, (s.speed || 160) / 175));
+      u.pitch = Math.min(2, Math.max(0, (s.pitch == null ? 50 : s.pitch) / 50));
+      u.onstart = () => { if (me === devSession && q[k].first) onStart(q[k].item); };
+      u.onend = () => setTimeout(() => next(k + 1), q[k].last ? (s.pause || 0) * 1000 : 0);
+      u.onerror = e => { if (me === devSession && e.error !== "interrupted" && e.error !== "canceled") next(k + 1); };
+      synth.speak(u);
+    };
+    next(0);
+  }
+  function deviceStop(){ devSession++; if (synth) synth.cancel(); }
+  function usingDevice(){ return (state.voice || {}).engine === "device" && synth && deviceVoices().length > 0; }
+
   function toggleReading(){
-    if (readingNow){ vox().then(m => m.stop()); setListenBtn(false); return; }
+    if (readingNow){ vox().then(m => m.stop()); deviceStop(); setListenBtn(false); return; }
     const got = readingItems();
     if (!got) return showToast("Open a chapter, verse or document to hear it read");
-    if (voxMod && voxReady) voxMod.then(m => m.unlock());
+    let lit = null, stopIt = () => {};
+    const handlers = {
+      onStart: k => {
+        const el = findNow(got.list[k], got.ctx);
+        if (!el){ stopIt(); setListenBtn(false); return; }
+        if (lit) lit.classList.remove("speaking");
+        lit = el.closest(".v") || el; lit.classList.add("speaking");
+        if ((state.voice || {}).follow !== false){
+          const r = lit.getBoundingClientRect();
+          if (r.top < 60 || r.bottom > innerHeight - 170) lit.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+      },
+      onDone: () => setListenBtn(false),
+    };
+    const texts = got.list.map(it => it.el.textContent);
     setListenBtn(true);
+    if (usingDevice()){
+      stopIt = deviceStop;
+      deviceRead(texts, voiceSettings(), handlers);
+      return;
+    }
+    if ((state.voice || {}).engine === "device") showToast("This device offers no voices to web pages. Reading with eSpeak.");
+    if (voxMod && voxReady) voxMod.then(m => m.unlock());
     voxEngine().then(m => {
       m.unlock();
-      let lit = null;
-      return m.read(got.list.map(it => ({ text: it.el.textContent })), voiceSettings(), {
-        onStart: k => {
-          const el = findNow(got.list[k], got.ctx);
-          if (!el){ m.stop(); setListenBtn(false); return; }
-          if (lit) lit.classList.remove("speaking");
-          lit = el.closest(".v") || el; lit.classList.add("speaking");
-          if ((state.voice || {}).follow !== false){
-            const r = lit.getBoundingClientRect();
-            if (r.top < 60 || r.bottom > innerHeight - 170) lit.scrollIntoView({ block: "center", behavior: "smooth" });
-          }
-        },
-        onDone: () => setListenBtn(false),
-      });
+      stopIt = () => m.stop();
+      return m.read(texts.map(text => ({ text })), voiceSettings(), handlers);
     }).catch(e => { console.error(e); setListenBtn(false); showToast("The voice could not play. Tap ▶ again."); });
   }
   function openVoiceSheet(){
     vox().then(m => {
-      const s = Object.assign({}, m.READ_DEFAULTS, state.voice || {});
-      const sl = (k, label, min, max, step, fmt) => '<label class="vs-row"><span>' + label + '</span>' +
+      const s = Object.assign({ engine: "espeak" }, m.READ_DEFAULTS, state.voice || {});
+      const sl = (k, label, min, max, step, cls) => '<label class="vs-row' + (cls ? " " + cls : "") + '"><span>' + label + '</span>' +
         '<input type="range" data-k="' + k + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + s[k] + '"><output data-o="' + k + '"></output></label>';
       const FMT = { speed: v => v + " wpm", pitch: v => v, range: v => v == 0 ? "flat" : v, gap: v => v * 10 + " ms",
         vowel: v => Math.round(v * 100) + "%", pause: v => (+v).toFixed(1) + " s" };
       const back = modal('<h3>Reading voice</h3>' +
-        '<div class="vs-sel"><select data-k="variant">' + m.READ_VOICES.map(([v, n]) => '<option value="' + v + '"' + (v === s.variant ? " selected" : "") + '>' + n + '</option>').join("") + '</select>' +
+        '<div class="vs-engine"><button class="btn small" data-engine="espeak">eSpeak voices</button><button class="btn small" data-engine="device">Device voice (natural)</button></div>' +
+        '<input type="hidden" data-k="engine" value="' + s.engine + '">' +
+        '<p class="vs-about es-only">Built from rules, with no human recording. The clearest settings were measured.</p>' +
+        '<p class="vs-about dev-only">Your device’s own synthetic voice. On an iPhone these are Apple’s voices, recorded by voice actors hired for the work. It is a machine voice, not a person. More voices: Settings → Accessibility → Spoken Content → Voices.</p>' +
+        '<div class="vs-sel es-only"><select data-k="variant">' + m.READ_VOICES.map(([v, n]) => '<option value="' + v + '"' + (v === s.variant ? " selected" : "") + '>' + n + '</option>').join("") + '</select>' +
         '<select data-k="voice">' + m.ACCENTS.map(([v, n]) => '<option value="' + v + '"' + (v === s.voice ? " selected" : "") + '>' + n + '</option>').join("") + '</select></div>' +
-        sl("speed", "Speed", 80, 260, 5) + sl("pitch", "Pitch", 0, 99, 1) + sl("range", "Intonation", 0, 99, 1) +
-        sl("gap", "Word spacing", 0, 20, 1) + sl("vowel", "Vowel length", 1, 2, 0.05) + sl("pause", "Pause between verses", 0, 2, 0.1) +
-        '<label class="vs-chk"><input type="checkbox" data-k="clarity"' + (s.clarity ? " checked" : "") + '> Clarity filter (lifts the consonants)</label>' +
+        '<div class="vs-sel dev-only"><select data-k="deviceVoice" id="vsDevVoice"></select></div>' +
+        sl("speed", "Speed", 80, 260, 5) + sl("pitch", "Pitch", 0, 99, 1) + sl("range", "Intonation", 0, 99, 1, "es-only") +
+        sl("gap", "Word spacing", 0, 20, 1, "es-only") + sl("vowel", "Vowel length", 1, 2, 0.05, "es-only") + sl("pause", "Pause between verses", 0, 2, 0.1) +
+        '<label class="vs-chk es-only"><input type="checkbox" data-k="clarity"' + (s.clarity ? " checked" : "") + '> Clarity filter (lifts the consonants)</label>' +
         '<label class="vs-chk"><input type="checkbox" data-k="follow"' + (s.follow !== false ? " checked" : "") + '> Follow along on the page</label>' +
         '<p class="vs-note">Changes save themselves.</p>' +
         '<div class="rowbtns"><button class="btn" id="vsReset">Reset to default</button><button class="btn" id="vsTest">▶ Test</button><button class="btn primary" id="vsClose">Done</button></div>');
       const q = sel => back.querySelector(sel);
+      const fillDevice = () => {
+        const vs = deviceVoices(), sel = q("#vsDevVoice"), best = bestDeviceVoice();
+        if (!vs.length){ sel.innerHTML = '<option value="">No device voices offered to web pages</option>'; return; }
+        const want = s.deviceVoice || (best && best.voiceURI);
+        sel.innerHTML = vs.map(v => '<option value="' + esc(v.voiceURI) + '"' + (v.voiceURI === want ? " selected" : "") + '>' +
+          esc(v.name + " · " + v.lang + (v.localService ? "" : " · online")) + '</option>').join("");
+      };
+      fillDevice();
+      if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", fillDevice);
+      const setEngine = e => {
+        q('[data-k="engine"]').value = e; back.dataset.engine = e;
+        back.querySelectorAll("[data-engine]").forEach(b => b.classList.toggle("on", b.dataset.engine === e));
+      };
+      setEngine(s.engine);
       const show = () => back.querySelectorAll("[data-o]").forEach(o => { o.textContent = FMT[o.dataset.o](q('[data-k="' + o.dataset.o + '"]').value); });
       const read = () => {
         const o = {};
@@ -1720,19 +1797,24 @@ const LuminaCore = (function () {
       };
       show();
       back.addEventListener("input", () => { show(); read(); });
-      q("#vsReset").onclick = () => { state.voice = Object.assign({}, m.READ_DEFAULTS); save(); back.remove(); openVoiceSheet(); showToast("Voice reset to the default"); };
-      q("#vsClose").onclick = () => back.remove();
-      q("#vsTest").onclick = () => {
-        m.unlock();
-        voxEngine().then(mm => mm.read([{ text: "In the beginning was the Word, and the Word was with God, and the Word was God." }], voiceSettings()))
-          .catch(() => showToast("The voice could not play"));
+      back.querySelectorAll(".vs-engine [data-engine]").forEach(b => b.onclick = () => { setEngine(b.dataset.engine); read(); });
+      q("#vsReset").onclick = () => {
+        state.voice = Object.assign({ engine: q('[data-k="engine"]').value }, m.READ_DEFAULTS);
+        save(); back.remove(); openVoiceSheet(); showToast("Voice reset to the default");
       };
-      voxEngine().catch(() => {});      /* start fetching the engine while the settings are open */
+      q("#vsClose").onclick = () => { if (synth && synth.removeEventListener) synth.removeEventListener("voiceschanged", fillDevice); back.remove(); };
+      q("#vsTest").onclick = () => {
+        const sample = "In the beginning was the Word, and the Word was with God, and the Word was God.";
+        if (usingDevice()) return deviceRead([sample], voiceSettings());
+        m.unlock();
+        voxEngine().then(mm => mm.read([{ text: sample }], voiceSettings())).catch(() => showToast("The voice could not play"));
+      };
+      if (s.engine !== "device") voxEngine().catch(() => {});      /* start fetching the engine while the settings are open */
     });
   }
   $("listenBtn").onclick = toggleReading;
   $("voiceBtn").onclick = openVoiceSheet;
-  setTimeout(() => { vox().catch(() => {}); }, 2000);    /* the small script now; the engine waits for the first ▶ */
+  setTimeout(() => { vox().then(m => { voxM = m; }).catch(() => {}); }, 2000);    /* the small script now; the engine waits for the first ▶ */
 
   /* the playful voices, for a highlighted passage */
   function voicePanelHtml(){
