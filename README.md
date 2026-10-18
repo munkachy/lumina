@@ -22,6 +22,12 @@ is the licensed way to display these copyrighted translations.
 
 ## Features
 
+- **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
+  wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
+  minutes left. At the end: a chime, or a chime and then a sentence you write, said in your
+  reading voice. iPhone pauses web pages when the screen locks, so for an alarm that rings
+  anyway choose **iPhone timer**: Lumina starts the Clock app's timer through a one-step
+  Shortcut (setup steps are in the timer sheet).
 - **▶ Read aloud** — **Listen** on the bottom bar (or ▶ by A−/A+) reads what is on screen, from the first verse or
   paragraph you can see: a chapter, a Psalm, the Catechism, a Church document. Each verse is
   lit up as it is read and the page follows along; ■ stops. **⚙** sets the voice: voice and
