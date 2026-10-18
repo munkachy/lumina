@@ -22,7 +22,7 @@ is the licensed way to display these copyrighted translations.
 
 ## Features
 
-- **▶ Read aloud** — the ▶ button by A−/A+ reads what is on screen, from the first verse or
+- **▶ Read aloud** — **Listen** on the bottom bar (or ▶ by A−/A+) reads what is on screen, from the first verse or
   paragraph you can see: a chapter, a Psalm, the Catechism, a Church document. Each verse is
   lit up as it is read and the page follows along; ■ stops. **⚙** sets the voice: voice and
   accent, speed, pitch, intonation, word spacing, vowel length, the pause between verses, and
