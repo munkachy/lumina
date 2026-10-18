@@ -28,6 +28,9 @@ is the licensed way to display these copyrighted translations.
   accent, speed, pitch, intonation, word spacing, vowel length, the pause between verses, and
   a clarity filter. The defaults (American Male 3, 160 words a minute, 40 ms between words)
   were chosen by measurement: see [`tools/voice-clarity.md`](tools/voice-clarity.md).
+  ⚙ also offers **Device voice (natural)**: your phone's own synthetic voice (on an iPhone,
+  Apple's voices, recorded by hired voice actors), labelled plainly as a machine voice, in
+  keeping with Pope Leo XIV's 2026 Message *Preserving Human Voices and Faces*.
   **Tap a highlight** and open *Hear it in other voices* for Vox Machina's 22 presets
   (Gregorian Machine, Cold Cathedral, Kraftwerk, West Coast Talkbox…), with the robot amount
   at 50% to start; *♪ Tune* gives a sung preset a new melody. The voice is eSpeak NG, made on
