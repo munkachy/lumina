@@ -302,7 +302,7 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .lib-s{font-size:calc(.9rem * var(--ts, 1)); color:var(--ink-soft); line-height:1.4; margin-top:.15rem}
 .doc-sum{max-width:34rem; margin:.5rem auto; font-size:calc(.95rem * var(--ts, 1)); line-height:1.45; color:var(--ink-soft)}
 .speaking{background:color-mix(in srgb, var(--gold) 13%, transparent); border-radius:.35rem}
-#listenBtn.on{border-color:var(--gold-line); background:var(--panel2)}
+#listenBtn.on, #btnListen.on{border-color:var(--gold-line); background:var(--panel2)}
 .vs-sel{display:flex; gap:.4rem; margin:.3rem 0 .5rem} .vs-sel select{flex:1; min-width:0}
 .vs-row{display:grid; grid-template-columns:7.5rem 1fr 3.6rem; gap:.5rem; align-items:center; margin:.25rem 0; font-size:.95rem}
 .vs-row output{font-size:.85rem; color:var(--ink-soft); text-align:right}
@@ -497,6 +497,7 @@ noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
     <button class="round-btn" id="listenBtn" title="Read aloud">▶</button>
     <button class="round-btn" id="voiceBtn" title="Reading voice">⚙</button>
     <button class="round-btn" id="themeBtn" title="Toggle light / dark">☾</button>
+    <button class="round-btn" id="btnSearch" title="Search">🔍</button>
   </div>
 
   <div class="actions main-bar">
@@ -506,7 +507,7 @@ noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
     <button class="btn ib" id="btnRandomChapter" title="Random chapter"><span class="ic">❧</span><span class="lb">Chapter</span></button>
     <button class="btn ib" id="btnBooks" title="Books"><span class="ic">▤</span><span class="lb" id="lbBooks">Books</span></button>
     <button class="btn ib" id="btnTree" title="The Psalm Tree"><span class="ic">🌳</span><span class="lb">Tree</span></button>
-    <button class="btn ib" id="btnSearch" title="Search"><span class="ic">🔍</span><span class="lb">Search</span></button>
+    <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
     <button class="btn ib" id="btnFavs" title="Favorites"><span class="ic">♥</span><span class="lb">Favs</span></button>
     <button class="btn ib" id="btnReadings" title="Daily Mass readings"><span class="ic">✠</span><span class="lb">Daily</span></button>
     <button class="btn ib" id="btnPlan" title="Reading plan"><span class="ic">📅</span><span class="lb">Plan</span></button>
@@ -1659,6 +1660,8 @@ const LuminaCore = (function () {
     readingNow = on;
     const b = $("listenBtn"); b.textContent = on ? "■" : "▶"; b.title = on ? "Stop reading" : "Read aloud";
     b.classList.toggle("on", on);
+    $("btnListenIc").textContent = on ? "■" : "▶"; $("btnListenLb").textContent = on ? "Stop" : "Listen";
+    $("btnListen").classList.toggle("on", on);
     if (!on) document.querySelectorAll(".speaking").forEach(x => x.classList.remove("speaking"));
   }
   /* what is on screen to read: the verses / paragraphs of this view, from the first one visible */
@@ -1813,6 +1816,7 @@ const LuminaCore = (function () {
     });
   }
   $("listenBtn").onclick = toggleReading;
+  $("btnListen").onclick = toggleReading;
   $("voiceBtn").onclick = openVoiceSheet;
   setTimeout(() => { vox().then(m => { voxM = m; }).catch(() => {}); }, 2000);    /* the small script now; the engine waits for the first ▶ */
 
