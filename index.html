@@ -190,6 +190,11 @@ select:disabled{opacity:.45}
 .font-btns .round-btn{font-family:"Cormorant Garamond",Georgia,serif; font-weight:600}
 .font-btns .fminus{font-size:.85rem}
 .font-btns .fplus{font-size:1.2rem}
+@media(max-width:480px){
+  .controls{gap:.3rem}
+  .controls .round-btn{width:2.1rem; height:2.1rem; font-size:.95rem}
+  .controls #focus{max-width:6.4rem}
+}
 
 .actions{display:flex; justify-content:center; gap:.55rem; flex-wrap:wrap; margin:0 0 1.3rem}
 .btn{
@@ -314,6 +319,13 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .vs-engine .btn.on{border-color:var(--gold-line); color:var(--gold); background:var(--panel2); font-weight:600}
 .vs-about{font-size:.86rem; color:var(--ink-soft); text-align:center; margin:.2rem 0 .5rem; line-height:1.4}
 .modal-back[data-engine="device"] .es-only, .modal-back[data-engine="espeak"] .dev-only{display:none}
+#timerBtn.on{border-color:var(--gold-line); background:var(--panel2); font-size:.85rem; font-weight:600}
+.tm-left{font-size:2.4rem; text-align:center; margin:.2rem 0 0; color:var(--gold); font-variant-numeric:tabular-nums}
+.tm-quick{display:flex; flex-wrap:wrap; gap:.35rem; justify-content:center; align-items:center; margin:.5rem 0}
+.tm-quick input{width:4.2rem}
+.tm-alert label{display:block; margin:.3rem 0}
+.tm-speak, .tm-iphone{display:none} .modal-back[data-alert="speak"] .tm-speak, .modal-back[data-alert="iphone"] .tm-iphone{display:block}
+.tm-speak textarea{width:100%}
 .vs-note{font-size:.85rem; color:var(--ink-faint); text-align:center; margin:.2rem 0}
 .fv-msg{text-align:center; font-size:.9rem; color:var(--ink-soft); min-height:1.2em; margin:.3rem 0 0}
 .bk-row{display:flex; gap:.7rem; align-items:center; margin:.55rem 0}
@@ -498,6 +510,7 @@ noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
     <button class="round-btn" id="voiceBtn" title="Reading voice">⚙</button>
     <button class="round-btn" id="themeBtn" title="Toggle light / dark">☾</button>
     <button class="round-btn" id="btnSearch" title="Search">🔍</button>
+    <button class="round-btn" id="timerBtn" title="Timer">⏱</button>
   </div>
 
   <div class="actions main-bar">
@@ -1819,6 +1832,121 @@ const LuminaCore = (function () {
   $("btnListen").onclick = toggleReading;
   $("voiceBtn").onclick = openVoiceSheet;
   setTimeout(() => { vox().then(m => { voxM = m; }).catch(() => {}); }, 2000);    /* the small script now; the engine waits for the first ▶ */
+
+  /* ---------- timer ---------- */
+  /* One timer for the whole app. Its end time is saved, so it keeps counting while you move
+     around Lumina and even if Lumina is closed and opened again. iPhone pauses web pages when
+     the screen locks, so the chime or spoken sentence sounds only while Lumina is on screen;
+     the "iPhone timer" option hands the countdown to the Clock app through a Shortcut instead. */
+  const TIMER_DEFAULTS = { minutes: 40, alert: "chime", sentence: "Forty minutes have passed. Peace be with you.", shortcut: "Lumina Timer" };
+  function timerCfg(){ return Object.assign({}, TIMER_DEFAULTS, state.timerCfg || {}); }
+  /* a soft bell, made here: a few decaying partials, as a WAV the <audio> element can play */
+  const chime = new Audio();
+  (function makeChime(){
+    const rate = 22050, len = rate * 3, x = new Float32Array(len);
+    [[523.25, 1], [1046.5, 0.45], [1568, 0.25], [2637, 0.12]].forEach(([f, a]) => {
+      for (let i = 0; i < len; i++) x[i] += a * Math.sin(2 * Math.PI * f * i / rate) * Math.exp(-i / rate * (1.6 + f / 1500));
+    });
+    const peak = x.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
+    const dv = new DataView(new ArrayBuffer(44 + len * 2)), w = (o, t) => { for (let i = 0; i < t.length; i++) dv.setUint8(o + i, t.charCodeAt(i)); };
+    w(0, "RIFF"); dv.setUint32(4, 36 + len * 2, true); w(8, "WAVE"); w(12, "fmt "); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+    dv.setUint32(24, rate, true); dv.setUint32(28, rate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w(36, "data"); dv.setUint32(40, len * 2, true);
+    for (let i = 0; i < len; i++) dv.setInt16(44 + i * 2, x[i] / peak * 0.8 * 32767, true);
+    chime.src = URL.createObjectURL(new Blob([dv.buffer], { type: "audio/wav" }));
+  })();
+  /* inside a tap: let the chime and the voices play later without one (iPhone's rule) */
+  function primeSound(){
+    chime.muted = true; chime.play().then(() => { chime.pause(); chime.currentTime = 0; chime.muted = false; }).catch(() => { chime.muted = false; });
+    if (voxMod) voxMod.then(m => m.unlock()).catch(() => {});
+    if (synth){ try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; synth.speak(u); } catch(e){} }
+  }
+  function ringTimer(){
+    const c = timerCfg();
+    showToast("⏱ Time is up");
+    if (navigator.vibrate) try { navigator.vibrate([300, 150, 300]); } catch(e){}
+    if (c.alert === "speak" && c.sentence.trim()){
+      chime.currentTime = 0; chime.play().catch(() => {});
+      setTimeout(() => {
+        if (usingDevice()) return deviceRead([c.sentence], voiceSettings());
+        voxEngine().then(m => m.read([{ text: c.sentence }], voiceSettings())).catch(() => {});
+      }, 1600);
+    } else { chime.currentTime = 0; chime.play().catch(() => {}); setTimeout(() => { chime.currentTime = 0; chime.play().catch(() => {}); }, 3200); }
+  }
+  let timerTick = null;
+  function timerLeft(){ return state.timer && state.timer.end ? state.timer.end - Date.now() : 0; }
+  function fmtLeft(ms){ const s = Math.max(0, Math.ceil(ms / 1000)), m = Math.floor(s / 60); return m + ":" + String(s % 60).padStart(2, "0"); }
+  function paintTimer(){
+    const b = $("timerBtn"), left = timerLeft();
+    if (state.timer && left > 0){ b.textContent = Math.ceil(left / 60000) + "′"; b.classList.add("on"); b.title = "Timer: " + fmtLeft(left) + " left"; }
+    else { b.textContent = "⏱"; b.classList.remove("on"); b.title = "Timer"; }
+    const big = document.getElementById("tmLeft"); if (big) big.textContent = state.timer && left > 0 ? fmtLeft(left) : "—";
+  }
+  function runTimer(){
+    clearInterval(timerTick);
+    timerTick = setInterval(() => {
+      if (!state.timer) { clearInterval(timerTick); paintTimer(); return; }
+      if (timerLeft() <= 0){
+        const local = state.timer.local; state.timer = null; save(); clearInterval(timerTick); paintTimer();
+        if (local) ringTimer();
+        const st = document.getElementById("tmState"); if (st) st.textContent = "Finished.";
+        return;
+      }
+      paintTimer();
+    }, 1000);
+    paintTimer();
+  }
+  function startTimer(minutes){
+    const c = timerCfg();
+    if (c.alert === "iphone"){
+      /* the Clock app's timer, started by the person's Shortcut; Lumina shows the countdown too */
+      location.href = "shortcuts://run-shortcut?name=" + encodeURIComponent(c.shortcut) + "&input=text&text=" + encodeURIComponent(String(minutes));
+      state.timer = { end: Date.now() + minutes * 60000, local: false };
+    } else {
+      primeSound();
+      state.timer = { end: Date.now() + minutes * 60000, local: true };
+    }
+    save(); runTimer();
+  }
+  function stopTimer(){ state.timer = null; save(); runTimer(); }
+  function openTimerSheet(){
+    const c = timerCfg(), running = state.timer && timerLeft() > 0;
+    const back = modal('<h3>Timer</h3>' +
+      '<p class="tm-left" id="tmLeft">—</p><p class="vs-note" id="tmState">' + (running ? (state.timer.local ? "Running" : "Running in the Clock app") : "Not running") + '</p>' +
+      '<div class="tm-quick">' + [10, 20, 30, 40, 60].map(m => '<button class="btn small" data-min="' + m + '">' + m + '</button>').join("") +
+        '<label><input type="number" id="tmMin" min="1" max="600" value="' + c.minutes + '" inputmode="numeric"> min</label></div>' +
+      '<div class="tm-alert">' +
+        '<label><input type="radio" name="tmAlert" value="chime"' + (c.alert === "chime" ? " checked" : "") + '> Chime</label>' +
+        '<label><input type="radio" name="tmAlert" value="speak"' + (c.alert === "speak" ? " checked" : "") + '> Chime, then say a sentence</label>' +
+        '<label><input type="radio" name="tmAlert" value="iphone"' + (c.alert === "iphone" ? " checked" : "") + '> iPhone timer (rings even when locked)</label></div>' +
+      '<div class="tm-speak"><textarea id="tmSentence" rows="2" placeholder="What the voice says">' + esc(c.sentence) + '</textarea>' +
+        '<p class="vs-note">Said in your reading voice (⚙). Chime and voice sound only while Lumina is on screen.</p></div>' +
+      '<div class="tm-iphone"><p class="vs-about">One-time setup: open the <b>Shortcuts</b> app → <b>+</b> → add the action <b>Start Timer</b> → tap its duration and choose <b>Shortcut Input</b>, set to minutes → name the shortcut <b>' + esc(c.shortcut) + '</b>. Lumina then starts the Clock timer through it; the first time, iPhone asks to allow it.</p></div>' +
+      '<div class="rowbtns"><button class="btn danger" id="tmStop"' + (running ? "" : " disabled") + '>Stop</button><button class="btn" id="tmTest">Test</button>' +
+        '<button class="btn primary" id="tmGo">' + (running ? "Restart" : "Start") + '</button></div>' +
+      '<div class="rowbtns"><button class="btn" id="tmClose">Close</button></div>');
+    const q = s => back.querySelector(s);
+    const keep = () => {
+      state.timerCfg = { minutes: Math.max(1, Math.min(600, +q("#tmMin").value || 40)),
+        alert: q('input[name="tmAlert"]:checked').value, sentence: q("#tmSentence").value, shortcut: c.shortcut };
+      save(); back.dataset.alert = state.timerCfg.alert;
+    };
+    back.dataset.alert = c.alert;
+    back.addEventListener("input", keep);
+    back.querySelectorAll("[data-min]").forEach(b => b.onclick = () => { q("#tmMin").value = b.dataset.min; keep(); });
+    q("#tmGo").onclick = () => { keep(); startTimer(timerCfg().minutes); q("#tmStop").disabled = false; q("#tmGo").textContent = "Restart";
+      q("#tmState").textContent = timerCfg().alert === "iphone" ? "Running in the Clock app" : "Running"; };
+    q("#tmStop").onclick = () => { stopTimer(); q("#tmStop").disabled = true; q("#tmGo").textContent = "Start"; q("#tmState").textContent = "Not running"; };
+    q("#tmTest").onclick = () => { keep(); primeSound(); if (timerCfg().alert === "iphone") return showToast("The iPhone timer rings from the Clock app"); setTimeout(ringTimer, 150); };
+    q("#tmClose").onclick = () => back.remove();
+    paintTimer();
+  }
+  $("timerBtn").onclick = openTimerSheet;
+  /* a timer that was running when Lumina closed */
+  if (state.timer){
+    if (timerLeft() > 0) runTimer();
+    else { const at = new Date(state.timer.end); state.timer = null; save();
+      setTimeout(() => showToast("⏱ Your timer finished at " + at.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })), 900); }
+  }
 
   /* the playful voices, for a highlighted passage */
   function voicePanelHtml(){
