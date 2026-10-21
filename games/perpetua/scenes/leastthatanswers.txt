@@ -1,0 +1,564 @@
+*comment ============ CHAPTER THREE — THE LEAST THAT ANSWERS ============
+*comment The first real Reticence case, and the Ceyla shape in miniature: a
+*comment faction asks, the recognised government forbids, and the rule does not
+*comment say who counts as "the world." Mission's moment of glory.
+*comment Ledger: Sedge, independent, pop. 41,000. Two settlements — the Landing
+*comment (council, Speaker Idris Vane) and the Fold (6,200 people, broke away
+*comment eleven years ago, speaker Cassa Doon). Blight in the staple grain.
+*comment Perpetua carries 400 kg of Concord seed stock and one water plant.
+
+Sedge is green, which is the problem.
+
+From four hundred kilometres up you can see the river and the town at the bend of it and the grain running away east for ninety kilometres in strips, and the strips are three different colours. The dark green is healthy. The pale green is infected and does not know it yet. The yellow is finished.
+
+There is a great deal of yellow.
+
+"Rust blight," ${engname} says, looking over your shoulder at the plot, because everyone on this ship reads everyone else's screens. "My grandmother had it on Sarn. It takes two seasons and then it takes everything."
+
+Forty-one thousand people live down there. They are not Concord members. They came out here sixty years ago on a charter ship and they have never asked the Concord for anything, and that fact is about to become the most important thing in your year.
+
+*page_break
+
+*comment ---------------- The Landing ----------------
+
+The council meets in a grain hall with the doors open because it is harvest month and nobody has told the weather that there is nothing to harvest.
+
+**Speaker Idris Vane** is about fifty-five, in a good coat, and has been elected nine times. He has three points and he makes them in order.
+
+One: Sedge has a blight and knows it. Two: Sedge has a plan — consolidate the outlying settlements, pool the seed, ration for four years, and come out the other side smaller. Three: the Concord's assistance is not required, and Sedge will not be having a Survey ship's opinion about its internal arrangements.
+
+He says all of this pleasantly, in a hall with the doors open, in front of about two hundred people.
+
+*if (background = "diplomatic")
+  You have sat at four treaty tables and you know exactly what this is. It is not addressed to you. It is addressed to the two hundred people behind him, and the parts that sound like courtesy are load-bearing.
+  *set standing %+4
+*if (background != "diplomatic")
+  It takes you until the middle of the second point to understand that he is not talking to you at all.
+
+*page_break
+
+*choice
+  #"Speaker, what is the plan for the Fold?"
+    *set candor %+12
+    *set rule %+4
+    The hall goes quiet in a way that tells you the question was already in the room and you have simply been the one to say it.
+
+    Vane does not lose his footing. "The Fold will consolidate with everybody else."
+
+    "And if it does not?"
+
+    "Then the Fold will have made a choice," Vane says, "as it did eleven years ago, and Sedge will not be able to help it, and that will be very sad." He looks at you levelly. "Commander, you have been on this world for two hours."
+    *set sedge_open true
+    *goto vane_two
+  #Thank him, accept the refusal, and ask only for the mail manifest.
+    *set candor %-12
+    *set rule %+8
+    *set standing %+5
+    You thank him for his time, confirm that the Survey has no standing to offer unrequested assistance to a non-member world, hand over the mail, and ask for a signature on the manifest.
+
+    Vane signs it. Then, at the door, quietly, so that the hall cannot hear him: "You are the first one in six years who did not offer. I want you to know that I noticed."
+
+    You are not sure whether you have been complimented or filed.
+    *goto vane_two
+  #"How many people are in the outlying settlements?"
+    *set candor %+6
+    *set crew %+4
+    *set rule %-4
+    A fair question, asked flatly, about a number.
+
+    Vane gives it: eleven thousand across nine settlements, of whom six thousand two hundred are in the Fold. Then he gives you the rest without being asked — the tonnage, the ration arithmetic, the four-year projection — because he is a man who has done the work and would like somebody competent to see it.
+
+    The arithmetic is honest. That is the thing you take away. Vane's plan is not a cruelty. It is a plan by a man with a blight and no help, and it works, and it works better if the Fold comes in.
+    *set standing %+3
+    *goto vane_two
+
+*label vane_two
+*page_break
+
+*comment ---------------- Cassa Doon ----------------
+
+That night, at the shuttle field, a woman is waiting by the *Tern* in the dark, and ${secname} sees her before you do.
+
+*if (sec = "oyelaran")
+  Oyelaran has her against the fuselage with one hand before you have finished turning round, and then lets her go the moment you say his name, and then stands exactly where he can get back to her in one step.
+*if (sec = "whitlow")
+  Whitlow does not move. She says, "Evening," and lets the woman come to them, and watches her hands the whole way in.
+*if (sec = "mott")
+  Mott simply stands up out of the dark, all two and a half metres of her, and the woman makes a small involuntary noise and then, to her credit, does not run.
+
+Her name is **Cassa Doon** and she speaks for the Fold: six thousand two hundred people, forty kilometres upriver, who split from the Landing eleven years ago over a water tax and have been paying for it ever since.
+
+She has walked two days to be at this fence.
+
+"Our seed is gone," she says. "All of it, not most. And eleven days ago the council cut our allocation off the main line to seventeen per cent, which they are entitled to do, and which means that by midwinter we are either in the Landing on their terms or we are dead."
+
+She has a folder. Everybody in this system has a folder.
+
+*page_break
+
+*if (background = "line")
+  You have stood at enough fences at night to know that the folder is not the point. The point is that she walked two days, which means she has already been told no by everybody closer.
+*if (background = "science")
+  The folder is data and it is good data — soil counts, spore loads, a yield curve. You read it standing up under a work light and it takes you ninety seconds to see that she has not exaggerated anything, and about four minutes to see what she has left out.
+*if (background = "diplomatic")
+  The folder is a negotiating position and you can see the shape of it before she opens it. She is not asking for what she wants. She is asking for slightly more than what she wants, so that you can win something by cutting it down.
+
+What she is asking for is this: two hundred kilos of Concord seed stock, which you have, and one portable water plant, which you also have, and which was requisitioned for a member colony four systems from here that will not miss it for eleven months.
+
+*choice
+  #"Does your council know you are here?"
+    *set candor %+8
+    *set rule %+6
+    "No," she says. "And if you tell them, they'll cut us to nothing and say we broke faith, and they will be right, and we will still be dead."
+
+    She says it without heat. That is what makes it land.
+    *set sedge_open true
+    *goto wardroom
+  #"You are asking me to take a side in your politics."
+    *set rule %+10
+    *set candor %+6
+    "I'm asking you for water and seed," Doon says. "You're the one calling it politics."
+
+    "It becomes politics the moment a Concord ship gives six thousand people what the recognised government of this world has refused them. That is not an opinion. That is the second sentence of my standing orders."
+
+    "Then your standing orders have a body count," she says, "and I would like to know what it is."
+    *set standing %-3
+    *goto wardroom
+  #Say nothing and let her finish. All of it.
+    *set candor %-10
+    *set nerve %-8
+    You let her talk for nineteen minutes at a fence in the dark, and you do not interrupt once, and at the end of it she stops and looks at you and says, "You haven't said anything."
+
+    "No."
+
+    "Is that a no?"
+
+    "It is not anything yet."
+
+    She takes that better than you expected, which tells you she has been managed by professionals before and has decided to let it happen because there is nothing else on offer.
+    *set rule %+4
+    *goto wardroom
+  #Bring her aboard. Feed her. Then hear it properly.
+    *set crew %+10
+    *set nerve %+8
+    *set rule %-6
+    You put a speaker of the Fold in the *Tern* and take her up to a Concord Survey vessel in orbit over her own world, which is not illegal and is going to look like exactly one thing to anybody in the Landing with a telescope.
+
+    She eats like somebody who has walked for two days. Then she talks for an hour in the wardroom with all five of your officers present, and by the end of it every one of them has a position, and you have lost the ability to pretend this is a small matter.
+    *set sedge_open true
+    *set standing %-6
+    *set rel_xo %-4
+    *goto wardroom
+
+*label wardroom
+*page_break
+
+*comment ---------------- The wardroom ----------------
+*comment The centrepiece. Five officers, five positions, and the player decides
+*comment how the room is run rather than what it concludes.
+
+You call your officers together at 2200 and put Standing Order Four on the table, which is a thing you can do literally, because there is a card.
+
+**No officer of the Survey shall move the history of a world that has not asked. Where a world has asked, the officer shall give the least that answers.**
+
+Two sentences. A hundred and forty-three years old. Written by people who had just finished a forty-year war that started, among other reasons, because three worlds each decided that a fourth needed help.
+
+*if (xo = "marand")
+  "The world has not asked," Marand says. "The Fold is not the world. Six thousand two hundred people are not a world, they are a faction, and the day the Survey starts deciding which faction is really the world is the day the Concord stops meaning anything. That is my advice and I would like it in the log."
+*if (xo = "ferreo")
+  "The world has not asked," Ferreo says, "which is a lovely sentence, and in about four months it is going to be read out at an inquiry by somebody who has never been within nine days of here. I am not saying give them the seed. I am saying that whichever way you go, you are going to be explaining it to a man in a good coat, and I would pick the version you can explain."
+*if (xo = "tanaka")
+  "I ran freight for twelve years," Tanaka-Osei says. "Every famine I ever saw, the government's plan was fine, and the people who died were the ones forty kilometres upriver who weren't in the plan. That's not politics, that's distance."
+
+*if (sec = "oyelaran")
+  "If you put stores on the ground at the Fold," Oyelaran says, "the council will come and take them, and then somebody will decide to guard them, and then this ship is in a shooting war on an independent world over grain. I have seen it. It takes about eleven days."
+*if (sec = "whitlow")
+  "Before anybody decides anything," Whitlow says, "I would like to know why the Fold's seed is *all* gone when the Landing's is only two-thirds gone, forty kilometres apart, same blight. That is not weather. Somebody did something, or somebody failed to, and I would like to know which before we hand out stores."
+*if (sec = "mott")
+  Mott says: "On my world we say that a rule which has never cost you anything is not a rule, it is a preference." Then she says nothing else for the rest of the meeting, and it is the only thing anyone remembers.
+
+*if (med = "nour")
+  "Seventeen per cent of allocation, six thousand people, midwinter," Nour says. "I have run those camps. You do not get six thousand dead. You get about four hundred dead and five thousand six hundred who are shorter for the rest of their lives. That is what this decision is actually about and I want the number said out loud."
+*if (med = "sorrel")
+  Sorrel says, "Four hundred," in a small voice, having done the same arithmetic, and then does not say anything else, and looks at the table.
+*if (med = "vasi")
+  "Four hundred dead, five thousand six hundred stunted, and a natural experiment in blight resistance across two isolated populations," Vasi says. "I am aware of how that sounds. It is nevertheless what is in front of us, and one of those three facts is the only one anybody will still care about in fifty years."
+
+*if (chap = "wren")
+  Wren says nothing for a long time. Then: "May I ask a question rather than give an answer? Everyone in this room has said what the rule permits. Has anyone said what we would be doing if the rule did not exist?"
+*if (chap = "onu")
+  "I have carried water into places the government did not want water carried," Onu says, still folding, "in three orders and on two worlds, and I was wrong once and I have never been able to work out which time."
+*if (chap = "serat")
+  "What I am hearing," Serat says, "is that everyone here has already decided and would like the Captain to say it first."
+*if (chap = "none")
+  At the foot of the table the chair is empty, and the argument goes round it, and lands nowhere.
+
+*page_break
+
+*choice
+  #Let it run. All of it. However long it takes.
+    *set rule %-14
+    *set crew %+8
+    You let them go for two hours. It gets bad-tempered twice and personal once, and at 0015 ${engname} says something that stops the room, and at 0040 you realise that nobody is performing any more and that this is the most useful thing that has happened aboard this ship.
+
+    You do not get a recommendation out of it. You get five people who now know exactly what the others think, which is worth more, and will be worth more still in eleven weeks.
+    *set rel_xo %+6
+    *set rel_med %+6
+    *set rel_sec %+6
+    *goto sedge_decide
+  #Take it round the table once, in order, and then close it.
+    *set rule %+6
+    Each of them gets four minutes. You take it in order of seniority, which means ${xoname} goes first and sets the frame, and you notice too late that this was a decision.
+
+    At 2320 you close the meeting. It was efficient. It was also, you suspect, a slightly smaller conversation than the one you needed.
+    *set rel_xo %+4
+    *goto sedge_decide
+  #Ask each of them one question and answer none.
+    *set rule %+10
+    *set candor %-10
+    You go round the table asking questions and giving nothing back, which is a thing you can do and which works, in the sense that you leave the wardroom with everything they have and none of them with anything of yours.
+
+    *if (chap = "wren")
+      Wren stays behind afterwards, stacking chairs he did not sit on. "You did that well," he says. "I have watched a bishop do it. He was also very good at it." And then he goes to bed, having said nothing at all, and you lie awake for an hour.
+      *set rel_chap %-4
+    *goto sedge_decide
+  *if (chap = "none")
+    #Look at the empty chair at the foot of the table.
+      *set rule %+8
+      *set candor %-6
+      There is nobody to ask. You look at the empty chair at the foot of the table for slightly too long, and then you say, "Right. ${xoname}," and the meeting starts, and afterwards you cannot account for the four seconds and neither can anyone else.
+      *achieve empty_berth
+      *goto sedge_decide
+  *if (chap != "none")
+    #Ask ${chapname} first, before anyone else.
+      *set rule %-8
+      *set rel_chap %+12
+      You ask the chaplain first, before the first officer, in front of the wardroom, which is not how a Meridian's table works and which everybody notices.
+      *if (chap = "wren")
+        Wren looks genuinely alarmed. "Captain, I have no view on the seed stock. I have a view on you, and it is not for a meeting."
+      *if (chap = "onu")
+        Onu puts down what she is folding, which she has not done once in three weeks. "Feed them," she says. "Then argue. That is the whole of my advice and it is not very sophisticated."
+      *if (chap = "serat")
+        "I would rather go last," Serat says, "because if I go first everybody calibrates to me, and you will get one opinion five times."
+      Then you take it round the table properly, and the meeting is better for having started somewhere unexpected.
+      *goto sedge_decide
+
+*label sedge_decide
+*page_break
+
+*comment ---------------- The decision ----------------
+
+At 0300 you are alone in the master's cabin, three metres by four, with a viewport and a desk bolted to the deck.
+
+In your hold: four hundred kilos of gene-corrected seed, requisitioned for three member colonies on this circuit, of which two hundred kilos are surplus to the manifest by any honest reading. One portable water plant, requisitioned for a colony four systems from here that will not need it for eleven months.
+
+Outside: a world that has not asked, and six thousand two hundred people inside it who have.
+
+*if (plaque)
+  Twenty centimetres from your face, in brass: *THE LEAST THAT ANSWERS.*
+
+*page_break
+
+*choice
+  #Nothing. The world has not asked. Hold the line.
+    *set sedge "held"
+    *set crew %-14
+    *set rule %+10
+    *set standing %+8
+    You write it out in full so that you cannot pretend later that you did it by accident.
+
+    *The recognised government of Sedge has declined Concord assistance. The Fold is not the recognised government. Standing Order Four does not permit me to decide which part of a world is the world. Assistance declined. No stores landed.*
+
+    Then you sit and look at it, and you understand for the first time in your life that Standing Order Four is not a shield. It is a thing you do to people. A hundred and forty-three years ago eleven worlds finished killing each other and agreed that this would be cheaper, and tonight the bill comes to about four hundred names you will never know.
+
+    You sign it.
+    *goto sedge_after
+  #The water plant. Not the seed. Water is life; seed is a harvest, and a harvest is politics.
+    *set sedge "water"
+    *set rule %+8
+    *set nerve %-4
+    *set standing %+4
+    *achieve least
+    It takes you two hours to convince yourself and eleven minutes to write.
+
+    A water plant does not change who governs Sedge. It does not restore the Fold's independence or break the council's plan or feed anybody through a winter. It keeps six thousand two hundred people alive and thirsty and exactly as dependent on the Landing as they were yesterday, and it can be defended, in a hall, in front of a Board, sentence by sentence.
+
+    *The least that answers.* You are aware, writing it, that you have used those four words to mean *the smallest thing I can give without being punished*, and that this is not what they say.
+
+    It is still the only reading of them that you can carry.
+    *goto sedge_handover
+  #Everything. Seed and water, to the Fold, in daylight, with my name on it.
+    *set sedge "gave"
+    *set crew %+8
+    *set nerve %+14
+    *set candor %+10
+    *set standing %-12
+    *achieve more
+    You do not do it quietly, because doing it quietly would be the worse crime — it would mean you knew.
+
+    *0410. Two hundred kilos seed stock and one portable water plant landed at the Fold, Sedge, by my direct order, in contravention of Standing Order Four. The recognised government of this world refused assistance. I have given it to six thousand two hundred people who asked for it. I request that this entry be forwarded to the Board of Inquiry with my commission.*
+
+    Then you go up to the bridge and tell the officer of the watch to signal the Landing and tell them what you are about to do, before you do it, which is the part that will actually cost you.
+    *goto sedge_handover
+  #Everything — through the council. Concord stores, Concord terms, Concord witnesses.
+    *set sedge "council"
+    *set rule %+12
+    *set candor %+6
+    *set standing %+3
+    You signal Speaker Vane at 0500 and offer him four hundred kilos of seed and a water plant for the whole of Sedge, on one condition: the Survey witnesses the distribution, settlement by settlement, against the register, including the Fold.
+
+    It is not assistance to a faction. It is assistance to the world, which is entitled to refuse it, and which will not, because Vane is a serious man with a blight.
+
+    He accepts in ninety minutes, which is fast enough to tell you that he has been awake all night too.
+
+    What you have done is hand a man his own plan back with your hand still on it. It is legal. ${xoname} calls it *elegant*, and you cannot tell whether that is praise.
+    *set rel_xo %+8
+    *goto sedge_handover
+
+*label sedge_handover
+*page_break
+
+*comment ---------------- The handover ----------------
+
+Whatever you have decided, it goes down in the *Tern*, and somebody has to be in it.
+
+*choice
+  #I go down with it myself.
+    *set nerve %+10
+    *set crew %+6
+    *set standing %-4
+    You go. It is not necessary and everybody knows it is not necessary, and ${xoname} says so, once, correctly, for the log.
+
+    You stand in a field forty kilometres upriver at seven in the morning while six thousand two hundred people work out what has arrived, and a man you have never met shakes your hand for eleven seconds without saying anything, and you carry that hand for a year.
+    *set rel_xo %-3
+    *goto sedge_after
+  #${xoname} takes it down. That is what a first officer is for.
+    *set rule %+6
+    *set crew %-4
+    *set rel_xo %+8
+    ${xoname} takes the *Tern* down and does it exactly right and reports in eleven sentences, and you sit on the bridge and watch the plot and find that you would very much rather have been there, and file that away as something to watch in yourself.
+    *goto sedge_after
+  #Send ${secname}. If this goes wrong it goes wrong on the ground.
+    *set rule %+8
+    *set nerve %-6
+    *set rel_sec %+10
+    *if (sec = "oyelaran")
+      Oyelaran goes down with four hands and no visible weapons, having spent forty minutes making certain that there are no visible weapons, and comes back up having talked to eleven people and learned that the council has already moved two trucks to within nine kilometres of the Fold.
+    *if (sec = "whitlow")
+      Whitlow goes down and comes back with the answer to her own question: the Fold's seed store was in a low barn, the council's water cut dropped the river weir, the weir dropped the water table, the barn flooded in the spring, and nobody did anything to anybody. It was arithmetic. It is somehow worse.
+    *if (sec = "mott")
+      Mott goes down, and the Fold has never seen a Karsk, and by the middle of the afternoon there are nine children following her at a distance of exactly four metres, and she has named all of them.
+    *goto sedge_after
+
+*comment ---- added choice: Cassa Doon ----
+Cassa Doon is at the field when the *Tern* comes back up for the last time.
+
+She has walked two days again. She does not have a folder this time.
+
+*choice
+  #Tell her exactly what you did and why, before she hears it from anybody else.
+    *set candor %+12
+    *set crew %+6
+    You tell her, standing on grass, with the shuttle ticking behind you.
+
+    She listens to all of it without interrupting, which she did not do the first time.
+
+    "Right," she says at the end. And then: "I'd have done it different." And then, after a moment, "I'd have done it different and I'd have been guessing, same as you." She puts out her hand. "Two days' walk each way, Commander. Don't make me do it a third time for something you could have said on a radio."
+    *set standing %+4
+    *goto sedge_after2
+  #Ask her what happens to the Fold now.
+    *set rule %-6
+    *set candor %+8
+    *set crew %+8
+    She tells you, standing on grass, in about four minutes, and it is not what you expected: not seed and water but a vote, in the spring, on whether to rejoin the Landing, which will be close, and which she will lose or win depending on exactly what your ship did this week and on nothing else.
+
+    "That's what you were deciding," she says. "I don't think anybody told you that."
+    *goto sedge_after2
+  #Say what needs saying and get in the shuttle.
+    *set candor %-10
+    *set rule %+8
+    You say the correct things, which are true and which cost nothing, and you get in the shuttle, and she watches it go up.
+
+    *if (nerve <= 45)
+      From four hundred metres she is a figure on grass at the edge of a field, and you keep her in the port viewport until the curve takes her, which is longer than you meant to.
+    *goto sedge_after2
+
+*label sedge_after2
+*page_break
+
+*label sedge_after
+*page_break
+
+*comment ---------------- What it costs ----------------
+
+*if (sedge = "held")
+  You are eleven days out of Sedge before the arithmetic finishes arriving.
+  *if (crew > 55)
+    It arrives in the mess deck first, the way these things do. Nobody says anything to you. Nobody has to. For four days the ship is quiet in a way that is not restful, and then ${xoname} tells you that a rating has asked to be transferred at the next member colony, and that the reason given on the form is *personal*.
+    *set rel_xo %-4
+  *if (crew <= 55)
+    It arrives as a number in a Concord bulletin four months later: Sedge, consolidation completed, three hundred and eighty-one excess deaths, winter of the blight. Under the Concord's reporting standards that is a *successful* consolidation, because the projection was four hundred.
+  *set sedge_dead 381
+  Three years from now, Sedge will have a crop again. Forty thousand people will be alive on a world that was never made to depend on anybody, and the Concord will not have decided which part of Sedge was really Sedge, and that will still be true in a hundred years, and it will still have cost three hundred and eighty-one people.
+
+  Both of those sentences are true at once. Nobody ever tells you how to hold two true sentences at the same time.
+  *set standing %+6
+
+*if (sedge = "water")
+  The water plant runs. It is not glamorous: a shed, a pipe, and eleven cubic metres an hour.
+  *set sedge_dead 190
+  Nineteen people die at the Fold that winter of things that are not thirst, and about a hundred and seventy more across the outlying settlements where you did not go, and the Fold consolidates with the Landing in the spring on the council's terms, exactly as Vane planned, only slower and with fewer funerals.
+
+  Speaker Vane files no protest. What he files is a note of thanks, correctly worded, which arrives at Concord Central four months later and does you a great deal of good, and which is the single most uncomfortable piece of paper you will receive all year.
+  *set standing %+5
+
+*if (sedge = "gave")
+  The Fold plants in eleven days.
+  *set sedge_dead 40
+  Speaker Vane's protest reaches Concord Central in six weeks. It is nine pages and it is not hysterical; it is the careful, wounded document of a man who had a plan and was overruled by a foreigner in orbit, and every single fact in it is correct.
+
+  Forty people die at the Fold that winter, which is what happens when six thousand people who were going to starve merely have a very bad time instead.
+
+  And eleven years from now the Fold will still be there, separate, watered, and fed, and the council of Sedge will still be able to name the ship.
+  *set standing %-8
+
+*if (sedge = "council")
+  The distribution takes nine days and ${xoname} witnesses every hour of it against the register, settlement by settlement, including the Fold, where Vane's own inspector has to stand in a field and count sacks in front of six thousand people who have not been counted in for eleven years.
+  *set sedge_dead 96
+  Ninety-six people die on Sedge that winter, across the whole world, of the ordinary things.
+
+  In the spring the Fold votes to rejoin the Landing, narrowly, and Cassa Doon votes against and loses and stays anyway. Nobody thanks you. Sedge does not think it was helped. Sedge thinks it made a plan and the plan worked, which is exactly what you wanted and gives you nothing at all to hold.
+  *set standing %+8
+
+*page_break
+
+*comment ---------------- The last conversation on the ground ----------------
+*comment Reaction block: reads all four pairs plus standing. Reconvergent —
+*comment every branch ends at the same place with a different thing understood.
+
+Before you break orbit, Speaker Idris Vane comes up to the ship. He has never been aboard a Survey vessel. He looks at the deckhead the whole way down the corridor.
+
+He wants to say one thing, and it takes him three attempts.
+
+*if (rule > 62)
+  "You did not ask me what I wanted," he says at last. "Not once, in nine days. You asked me what I had done and what I planned and what the numbers were, and then you decided." He turns his hat over. "I have been elected nine times, Commander. Nobody has asked me what I wanted since I was forty. I find I do not mind it as much as I expected to."
+*if (rule <= 62)
+  "You asked eleven people what they thought," he says at last, "including a woman who walked two days to stand at your fence, and I watched you do it, and I could not tell at any point what you had already decided." He turns his hat over. "I have been elected nine times. That is a very useful thing to be unable to tell about a person."
+
+*if (candor > 62)
+  "And you told me the truth in a hall with the doors open, in front of two hundred people, which was either brave or careless."
+*if (candor <= 62)
+  "And you told me very little, which I respect, and which means that in six months I will not know whether to be grateful to you or not."
+
+*if (crew > 62)
+  He looks at the corridor, at the ratings flattening themselves against the bulkhead to let him past. "Your people watch you," he says. "Mine watch me too. It is not the same watching and I would rather have yours."
+*if (crew <= 62)
+  He looks at the corridor. "You run a quiet ship," he says, which is not entirely a compliment on a world where the loudest thing anybody owns is a grain drier.
+
+*if (nerve > 62)
+  At the airlock he says: "You move fast. Faster than the last one, and he was not slow." He does not say whether that is good.
+*if (nerve <= 62)
+  At the airlock he says: "You are careful. The last one was not, at the end." He does not say whether that is good.
+
+*page_break
+
+*choice
+  #"Speaker — was I wrong?"
+    *set candor %+10
+    *set rule %-6
+    You ask a man whose world you have just been standing on whether you were wrong, in a corridor, with your own ratings within earshot.
+
+    Vane thinks about it for a long time. He is not being kind.
+
+    *if (standing > 55)
+      "No," he says. "I think you were correct and I think it cost something, and I think you know exactly what, and I think that is as much as anybody gets." He puts his hat on. "It is more than Halloran got."
+      *set standing %+4
+    *if (standing <= 55)
+      "I do not know yet," he says. "Ask me in three years. I will still be here." He puts his hat on. "That is the difference between us, Commander. You leave."
+    *goto tell_ship
+  #"You will have a Vaunt ship here inside two years. Be ready."
+    *set candor %+12
+    *set nerve %+8
+    *set standing %-5
+    You tell an independent world, without authorisation, that a rival power is going to come for it.
+
+    Vane does not look surprised, which is the worst part. "We have had two Vaunt traders in eleven months," he says. "Very polite. Very good prices. They asked whether the Concord had ever given us anything." He looks at you. "Until this week I could say no."
+    *set sedge_open true
+    *goto tell_ship
+  #Shake his hand and say nothing.
+    *set candor %-10
+    *set rule %+6
+    You shake his hand at the airlock and say the correct things about safe harvests, and he says the correct things back, and it takes ninety seconds and nothing whatsoever passes between you.
+
+    *if (background = "diplomatic")
+      Which is, you are aware, the single most useful outcome available, and you have arranged it deliberately, and you are getting extremely good at it, and somewhere around the third exchange of correct things you catch yourself enjoying it.
+      *set standing %+4
+    *goto tell_ship
+
+*label tell_ship
+*page_break
+
+*comment ---------------- What you tell the ship ----------------
+
+A hundred and twelve people know what you did. About ninety of them have an opinion. The intercom is on the bulkhead.
+
+*choice
+  #Explain it. The whole reasoning, out loud, to everybody.
+    *set candor %+14
+    *set crew %+6
+    You take nine minutes on the intercom and walk a hundred and twelve people through Standing Order Four, both sentences, and what you decided and why, including the part where you are not certain.
+
+    *if (candor > 70)
+      It works, and it works for a reason you did not expect: not because you persuaded them, but because a crew nine days from help will forgive almost any decision except being managed, and you have just spent nine minutes not managing them.
+      *set rel_xo %+6
+      *set rel_sec %+6
+      *set rel_med %+6
+    *if (candor <= 70)
+      It half works. The ones who agreed with you agree with you more. The ones who did not now have nine minutes of your reasoning to be specific about, and specificity is not always a gift.
+    *goto sedge_log
+  #Post the log entry on the mess board. Unedited. Let them read it.
+    *set candor %+10
+    *set rule %-8
+    *set crew %+8
+    You do not explain anything. You have ${xoname} post the master's log entry, in full, unedited, on the mess board beside the whiteboard and the coffee urn, and you do not go down to see who is reading it.
+
+    It is there for four days. On the fifth morning somebody has written under it, in pencil, in a hand nobody ever identifies: *fair enough.*
+
+    You have that board photographed, and you do not tell anyone why.
+    *set rel_xo %+5
+    *goto sedge_log
+  #Nothing. They will work it out.
+    *set candor %-14
+    *set rule %+8
+    You say nothing at all, and a hundred and twelve people work it out, and what they work out is roughly correct and entirely without your fingerprints on it, and about a fifth of it is wrong in ways you will not discover for months.
+
+    *if (crew > 60)
+      ${medname} mentions, three weeks later and apparently at random, that the third watch believes you argued with Speaker Vane for two hours and lost. You have never spoken to Speaker Vane for more than eleven minutes at a stretch.
+    *goto sedge_log
+
+*label sedge_log
+*page_break
+
+You are four days out of Sedge, at 0200, when the sensor watch finds something and does not know what to do about it, and wakes ${xoname}, who wakes you.
+
+It is a track. Nine hours old, cold, and running out of Sedge space towards the coreward edge of the Reach on a heading that no trader uses.
+
+*if (background = "line")
+  You have chased tracks like this for six years on the Sarn frontier and you know what it is before ${engname} finishes the profile. It is a warship, running quiet, with a drive signature nobody in the Concord builds.
+*if (background != "line")
+  ${engname} runs the profile three times. The third time ${engthey} stops talking in the middle of a sentence.
+
+*if (eng = "dorr")
+  Dorr looks at the signature for a long moment. "I am sorry," he says. "That is a Vaunt cruiser. Fourth pattern, Kes-Arahel yards, and I helped build the coolant baffle that makes it look like that on your sensors."
+
+  Nobody on the bridge says anything. Dorr adds, quietly: "It has been there the whole time we were at Sedge."
+*if (eng != "dorr")
+  It is a Vaunt cruiser. Fourth pattern, Kes-Arahel yards, and by the time you have the profile it is nine hours gone.
+
+  It has been there the whole time you were at Sedge.
+
+*page_break
+
+Whatever you did at the Fold, somebody watched you do it.
+
+*finish

@@ -1,0 +1,2354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nightfreight</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  --bg:#07070a; --panel:#101016; --panel2:#15151c; --panel3:#1b1b24;
+  --ink:#e9e6df; --ink2:#a29d90; --ink3:#635e55;
+  --rule:#22222b; --amber:#f0a63c; --sand:#c9a86a; --sky:#7ea6d8;
+  --rose:#d47f7f; --mauve:#b39ad8; --green:#8fbf7f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:Spectral,Georgia,"Times New Roman",serif;font-size:16px;line-height:1.6;
+  -webkit-text-size-adjust:100%;
+  background-image:radial-gradient(ellipse 70% 30% at 50% -6%,rgba(240,166,60,.06),transparent 70%)}
+.cond{font-family:"Barlow Condensed",Arial Narrow,sans-serif}
+.app{max-width:62rem;margin:0 auto;padding:0 .9rem 4rem}
+
+/* ---------- status bar ---------- */
+.status{position:sticky;top:0;z-index:40;background:#07070aee;backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--rule);margin:0 -.9rem;padding:.5rem .9rem}
+.statrow{display:flex;gap:.15rem .95rem;flex-wrap:wrap;align-items:baseline;
+  font-family:"Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+.stat{display:flex;gap:.4rem;align-items:baseline;white-space:nowrap}
+.stat b{font-weight:500;letter-spacing:.16em;text-transform:uppercase;font-size:.6rem;color:var(--ink3)}
+.stat span{font-size:1rem;color:var(--ink)}
+.stat span.hi{color:var(--amber)}
+.stat span.warn{color:var(--rose)}
+.stat span.ok{color:var(--green)}
+
+/* ---------- header ---------- */
+header{padding:1.3rem 0 .3rem;display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap}
+.elbow{width:5rem;height:3rem;position:relative;flex:0 0 auto}
+.elbow i{position:absolute;display:block;border-radius:1rem}
+.elbow i:nth-child(1){left:0;top:0;width:5rem;height:1.1rem;background:var(--amber);border-bottom-right-radius:0}
+.elbow i:nth-child(2){left:0;top:1.25rem;width:1.9rem;height:1.75rem;background:var(--sand);border-top-right-radius:0}
+.elbow i:nth-child(3){left:2.1rem;top:1.25rem;width:1.3rem;height:.8rem;background:#3a3a46}
+h1{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:2rem;
+  letter-spacing:.13em;text-transform:uppercase;margin:0;line-height:1}
+.where{font-family:"Barlow Condensed",sans-serif;letter-spacing:.24em;text-transform:uppercase;
+  font-size:.68rem;color:var(--amber)}
+.wheresub{color:var(--ink3);letter-spacing:.18em}
+
+/* ---------- tabs ---------- */
+.objective{font-family:"Barlow Condensed",sans-serif;letter-spacing:.02em;font-size:.95rem;
+  color:var(--amber);margin-top:.35rem;padding-top:.35rem;border-top:1px solid #1c1c25;
+  line-height:1.4}
+.objective b{color:#ffd08a;font-weight:600}
+.objective i{color:var(--ink2);font-style:italic}
+
+.tut{background:#17140d;border-left:.4rem solid var(--amber);border-radius:.2rem .6rem .6rem .2rem;
+  padding:.85rem 1rem .95rem;margin:0 0 1.3rem}
+.tutnum{font-family:"Barlow Condensed",sans-serif;letter-spacing:.24em;text-transform:uppercase;
+  font-size:.62rem;color:var(--amber);margin-bottom:.25rem}
+.tut h3{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.05em;
+  font-size:1.24rem;margin:0 0 .4rem;color:#fff}
+.tut p{margin:0 0 .5rem;font-size:.96rem;color:var(--ink2);max-width:40rem;line-height:1.55}
+.tut p.do{color:var(--ink);font-size:1.04rem;margin-bottom:.75rem}
+.tut p.do b{color:var(--amber)}
+.tut i{color:var(--sand);font-style:italic}
+.tut button.skip{background:transparent;border-color:#33302a;color:var(--ink3);font-size:.66rem}
+
+.spot{position:relative;z-index:5;
+  box-shadow:0 0 0 2px var(--amber),0 0 0 7px rgba(240,166,60,.22)!important;
+  animation:sp 1.7s ease-in-out infinite}
+@keyframes sp{0%,100%{box-shadow:0 0 0 2px var(--amber),0 0 0 5px rgba(240,166,60,.14)}
+              50%{box-shadow:0 0 0 2px var(--amber),0 0 0 11px rgba(240,166,60,.30)}}
+@media (prefers-reduced-motion:reduce){.spot{animation:none}}
+
+/* one small screen at a time, with a way back that is always in the same place */
+nav.tabs{display:flex;gap:.6rem;align-items:center;margin:1.1rem 0 .35rem;flex-wrap:wrap}
+nav.tabs[hidden]{display:none}
+nav.tabs button.back{font-family:"Barlow Condensed",sans-serif;letter-spacing:.14em;
+  text-transform:uppercase;font-size:.74rem;background:var(--amber);color:#12100c;
+  border:0;padding:.42rem 1.1rem .42rem .8rem;cursor:pointer;font-weight:600;
+  border-radius:1rem 0 0 1rem}
+nav.tabs button.back:hover{background:#ffc063}
+nav.tabs button.back:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.screentitle{font-family:"Barlow Condensed",sans-serif;letter-spacing:.22em;
+  text-transform:uppercase;font-size:.78rem;color:var(--ink3)}
+
+.pane{background:var(--panel);border-radius:.6rem;padding:1rem 1.1rem 1.2rem;min-height:20rem}
+
+.hereline{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.5rem}
+.hereline b{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:1.5rem;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink)}
+.hereline span{font-family:"Barlow Condensed",sans-serif;letter-spacing:.2em;
+  text-transform:uppercase;font-size:.66rem;color:var(--amber)}
+
+/* the hub: Space Trader's button grid, wearing LCARS */
+.menu{display:grid;gap:.45rem;grid-template-columns:repeat(auto-fit,minmax(8.2rem,1fr));
+  margin:1.4rem 0 .4rem}
+button.b.tile{font-family:"Barlow Condensed",sans-serif;letter-spacing:.13em;
+  text-transform:uppercase;font-size:.98rem;font-weight:500;line-height:1.15;
+  background:var(--c,var(--amber));color:#0c0b08;border:0;
+  padding:1.15rem .8rem;border-radius:.25rem 1.1rem 1.1rem .25rem;cursor:pointer;
+  text-align:right;min-height:4.6rem;display:flex;align-items:flex-end;justify-content:flex-end;
+  white-space:normal;transition:filter .14s,transform .1s}
+button.b.tile:hover{filter:brightness(1.16);transform:translateX(2px)}
+button.b.tile:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.menu button.b.tile:nth-child(even){border-radius:1.1rem .25rem .25rem 1.1rem;
+  text-align:left;justify-content:flex-start}
+.menu button.b.tile:nth-child(even):hover{transform:translateX(-2px)}
+@media (max-width:26rem){
+  .menu{grid-template-columns:1fr 1fr}
+  button.b.tile{min-height:3.9rem;font-size:.88rem;padding:.85rem .7rem}
+}
+h2.sec{font-family:"Barlow Condensed",sans-serif;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;font-size:.72rem;color:var(--ink3);margin:0 0 .7rem;
+  padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h2.sec:not(:first-child){margin-top:1.8rem}
+p.note{color:var(--ink2);font-size:.94rem;margin:.2rem 0 .9rem;max-width:42rem}
+p.note em{color:var(--sand);font-style:italic}
+
+/* ---------- tables ---------- */
+.scroll{overflow-x:auto;margin:0 -.3rem}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.92rem}
+th{font-family:"Barlow Condensed",sans-serif;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;font-size:.63rem;color:var(--ink3);text-align:left;
+  padding:.45rem .55rem;white-space:nowrap;border-bottom:1px solid var(--rule)}
+th.n,td.n{text-align:right}
+td{padding:.4rem .55rem;border-bottom:1px solid #1a1a22;color:var(--ink2);vertical-align:middle}
+td.nm{color:var(--ink)}
+tr.illegal td{color:#8c6a6a}
+tr.illegal td.nm{color:var(--rose)}
+tr.held td.nm{color:var(--amber)}
+tbody tr:hover td{background:var(--panel2)}
+
+/* ---------- buttons ---------- */
+button.b{font-family:"Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  font-size:.74rem;background:var(--panel3);color:var(--ink);border:1px solid #2b2b36;
+  padding:.3rem .6rem;border-radius:.25rem;cursor:pointer;white-space:nowrap}
+button.b:hover:not(:disabled){background:#262633;border-color:#3b3b4a}
+button.b:disabled{opacity:.32;cursor:not-allowed}
+button.b.go{background:var(--amber);color:#12100c;border-color:var(--amber);font-weight:600}
+button.b.go:hover:not(:disabled){background:#ffc063}
+button.b.warn{border-color:#5a3333;color:var(--rose)}
+button.b:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.btnrow{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
+
+/* ---------- cards ---------- */
+.cards{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr))}
+.card{background:var(--panel2);border-radius:.2rem .6rem .6rem .2rem;padding:.8rem .9rem;
+  border-left:.35rem solid var(--c,var(--ink3));display:flex;flex-direction:column;gap:.45rem}
+.card h3{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.06em;
+  font-size:1.02rem;margin:0;color:var(--ink)}
+.card .role{font-family:"Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;
+  font-size:.62rem;color:var(--ink3);margin-top:-.3rem}
+.card p{margin:0;font-size:.88rem;color:var(--ink2);line-height:1.5}
+.skills{display:flex;gap:.5rem;font-family:"Barlow Condensed",sans-serif;
+  font-variant-numeric:tabular-nums;font-size:.8rem;flex-wrap:wrap}
+.skills i{font-style:normal;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;font-size:.6rem}
+.skills b{font-weight:500;color:var(--ink)}
+.pill{font-family:"Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;
+  font-size:.6rem;padding:.1rem .4rem;border-radius:.6rem;border:1px solid currentColor}
+.pill.steady{color:var(--ink3)} .pill.hard{color:var(--sand)} .pill.gone{color:var(--rose)}
+
+/* ---------- modal ---------- */
+.veil{position:fixed;inset:0;background:#040407ee;z-index:90;display:flex;
+  align-items:flex-start;justify-content:center;overflow-y:auto;padding:1.2rem .8rem 3rem}
+.veil[hidden]{display:none!important}
+.modal{background:var(--panel);max-width:40rem;width:100%;border-radius:.5rem;
+  border-top:.3rem solid var(--c,var(--amber));padding:1.4rem 1.5rem 1.3rem;margin-top:1.5rem}
+.modal .eyebrow{font-family:"Barlow Condensed",sans-serif;letter-spacing:.26em;
+  text-transform:uppercase;font-size:.64rem;color:var(--c,var(--amber));margin-bottom:.5rem}
+.modal h2{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;font-size:1.3rem;margin:0 0 .9rem;line-height:1.1;text-wrap:balance}
+.modal p{margin:0 0 .85rem;max-width:36rem}
+.modal p.said{color:var(--ink);padding-left:.9rem;border-left:2px solid #2c2c38}
+.modal pre{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.78rem;
+  line-height:1.6;background:#0b0b10;border:1px solid var(--rule);border-radius:.3rem;
+  padding:.8rem .9rem;overflow-x:auto;color:var(--sand);white-space:pre;margin:0 0 .9rem}
+.modal .opts{display:flex;flex-direction:column;gap:.4rem;margin-top:1.1rem}
+.modal .opts button{text-align:left;font-family:Spectral,serif;text-transform:none;
+  letter-spacing:0;font-size:.98rem;padding:.6rem .8rem;background:var(--panel2);
+  border:1px solid #262632;color:var(--ink);border-radius:.3rem;cursor:pointer;line-height:1.45}
+.modal .opts button:hover{background:var(--panel3);border-color:var(--amber);color:#fff}
+.modal .opts button:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.modal .opts button small{display:block;color:var(--ink3);font-size:.82rem;margin-top:.15rem}
+
+/* ---------- fight ---------- */
+.fight{display:grid;gap:.55rem;grid-template-columns:1fr 1fr;margin:.4rem 0 1rem}
+.bar{background:var(--panel2);border-radius:.3rem;padding:.5rem .65rem}
+.bar .who{font-family:"Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;
+  font-size:.62rem;color:var(--ink3);margin-bottom:.3rem}
+.meter{height:.5rem;background:#0b0b10;border-radius:.3rem;overflow:hidden;margin:.25rem 0}
+.meter i{display:block;height:100%;background:var(--c,var(--amber));transition:width .25s}
+.bar small{font-family:"Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums;
+  color:var(--ink2);font-size:.76rem}
+.log{background:#0b0b10;border:1px solid var(--rule);border-radius:.3rem;padding:.6rem .75rem;
+  max-height:11rem;overflow-y:auto;font-size:.9rem;color:var(--ink2)}
+.log div{margin:0 0 .25rem}
+.log div:last-child{color:var(--ink);margin-bottom:0}
+
+/* ---------- map ---------- */
+.vpicker{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem}
+button.b.vp{background:var(--panel2);border-color:#2b2b36;color:var(--ink2);
+  letter-spacing:.16em;padding:.4rem .8rem}
+button.b.vp.on{background:var(--amber);color:#12100c;border-color:var(--amber);font-weight:600}
+
+figure.map{margin:0 0 .4rem;padding:.4rem 0 0}
+figure.map svg{width:100%;max-width:30rem;height:auto;display:block;margin:0 auto;
+  background:#0a0a0f;border-radius:.4rem;border:1px solid var(--rule)}
+figure.map figcaption{font-family:"Barlow Condensed",sans-serif;letter-spacing:.1em;
+  text-transform:uppercase;font-size:.62rem;color:var(--ink3);margin-top:.5rem}
+g.mapnode{cursor:pointer}
+g.mapnode:hover circle,g.mapnode:hover text{stroke:#fff}
+g.mapnode:hover text{fill:#fff}
+g.mapnode:focus{outline:none}
+g.mapnode:focus-visible circle:nth-of-type(2){stroke:#fff;stroke-width:3}
+g.mapnode.dim{opacity:.55}
+
+.valley{margin-bottom:1.3rem}
+.vname{font-family:"Barlow Condensed",sans-serif;letter-spacing:.22em;text-transform:uppercase;
+  font-size:.66rem;color:var(--amber);margin-bottom:.45rem}
+.places{display:grid;gap:.4rem;grid-template-columns:repeat(auto-fill,minmax(13.5rem,1fr))}
+.place{background:var(--panel2);border-radius:.3rem;padding:.55rem .7rem;font-size:.88rem;
+  border-left:.25rem solid var(--ink3)}
+.place.here{border-left-color:var(--amber);background:var(--panel3)}
+.place.shut{opacity:.45}
+.place b{font-family:"Barlow Condensed",sans-serif;font-size:.98rem;letter-spacing:.05em;
+  display:block;color:var(--ink)}
+.place small{color:var(--ink3);font-family:"Barlow Condensed",sans-serif;letter-spacing:.1em;
+  text-transform:uppercase;font-size:.6rem}
+.place em{color:var(--sand);font-style:normal;font-size:.78rem;display:block;line-height:1.35;margin-top:.2rem}
+
+footer{margin-top:2rem;padding-top:.9rem;border-top:1px solid var(--rule);
+  font-family:"Barlow Condensed",sans-serif;letter-spacing:.18em;text-transform:uppercase;
+  font-size:.62rem;color:var(--ink3);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+footer a{color:var(--ink3)}
+@media (max-width:32rem){
+  body{font-size:15px}
+  .fight{grid-template-columns:1fr}
+  h1{font-size:1.6rem}
+  .elbow{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <div class="elbow"><i></i><i></i><i></i></div>
+  <div>
+    <div class="where" id="where">&nbsp;</div>
+    <h1>Nightfreight</h1>
+  </div>
+</header>
+
+<div class="status">
+  <div class="statrow" id="statrow"></div>
+  <div class="objective" id="objective" hidden></div>
+</div>
+
+<nav class="tabs" id="tabs"></nav>
+<div class="pane" id="pane"></div>
+
+<footer>
+  <span>Scriptorium · first draft</span>
+  <span class="cond"><a href="#" id="readintro">What is this</a> &nbsp;·&nbsp; <a href="#" id="newgame">Start again</a></span>
+</footer>
+</div>
+
+<div class="veil" id="veil" hidden><div class="modal" id="modal"></div></div>
+
+<script>
+"use strict";
+/* ===================================================================
+   NIGHTFREIGHT — first draft
+
+   A trading game on the Space Trader chassis (Pieter Spronck, 2002, GPL).
+   The arithmetic below is copied from that game on purpose: the buy-price
+   spread from the dealer's skill, the police record multiplying patrol
+   strength, the daily wage of skills-summed-times-three, the flat
+   maximum-of-crew read on a skill.
+
+   The one deliberate break: Fighting is not a maximum. It is the best
+   aboard plus half of everyone else's. That is the only reason a truck
+   with four seats is worth buying.
+   =================================================================== */
+
+/* ---------- goods ---------- */
+const GOODS = [
+  {id:"water",    name:"Water",         low:30,   inc:2,  vary:.10, restricted:false},
+  {id:"flour",    name:"Flour",         low:90,   inc:14, vary:.12, restricted:false},
+  {id:"fuel",     name:"Fuel",          low:150,  inc:26, vary:.10, restricted:false},
+  {id:"seed",     name:"Seed",          low:200,  inc:24, vary:.12, restricted:false},
+  {id:"salvage",  name:"Salvage",       low:250,  inc:48, vary:.20, restricted:false},
+  {id:"liquor",   name:"Liquor",        low:300,  inc:48, vary:.15, restricted:false},
+  {id:"medicine", name:"Medicine",      low:400,  inc:72, vary:.15, restricted:false},
+  {id:"parts",    name:"Machine parts", low:600,  inc:48, vary:.10, restricted:false},
+  {id:"ammo",     name:"Ammunition",    low:600,  inc:120,vary:.15, restricted:true},
+  {id:"blood",    name:"Blood",         low:2000, inc:240,vary:.18, restricted:true}
+];
+const GOOD = {}; GOODS.forEach((g,i)=>{GOOD[g.id]=g; g.ix=i;});
+
+/* ---------- local events ---------- */
+const EVENTS = {
+  quiet:   {name:"Quiet",        moves:{liquor:1.4}},
+  siege:   {name:"Under siege",  moves:{water:2.0, ammo:1.9, medicine:1.5}},
+  fever:   {name:"Fever",        moves:{medicine:2.2, liquor:1.3}},
+  frost:   {name:"Hard frost",   moves:{fuel:1.8, flour:1.4}},
+  failure: {name:"Crop failure", moves:{flour:2.0, seed:1.8, water:1.3}},
+  strike:  {name:"A strike",     moves:{parts:2.0, fuel:1.5}},
+  hunt:    {name:"A hunt",       moves:{ammo:1.8, liquor:1.4, blood:1.3}}
+};
+const EVENT_IDS = Object.keys(EVENTS);
+
+/* ---------- the map ----------
+   blood is restricted in nine of the thirteen, ammunition in four. */
+const PLACES = [
+  {id:"fenner",  name:"Fenner",       valley:0, wealth:1, bureau:false, farm:null,
+   makes:["flour","seed"], wants:["fuel","medicine","parts"],
+   legal:{blood:false, ammo:true},
+   line:"Four hundred people, a grain store and a chapel with the roof off."},
+  {id:"tolm",    name:"Tolm",         valley:0, wealth:2, bureau:false, farm:null,
+   makes:["flour","liquor"], wants:["parts","fuel"],
+   legal:{blood:false, ammo:true},
+   line:"The mill still turns. The contract board is by the weighbridge."},
+  {id:"bford",   name:"Bright's Ford",valley:0, wealth:2, bureau:false, farm:null,
+   makes:[], wants:["flour","medicine","water","seed"],
+   legal:{blood:false, ammo:false},
+   line:"A market on a river crossing. Everything here costs more than it should."},
+  {id:"ashgate", name:"Ashgate",      valley:0, wealth:1, bureau:false, farm:null,
+   makes:["salvage","water"], wants:["flour","medicine","seed"],
+   legal:{blood:true, ammo:true},
+   line:"A worked-out pit and a row of houses. Nobody official has been up here in two years."},
+
+  {id:"sennick", name:"Sennick",      valley:1, wealth:3, bureau:true,  farm:null,
+   makes:["parts","fuel"], wants:["flour","water","salvage"],
+   legal:{blood:false, ammo:true},
+   line:"Chimneys, a rail spur, and a Bureau post that buys teeth."},
+  {id:"doulton", name:"Doulton",      valley:1, wealth:3, bureau:false, farm:null,
+   makes:["ammo","parts"], wants:["medicine","liquor","flour"],
+   legal:{blood:false, ammo:true},
+   line:"The arms works. They will sell you anything that fits in a magazine."},
+  {id:"marrow",  name:"Marrow",       valley:1, wealth:3, bureau:true,  farm:null,
+   makes:[], wants:["flour","fuel","medicine","parts"],
+   legal:{blood:false, ammo:false},
+   line:"A junction. Three roads, a Bureau post, and everybody passing through."},
+  {id:"cade",    name:"Cade",         valley:1, wealth:2, bureau:false, farm:null,
+   makes:["fuel","medicine"], wants:["parts","seed","water"],
+   legal:{blood:false, ammo:true},
+   line:"A refinery town that smells of it. The night shift never quite stops."},
+
+  {id:"ossett",  name:"Ossett",       valley:2, wealth:1, bureau:false, farm:null,
+   makes:["water"], wants:["flour","medicine","seed","fuel"],
+   legal:{blood:false, ammo:false},
+   line:"Lawful and poor, which in the Kell means the same thing twice."},
+  {id:"halloway",name:"Halloway",     valley:2, wealth:4, bureau:true,  farm:null,
+   makes:["medicine","liquor"], wants:["parts","fuel","salvage"],
+   legal:{blood:false, ammo:false},
+   line:"The port. The boat leaves when it is full, and the berth office is on the quay."},
+  {id:"vire",    name:"Vire",         valley:2, wealth:3, bureau:false, farm:"fang",
+   makes:[], wants:["blood","ammo","medicine","flour"],
+   legal:{blood:true, ammo:true},
+   line:"Sheds, a high fence, and a line going since 1961."},
+  {id:"rooks",   name:"Rook's End",   valley:2, wealth:3, bureau:false, farm:"blood",
+   makes:["blood"], wants:["medicine","flour","ammo"],
+   legal:{blood:true, ammo:true},
+   line:"A long low building with the windows painted. They buy medicine by the crate."},
+  {id:"pell",    name:"Pell",         valley:2, wealth:2, bureau:false, farm:null,
+   makes:["salvage"], wants:["fuel","water","ammo"],
+   legal:{blood:true, ammo:true},
+   line:"Nobody here will tell you what Pell is for, and they are not being coy."}
+];
+const PLACE = {}; PLACES.forEach(p=>PLACE[p.id]=p);
+const VALLEYS = ["Colter","Vann","The Kell"];
+
+/* roads: [a, b, days, checkpoint|null] */
+const ROADS = [
+  ["fenner","tolm",1,null], ["tolm","bford",1,null], ["tolm","ashgate",1,null],
+  ["fenner","ashgate",2,null], ["bford","ashgate",2,null],
+  ["bford","sennick",2,"rell"],
+  ["sennick","doulton",1,null], ["doulton","marrow",1,null], ["marrow","cade",1,null],
+  ["sennick","cade",2,null], ["doulton","cade",2,null],
+  ["marrow","ossett",3,"ostrow"],
+  ["ossett","halloway",1,null], ["ossett","vire",2,null], ["vire","rooks",1,null],
+  ["rooks","pell",1,null], ["pell","halloway",2,null], ["vire","halloway",2,null]
+];
+/* Hand-placed so the country reads: Colter runs west to east along the mill
+   road with Ashgate down the pit track; Vann is the same line one valley over;
+   the Kell hangs south off Ossett with the port at the top right. Grid of 10. */
+const MAPPOS = {
+  fenner:[70,110], tolm:[200,90], bford:[340,120], ashgate:[190,220],
+  sennick:[80,100], doulton:[210,80], marrow:[340,120], cade:[200,220],
+  ossett:[90,90], halloway:[330,80], vire:[110,200], rooks:[215,245], pell:[330,195]
+};
+/* where a road that leaves the valley points, and what to call it */
+const MAPEXIT = {
+  "bford>sennick":  [430,120,"Rell"],
+  "sennick>bford":  [20,100,"Rell"],
+  "marrow>ossett":  [430,150,"Ostrow"],
+  "ossett>marrow":  [90,20,"Ostrow"]
+};
+
+const CHECKPOINTS = {
+  rell:  {name:"Rell", fee:500,  needs:"licence"},
+  ostrow:{name:"Ostrow weighing station", fee:1500, needs:null}
+};
+
+/* ---------- trucks ----------
+   The Coach carries four and protects none of them. The sides are glass. */
+const TRUCKS = [
+  {id:0,name:"Panel van",       cargo:10,seats:1,mounts:1,plating:0,fittings:0,tank:14,hull:40, price:0,     fuelCost:2, sell:0},
+  {id:1,name:"Flatbed",         cargo:15,seats:2,mounts:1,plating:0,fittings:1,tank:16,hull:55, price:10000, fuelCost:2, sell:7000},
+  {id:2,name:"Box truck",       cargo:25,seats:2,mounts:1,plating:1,fittings:2,tank:15,hull:70, price:30000, fuelCost:3, sell:21000},
+  {id:3,name:"Coach",           cargo:20,seats:4,mounts:1,plating:1,fittings:2,tank:14,hull:50, price:75000, fuelCost:3, sell:52000},
+  {id:4,name:"Hauler",          cargo:45,seats:3,mounts:2,plating:2,fittings:3,tank:13,hull:100,price:150000,fuelCost:4, sell:105000},
+  {id:5,name:"Armoured hauler", cargo:35,seats:3,mounts:3,plating:3,fittings:3,tank:12,hull:160,price:300000,fuelCost:5, sell:210000}
+];
+const TRUCK_NOTE = {
+  3:"Four seats. One mount, one plating, and a body built to carry people, not to stop anything.",
+  4:"Forty-five crates and a poor turning circle.",
+  5:"Slow, thirsty, and the only thing on the road that a vampire will think twice about."
+};
+
+const MOUNTS = [
+  {id:0,name:"Shotgun rack",  power:10, price:2000},
+  {id:1,name:"Rifle mount",   power:15, price:12500},
+  {id:2,name:"Heavy mount",   power:25, price:35000},
+  {id:3,name:"The Doulton gun",power:40,price:50000, unbuyable:true}
+];
+const PLATINGS = [
+  {id:0,name:"Mesh",           power:20, price:5000},
+  {id:1,name:"Plate",          power:35, price:20000},
+  {id:2,name:"Plate and mesh", power:50, price:45000}
+];
+const FITTINGS = [
+  {id:0,name:"Roof rack",      price:2500,  note:"Five more crates."},
+  {id:1,name:"Toolkit",        price:7500,  note:"Mends the frame while you drive."},
+  {id:2,name:"Maps and radio", price:15000, note:"Tells you where somebody is looking for a seat."},
+  {id:3,name:"Floodlights",    price:25000, note:"You shoot as well at night as you do by day."},
+  {id:4,name:"Long tank",      price:30000, note:"Five more days of fuel."},
+  {id:5,name:"Muffled engine", price:100000,note:"Half of what is out there does not hear you coming."}
+];
+
+/* ---------- crew ----------
+   dri/fig/dea/men. Wage is the sum times three, per day, as in the original. */
+const CREW = [
+  {id:"sull", name:"Ivar Sull", role:"ex-haulage", dri:8,fig:2,dea:4,men:3,
+   at:"fenner", when:"start",
+   trait:"Will not drive at night. With him aboard you do not set out after dark, and he will not sit in the back and watch you do it either.",
+   c:"--sand"},
+  {id:"kelm", name:"Ruta Kelm", role:"buyer", dri:2,fig:1,dea:9,men:2,
+   at:"bford", when:"start",
+   trait:"Reads a market before she is out of the cab. Will not haggle over medicine, so you pay list for it.",
+   c:"--sky"},
+  {id:"frame",name:"Ollie Frame", role:"mechanic", dri:3,fig:2,dea:2,men:9,
+   at:"tolm", when:"start",
+   trait:"Fixes anything. Drinks, which costs you a little every day and one bad morning in ten.",
+   c:"--sand"},
+  {id:"sten", name:"Sten", role:"raider, turned", dri:6,fig:8,dea:2,men:3,
+   at:"ashgate", when:"wonfight",
+   trait:"The best gun on the road, and he hardens twice as fast as anybody else.",
+   c:"--rose"},
+  {id:"wace", name:"Corin Wace", role:"boy", dri:5,fig:3,dea:3,men:4,
+   at:"bford", when:"second",
+   trait:"Nineteen and useless. Gains a point in something every six weeks until he is a seven.",
+   c:"--green"},
+  {id:"roan", name:"Nessa Roan", role:"smuggler", dri:6,fig:4,dea:7,men:2,
+   at:"marrow", when:"watched",
+   trait:"Halves what a blood run costs your Warrant. She will not walk up to a clean truck.",
+   c:"--mauve"},
+  {id:"sarto",name:"Fr. Emil Sarto", role:"priest", dri:2,fig:1,dea:3,men:4,
+   at:"ashgate", when:"start",
+   trait:"Holds that the trade is licit. Will ride on a blood run and say grace over it.",
+   c:"--amber"},
+  {id:"kwiat",name:"Fr. Jan Kwiat", role:"priest", dri:1,fig:1,dea:2,men:5,
+   at:"tolm", when:"start",
+   trait:"Holds that the not-knowing is the point. Gets out at the next post if blood is loaded.",
+   c:"--amber"},
+  {id:"vist", name:"Andrej Vist", role:"against the farms", dri:6,fig:10,dea:2,men:3,
+   at:null, when:"earned", nowage:true,
+   trait:"Turned in 1889. Takes no wage and eats nothing you can buy. A patrol that opens the back will find him.",
+   c:"--rose"}
+];
+const CREWBY = {}; CREW.forEach(c=>CREWBY[c.id]=c);
+
+/* ---------- Warrant ---------- */
+const BANDS = [
+  {min:60,  name:"Commended"}, {min:30,  name:"Bonded"},   {min:10, name:"Licensed"},
+  {min:-4,  name:"Clean"},     {min:-19, name:"Watched"},  {min:-49,name:"Marked"},
+  {min:-999,name:"Wanted"}
+];
+function band(w){ for(const b of BANDS) if(w>=b.min) return b.name; return "Wanted"; }
+
+/* Below Marked the lawful towns will not trade. Halloway's market shuts with
+   them — but the berth office does not, because the man selling berths does
+   not ask what you are. He asks for the money. */
+const LAWFUL = ["fenner","tolm","bford","sennick","doulton","marrow","ossett","halloway"];
+</script>
+
+<script>
+"use strict";
+/* ===================== state ===================== */
+const SAVE = "nightfreight.v1";
+let S = null;
+
+function rnd(n){ return Math.floor(Math.random()*n); }
+function pick(a){ return a[rnd(a.length)]; }
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function money(n){ return n.toLocaleString("en-GB"); }
+
+function newGame(){
+  S = {
+    day:1, cash:2500, warrant:0, truck:0,
+    mounts:[0], plating:[], fittings:[],
+    fuel:14, hull:40, at:"fenner",
+    cargo:{}, bought:{},              // bought = what each unit cost, for the ledger
+    crew:[], strain:{}, waceDay:1,
+    fangs:[],                          // {day} — a tooth degrades ten days after it is drawn
+    market:{}, event:{}, mapValley:0,
+    flags:{licence:false, ostrow:false, tolmContract:false, tolmDone:false,
+           bfordVisits:0, wonFight:false, farmRuns:0, fangsSold:0, vistOffered:false,
+           sabotage:0, bloodRuns:0, seenIntro:false},
+    tut:{step:0, done:false, paid:0, got:0}, taught:{},
+    log:[], over:null
+  };
+  GOODS.forEach(g=>{S.cargo[g.id]=0; S.bought[g.id]=0;});
+  PLACES.forEach(p=>{ S.event[p.id] = "quiet"; });
+  reprice();
+  say("You have a panel van, two thousand five hundred, and a full tank. The road out of Fenner goes east.");
+  save();
+}
+function save(){ try{ localStorage.setItem(SAVE, JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{ const r = localStorage.getItem(SAVE); if(!r) return false;
+       const o = JSON.parse(r); if(!o || !o.day) return false; S = o; return true; }
+  catch(e){ return false; }
+}
+function say(t){ S.log.unshift({d:S.day, t}); if(S.log.length>60) S.log.pop(); }
+
+/* ===================== derived ===================== */
+function truck(){ return TRUCKS[S.truck]; }
+function cargoCap(){ return truck().cargo + (S.fittings.includes(0) ? 5 : 0); }
+function cargoUsed(){ let n=0; GOODS.forEach(g=>n+=S.cargo[g.id]); return n; }
+function tankCap(){ return truck().tank + (S.fittings.includes(4) ? 5 : 0); }
+function hullCap(){ return truck().hull; }
+function shieldCap(){ let n=0; S.plating.forEach(i=>n+=PLATINGS[i].power); return n; }
+function gunPower(){ let n=0; S.mounts.forEach(i=>n+=MOUNTS[i].power); return n; }
+function aboard(){ return S.crew.map(id=>CREWBY[id]); }
+function hasCrew(id){ return S.crew.includes(id); }
+function priestAboard(){ return hasCrew("sarto") || hasCrew("kwiat"); }
+
+/* Skills. Driving, Dealing and Mending take the best aboard and nobody else
+   counts — that is the original's rule. Fighting takes the best aboard plus
+   half of each other person's, because in a fight everybody shoots. */
+function bestSkill(k){
+  let m = 1;
+  aboard().forEach(c=>{ const v = skillOf(c,k); if(v>m) m=v; });
+  return m;
+}
+function skillOf(c,k){
+  let v = c[k];
+  if(c.id==="wace"){ v += Math.min(3, Math.floor((S.day - S.waceDay)/42)); v = Math.min(v,7); }
+  const st = strainOf(c.id);
+  if(k==="fig") v += (st==="gone"?3:st==="hard"?2:0);
+  if(k==="dea") v -= (st==="gone"?4:st==="hard"?2:0);
+  return clamp(v,1,12);
+}
+function driving(){ return bestSkill("dri"); }
+function dealing(){ return bestSkill("dea"); }
+function mending(){ return bestSkill("men"); }
+function fighting(){
+  const vals = aboard().map(c=>skillOf(c,"fig")).sort((a,b)=>b-a);
+  if(!vals.length) return 1;
+  let n = vals[0];
+  for(let i=1;i<vals.length;i++) n += Math.floor(vals[i]/2);
+  return n;
+}
+function wages(){
+  let n = 0;
+  aboard().forEach(c=>{ if(!c.nowage) n += (c.dri+c.fig+c.dea+c.men)*3; });
+  return n;
+}
+function strainOf(id){ const v = S.strain[id]||0; return v>=10?"gone":v>=5?"hard":"steady"; }
+function addStrain(n){
+  S.crew.forEach(id=>{
+    if(id==="sarto"||id==="kwiat"||id==="vist") return;
+    S.strain[id] = (S.strain[id]||0) + n * (id==="sten"?2:1);
+  });
+}
+
+/* ===================== market ===================== */
+/* Copied in shape from Space Trader: a base that rises with the place's
+   wealth, a random spread, a discount where it is made and a premium where
+   it is wanted, then the local event on top. */
+function reprice(){
+  PLACES.forEach(p=>{
+    const m = {};
+    GOODS.forEach(g=>{
+      let v = g.low + g.inc * p.wealth;
+      v *= 1 + (Math.random()*2-1) * g.vary;
+      if(p.makes.includes(g.id)) v *= 0.65;
+      if(p.wants.includes(g.id)) v *= 1.45;
+      /* There is always a buyer. Where it is restricted there is a buyer and a
+         risk, and the price carries the risk — which is the whole trade. */
+      if(g.restricted){
+        const ok = g.id==="blood" ? p.legal.blood : p.legal.ammo;
+        v *= ok ? 0.9 : 1.2;
+      }
+      const ev = EVENTS[S.event[p.id]];
+      if(ev && ev.moves[g.id]) v *= ev.moves[g.id];
+      if(g.id==="blood" && p.farm==="blood") v *= 0.7;
+      if(g.id==="blood" && p.farm==="fang")  v *= 1.35;
+      m[g.id] = Math.max(1, Math.round(v/5)*5);
+    });
+    S.market[p.id] = m;
+  });
+}
+function sellPrice(pid,gid){ return S.market[pid][gid] || 0; }
+/* buy = sell + 3%..12% on the dealer's skill, and 11% on top below Watched */
+function buyPrice(pid,gid){
+  const s = sellPrice(pid,gid);
+  if(!s) return 0;
+  let b = S.warrant < -5 ? Math.round(s*100/90) : s;
+  b = Math.round(b * (103 + (10 - clamp(dealing(),1,10))) / 100);
+  return Math.max(b, s+1);
+}
+function isLegalHere(gid,pid){
+  const p = PLACE[pid||S.at];
+  const g = GOOD[gid];
+  if(!g.restricted) return true;
+  return gid==="blood" ? p.legal.blood : p.legal.ammo;
+}
+function carryingIllegal(pid){
+  return GOODS.some(g=>S.cargo[g.id]>0 && !isLegalHere(g.id,pid));
+}
+function marketOpen(pid){
+  const p = PLACE[pid];
+  if(S.warrant <= -20 && LAWFUL.includes(pid)) return false;        // Marked or worse
+  if(S.warrant >= 30 && p.farm) return false;                        // Bonded or better
+  return true;
+}
+function shutReason(pid){
+  const p = PLACE[pid];
+  if(S.warrant <= -20 && LAWFUL.includes(pid))
+    return "They will not trade with a truck at "+band(S.warrant)+".";
+  if(S.warrant >= 30 && p.farm)
+    return "A bonded hauler is a Bureau informant. The gate stays shut.";
+  return "";
+}
+
+/* ===================== fangs ===================== */
+function fangValue(f){ return (S.day - f.day) < 10 ? 1200 : 700; }
+function fangTotal(){ let n=0; S.fangs.forEach(f=>n+=fangValue(f)); return n; }
+
+/* ===================== warrant ===================== */
+function warrant(n, why){
+  const before = band(S.warrant);
+  S.warrant = clamp(S.warrant + n, -70, 75);
+  const after = band(S.warrant);
+  if(before!==after) say("Your standing is now "+after+". "+(why||""));
+}
+
+/* ===================== travel ===================== */
+function roadsFrom(pid){
+  const out = [];
+  ROADS.forEach(r=>{
+    if(r[0]===pid) out.push({to:r[1], days:r[2], cp:r[3]});
+    if(r[1]===pid) out.push({to:r[0], days:r[2], cp:r[3]});
+  });
+  return out;
+}
+function valleyOpen(v){
+  if(v===0) return true;
+  if(v===1) return S.flags.licence;
+  return S.flags.ostrow;
+}
+
+/* One leg of road. Each day costs fuel and wages and rolls one encounter.
+   The trip is resolved a day at a time so an encounter can interrupt it. */
+let TRIP = null;
+
+function beginTrip(to, days, cp, night){
+  if(cp && !passCheckpoint(cp, to, days, night)) return;
+  TRIP = {to, left:days, night:!!night};
+  runTrip();
+}
+function passCheckpoint(cpid, to, days, night){
+  const cp = CHECKPOINTS[cpid];
+  if(cpid==="ostrow" && !S.flags.ostrow){ scene("ostrow", {to, days, night}); return false; }
+  if(cp.needs==="licence" && !S.flags.licence){
+    modal({eyebrow:"Rell", title:"The barrier stays down", c:"--rose",
+      body:["The corporal reads your book, finds no haulage licence in it, and hands it back.",
+            "“Vann's a licensed road. Tolm sponsors people. Do a job for the mill and come back to me.”"],
+      opts:[{t:"Turn around", go:()=>close()}]});
+    return false;
+  }
+  if(S.cash < cp.fee){ toast("The fee at "+cp.name+" is "+money(cp.fee)+" and you have not got it."); return false; }
+  S.cash -= cp.fee;
+  say("Paid "+money(cp.fee)+" at "+cp.name+".");
+  /* Below Marked they stop waving people through and start taking the load apart. */
+  if(S.warrant <= -20 && GOODS.some(g=>S.cargo[g.id]>0 && g.restricted)){
+    inspection(true, cp.name);
+    return false;
+  }
+  return true;
+}
+
+function runTrip(){
+  if(!TRIP){ return; }
+  while(TRIP.left > 0){
+    if(S.fuel <= 0){ toast("Out of fuel. You coast into "+PLACE[TRIP.to].name+" on fumes."); break; }
+    S.fuel--; S.day++;
+    payDay();
+    if(S.over) { TRIP=null; return; }
+    TRIP.left--;
+    if(rollEncounter()) { save(); return; }   // an encounter takes over; runTrip resumes after
+  }
+  arrive();
+}
+function payDay(){
+  const w = wages();
+  S.cash -= w;
+  if(hasCrew("frame")) S.cash -= 15;                       // he drinks
+  if(S.cash < 0){
+    S.cash = 0;
+    const quit = S.crew.filter(id=>!CREWBY[id].nowage);
+    if(quit.length){
+      const g = quit[quit.length-1];
+      S.crew = S.crew.filter(id=>id!==g);
+      say(CREWBY[g].name+" was not paid and got out at the roadside.");
+    }
+  }
+  if(S.fittings.includes(1) && S.hull < hullCap())            // toolkit
+    S.hull = Math.min(hullCap(), S.hull + Math.ceil(mending()/2));
+  if(priestAboard()){
+    S.crew.forEach(id=>{ if(S.strain[id]) S.strain[id] = Math.max(0, S.strain[id]-1); });
+  }
+  if(S.day >= 4 && S.day % 4 === 0){
+    PLACES.forEach(p=>{ if(rnd(3)===0) S.event[p.id] = rnd(3)===0 ? pick(EVENT_IDS) : "quiet"; });
+    reprice();
+  }
+}
+function arrive(){
+  const to = TRIP ? TRIP.to : S.at;
+  TRIP = null;
+  S.at = to;
+  S.mapValley = PLACE[to].valley; MAPSEL = to;
+  if(to==="bford") S.flags.bfordVisits++;
+  say("Into "+PLACE[to].name+" on day "+S.day+".");
+  if(checkTolm()){ save(); return; }
+  offerRecruit();
+  if(!veil.hidden){ save(); return; }
+  if(arrivalLesson()){ save(); return; }
+  save(); render();
+}
+
+/* ===================== encounters ===================== */
+function encounterOdds(){
+  const v = PLACE[TRIP.to].valley;
+  let raider = [.13,.15,.24][v];
+  let patrol = [.12,.20,.18][v];
+  const hauler= [.15,.15,.12][v];
+  if(GOODS.some(g=>S.cargo[g.id]>0 && g.restricted)) patrol += .08;
+  if(S.warrant <= -20) patrol += .07;
+  if(S.fittings.includes(5)){ raider*=.5; patrol*=.5; }        // muffled engine
+  if(TRIP.night){ raider*=1.4; patrol*=.6; }
+  return {raider, patrol, hauler};
+}
+function rollEncounter(){
+  if(tutActive()) return false;          // the guided run is quiet on purpose
+  const o = encounterOdds(), r = Math.random();
+  if(r < o.raider) { startRaider(); return true; }
+  if(r < o.raider + o.patrol) { startPatrol(); return true; }
+  if(r < o.raider + o.patrol + o.hauler) { startHauler(); return true; }
+  return false;
+}
+function strengthMul(){ return S.warrant < -50 ? 3 : S.warrant < -20 ? 2 : 1; }
+
+function foe(kind){
+  const v = PLACE[TRIP.to].valley;
+  if(kind==="raider"){
+    if(v===2 && Math.random()<0.65){
+      return {kind:"raider", vampire:true, name:"A vampire off the Kell road",
+              fig:8, dri:6, power:28, shield:20, hull:80, loot:4000, fangs:2,
+              intro:"It comes off the bank on the driver's side, moving faster than a man does, and it does not shout anything."};
+    }
+    const hard = v>=1;
+    return {kind:"raider", vampire:false,
+            name: hard ? "Four men with a lorry across the road" : "Three men and a chain",
+            fig: hard?5:3, dri: hard?4:3, power: hard?20:12, shield: hard?15:0,
+            hull: hard?55:35, loot: hard?2500:1000, fangs:0,
+            intro: hard ? "They have done this before. One of them stands where your mirror is."
+                        : "They are thin and they are frightened, which is worse, not better."};
+  }
+  const m = strengthMul();
+  const base = [{fig:4,dri:4,power:15,shield:10,hull:45},
+                {fig:6,dri:5,power:22,shield:20,hull:65},
+                {fig:7,dri:5,power:25,shield:25,hull:80}][v];
+  return {kind:"patrol", vampire:false, name:"A Bureau patrol",
+          fig:base.fig*m, dri:base.dri, power:base.power, shield:base.shield*m,
+          hull:base.hull*m, loot:0, fangs:0,
+          intro: m>1 ? "Two vehicles, not one. They have your registration on a sheet."
+                     : "One vehicle, lights on, pulled across the crown of the road."};
+}
+
+let FIGHT = null;
+function startRaider(){
+  const f = foe("raider");
+  if(teach("raider", ()=>openFight(f))) return;
+  openFight(f);
+}
+function startPatrol(){
+  const f = foe("patrol");
+  if(teach("patrol", ()=>startPatrol2(f))) return;
+  startPatrol2(f);
+}
+function startPatrol2(f){
+  const illegal = GOODS.filter(g=>S.cargo[g.id]>0 && !isLegalHere(g.id, TRIP.to));
+  FIGHT = {f, shield:f.shield, hull:f.hull, myShield:shieldCap(), log:[], fled:false};
+  const opts = [
+    {t:"Stop and let them look", s:"They will find whatever is in the back.", go:()=>{ close(); inspection(false); }},
+    {t:"Run for it", s:"Driving "+driving()+" against theirs.", go:()=>{ close(); tryFlee(true); }}
+  ];
+  if(S.cash >= 2000)
+    opts.push({t:"Offer him something for his trouble", s:money(bribeCost())+" from the tin.",
+               go:()=>{ close(); tryBribe(); }});
+  opts.push({t:"Shoot", s:"Attacking a patrol costs you six on the Warrant before a shot lands.",
+             go:()=>{ close(); warrant(-6,"You fired on a Bureau vehicle."); openFight(f); }});
+  modal({eyebrow:"On the road", title:f.name, c:"--sky",
+         body:[f.intro, illegal.length
+              ? "You are carrying "+illegal.map(g=>g.name.toLowerCase()).join(" and ")+", and it is restricted where you are going."
+              : "There is nothing in the back that is against the law here."],
+         opts});
+}
+function bribeCost(){ return Math.max(1000, Math.round(S.cash/12/100)*100); }
+function tryBribe(){
+  const c = bribeCost();
+  const chance = 0.35 + 0.05*dealing() + (S.warrant>0?0.15:0) - (strengthMul()-1)*0.2;
+  if(Math.random() < chance){
+    S.cash -= c; say("Paid "+money(c)+" at the roadside and drove on.");
+    toast("He puts it in his coat and waves you through."); resume();
+  } else {
+    warrant(-8,"He wrote down the offer.");
+    toast("He looks at the money, then at you, and writes something down."); inspection(false);
+  }
+}
+function tryFlee(fromPatrol){
+  const enemyDri = FIGHT ? FIGHT.f.dri : 4;
+  const chance = clamp(0.25 + 0.06*(driving() - enemyDri), 0.1, 0.85);
+  if(Math.random() < chance){
+    if(fromPatrol) warrant(-4,"You ran from a checkpoint.");
+    toast("You lose them at the bend past the water tower."); resume();
+  } else {
+    toast("They stay with you. There is nothing for it.");
+    if(fromPatrol) warrant(-4,"You ran from a checkpoint.");
+    openFight(FIGHT ? FIGHT.f : foe("patrol"));
+  }
+}
+
+function inspection(atCheckpoint, cpName){
+  const illegal = GOODS.filter(g=>S.cargo[g.id]>0 && !isLegalHere(g.id, TRIP?TRIP.to:S.at));
+  if(hasCrew("vist")){
+    modal({eyebrow:atCheckpoint?cpName:"On the road", title:"They open the back", c:"--rose",
+      body:["The corporal puts his torch on the load and then on the man sitting against the bulkhead, and the man does not blink and does not look away from the light.",
+            "Vist goes out of the door on the far side before anybody has decided anything. You hear him hit the bank, and then nothing.",
+            "It costs you every friend you had in the Bureau."],
+      opts:[{t:"Drive on", go:()=>{ S.crew = S.crew.filter(i=>i!=="vist");
+            warrant(-15,"You were carrying one of them."); S.cash = Math.max(0,S.cash-3000);
+            close(); resume(); }}]});
+    return;
+  }
+  if(!illegal.length){
+    modal({eyebrow:atCheckpoint?cpName:"On the road", title:"Nothing to see", c:"--sky",
+      body:["He looks under the sheet, counts the crates against the book, and finds them agreeing.",
+            S.warrant>=30 ? "“Bonded. Right you are.” He is almost friendly about it."
+                          : "He hands the book back without a word."],
+      opts:[{t:"Drive on", go:()=>{ if(S.warrant>=0) warrant(1,""); close(); resume(); }}]});
+    return;
+  }
+  let fine = 0, lost = [];
+  illegal.forEach(g=>{
+    const n = S.cargo[g.id];
+    fine += Math.round(sellPrice(S.at,g.id) * n * 0.6);
+    lost.push(n+" of "+g.name.toLowerCase());
+    S.cargo[g.id] = 0;
+  });
+  fine = Math.min(fine, Math.max(500, Math.round(S.cash*0.7)));
+  S.cash = Math.max(0, S.cash - fine);
+  let hit = illegal.some(g=>g.id==="blood") ? -5 : -3;
+  if(hasCrew("roan") && illegal.some(g=>g.id==="blood")) hit = -3;
+  warrant(hit, "They found it.");
+  modal({eyebrow:atCheckpoint?cpName:"On the road", title:"They found it", c:"--rose",
+    body:["He takes the sheet off, and stands looking at it for a moment longer than he needs to.",
+          "Confiscated: "+lost.join(", ")+". Fine: "+money(fine)+".",
+          hasCrew("roan") ? "Roan does the talking and it goes better than it should." : ""],
+    opts:[{t:"Drive on", go:()=>{ close(); resume(); }}]});
+}
+
+function startHauler(){
+  const g = pick(GOODS.filter(x=>!x.restricted));
+  const price = Math.round(sellPrice(TRIP.to, g.id) * (0.8 + Math.random()*0.2));
+  const room = cargoCap() - cargoUsed();
+  const n = Math.min(room, 3 + rnd(5));
+  const rumour = pick([
+    PLACE[pick(PLACES.filter(p=>valleyOpen(p.valley)).map(p=>p.id))].name+" is short of "+pick(["medicine","flour","fuel","water"])+" this week.",
+    "There is a Bureau sweep somewhere on the Cade road.",
+    "Somebody is paying over the odds for salvage at Pell.",
+    "A truck went over the edge below the bridge and nobody has been down for it."
+  ]);
+  const opts = [];
+  if(n>0 && S.cash >= price*n)
+    opts.push({t:"Buy "+n+" of "+g.name.toLowerCase()+" at "+money(price)+" each",
+      s:"Total "+money(price*n)+".",
+      go:()=>{ S.cash -= price*n; S.cargo[g.id]+=n; S.bought[g.id]=price; close(); resume(); }});
+  opts.push({t:"Swap news and drive on", s:rumour, go:()=>{ say(rumour); close(); resume(); }});
+  if(S.warrant < -20 && gunPower()>0)
+    opts.push({t:"Take what he has", s:"He is not armed. This is robbery.",
+      go:()=>{ const take = Math.min(cargoCap()-cargoUsed(), 5+rnd(5));
+               S.cargo[g.id]+=take; warrant(-6,"You robbed a hauler."); addStrain(1);
+               say("Took "+take+" of "+g.name.toLowerCase()+" off a man on the road.");
+               close(); resume(); }});
+  modal({eyebrow:"On the road", title:"Another truck, coming the other way", c:"--sand",
+    body:["He flashes you and pulls in. Everybody does this; the road is long and there is nothing else to do.",
+          "He has "+g.name.toLowerCase()+" he would rather not carry any further."],
+    opts});
+}
+
+/* ===================== combat ===================== */
+function openFight(f){
+  FIGHT = {f, shield:f.shield, hull:f.hull, myShield:shieldCap(), log:[], round:0, broke:false};
+  if(f.vampire && priestAboard()){
+    const who = hasCrew("kwiat") ? CREWBY.kwiat : CREWBY.sarto;
+    if(Math.random() < 0.5){
+      FIGHT.broke = true;
+      FIGHT.log.push(who.name+" gets down out of the cab. It stops where it is, ten yards off, and looks at him, and then it is not there any more.");
+    } else {
+      FIGHT.log.push(who.name+" is out of the cab before you are. It hesitates. You get the first shot free.");
+      FIGHT.free = true;
+    }
+  }
+  drawFight();
+}
+function drawFight(){
+  const f = FIGHT.f;
+  const dead = FIGHT.hull<=0;
+  const opts = [];
+  if(FIGHT.broke){
+    opts.push({t:"Get back in and drive", go:()=>{ close(); resume(); }});
+  } else if(dead){
+    opts.push({t:"Go through what is left", go:()=>afterWin()});
+  } else {
+    if(gunPower()>0) opts.push({t:"Fire", s:"Fighting "+fighting()+", "+gunPower()+" of gun.", go:()=>round("attack")});
+    else opts.push({t:"You have nothing to fire", s:"Buy a mount at any settlement.", dis:true});
+    opts.push({t:"Run", s:"Driving "+driving()+" against "+f.dri+".", go:()=>round("flee")});
+    if(f.kind==="raider")
+      opts.push({t:"Give them the load", s:"They take the cargo and let you go.", go:()=>round("submit")});
+    else
+      opts.push({t:"Stop and submit to inspection", go:()=>{ close(); inspection(false); }});
+  }
+  modalFight(opts);
+}
+function round(act){
+  const f = FIGHT;
+  if(act==="submit"){
+    let lost = 0; GOODS.forEach(g=>{ lost += S.cargo[g.id]; S.cargo[g.id]=0; });
+    say("Gave up "+lost+" crates on the road."); addStrain(1);
+    toast("They take everything in the back and one of them apologises."); close(); resume(); return;
+  }
+  if(act==="flee"){
+    const chance = clamp(0.25 + 0.06*(driving() - f.f.dri), 0.1, 0.85);
+    if(Math.random() < chance){ toast("You get away."); close(); resume(); return; }
+    f.log.push("You do not get away.");
+  }
+  if(act==="attack"){
+    const hit = clamp(0.30 + 0.05*(fighting() - f.f.dri) + (TRIP && TRIP.night && !S.fittings.includes(3) ? -0.12 : 0), .1, .92);
+    if(f.free){ f.log.push("The first one is a gift and you take it."); f.free = false; }
+    if(Math.random() < hit){
+      let d = Math.round(gunPower() * (0.6 + Math.random()*0.8));
+      if(f.shield > 0){ const a = Math.min(f.shield, d); f.shield -= a; d -= a;
+        f.log.push("You hit. "+(d>0?"Through the plating.":"It holds.")); }
+      else f.log.push("You hit, and there is nothing left to stop it.");
+      f.hull -= d;
+    } else f.log.push("You miss.");
+  }
+  if(f.hull > 0){
+    const hit = clamp(0.28 + 0.05*(f.f.fig - driving()), .08, .9);
+    if(Math.random() < hit){
+      let d = Math.round(f.f.power * (0.6 + Math.random()*0.8));
+      if(f.myShield > 0){ const a = Math.min(f.myShield, d); f.myShield -= a; d -= a; }
+      S.hull -= d;
+      f.log.push(d>0 ? "You take it in the body of the truck." : "The plating takes it.");
+    } else f.log.push("It goes past you.");
+  }
+  f.round++;
+  if(S.hull <= 0) return lose(f.f);
+  if(f.hull <= 0) f.log.push(f.f.vampire ? "It stops moving. It takes a while to be sure." : "It is over.");
+  drawFight();
+}
+function afterWin(){
+  const f = FIGHT.f;
+  S.flags.wonFight = true;
+  let s = [];
+  if(f.loot){ S.cash += f.loot; s.push(money(f.loot)+" in a tin under the seat"); }
+  if(f.fangs){ for(let i=0;i<f.fangs;i++) S.fangs.push({day:S.day});
+               s.push(f.fangs+" teeth, which are worth twelve hundred each for ten days"); }
+  if(f.kind==="raider") warrant(1,"");
+  else warrant(-10,"You killed a Bureau man.");
+  addStrain(TRIP && TRIP.night ? 2 : 1);
+  say("Fought and won on the road: "+(s.join(", ")||"nothing worth taking")+".");
+  close(); resume();
+}
+function lose(f){
+  close();
+  if(f.kind==="raider"){
+    let lost=0; GOODS.forEach(g=>{ lost+=S.cargo[g.id]; S.cargo[g.id]=0; });
+    S.hull = Math.max(8, Math.round(hullCap()*0.15));
+    S.cash = Math.round(S.cash*0.4);
+    const hurt = S.crew.filter(id=>id!=="vist");
+    let line = "";
+    if(hurt.length && Math.random()<0.5){
+      const g = pick(hurt); S.crew = S.crew.filter(i=>i!==g);
+      line = CREWBY[g].name+" did not get back in.";
+    }
+    modal({eyebrow:"On the road", title:"They stop you", c:"--rose",
+      body:["The engine goes first, and then it is just standing still in the dark with people outside it.",
+            "They take the load, most of what is in the tin, and forty minutes.", line],
+      opts:[{t:"Get it started again", go:()=>{ close(); TRIP=null; arrive(); }}]});
+  } else {
+    S.hull = Math.max(8, Math.round(hullCap()*0.2));
+    const fine = Math.round(S.cash*0.6);
+    S.cash -= fine; warrant(-6,"");
+    GOODS.forEach(g=>{ if(g.restricted) S.cargo[g.id]=0; });
+    modal({eyebrow:"On the road", title:"They stop you", c:"--rose",
+      body:["It ends the way it was always going to end.",
+            "Fine of "+money(fine)+", the restricted load gone, and eleven days you will not get back."],
+      opts:[{t:"Sign it", go:()=>{ S.day += 11; close(); TRIP=null; arrive(); }}]});
+  }
+}
+function resume(){
+  close();
+  if(TRIP && TRIP.left > 0) runTrip();
+  else if(TRIP) arrive();
+  else { save(); render(); }
+}
+
+/* ===================== scenes ===================== */
+let PENDING = null;
+
+const RATE_CARD =
+"BUREAU OF CONTAINMENT — SCHEDULE 4, REVISED\n" +
+"\n" +
+"  Canine, upper, entire  . . . . . . . . 1,200\n" +
+"  Canine, upper, degraded  . . . . . . . . 700\n" +
+"\n" +
+"  Degradation begins ten days from expiry.\n" +
+"  Teeth may be presented at any post.\n" +
+"  Teeth drawn on Bureau premises attract the full rate.";
+
+function scene(id, ctx){
+  if(id==="ostrow") return ostrow0(ctx);
+}
+function ostrow0(ctx){
+  PENDING = ctx;
+  modal({eyebrow:"Ostrow weighing station · the Marrow road", title:"Forty minutes in the queue", c:"--rose",
+    body:[
+      "The queue is eleven trucks long and it takes forty minutes to get near the front.",
+      "Ostrow is a Bureau post like the one at Rell, except that Rell only weighs freight. Ostrow weighs teeth. There is a scale under an awning, a clerk at a window with a ledger open in front of him, a rate card screwed to the wall, and a long grey shed behind the office with no windows in it.",
+      "You read the rate card while you wait, because there is nothing else to read."
+    ], pre:RATE_CARD,
+    opts:[{t:"Read the last line again", s:"Teeth drawn on Bureau premises attract the full rate.", go:ostrow1}]});
+}
+function ostrow1(){
+  modal({eyebrow:"Ostrow weighing station", title:"The shed door opens", c:"--rose",
+    body:[
+      "You are still working out what that line is for when the shed door opens.",
+      "A man comes out of it. He is about fifty, in a rubber apron, and he is wiping his hands on a rag as he walks. He is carrying a wooden crate against his hip. He does not carry it the way a man carries something he is hiding. He carries it the way a man carries his own work. He comes up the line and stands two trucks ahead of you.",
+      "Nobody in the queue looks at him. This has happened before.",
+      "When he gets to the window the clerk takes the crate off him, tips it out onto the scale, and counts. You can hear him counting. He gets to thirty-one. He writes 31 in the ledger, in a column that already has numbers in it, and he pays the man out of a tin, and stamps a book, and hands the book back, and the man walks back down the line towards the shed with the empty crate under his arm."
+    ],
+    opts:[{t:"He calls you forward", go:ostrow2}]});
+}
+function ostrow2(){
+  modal({eyebrow:"Ostrow weighing station", title:"The clerk", c:"--rose",
+    body:[
+      "He is not sinister. He is bored, his hands are cold, and he wants his tea.",
+      "He takes your papers and runs a finger down the page looking for your registration, and while he is looking he says, without any particular meaning:",
+      "SAID:“You'll be the one who brought the Tolm consignment up on the ninth.”",
+      "You say that you are.",
+      "SAID:“That went in here.”",
+      "He turns the ledger round about ten degrees so that you can see it, which he is allowed to do, because there is nothing on the page that is a secret. There are two columns. The left one is headed RECEIVED. The right one is headed DRAWN. Your consignment number is in the left column, on the ninth, in his handwriting. Eleven days further down, in the right column, on a line ruled underneath it, is the number 31.",
+      "He turns the ledger back and stamps your papers."
+    ],
+    opts:[
+      {t:"“What's the shed?”", s:"Ask him. He is not going to mind.", go:ostrowShed},
+      {t:"“Whose were they?”", s:"Ask about the teeth.", go:ostrowWhose},
+      {t:"Say nothing. Pay the fee and drive.", go:ostrowEnd}
+    ]});
+}
+function ostrowShed(){
+  modal({eyebrow:"Ostrow weighing station", title:"“Holding”", c:"--rose",
+    body:[
+      "He says it the way you would say <em>garage</em>.",
+      "SAID:“Stock comes up from Vire on a Tuesday. It's held here till there's enough of it to be worth the man's while coming out, and then he draws them, and we pay him, and it goes back down on the return lorry. There's no mystery in it. It's on the schedule.”",
+      "You ask whether the stock is alive when it comes up.",
+      "SAID:“It has to be. A tooth off a dead one is degraded inside ten days — that's the whole reason for the shed. If we drew them at Vire we'd be paying seven hundred instead of twelve.”",
+      "He is not defending anything. He is explaining a price difference, because that is his job and he is good at it."
+    ],
+    opts:[
+      {t:"“Whose were they?”", go:ostrowWhose},
+      {t:"Pay the fee and drive", go:ostrowEnd}
+    ]});
+}
+function ostrowWhose(){
+  modal({eyebrow:"Ostrow weighing station", title:"“Stock”", c:"--rose",
+    body:[
+      "SAID:“Stock.”",
+      "Then, because you have not moved:",
+      "SAID:“Nobody's. They're bred. Vire's had a line going since '61.”",
+      "He looks at you properly for the first time.",
+      "SAID:“You've been running crates up this road for a month. What did you think they were for?”"
+    ],
+    opts:[{t:"Pay the fee and drive", go:ostrowEnd}]});
+}
+function ostrowEnd(){
+  const body = [
+    "You did not know. Now you do, and it will not come off. Here it is put plainly, so that nobody can say afterwards that you only suspected it:",
+    "The blood you have been hauling is fed to people who are kept in a shed. They are kept alive because a tooth pulled out of a living mouth is worth twelve hundred and a tooth pulled out of a dead one is worth seven hundred. The Bureau does not hide any part of this. It has a rate card on the wall and a ledger with two columns, and your consignment number is in the left one.",
+    "Nothing in your truck has changed. No price has moved. You can carry the same cargo tomorrow to the same place for the same money. The only difference is that from tomorrow you will be doing it on purpose."
+  ];
+  if(hasCrew("kwiat")) body.push(
+    "SAID:Kwiat says: “I did not know either. I want that written down somewhere. I did not know.”");
+  if(hasCrew("sarto")) body.push(
+    "SAID:Sarto says: “I have thought about this for four years and I am going to say the same thing I said before, and you may hate me for it. Those people are alive because somebody pays for blood. The day nobody hauls it, they stop being worth the feeding. I am not telling you it is clean. I am telling you what happens on the day you stop.”");
+  if(hasCrew("sarto") && hasCrew("kwiat")) body.push(
+    "SAID:Kwiat says: “He is not wrong about what happens. He is wrong about what it makes us. Father — they have a rate card.”");
+  body.push("Neither of them says anything else before Ossett.");
+  modal({eyebrow:"Ostrow weighing station", title:"The horror is that it is paperwork", c:"--rose",
+    body,
+    opts:[{t:"Drive on into the Kell", go:()=>{
+      S.flags.ostrow = true;
+      S.cash = Math.max(0, S.cash - CHECKPOINTS.ostrow.fee);
+      say("Crossed at Ostrow. You know what the shed is now.");
+      const c = PENDING; PENDING = null; close();
+      TRIP = {to:c.to, left:c.days, night:c.night}; runTrip();
+    }}]});
+}
+
+/* Vist. He is not for hire. He turns up on the Vire–Rook's End road once
+   you have been to both and have never taken a load to either. */
+function maybeVist(){
+  if(S.flags.vistOffered || !S.flags.ostrow || hasCrew("vist")) return false;
+  if(!["vire","rooks"].includes(S.at)) return false;
+  if(S.flags.farmRuns > 0 || S.flags.fangsSold > 0) return false;
+  S.flags.vistOffered = true;
+  const room = truck().seats - S.crew.length;
+  const opts = [];
+  if(room > 0) opts.push({t:"“There's a seat.”", s:"He takes no wage. A patrol that opens the back finds him.",
+    go:()=>{ S.crew.push("vist"); say("Andrej Vist got in the back at "+PLACE[S.at].name+".");
+             close(); save(); render(); }});
+  else opts.push({t:"There is no seat", s:"Every seat in the truck is taken.", dis:true});
+  opts.push({t:"“No.”", s:"He nods and goes back up the bank.", go:()=>{ close(); render(); }});
+  modal({eyebrow:"The Vire road", title:"Three of them, and one of them talks", c:"--rose",
+    body:[
+      "They come down the bank in front of you and there is no point in the accelerator. Two stay by the wheel arches. The third walks round to the window, and he is wearing a coat that was good forty years ago, and he says good evening.",
+      "SAID:“You have been up and down this road for three weeks and you have not taken anything through that gate. I wanted to see what that was.”",
+      "He says his name is Andrej Vist and that he was made in 1889, near Pell, by somebody who is dead now.",
+      "SAID:“The farms breed us to pull the teeth. Everything you have ever been told about what we are is beside the point next to that. I am not asking you to like me. I am asking for a seat, because a truck goes through a gate and a man on foot does not.”",
+      hasCrew("kwiat")
+        ? "SAID:Kwiat says, from the back: “Where does he get his? Ask him where he gets his.” Vist says: “A farm. I do not know which one. He is right to ask and I have no answer for him.” Kwiat does not say anything else, and he will not ride with him."
+        : "",
+      hasCrew("sarto")
+        ? "SAID:Sarto has already got down out of the cab and put his hand out."
+        : ""
+    ],
+    opts});
+  return true;
+}
+
+/* ===================== crew ===================== */
+function availableHere(){
+  return CREW.filter(c=>{
+    if(hasCrew(c.id) || c.when==="earned" || c.at!==S.at) return false;
+    if(c.when==="start") return true;
+    if(c.when==="wonfight") return S.flags.wonFight;
+    if(c.when==="second") return S.flags.bfordVisits >= 2;
+    if(c.when==="watched") return S.warrant <= -5;
+    return false;
+  });
+}
+function seatsFree(){ return truck().seats - S.crew.length; }
+function hire(id){
+  const c = CREWBY[id];
+  if(seatsFree() <= 0){ toast("Every seat in the "+truck().name.toLowerCase()+" is taken."); return; }
+  S.crew.push(id);
+  if(id==="wace") S.waceDay = S.day;
+  if(id==="kwiat" && S.flags.bloodRuns > 0){
+    modal({eyebrow:"Tolm", title:"Fr. Jan Kwiat", c:"--amber",
+      body:["He puts his bag in and then stands with his hand on the door.",
+            "SAID:“I know what you have been carrying since I got out. I am not going to pretend that putting me down at a post was the same as my saying yes to it. It was not. It was just me not being in the cab.”",
+            "SAID:“I will still come.”"],
+      opts:[{t:"Shut the door", go:()=>{ close(); save(); render(); }}]});
+    return;
+  }
+  say(c.name+" took a seat at "+PLACE[S.at].name+".");
+  save(); render();
+}
+function fire(id){
+  S.crew = S.crew.filter(i=>i!==id);
+  if(id==="vist"){ say("Vist got out at "+PLACE[S.at].name+" and did not say where he was going."); }
+  else say(CREWBY[id].name+" is waiting at "+PLACE[S.at].name+".");
+  save(); render();
+}
+function offerRecruit(){
+  if(maybeVist()) return;
+  const a = availableHere();
+  if(a.length && seatsFree()>0) toast(a[0].name+" is asking after a seat.");
+}
+/* One lesson per arrival, in the order of what the player can do about it
+   right now. The rest keep until the next town. */
+function arrivalLesson(){
+  if(availableHere().length && seatsFree()>0 && teach("crew")) return true;
+  if(S.hull < hullCap()*0.6 && teach("damage")) return true;
+  if(band(S.warrant)!=="Clean" && teach("warrant")) return true;
+  if(S.fangs.length && teach("fangs")) return true;
+  if(S.event[S.at]!=="quiet" && teach("event")) return true;
+  return false;
+}
+
+/* ===================== market actions ===================== */
+function buy(gid, n){
+  const p = buyPrice(S.at, gid);
+  n = Math.min(n, cargoCap()-cargoUsed(), Math.floor(S.cash/Math.max(1,p)));
+  if(n<=0) return;
+  if(gid==="blood" && hasCrew("kwiat")) return kwiatStop(gid,n,p);
+  doBuy(gid,n,p);
+}
+function doBuy(gid,n,p){
+  S.cash -= p*n; S.cargo[gid]+=n; S.bought[gid]=p;
+  if(gid==="flour" && tutActive() && S.tut.step===1) S.tut.paid = p*n;
+  if(gid==="blood"){ S.flags.bloodRuns++; warrant(hasCrew("roan") ? -1 : -2, ""); }
+  if(GOOD[gid].restricted && !isLegalHere(gid)) warrant(-1, "");
+  save(); render();
+  if(GOOD[gid].restricted) teach("restricted");
+}
+function kwiatStop(gid,n,p){
+  modal({eyebrow:PLACE[S.at].name, title:"Fr. Jan Kwiat gets out", c:"--amber",
+    body:["He is already reaching for his bag before the first crate is on.",
+          "SAID:“I am not going to argue with you in the street. You know what I think and you have heard it. I will be at the presbytery here. If you come back without it I will get in again.”",
+          "He is not angry. That is the part that is hard to take."],
+    opts:[
+      {t:"Load it", s:"He waits here. The blood goes on.", go:()=>{
+        S.crew = S.crew.filter(i=>i!=="kwiat"); doBuy(gid,n,p); close(); }},
+      {t:"Leave it", s:"No blood on this truck today.", go:()=>{ close(); render(); }}
+    ]});
+}
+function sell(gid, n){
+  n = Math.min(n, S.cargo[gid]);
+  if(n<=0) return;
+  const p = sellPrice(S.at, gid);
+  if(!p){ toast("Nobody here buys that."); return; }
+  S.cash += p*n; S.cargo[gid]-=n;
+  const here = PLACE[S.at];
+  if(GOOD[gid].restricted && !isLegalHere(gid))
+    warrant(gid==="blood" ? (hasCrew("roan")?-1:-2) : -1, "Somebody saw the crates come off.");
+  if(here.farm && (gid==="blood"||gid==="ammo"||gid==="medicine")){
+    S.flags.farmRuns++; warrant(-2,""); addStrain(1);
+  }
+  save(); render();
+}
+function sellFangs(){
+  if(!S.fangs.length) return;
+  const v = fangTotal(), n = S.fangs.length;
+  S.cash += v; S.fangs = []; S.flags.fangsSold += n;
+  warrant(+1, "");
+  addStrain(1);
+  say("Sold "+n+" teeth at the post for "+money(v)+".");
+  save(); render();
+}
+function refuel(){
+  const need = tankCap() - S.fuel, cost = truck().fuelCost * 40;
+  const can = Math.min(need, Math.floor(S.cash/cost));
+  if(can<=0) return;
+  S.cash -= can*cost; S.fuel += can; save(); render();
+}
+function repair(){
+  const need = hullCap() - S.hull;
+  const per = Math.max(8, truck().fuelCost*14 - mending()*4);
+  const can = Math.min(need, Math.floor(S.cash/per));
+  if(can<=0) return;
+  S.cash -= can*per; S.hull += can; save(); render();
+}
+
+/* ===================== Tolm, and the boat ===================== */
+function tolmContract(){
+  if(S.flags.licence) return null;
+  if(S.at!=="tolm") return null;
+  if(!S.flags.tolmContract) return {
+    t:"Take the mill's contract", s:"Ten of flour to Bright's Ford. They sponsor your licence for Vann.",
+    go:()=>{ S.flags.tolmContract = true; say("Took the Tolm contract: ten of flour to Bright's Ford."); save(); render(); }};
+  return null;
+}
+function checkTolm(){
+  if(S.flags.tolmContract && !S.flags.licence && S.at==="bford" && S.cargo.flour>=10){
+    const got = 10*sellPrice("bford","flour") + 2000;
+    S.tut.got = got;
+    S.cargo.flour -= 10; S.cash += got;
+    S.flags.licence = true; warrant(+6,"");
+    modal({eyebrow:"Bright's Ford", title:"The licence", c:"--sand",
+      body:["The mill's man counts ten off the tail and signs the sheet, and then hands you a second sheet you were not expecting.",
+            "It is a haulage licence for the Vann road, sponsored by the Tolm mill, valid for a year.",
+            "SAID:“Rell will want five hundred off you every time. That's the road, that isn't us.”"],
+      opts:[{t:"Fold it into the book", go:()=>{ close(); save(); render(); }}]});
+    return true;
+  }
+  return false;
+}
+const BERTH = 500000;
+function buyBerth(){
+  const staying = S.crew.filter(id=>id!=="vist").map(id=>CREWBY[id].name);
+  modal({eyebrow:"Halloway · the quay", title:"One berth", c:"--sand",
+    body:["The office is a hut on the quay with a window in the side of it and a queue that does not move fast.",
+          "The man does not ask what you are. He asks for the money, and he writes a name in a book, and he says the boat goes when it is full.",
+          "Berths are sold one at a time. There is nothing on the wall about that. It is just how many he has."],
+    opts:[
+      {t:"Buy a berth and go", s:money(BERTH)+". The truck stays on the quay.", go:()=>endGame(true)},
+      {t:"Buy a berth and leave it in the book", s:money(BERTH)+", name blank. You stay.",
+       dis:S.cash < BERTH*2,
+       go:()=>{ S.cash -= BERTH; S.flags.berths = (S.flags.berths||0)+1;
+                say("Bought a berth and left the name blank."); close(); save(); render(); }},
+      {t:"Not yet", go:()=>close()}
+    ]});
+}
+function endGame(spend){
+  if(spend) S.cash -= BERTH;
+  const withYou = S.crew.map(id=>CREWBY[id].name);
+  const left = CREW.filter(c=>c.when!=="earned" && !hasCrew(c.id) && c.at)
+                   .map(c=>c.name+", at "+PLACE[c.at].name);
+  const spare = S.flags.berths || 0;
+  const body = [
+    "The boat goes at four in the morning with the tide, and it is not a big boat.",
+    "On it: you"+(withYou.length? ", and "+withYou.join(", ") : ", on your own")+"."
+  ];
+  if(spare>0) body.push("There "+(spare===1?"is one berth":"are "+spare+" berths")+" in the book with no name written in. The man on the quay will sell "+(spare===1?"it":"them")+" again to whoever comes.");
+  if(left.length) body.push("Still in the country: "+left.join("; ")+".");
+  body.push("Day "+S.day+". "+money(S.cash)+" left over, which buys nothing now.");
+  if(S.flags.fangsSold) body.push("You sold "+S.flags.fangsSold+" teeth to the Bureau.");
+  if(S.flags.farmRuns) body.push("You made "+S.flags.farmRuns+" deliveries to the farms.");
+  if(!S.flags.fangsSold && !S.flags.farmRuns) body.push("You never sold a tooth and you never took a load through a farm gate.");
+  S.over = "boat";
+  modal({eyebrow:"The end", title:"Four in the morning, with the tide", c:"--sand",
+    body, opts:[{t:"Start again", go:()=>{ close(); newGame(); render(); }}]});
+}
+
+/* ===================== modal, toast ===================== */
+const veil = document.getElementById("veil");
+const modalEl = document.getElementById("modal");
+function close(){ veil.hidden = true; modalEl.innerHTML = ""; }
+function modal(o){
+  modalEl.style.setProperty("--c","var("+(o.c||"--amber")+")");
+  let h = '<div class="eyebrow">'+o.eyebrow+"</div><h2>"+o.title+"</h2>";
+  (o.body||[]).forEach(p=>{
+    if(!p) return;
+    h += p.slice(0,5)==="SAID:" ? '<p class="said">'+p.slice(5)+"</p>" : "<p>"+p+"</p>";
+  });
+  if(o.pre) h += "<pre>"+o.pre+"</pre>";
+  h += '<div class="opts">';
+  (o.opts||[]).forEach((op,i)=>{
+    h += '<button data-i="'+i+'"'+(op.dis?" disabled":"")+">"+op.t+
+         (op.s?"<small>"+op.s+"</small>":"")+"</button>";
+  });
+  h += "</div>";
+  modalEl.innerHTML = h;
+  modalEl.querySelectorAll(".opts button").forEach(b=>{
+    b.onclick = ()=>{ const op = o.opts[+b.dataset.i]; if(op && op.go) op.go(); };
+  });
+  veil.hidden = false;
+  modalEl.scrollIntoView({block:"start"});
+  const f = modalEl.querySelector(".opts button:not([disabled])"); if(f) f.focus();
+}
+function modalFight(opts){
+  const f = FIGHT, cap = hullCap(), sc = shieldCap();
+  modalEl.style.setProperty("--c","var(--rose)");
+  let h = '<div class="eyebrow">On the road'+(TRIP&&TRIP.night?" · night":"")+"</div><h2>"+f.f.name+"</h2>";
+  h += '<div class="fight">';
+  h += '<div class="bar"><div class="who">Your truck</div>'+
+       '<div class="meter" style="--c:var(--amber)"><i style="width:'+Math.max(0,S.hull/cap*100)+'%"></i></div>'+
+       "<small>Frame "+Math.max(0,S.hull)+" / "+cap+(sc?" · plating "+f.myShield+" / "+sc:"")+
+       " · fighting "+fighting()+" · gun "+gunPower()+"</small></div>";
+  h += '<div class="bar"><div class="who">Them</div>'+
+       '<div class="meter" style="--c:var(--rose)"><i style="width:'+Math.max(0,f.hull/f.f.hull*100)+'%"></i></div>'+
+       "<small>"+Math.max(0,f.hull)+" / "+f.f.hull+(f.f.shield?" · plating "+Math.max(0,f.shield):"")+
+       " · fighting "+f.f.fig+"</small></div></div>";
+  if(!f.log.length) f.log.push(f.f.intro);
+  h += '<div class="log">'+f.log.slice(-7).map(l=>"<div>"+l+"</div>").join("")+"</div>";
+  h += '<div class="opts">';
+  opts.forEach((op,i)=>{ h += '<button data-i="'+i+'"'+(op.dis?" disabled":"")+">"+op.t+
+        (op.s?"<small>"+op.s+"</small>":"")+"</button>"; });
+  h += "</div>";
+  modalEl.innerHTML = h;
+  modalEl.querySelectorAll(".opts button").forEach(b=>{
+    b.onclick = ()=>{ const op = opts[+b.dataset.i]; if(op && op.go) op.go(); };
+  });
+  veil.hidden = false;
+  const fb = modalEl.querySelector(".opts button:not([disabled])"); if(fb) fb.focus();
+}
+function toast(t){ say(t); }
+
+/* ===================== panes ===================== */
+/* Space Trader's shape: one small screen at a time, and a hub of labelled
+   buttons you always come back to. LCARS is a grid of labelled pills, which
+   happens to be the same object, so the two fit without a fight. */
+let TAB = "here";
+const SCREENS = {
+  here:  "Fenner",
+  buy:   "Buy cargo",
+  sell:  "Sell cargo",
+  drive: "Take the road",
+  crew:  "Crew",
+  truck: "The yard",
+  map:   "The map",
+  status:"Where you stand",
+  help:  "How to play"
+};
+/* id, label, colour, and whether it is worth offering right now */
+const MENU = [
+  ["buy",   "Buy<br>cargo",   "--amber", ()=>marketOpen(S.at)],
+  ["sell",  "Sell<br>cargo",  "--sand",  ()=>cargoUsed()>0 && marketOpen(S.at)],
+  ["drive", "Take the<br>road","--sky",  ()=>true],
+  ["crew",  "Crew",           "--mauve", ()=>true],
+  ["truck", "The<br>yard",    "--sand",  ()=>true],
+  ["map",   "The<br>map",     "--sky",   ()=>true],
+  ["status","Where you<br>stand","--mauve",()=>true],
+  ["help",  "How to<br>play", "--rose",  ()=>true]
+];
+
+/* The one line that says what to do next. Everything else on the screen is a
+   number; this is the sentence. */
+function objective(){
+  if(S.over || tutActive()) return "";
+  if(!S.flags.licence){
+    if(!S.flags.tolmContract){
+      if(S.at==="fenner" && S.cargo.flour < 10)
+        return sellPrice("fenner","flour") < typicalPrice(GOOD.flour)*0.9
+          ? "Fenner makes flour, so flour is cheap here. Press <b>Buy cargo</b> and fill the truck with it."
+          : "You want ten of flour. It is expensive at Fenner today — buy it anyway, or wait a few days for the price to come back.";
+      if(S.at==="fenner")
+        return "You have the flour. Press <b>Take the road</b> and drive to Tolm — one day.";
+      if(S.at==="tolm")
+        return "Take the mill's contract, on the town screen under <i>In this town</i>.";
+      return "Get to Tolm and take the mill's contract. It is what opens the road east.";
+    }
+    if(S.cargo.flour < 10)
+      return "The contract wants ten of flour. Fenner is where flour is cheap.";
+    if(S.at==="bford") return "You are here with the flour. It delivers itself — check the Log.";
+    return "Take the ten of flour to Bright's Ford. Press <b>Take the road</b>.";
+  }
+  if(!S.flags.ostrow){
+    if(!S.crew.length)
+      return "Vann is open through Rell. Nobody is riding with you — press <b>Crew</b> to see who is where.";
+    if(S.cash < 30000)
+      return "Run freight in Colter and Vann until you can afford a bigger truck. Buy where a thing is made, sell where it is wanted.";
+    return "The Kell road runs from Marrow through the Ostrow weighing station. That is where the money is.";
+  }
+  const left = BERTH - S.cash;
+  if(left > 0) return "A berth at Halloway costs "+money(BERTH)+". You are "+money(left)+" short.";
+  return "You can afford a berth. Halloway, on the quay.";
+}
+
+const INTRO = {
+  eyebrow:"Nightfreight", title:"You drive a truck", c:"--amber",
+  body:[
+    "There is a boat at Halloway. A berth on it costs <b>500,000</b>, and it is the only way out of this country.",
+    "You get that money by hauling freight from a town that has a thing to a town that wants it — and, sooner or later, by deciding what you are willing to put in the back."
+  ],
+  opts:[
+    {t:"Show me how", s:"Four steps. About three minutes.",
+     go:()=>{ S.flags.seenIntro = true; S.tut.step = 1; close(); save(); render(); }},
+    {t:"I have played games like this", s:"Skip it. Everything is on the How to play tab.",
+     go:()=>{ S.flags.seenIntro = true; S.tut.done = true; close(); save(); render(); }}
+  ]
+};
+
+/* ===================================================================
+   The guided first run.
+
+   Ordered by importance rather than complexity: the first thing a trader
+   has to understand is that the same crate is worth different money in
+   two places. Nothing else is on the screen until he has done it once
+   and been paid for it. One action per step, and the tabs he has not
+   been given a reason to open are not there yet.
+   =================================================================== */
+const TUTORIAL = [
+  { title:"Buy something cheap",
+    what:"Every town buys and sells the same ten goods at different prices. Fenner grows flour, so flour is cheaper here than it is anywhere else.",
+    doIt:()=> TAB==="buy" ? "Press <b>Max</b> on the flour row and fill the truck with it."
+                          : "Press <b>Buy cargo</b>.",
+    spot:()=> TAB==="buy" ? '#pane button[data-a="buyx"][data-v="flour"]'
+                          : '#pane button[data-v="buy"]',
+    done:()=> S.cargo.flour >= 10,
+    after:()=> "Ten crates of flour for "+money(S.tut.paid)+". The truck is full."
+  },
+  { title:"Take it to somebody who wants it",
+    what:"Bright's Ford grows no flour and is short of it, so they pay about half again for what you bring. It is two days up the road, through Tolm.",
+    doIt:()=> TAB==="drive" ? "Press <b>Drive</b> on the Tolm row."
+            : TAB==="here"  ? "Press <b>Take the road</b>."
+                            : "Press the amber button at the top to go back to the town.",
+    spot:()=> TAB==="drive" ? '#pane button[data-a="go"][data-v^="tolm"]'
+            : TAB==="here"  ? '#pane button[data-v="drive"]' : '#tabs button.back',
+    done:()=> S.at==="tolm",
+    after:()=> "One day gone. A day on the road costs one day of fuel and one day of wages whether anything happens or not."
+  },
+  { title:"Pick up a job while you are here",
+    what:"Tolm's mill wants ten of flour delivered to Bright's Ford, which is where you were going anyway. They pay a bonus, and they sponsor the licence you need for the road east.",
+    doIt:()=> TAB==="here" ? "Press <b>Take the mill's contract</b>, under <i>In this town</i>."
+                           : "Press the amber button at the top to go back to the town.",
+    spot:()=> TAB==="here" ? '#pane button[data-a="tolm"]' : '#tabs button.back',
+    done:()=> S.flags.tolmContract,
+    after:()=> "Taken. Now deliver it."
+  },
+  { title:"Deliver it",
+    what:"Bright's Ford is one more day up the road. Do not sell the flour anywhere else on the way — the contract wants all ten crates.",
+    doIt:()=> TAB==="drive" ? "Press <b>Drive</b> on the Bright's Ford row."
+            : TAB==="here"  ? "Press <b>Take the road</b>."
+                            : "Press the amber button at the top to go back to the town.",
+    spot:()=> TAB==="drive" ? '#pane button[data-a="go"][data-v^="bford"]'
+            : TAB==="here"  ? '#pane button[data-v="drive"]' : '#tabs button.back',
+    done:()=> S.flags.licence,
+    after:()=> "Delivered."
+  }
+];
+function tutStep(){ return (!S || S.tut.done) ? null : TUTORIAL[S.tut.step-1] || null; }
+function tutActive(){ return !!S && !S.tut.done && S.tut.step >= 1; }
+
+/* Only the buttons he has been given a reason to press. */
+function visibleMenu(){
+  const live = MENU.filter(m=>m[3]());
+  if(!tutActive()) return live;
+  const allow = S.tut.step >= 2 ? ["buy","drive","help"] : ["buy","help"];
+  return live.filter(m=>allow.includes(m[0]));
+}
+function checkTutorial(){
+  const st = tutStep();
+  if(!st || !st.done()) return;
+  say(typeof st.after==="function" ? st.after() : st.after);
+  S.tut.step++;
+  if(S.tut.step > TUTORIAL.length){ S.tut.done = true; tutFinish(); }
+}
+function tutFinish(){
+  const paid = S.tut.paid, got = S.tut.got;
+  modal({eyebrow:"That is the game", title:"You just made "+money(got-paid), c:"--amber",
+    body:[
+      "The flour cost <b>"+money(paid)+"</b> at Fenner, where it is grown. Bright's Ford, which grows none, paid <b>"+
+        money(got-2000)+"</b> for it, and the mill put <b>2,000</b> on top for the contract. Three days' work.",
+      "<b>That is the engine of the whole game.</b> Buy a thing where it is made and cheap, drive it to a town that is short of it, sell it, and do it again with a bigger truck.",
+      "You have the haulage licence now, so the road east through Rell is open, and every button on the town screen is unlocked.",
+      "Nothing else gets explained up front. When something new happens to you — a patrol, a fight, somebody wanting a seat — you get one card about it, once, at the moment it happens."
+    ],
+    opts:[{t:"Get on with it", go:()=>{ close(); save(); render(); }}]});
+}
+
+/* ===================================================================
+   Just-in-time lessons. Each fires the first time the thing actually
+   happens to you, and never again. What it is, how it works, why it
+   matters — in that order, and short.
+   =================================================================== */
+const TEACH = {
+  raider:{ title:"Somebody is trying to rob you", c:"--rose", body:[
+    "<b>Fire</b> puts your <i>Fighting</i> and the power of the mounts on the truck against their plating and their frame. <b>Run</b> is your <i>Driving</i> against theirs. <b>Give them the load</b> ends it now and costs you everything in the back.",
+    "You started with a shotgun rack, which is enough for men on a country road and not much else. Heavier mounts and plating are in <b>The yard</b>.",
+    "Losing is not the end of the game. They take the load and most of the cash, and you drive on slowly."]},
+  patrol:{ title:"A Bureau patrol", c:"--sky", body:[
+    "They want to see what is in the back. If everything in there is legal where you are going, stopping costs you nothing and they think slightly better of you afterwards.",
+    "If it is not, they take it and fine you. <b>Running</b> and <b>shooting</b> both cost you far more than being caught does.",
+    "<i>Warrant</i> is the number at the top that says Clean. It is how the Bureau sees you, and it opens some doors and shuts others."]},
+  crew:{ title:"Somebody wants a seat", c:"--sky", body:[
+    "People are not hired off a list. You find them by driving to where they are, and some will not come out at all until you have done something that makes them willing to get into a truck with you.",
+    "<b>Driving, Dealing and Mending are read off the best person in the cab</b> — a second good driver earns you nothing at all. <b>Fighting is different:</b> the best aboard plus half of everybody else's, because in a fight everyone shoots.",
+    "They cost wages every day you are on the road, and the truck has a fixed number of seats. Both are on the <b>Crew</b> screen."]},
+  restricted:{ title:"That cargo is restricted", c:"--rose", body:[
+    "Restricted does not mean there is no buyer. It means there is a buyer <i>and a risk</i>, so the price carries the risk: it costs more where it is restricted and less where it is open.",
+    "Carrying it makes a patrol more likely to stop you, and if they look they take it and fine you and your Warrant drops.",
+    "Blood is restricted in nine of the thirteen towns, and it is the best money on this road by a long way. That is the game asking you a question."]},
+  warrant:{ title:"Your Warrant has moved", c:"--sand", body:[
+    "One number from &minus;70 to +75: how the Bureau sees you. Wanted · Marked · Watched · <b>Clean</b> · Licensed · Bonded · Commended.",
+    "<b>Below Watched</b>, everything you buy costs 11% more. <b>Below Marked</b>, the lawful towns stop trading with you and patrols come at double strength — but the farms in the south open up, and they pay better than anywhere.",
+    "<b>Above Bonded</b> it runs the other way: the lawful towns like you and the farms shut their gates, because a bonded hauler is a Bureau informant and they know it."]},
+  damage:{ title:"The truck is hurt", c:"--sand", body:[
+    "<b>Frame</b> is how much the truck can still take before it stops. At zero you lose the load and most of the cash.",
+    "Mend it in <b>The yard</b>, off the town screen. A good <i>Mending</i> skill in the cab makes it cheaper, and a toolkit fitted to the truck mends it while you drive."]},
+  fangs:{ title:"You have teeth", c:"--rose", body:[
+    "Vampire canines. Any Bureau post — Sennick, Marrow, Halloway — buys them at a published rate: <b>1,200</b> for ten days after they are drawn, <b>700</b> after that. You sell them on the town screen.",
+    "It is entirely legal and it puts your Warrant up.",
+    "It also hardens everybody in the cab a little, every single time."]},
+  event:{ title:"Something is happening in a town", c:"--sand", body:[
+    "Towns have weather of their own: a fever, a siege, a hard frost, a crop failure, a strike, a Bureau hunt. Each moves particular prices, sometimes to double.",
+    "They change every few days and <b>The map</b> shows which town has what. A fever three days away is a medicine run, if you get there first."]}
+};
+function teach(id, then){
+  if(!S.taught) S.taught = {};
+  if(S.taught[id] || tutActive() || !TEACH[id]) return false;
+  S.taught[id] = true;
+  const t = TEACH[id];
+  modal({eyebrow:"First time", title:t.title, c:t.c, body:t.body,
+    opts:[{t:then ? "Right — go on" : "Right",
+           go:()=>{ close(); save(); if(then) then(); else render(); }}]});
+  return true;
+}
+
+
+function render(){
+  if(!S) return;
+  if(!S.tut) S.tut = {step:0, done:true, paid:0, got:0};
+  if(!S.tut.done) checkTutorial();
+  const p = PLACE[S.at];
+  document.getElementById("where").innerHTML =
+    p.name+' <span class="wheresub">· '+VALLEYS[p.valley]+
+    (EVENTS[S.event[S.at]] && S.event[S.at]!=="quiet" ? " · "+EVENTS[S.event[S.at]].name : "")+"</span>";
+  const wb = band(S.warrant);
+  const wcls = S.warrant<=-20 ? "warn" : S.warrant>=30 ? "ok" : "";
+  document.getElementById("statrow").innerHTML =
+    stat("Day", S.day) + stat("Cash", money(S.cash), "hi") +
+    stat("Warrant", wb+" "+(S.warrant>0?"+":"")+S.warrant, wcls) +
+    stat("Fuel", S.fuel+" / "+tankCap(), S.fuel<=3?"warn":"") +
+    stat("Frame", Math.max(0,S.hull)+" / "+hullCap(), S.hull<hullCap()*0.35?"warn":"") +
+    stat("Hold", cargoUsed()+" / "+cargoCap()) +
+    stat("Wages", money(wages())+"/day") +
+    (S.fangs.length ? stat("Teeth", S.fangs.length) : "");
+  const obj = objective();
+  document.getElementById("objective").innerHTML = obj ? "&rarr; "+obj : "";
+  document.getElementById("objective").hidden = !obj;
+  const menu = visibleMenu();
+  if(TAB!=="here" && !menu.some(m=>m[0]===TAB)) TAB = "here";
+  const nav = document.getElementById("tabs");
+  if(TAB==="here"){ nav.innerHTML = ""; nav.hidden = true; }
+  else {
+    nav.hidden = false;
+    nav.innerHTML = '<button class="back" data-t="here">&#9664; '+p.name+"</button>"+
+      '<span class="screentitle">'+SCREENS[TAB]+"</span>";
+    nav.querySelectorAll("button").forEach(b=>
+      b.onclick = ()=>{ TAB = b.dataset.t; render(); });
+  }
+  document.getElementById("pane").innerHTML =
+    TAB==="here"  ? paneHere()  : TAB==="buy"    ? paneBuy()   :
+    TAB==="sell"  ? paneSell()  : TAB==="drive"  ? paneDrive() :
+    TAB==="truck" ? paneTruck() : TAB==="crew"   ? paneCrew()  :
+    TAB==="map"   ? paneMap()   : TAB==="help"   ? paneHelp()  : paneStatus();
+  document.getElementById("pane").insertAdjacentHTML("afterbegin", tutCard());
+  wire();
+  spotlight();
+  save();
+}
+const STAT_MEANS = {
+  Day:"Days since you started. Nothing is on a clock; this is just how long it took.",
+  Cash:"What you have. A berth at Halloway is 500,000.",
+  Warrant:"How the Bureau sees you. Above Bonded the farms shut their gates; below Marked the lawful towns shut theirs.",
+  Fuel:"Days of driving left in the tank. One day of road burns one.",
+  Frame:"How much the truck can still take before it stops. Mend it in the yard.",
+  Hold:"Crates carried, out of what the truck holds. A crew seat is not a crate — they are separate.",
+  Wages:"What the people in the cab cost you for every day you are on the road.",
+  Teeth:"Vampire canines. Bureau posts buy them: 1,200 for ten days after they are drawn, 700 after that."
+};
+function tutCard(){
+  const st = tutStep();
+  if(!st) return "";
+  const doIt = typeof st.doIt==="function" ? st.doIt() : st.doIt;
+  return '<div class="tut"><div class="tutnum">Step '+S.tut.step+" of "+TUTORIAL.length+"</div>"+
+    "<h3>"+st.title+"</h3><p>"+st.what+'</p><p class="do">'+doIt+"</p>"+
+    '<button class="b skip" data-a="tutskip" data-v="">Skip the walkthrough</button></div>';
+}
+/* One ring, on the one thing to press. Nothing else on the screen moves. */
+function spotlight(){
+  document.querySelectorAll(".spot").forEach(e=>e.classList.remove("spot"));
+  const st = tutStep();
+  if(!st || !st.spot) return;
+  const sel = typeof st.spot==="function" ? st.spot() : st.spot;
+  const el = document.querySelector(sel);
+  if(el) el.classList.add("spot");
+}
+
+function stat(b,v,cls){
+  return '<div class="stat" title="'+(STAT_MEANS[b]||"")+'"><b>'+b+"</b><span class=\""+
+         (cls||"")+'">'+v+"</span></div>";
+}
+
+/* A price on its own tells a new driver nothing. What he needs is the same
+   thing a real haulier carries in his head: is this cheap or costly for this
+   thing, and why, and who up the road wants it. */
+function typicalPrice(g){ return g.low + g.inc*2; }
+function priceTag(g, sp){
+  const r = sp / typicalPrice(g);
+  if(r < 0.82) return '<b style="color:var(--green)">CHEAP</b>';
+  if(r > 1.25) return '<b style="color:var(--rose)">DEAR</b>';
+  return '<span style="color:var(--ink3)">usual</span>';
+}
+function priceWhy(p, gid){
+  const w = [];
+  if(p.makes.includes(gid)) w.push("made here");
+  if(p.wants.includes(gid)) w.push("wanted here");
+  const ev = S.event[p.id]==="quiet" ? null : EVENTS[S.event[p.id]];
+  if(ev && ev.moves[gid]) w.push(ev.name.toLowerCase());
+  if(GOOD[gid].restricted) w.push(isLegalHere(gid, p.id)
+    ? '<span style="color:var(--sand)">traded openly here</span>'
+    : '<span style="color:var(--rose)">restricted here</span>');
+  return w.join(" · ");
+}
+function wantedAt(gid){
+  return PLACES.filter(pp => valleyOpen(pp.valley) && pp.id!==S.at && pp.wants.includes(gid))
+               .map(pp => pp.name);
+}
+/* ---------- the hub ---------- */
+function paneHere(){
+  const p = PLACE[S.at];
+  let h = '<div class="hereline"><b>'+p.name+"</b> <span>"+VALLEYS[p.valley]+
+    (p.bureau?" · Bureau post":"")+(p.farm?" · "+p.farm+" farm":"")+"</span></div>";
+  h += '<p class="note">'+p.line+
+    (S.event[S.at]!=="quiet" ? ' <em>'+EVENTS[S.event[S.at]].name+" here just now.</em>" : "")+"</p>";
+  if(!marketOpen(S.at))
+    h += '<p class="note" style="color:var(--rose)">'+shutReason(S.at)+
+         " Fuel and repairs only.</p>";
+  else
+    h += '<div class="scroll"><table><tbody>'+
+      row("Sells cheap", p.makes.length ? p.makes.map(g=>GOOD[g].name.toLowerCase()).join(", ") : "nothing much") +
+      row("Short of", p.wants.length ? p.wants.map(g=>GOOD[g].name.toLowerCase()).join(", ") : "nothing in particular") +
+      row("Blood", p.legal.blood ? "traded openly" : '<span style="color:var(--rose)">restricted</span>') +
+      "</tbody></table></div>";
+
+  h += '<div class="menu">';
+  visibleMenu().forEach(m=>{
+    h += '<button class="b tile" style="--c:var('+m[2]+')" data-a="go2" data-v="'+m[0]+'">'+m[1]+"</button>";
+  });
+  h += "</div>";
+
+  /* the things you can only do standing here */
+  const extra = [];
+  const t = tolmContract();
+  if(t) extra.push(btn("tolm","",t.t));
+  if(p.bureau && S.fangs.length)
+    extra.push(btn("fangs","","Present "+S.fangs.length+" teeth · "+money(fangTotal())));
+  if(S.at==="halloway")
+    extra.push(btn("berth","","The berth office · "+money(BERTH), S.cash<BERTH));
+  if(extra.length && !tutActive() || (t && tutActive() && S.tut.step===3)){
+    h += '<h2 class="sec">In this town</h2><div class="btnrow">'+extra.join("")+"</div>";
+    if(t) h += '<p class="note">'+t.s+"</p>";
+  }
+  if(S.flags.tolmContract && !S.flags.licence)
+    h += '<p class="note"><em>Contract in hand:</em> ten of flour to Bright&rsquo;s Ford.</p>';
+  const a = tutActive() ? [] : availableHere();
+  if(a.length) h += '<p class="note">'+a.map(c=>c.name).join(" and ")+
+    (a.length>1?" are":" is")+" asking after a seat. See <b>Crew</b>.</p>";
+  return h;
+}
+
+/* ---------- reading a price ---------- */
+function typicalPrice(g){ return g.low + g.inc*2; }
+function priceTag(g, sp){
+  const r = sp / typicalPrice(g);
+  if(r < 0.82) return '<b style="color:var(--green)">CHEAP</b>';
+  if(r > 1.25) return '<b style="color:var(--rose)">IN DEMAND</b>';
+  return '<span style="color:var(--ink3)">usual</span>';
+}
+function priceWhy(p, gid){
+  const w = [];
+  if(p.makes.includes(gid)) w.push("made here");
+  if(p.wants.includes(gid)) w.push("short of it here");
+  const ev = S.event[p.id]==="quiet" ? null : EVENTS[S.event[p.id]];
+  if(ev && ev.moves[gid]) w.push(ev.name.toLowerCase());
+  if(GOOD[gid].restricted) w.push(isLegalHere(gid, p.id)
+    ? '<span style="color:var(--sand)">traded openly here</span>'
+    : '<span style="color:var(--rose)">restricted here</span>');
+  return w.join(" · ");
+}
+function wantedAt(gid){
+  return PLACES.filter(pp => valleyOpen(pp.valley) && pp.id!==S.at && pp.wants.includes(gid))
+               .map(pp => pp.name);
+}
+
+/* ---------- buy ---------- */
+function paneBuy(){
+  const p = PLACE[S.at];
+  let h = '<p class="note">Hold <b>'+cargoUsed()+" of "+cargoCap()+"</b> &nbsp;·&nbsp; cash <b>"+
+    money(S.cash)+"</b></p>";
+  h += '<div class="scroll"><table><thead><tr><th>Good</th><th>Price here</th><th>Why</th>'+
+       '<th class="n">Costs</th><th class="n">Held</th><th></th></tr></thead><tbody>';
+  GOODS.forEach(g=>{
+    const bp = buyPrice(S.at,g.id), sp = sellPrice(S.at,g.id), held = S.cargo[g.id];
+    const cls = !isLegalHere(g.id) ? "illegal" : (held ? "held" : "");
+    h += '<tr class="'+cls+'"><td class="nm">'+g.name+"</td><td>"+priceTag(g,sp)+"</td>";
+    h += '<td style="font-size:.84rem">'+(priceWhy(p,g.id)||"&mdash;")+"</td>";
+    h += '<td class="n">'+money(bp)+'</td><td class="n">'+(held||"")+"</td>";
+    h += '<td><div class="btnrow">'+
+      btn("buy1",g.id,"Buy 1", S.cash<bp || cargoUsed()>=cargoCap())+
+      btn("buyx",g.id,"Max", S.cash<bp || cargoUsed()>=cargoCap())+"</div></td></tr>";
+  });
+  h += "</tbody></table></div>";
+  h += '<p class="note"><b>Cheap</b> means the town makes it and sells it below what it costs '+
+    "in an average town. <b>In demand</b> means the town is short of it and pays over the odds — "+
+    "that is a place to <i>sell</i>, not a place to buy.</p>";
+  h += '<p class="note">You buy at the price shown and sell at about 10% under it. That gap is the '+
+    "middleman's, and a good <b>Dealing</b> skill in the cab narrows it.</p>";
+  return h;
+}
+
+/* ---------- sell ---------- */
+function paneSell(){
+  const carrying = GOODS.filter(g=>S.cargo[g.id]>0);
+  if(!carrying.length) return '<p class="note">There is nothing in the back.</p>';
+  const p = PLACE[S.at];
+  let h = '<div class="scroll"><table><thead><tr><th>Good</th><th class="n">Held</th>'+
+    '<th>Price here</th><th class="n">They pay</th><th class="n">Whole load</th><th></th></tr></thead><tbody>';
+  carrying.forEach(g=>{
+    const sp = sellPrice(S.at,g.id), n = S.cargo[g.id];
+    h += '<tr class="held"><td class="nm">'+g.name+'</td><td class="n">'+n+"</td>";
+    h += "<td>"+priceTag(g,sp)+"</td>";
+    h += '<td class="n">'+money(sp)+'</td><td class="n">'+money(sp*n)+"</td>";
+    h += '<td><div class="btnrow">'+btn("sell1",g.id,"Sell 1")+btn("sellx",g.id,"Sell all "+n)+
+         "</div></td></tr>";
+  });
+  h += "</tbody></table></div>";
+  h += '<h2 class="sec">Who else wants this</h2><div class="scroll"><table><tbody>';
+  carrying.forEach(g=>{
+    const w = wantedAt(g.id);
+    h += "<tr><td class=\"nm\">"+g.name+"</td><td>"+
+      (w.length ? "short of it at <b>"+w.join("</b>, <b>")+"</b>" : "nowhere you can reach is short of it")+
+      (g.restricted ? ' <span style="color:var(--rose)">· restricted almost everywhere; a patrol that looks will take it</span>' : "")+
+      "</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  if(S.flags.ostrow && S.cargo.blood>0)
+    h += '<p class="note" style="color:var(--sand)">You know where this goes.</p>';
+  return h;
+}
+
+function paneTruck(){
+  const t = truck();
+  let h = '<h2 class="sec">Fuel and repairs</h2><div class="btnrow">';
+  const fcost = t.fuelCost*40;
+  h += btn("fuel","","Fill the tank · "+money(fcost)+" a day", S.fuel>=tankCap()||S.cash<fcost);
+  const per = Math.max(8, t.fuelCost*14 - mending()*4);
+  h += btn("fix","","Mend the frame · "+money(per)+" a point", S.hull>=hullCap()||S.cash<per);
+  h += "</div>";
+  h += '<p class="note">Tank <b>'+S.fuel+" of "+tankCap()+"</b> · frame <b>"+
+    Math.max(0,S.hull)+" of "+hullCap()+"</b></p>";
+  h += '<h2 class="sec">'+t.name+"</h2>";
+  h += '<p class="note">'+(TRUCK_NOTE[t.id]||"")+"</p>";
+  h += '<div class="scroll"><table><tbody>'+
+    row("Hold", cargoUsed()+" of "+cargoCap()) + row("Seats", S.crew.length+" of "+t.seats) +
+    row("Frame", Math.max(0,S.hull)+" of "+hullCap()) +
+    row("Plating", S.plating.map(i=>PLATINGS[i].name).join(", ")||"none") +
+    row("Mounts", S.mounts.map(i=>MOUNTS[i].name).join(", ")||"none") +
+    row("Fittings", S.fittings.map(i=>FITTINGS[i].name).join(", ")||"none") +
+    row("Tank", S.fuel+" of "+tankCap()) + "</tbody></table></div>";
+
+  h += '<h2 class="sec">Trucks for sale</h2><div class="scroll"><table><thead><tr>'+
+    "<th>Truck</th><th class=\"n\">Hold</th><th class=\"n\">Seats</th><th class=\"n\">Mnt</th>"+
+    "<th class=\"n\">Plt</th><th class=\"n\">Fit</th><th class=\"n\">Frame</th><th class=\"n\">Price</th><th></th>"+
+    "</tr></thead><tbody>";
+  TRUCKS.forEach(tk=>{
+    if(tk.id===S.truck){ h += '<tr class="held"><td class="nm">'+tk.name+
+      "</td><td class=\"n\">"+tk.cargo+"</td><td class=\"n\">"+tk.seats+"</td><td class=\"n\">"+tk.mounts+
+      "</td><td class=\"n\">"+tk.plating+"</td><td class=\"n\">"+tk.fittings+"</td><td class=\"n\">"+tk.hull+
+      "</td><td class=\"n\">yours</td><td></td></tr>"; return; }
+    const net = tk.price - truck().sell;
+    h += "<tr><td class=\"nm\">"+tk.name+"</td><td class=\"n\">"+tk.cargo+"</td><td class=\"n\">"+tk.seats+
+      "</td><td class=\"n\">"+tk.mounts+"</td><td class=\"n\">"+tk.plating+"</td><td class=\"n\">"+tk.fittings+
+      "</td><td class=\"n\">"+tk.hull+"</td><td class=\"n\">"+money(Math.max(0,net))+"</td><td>"+
+      btn("truck",tk.id,"Take it", S.cash<net || tk.cargo<cargoUsed())+"</td></tr>";
+  });
+  h += "</tbody></table></div><p class=\"note\">The price shown is with your own truck traded in. You cannot move into something that will not hold what you are already carrying.</p>";
+
+  h += '<h2 class="sec">Mounts, plating, fittings</h2><div class="scroll"><table><tbody>';
+  MOUNTS.filter(m=>!m.unbuyable).forEach(m=>{
+    const have = S.mounts.filter(i=>i===m.id).length;
+    h += "<tr><td class=\"nm\">"+m.name+"</td><td>power "+m.power+"</td><td class=\"n\">"+money(m.price)+
+      "</td><td class=\"n\">"+(have||"")+"</td><td>"+
+      btn("mount",m.id,"Fit", S.cash<m.price || S.mounts.length>=t.mounts)+"</td></tr>";
+  });
+  PLATINGS.forEach(m=>{
+    h += "<tr><td class=\"nm\">"+m.name+"</td><td>stops "+m.power+"</td><td class=\"n\">"+money(m.price)+
+      "</td><td class=\"n\">"+(S.plating.filter(i=>i===m.id).length||"")+"</td><td>"+
+      btn("plate",m.id,"Fit", S.cash<m.price || S.plating.length>=t.plating)+"</td></tr>";
+  });
+  FITTINGS.forEach(m=>{
+    const have = S.fittings.includes(m.id);
+    h += "<tr><td class=\"nm\">"+m.name+"</td><td>"+m.note+"</td><td class=\"n\">"+money(m.price)+
+      "</td><td class=\"n\">"+(have?"fitted":"")+"</td><td>"+
+      btn("fitting",m.id,"Fit", have || S.cash<m.price || S.fittings.length>=t.fittings)+"</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  if(S.mounts.length>=t.mounts && t.mounts>0) h += '<p class="note">Every mount is used.</p>';
+  return h;
+}
+function row(a,b){ return "<tr><td class=\"nm\">"+a+"</td><td>"+b+"</td></tr>"; }
+
+function paneCrew(){
+  let h = '<h2 class="sec">Aboard · '+S.crew.length+" of "+truck().seats+" seats</h2>";
+  h += '<div class="scroll"><table><tbody>'+
+    row("<b>Driving</b>", "Getting away. A high Driving is the difference between losing a raider at the bend and having to fight him. It also makes you harder to hit.") +
+    row("<b>Fighting</b>", "Hitting what you shoot at.") +
+    row("<b>Dealing</b>", "Narrows the gap between what you pay and what a thing is worth. Dealing 1 costs you 12% on everything you buy; Dealing 10 costs you 3%.") +
+    row("<b>Mending</b>", "Makes repairs cheaper, and with a toolkit fitted it mends the frame while you drive.") +
+    "</tbody></table></div>";
+  h += '<p class="note"><b>Driving, Dealing and Mending take the best person in the cab and nobody else counts</b> '+
+    "— a second good driver is a wage with no return. "+
+    "<em>Fighting is different: the best aboard, plus half of everyone else's</em>, because in a fight everybody shoots. "+
+    "That is the only reason a truck with four seats is worth buying.</p>"+
+    '<p class="note">Wages are the sum of a person\'s four skills times three, charged for every day you are on the road. '+
+    "A seat is not a crate — they come out of different pockets — but a truck with four seats holds fewer crates than one with two.</p>";
+  h += '<div class="scroll"><table><tbody>'+
+    row("Driving", driving()) + row("Fighting", fighting()+
+      (S.crew.length>1 ? " <small>(best "+bestSkill("fig")+", and the rest)</small>" : "")) +
+    row("Dealing", dealing()) + row("Mending", mending()) +
+    row("Wages", money(wages())+" a day") + "</tbody></table></div>";
+  h += '<div class="cards" style="margin-top:.9rem">';
+  if(!S.crew.length) h += '<p class="note">Nobody but you.</p>';
+  S.crew.forEach(id=>{ h += crewCard(CREWBY[id], true); });
+  h += "</div>";
+  const a = availableHere();
+  if(a.length){
+    h += '<h2 class="sec">Asking after a seat · '+PLACE[S.at].name+"</h2>";
+    h += '<div class="cards">'; a.forEach(c=>{ h += crewCard(c, false); }); h += "</div>";
+  } else {
+    h += '<h2 class="sec">Asking after a seat</h2><p class="note">Nobody here. '+
+      (S.fittings.includes(2)
+        ? "Maps and radio: "+radioHint()
+        : "People are found by driving to where they are. Nobody advertises.")+"</p>";
+  }
+  const waiting = CREW.filter(c=>c.at && !hasCrew(c.id) && c.when!=="earned" && c.at!==S.at);
+  if(S.fittings.includes(2) && waiting.length)
+    h += '<p class="note"><em>On the radio:</em> '+radioHint()+"</p>";
+  return h;
+}
+function radioHint(){
+  const where = {};
+  CREW.forEach(c=>{
+    if(!c.at || hasCrew(c.id) || c.when==="earned") return;
+    if(!valleyOpen(PLACE[c.at].valley)) return;
+    where[c.at] = (where[c.at]||0)+1;
+  });
+  const ks = Object.keys(where);
+  if(!ks.length) return "nobody on this side of the country is looking.";
+  return ks.map(k=>PLACE[k].name+(where[k]>1?" (two)":"")).join(", ")+" — somebody there wants a seat. It does not say who.";
+}
+function crewCard(c, mine){
+  const st = strainOf(c.id);
+  let h = '<div class="card" style="--c:var('+c.c+')"><h3>'+c.name+"</h3>";
+  h += '<div class="role">'+c.role+(mine?' · <span class="pill '+st+'">'+st+"</span>":"")+"</div>";
+  h += '<div class="skills">'+
+    sk("Dri", mine?skillOf(c,"dri"):c.dri) + sk("Fig", mine?skillOf(c,"fig"):c.fig) +
+    sk("Dea", mine?skillOf(c,"dea"):c.dea) + sk("Men", mine?skillOf(c,"men"):c.men) +
+    (c.nowage ? '<i>no wage</i>' : '<i>'+money((c.dri+c.fig+c.dea+c.men)*3)+"/day</i>") + "</div>";
+  h += "<p>"+c.trait+"</p>";
+  if(mine && st!=="steady")
+    h += '<p style="color:var(--sand)">'+(st==="hard"
+      ? "Harder than he was. Better in a fight, worse at a price, and he has started saying no to things."
+      : "Gone. He will haul anything you put in front of him and he does not go to the priest any more.")+
+      (priestAboard()?" A priest aboard walks it back a little every day you drive.":" Only a priest walks that back.")+"</p>";
+  h += '<div class="btnrow">';
+  h += mine ? btn("fire",c.id,"Put him down here")
+            : btn("hire",c.id,"Offer a seat", seatsFree()<=0);
+  h += "</div></div>";
+  return h;
+}
+function sk(n,v){ return "<span><i>"+n+"</i> <b>"+v+"</b></span>"; }
+
+function paneDrive(){
+  const here = PLACE[S.at];
+  let h = '<p class="note">A day on the road burns one of fuel and one day of wages, and rolls once '+
+    "for what is out there. You have <b>"+S.fuel+"</b> days of fuel and pay <b>"+money(wages())+
+    "</b> a day.</p>";
+  h += '<div class="scroll"><table><thead><tr><th>To</th><th class="n">Days</th>'+
+       '<th class="n">This trip</th><th>The road</th><th></th></tr></thead><tbody>';
+  roadsFrom(S.at).forEach(r=>{
+    const p = PLACE[r.to];
+    const open = valleyOpen(p.valley);
+    const fee = r.cp ? CHECKPOINTS[r.cp].fee : 0;
+    const cost = wages()*r.days + fee;
+    let note = r.cp ? CHECKPOINTS[r.cp].name+" · "+money(fee)+" to pass" : "open road";
+    if(!open) note = r.cp==="rell" ? "Licensed road. The Tolm mill sponsors people." : "Not open yet.";
+    h += "<tr><td class=\"nm\">"+p.name+" <small>· "+VALLEYS[p.valley]+"</small></td>"+
+      '<td class="n">'+r.days+'</td><td class="n">'+money(cost)+"</td><td>"+note+"</td>"+
+      '<td><div class="btnrow">'+
+      btn("go",r.to+":"+r.days+":"+(r.cp||""),"Drive", S.fuel<r.days)+
+      btn("gon",r.to+":"+r.days+":"+(r.cp||""),"By night", S.fuel<r.days || hasCrew("sull"))+
+      "</div></td></tr>";
+  });
+  h += "</tbody></table></div>";
+  h += '<p class="note"><b>This trip</b> is wages plus any fee at a checkpoint — what the drive costs '+
+    "before you have sold anything. <b>By night</b> means more raiders and fewer patrols, and you "+
+    "shoot worse without floodlights fitted.</p>";
+  if(hasCrew("sull")) h += '<p class="note">Sull will not drive at night, and he will not sit in the '+
+    "back and watch you do it either.</p>";
+  return h;
+}
+
+let MAPSEL = null;
+function mapValley(){
+  if(S.mapValley === undefined || S.mapValley === null) S.mapValley = PLACE[S.at].valley;
+  if(!valleyOpen(S.mapValley)) S.mapValley = PLACE[S.at].valley;
+  return S.mapValley;
+}
+function adjacentTo(id){ return roadsFrom(S.at).find(r=>r.to===id) || null; }
+
+function paneMap(){
+  const v = mapValley();
+  const here = PLACE[S.at];
+  if(!MAPSEL || PLACE[MAPSEL].valley !== v) MAPSEL = (here.valley===v) ? S.at : null;
+
+  let h = '<div class="vpicker">';
+  [0,1,2].forEach(i=>{
+    if(!valleyOpen(i)) return;
+    h += '<button class="b vp'+(i===v?" on":"")+'" data-a="valley" data-v="'+i+'">'+VALLEYS[i]+
+         (i===here.valley?" &middot; you are here":"")+"</button>";
+  });
+  h += "</div>";
+
+  const towns = PLACES.filter(p=>p.valley===v);
+  const ids = towns.map(p=>p.id);
+  let x0=1e4, y0=1e4, x1=-1e4, y1=-1e4;
+  const box = (x, y, w, hh)=>{ x0=Math.min(x0,x-w); x1=Math.max(x1,x+w);
+                               y0=Math.min(y0,y-hh[0]); y1=Math.max(y1,y+hh[1]); };
+  towns.forEach(p=>{ const n = Math.max(60, p.name.length*7.0);
+                     box(MAPPOS[p.id][0], MAPPOS[p.id][1], n, [28, 62]); });
+  ROADS.forEach(r=>{
+    const inA = ids.includes(r[0]), inB = ids.includes(r[1]);
+    if(inA === inB) return;
+    const e = MAPEXIT[(inA?r[0]:r[1])+">"+(inA?r[1]:r[0])];
+    if(e) box(e[0], e[1], Math.max(34, e[2].length*5.3 + 10), [17, 17]);
+  });
+  const PAD = 10;
+  const VX = Math.round(x0-PAD), VY = Math.round(y0-PAD);
+  const VW = Math.round(x1-x0+PAD*2), VH = Math.round(y1-y0+PAD*2);
+  let svg = '<svg viewBox="'+VX+" "+VY+" "+VW+" "+VH+'" role="img" aria-label="Map of '+VALLEYS[v]+
+    ', its settlements and the roads between them, with the number of days each road takes.">';
+
+  /* roads first, so the towns sit on top of them */
+  const drawn = [];
+  ROADS.forEach(r=>{
+    const inA = ids.includes(r[0]), inB = ids.includes(r[1]);
+    if(!inA && !inB) return;
+    if(inA && inB){
+      const [x1,y1] = MAPPOS[r[0]], [x2,y2] = MAPPOS[r[1]];
+      const live = (r[0]===S.at || r[1]===S.at) && here.valley===v;
+      svg += '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+
+        (live?"#c9a86a":"#2b2b38")+'" stroke-width="'+(live?3.5:2.5)+'" stroke-linecap="round"/>';
+      drawn.push([(x1+x2)/2,(y1+y2)/2,r[2],live]);
+    } else {
+      /* a road out of the valley: a stub to a labelled checkpoint */
+      const inside = inA ? r[0] : r[1], out = inA ? r[1] : r[0];
+      const e = MAPEXIT[inside+">"+out];
+      if(!e) return;
+      const [x1,y1] = MAPPOS[inside];
+      const live = inside===S.at && here.valley===v;
+      svg += '<line x1="'+x1+'" y1="'+y1+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="'+
+        (live?"#c9a86a":"#2b2b38")+'" stroke-width="'+(live?3.5:2.5)+
+        '" stroke-dasharray="7 5" stroke-linecap="round"/>';
+      const cw = Math.max(64, e[2].length*10.6 + 18);
+      svg += '<rect x="'+(e[0]-cw/2)+'" y="'+(e[1]-15)+'" width="'+cw+'" height="30" rx="6" '+
+        'fill="#15151c" stroke="'+(live?"#c9a86a":"#3a3a48")+'" stroke-width="1"/>';
+      svg += '<text x="'+e[0]+'" y="'+(e[1]+6)+'" text-anchor="middle" font-size="15" '+
+        'font-family="Barlow Condensed, sans-serif" letter-spacing="1.4" fill="'+
+        (live?"#c9a86a":"#8a8497")+'">'+e[2].toUpperCase()+"</text>";
+      drawn.push([(x1+e[0])/2,(y1+e[1])/2,r[2],live]);
+    }
+  });
+  /* the day count, in a chip on the middle of each road */
+  drawn.forEach(([x,y,d,live])=>{
+    svg += '<rect x="'+(x-14)+'" y="'+(y-13)+'" width="28" height="26" rx="13" fill="#0b0b10" '+
+      'stroke="'+(live?"#c9a86a":"#2b2b38")+'" stroke-width="1.2"/>';
+    svg += '<text x="'+x+'" y="'+(y+6)+'" text-anchor="middle" font-size="16" '+
+      'font-family="Barlow Condensed, sans-serif" fill="'+(live?"#e9e6df":"#8a8497")+'">'+d+"</text>";
+  });
+
+  /* the towns */
+  towns.forEach(p=>{
+    const [x,y] = MAPPOS[p.id];
+    const you = (p.id===S.at);
+    const sel = (p.id===MAPSEL);
+    const shut = !marketOpen(p.id);
+    const ring = you ? "#f0a63c" : p.farm ? "#d47f7f" : p.bureau ? "#c9a86a" : "#45455a";
+    svg += '<g class="mapnode'+(shut?" dim":"")+'" data-map="'+p.id+'" tabindex="0" role="button" '+
+      'aria-label="'+p.name+'">';
+    svg += '<circle cx="'+x+'" cy="'+y+'" r="22" fill="transparent"/>';   /* touch target */
+    if(sel) svg += '<circle cx="'+x+'" cy="'+y+'" r="20" fill="none" stroke="#f0a63c" '+
+      'stroke-width="1.2" stroke-dasharray="3 3" opacity="0.85"/>';
+    svg += '<circle cx="'+x+'" cy="'+y+'" r="'+(you?15:12)+'" fill="#15151c" stroke="'+ring+
+      '" stroke-width="'+(you?3:2)+'"/>';
+    if(you) svg += '<circle cx="'+x+'" cy="'+y+'" r="5" fill="#f0a63c"/>';
+    else if(p.farm) svg += '<rect x="'+(x-4)+'" y="'+(y-4)+'" width="8" height="8" fill="#d47f7f"/>';
+    else if(p.bureau) svg += '<rect x="'+(x-4)+'" y="'+(y-4)+'" width="8" height="8" fill="#c9a86a"/>';
+    svg += '<text x="'+x+'" y="'+(y+36)+'" text-anchor="middle" font-size="20" font-weight="600" '+
+      'font-family="Barlow Condensed, sans-serif" letter-spacing="1.1" fill="'+
+      (you?"#f0a63c":shut?"#5f5b52":"#e9e6df")+'">'+p.name.toUpperCase()+"</text>";
+    const tag = shut ? "shut to you"
+              : S.event[p.id]!=="quiet" ? EVENTS[S.event[p.id]].name.toLowerCase()
+              : p.farm ? p.farm+" farm" : p.bureau ? "bureau post" : "";
+    if(tag) svg += '<text x="'+x+'" y="'+(y+54)+'" text-anchor="middle" font-size="14" '+
+      'font-family="Barlow Condensed, sans-serif" letter-spacing="0.8" fill="'+
+      (shut?"#d47f7f":S.event[p.id]!=="quiet"?"#f0a63c":"#8a8497")+'">'+tag+"</text>";
+    svg += "</g>";
+  });
+  svg += "</svg>";
+  h += '<figure class="map">'+svg+
+    '<figcaption>Numbers on the roads are days. Dashed roads leave the valley through a '+
+    "checkpoint. Tap a town.</figcaption></figure>";
+
+  /* what you tapped */
+  h += mapPanel();
+  return h;
+}
+
+function mapPanel(){
+  if(!MAPSEL) return '<p class="note">You are not in this valley. Tap a town to read it.</p>';
+  const p = PLACE[MAPSEL];
+  const r = adjacentTo(p.id);
+  let h = '<div class="hereline" style="margin-top:1rem"><b>'+p.name+"</b> <span>"+
+    VALLEYS[p.valley]+(p.id===S.at?" · you are here":"")+"</span></div>";
+  h += '<p class="note">'+p.line+"</p>";
+  h += '<div class="scroll"><table><tbody>'+
+    row("Sells cheap", p.makes.length ? p.makes.map(g=>GOOD[g].name.toLowerCase()).join(", ") : "nothing much") +
+    row("Short of", p.wants.length ? p.wants.map(g=>GOOD[g].name.toLowerCase()).join(", ") : "nothing in particular") +
+    row("Blood", p.legal.blood ? "traded openly" : '<span style="color:var(--rose)">restricted</span>') +
+    row("Ammunition", p.legal.ammo ? "traded openly" : '<span style="color:var(--rose)">restricted</span>') +
+    (S.event[p.id]!=="quiet" ? row("Just now", '<span style="color:var(--amber)">'+EVENTS[S.event[p.id]].name+"</span>") : "") +
+    (marketOpen(p.id) ? "" : row("Closed", '<span style="color:var(--rose)">'+shutReason(p.id)+"</span>")) +
+    "</tbody></table></div>";
+  if(p.id===S.at) return h;
+  if(r){
+    const fee = r.cp ? CHECKPOINTS[r.cp].fee : 0;
+    h += '<p class="note"><b>'+r.days+(r.days>1?" days":" day")+"</b> from here"+
+      (r.cp ? ", through "+CHECKPOINTS[r.cp].name+" at "+money(fee) : ", open road")+
+      ". This trip costs <b>"+money(wages()*r.days+fee)+"</b> in wages and fees.</p>";
+    h += '<div class="btnrow">'+
+      btn("go",p.id+":"+r.days+":"+(r.cp||""),"Drive to "+p.name, S.fuel<r.days)+
+      btn("gon",p.id+":"+r.days+":"+(r.cp||""),"By night", S.fuel<r.days||hasCrew("sull"))+"</div>";
+  } else {
+    h += '<p class="note">No road from '+PLACE[S.at].name+" straight there.</p>";
+  }
+  return h;
+}
+
+function paneStatus(){
+  let h = '<h2 class="sec">The truck and the crew</h2><div class="scroll"><table><tbody>'+
+    row("Driving", driving()) + row("Fighting", fighting()) +
+    row("Dealing", dealing()) + row("Mending", mending()) +
+    row("Wages", money(wages())+" a day") +
+    row("Truck", truck().name+" · "+cargoUsed()+" of "+cargoCap()+" crates · "+
+        S.crew.length+" of "+truck().seats+" seats") +
+    "</tbody></table></div>";
+  h += '<h2 class="sec">What has happened</h2>';
+  if(!S.log.length) return h+'<p class="note">Nothing yet.</p>';
+  h += '<div class="scroll"><table><tbody>';
+  S.log.forEach(l=>{ h += "<tr><td class=\"n\" style=\"width:3.5rem;color:var(--ink3)\">"+l.d+
+    "</td><td>"+l.t+"</td></tr>"; });
+  h += "</tbody></table></div>";
+  h += '<h2 class="sec">With the Bureau</h2><div class="scroll"><table><tbody>'+
+    row("Warrant", band(S.warrant)+" ("+(S.warrant>0?"+":"")+S.warrant+")") +
+    row("Blood runs", S.flags.bloodRuns) +
+    row("Teeth sold", S.flags.fangsSold) +
+    row("Farm deliveries", S.flags.farmRuns) +
+    row("Berth", money(BERTH)+" at Halloway"+(S.flags.berths?" · "+S.flags.berths+" bought and unnamed":"")) +
+    "</tbody></table></div>";
+  h += '<p class="note">Bonded or better and the farms will not open the gate. Marked or worse and the lawful '+
+    "towns will not trade — but the berth office on the Halloway quay does not ask what you are.</p>";
+  return h;
+}
+function paneHelp(){
+  let h = '<h2 class="sec">What you are trying to do</h2>';
+  h += '<p class="note">Get a berth on the boat at Halloway. It costs <b>'+money(BERTH)+
+    "</b> and they are sold one at a time. Everything else in this game is how you raise that.</p>";
+
+  h += '<h2 class="sec">The loop</h2>';
+  h += '<p class="note">Buy a thing where it is <b>made</b>, because that is where it is cheap. '+
+    "Drive to a place that is <b>short of it</b>, because that is where it fetches more. Sell it. "+
+    "Every day on the road burns one day of fuel and one day of wages, and rolls to see whether "+
+    "anything comes out of the dark at you.</p>";
+  h += '<p class="note"><em>Your first run, if you want one:</em> Fenner makes flour, so flour is cheap here. '+
+    "Fill the truck. Drive to Tolm and take the mill's contract off the town screen. Then drive to "+
+    "Bright's Ford, which makes nothing and is short of everything, and the contract delivers itself. "+
+    "That gets you the licence for the Vann road, which is where the money starts.</p>";
+
+  h += '<h2 class="sec">Reading a market</h2>';
+  h += '<div class="scroll"><table><tbody>'+
+    row("Cheap", "The town makes it and sells it below what it costs in an average town. This is where you buy.") +
+    row("In demand", "The town is short of it and pays over the odds. This is where you <i>sell</i> — never where you buy.") +
+    row("Made here", "The town produces it. About a third off.") +
+    row("Short of it here", "The town has none and wants some. About half again on top.") +
+    row("An event", "Fever, a siege, a hard frost, a crop failure, a strike, a hunt. Each one moves particular goods, sometimes double. They change every few days.") +
+    row("Buy vs sell", "You buy at the high number and sell at the low one. The gap is between 3% and 12%, depending on the best <b>Dealing</b> in your cab. Below <b>Watched</b> on the Warrant, everything you buy costs another 11% — nobody gives a discount to a man he may have to explain later.") +
+    "</tbody></table></div>";
+
+  h += '<h2 class="sec">The numbers along the top</h2><div class="scroll"><table><tbody>';
+  Object.keys(STAT_MEANS).forEach(k=>{ h += row("<b>"+k+"</b>", STAT_MEANS[k]); });
+  h += "</tbody></table></div>";
+
+  h += '<h2 class="sec">Warrant — how the Bureau sees you</h2>';
+  h += '<p class="note">One number from &minus;70 to +75. It is the only reputation in the game and it '+
+    "does four jobs.</p>";
+  h += '<div class="scroll"><table><tbody>'+
+    row("It sets who stops you", "Below Marked a patrol stops inspecting and starts hunting: twice the strength. Below Wanted, three times.") +
+    row("It sets the fine", "Scaled to what you are worth, so getting rich never makes the law cheap.") +
+    row("It sets your buying", "Below Watched, everything costs about 11% more.") +
+    row("It opens and shuts doors", "See below.") +
+    "</tbody></table></div>";
+  h += '<div class="scroll"><table><thead><tr><th>Where you stand</th><th>Lawful towns</th><th>The farms in the Kell</th></tr></thead><tbody>'+
+    "<tr><td class=\"nm\">Bonded +30 / Commended +60</td><td>Open, and friendly</td><td class=\"nm\" style=\"color:var(--rose)\">Shut. A bonded hauler is a Bureau informant and they know it.</td></tr>"+
+    "<tr><td class=\"nm\">Clean 0 / Watched &minus;5</td><td>Open</td><td>Open, watchfully</td></tr>"+
+    "<tr><td class=\"nm\">Marked &minus;20 / Wanted &minus;50</td><td class=\"nm\" style=\"color:var(--rose)\">Shut</td><td>Open, and the best prices in the game</td></tr>"+
+    "</tbody></table></div>";
+  h += '<p class="note">The middle band cannot be held for long by design: every load of blood drags you '+
+    "down, every tooth you sell pushes you up. <b>The berth office at Halloway never shuts</b> — the man "+
+    "on the quay does not ask what you are, he asks for the money.</p>";
+  h += '<p class="note"><em>What moves it:</em> selling teeth +1 · killing a raider +1 · a clean inspection +1 · '+
+    "buying or selling blood &minus;2 · a delivery to a farm &minus;2 · running from a patrol &minus;4 · "+
+    "caught with blood &minus;5 · shooting at a patrol &minus;6 · killing one &minus;10. Coming back up is slow "+
+    "on purpose.</p>";
+
+  h += '<h2 class="sec">Restricted cargo</h2>';
+  h += '<p class="note">Blood is restricted in nine of the thirteen settlements and ammunition in four. '+
+    "<b>Restricted does not mean there is no buyer.</b> It means there is a buyer and a risk, so the "+
+    "price carries the risk — about 20% over the odds where it is restricted, about 10% under where it "+
+    "is open. That is where the whole blood margin comes from.</p>";
+  h += '<p class="note">If a patrol looks in the back and finds restricted cargo, it is confiscated and you '+
+    "are fined. Carrying it makes a patrol more likely to stop you in the first place.</p>";
+
+  h += '<h2 class="sec">Teeth</h2>';
+  h += '<p class="note">Vampire canines. You take them off a vampire you have killed. Any Bureau post '+
+    "(Sennick, Marrow, Halloway) buys them at a published rate: <b>1,200</b> for the first ten days after "+
+    "they are drawn, <b>700</b> after that. Selling them is entirely legal and puts your Warrant up. "+
+    "It also hardens everybody in the cab.</p>";
+
+  h += '<h2 class="sec">Your crew</h2>';
+  h += '<p class="note">People are found by driving to where they are — nobody advertises, and some of them '+
+    "will not come out until you have done something that makes them willing to get in a truck with you. "+
+    "Everyone hardens: <b>steady</b>, then <b>hard</b>, then <b>gone</b>. Hard men fight better and deal "+
+    "worse and start refusing things. Only a priest walks that back, and he takes a seat to do it.</p>";
+
+  h += '<h2 class="sec">The road</h2>';
+  h += '<p class="note">A leg takes one to three days. Each day: one fuel, one day of wages, one roll. '+
+    "You may meet a <b>patrol</b> (they inspect), a <b>raider</b> (they attack), or another <b>hauler</b> "+
+    "(they trade and gossip). Driving at night means more raiders and fewer patrols, and you shoot worse "+
+    "unless floodlights are fitted.</p>";
+  h += '<p class="note">In a fight you can fire, run, or give them what is in the back. Running is your '+
+    "<b>Driving</b> against theirs. Firing is your <b>Fighting</b> and the power of your mounts against "+
+    "their plating and frame.</p>";
+
+  h += '<h2 class="sec">The three valleys</h2><div class="scroll"><table><tbody>'+
+    row("<b>Colter</b>", "Where you start. Thin margins, human raiders, nobody official. Four towns.") +
+    row("<b>Vann</b>", "Opens when the Tolm mill sponsors your licence. Industry, Bureau posts, real money. The crossing at Rell costs 500 each way.") +
+    row("<b>The Kell</b>", "Opens after the Ostrow weighing station. The port, the farms, and the vampires. The crossing costs 1,500.") +
+    "</tbody></table></div>";
+  h += '<p class="note"><b>You can always go back.</b> Nothing is one-way. But below Marked the checkpoints '+
+    "turn from an inconvenience into the most dangerous thing on the map, and you may find you cannot go "+
+    "home without anyone having built a wall.</p>";
+
+  h += '<h2 class="sec">Getting about</h2>';
+  h += '<p class="note">Every screen is reached from the town you are standing in, and the amber '+
+    "button at the top always takes you back to it. <b>Buy cargo</b> and <b>Sell cargo</b> are "+
+    "separate on purpose; <b>The yard</b> holds fuel, repairs, trucks and fittings; <b>The map</b> "+
+    "draws one valley at a time, with the roads and how many days each one takes; <b>Where you stand</b> is your skills, your standing with the Bureau, and everything "+
+    "that has happened.</p>";
+  h += '<h2 class="sec">The notebook</h2>';
+  h += '<p class="note">Every settlement on roads you can drive.</p>';
+  h += '<div class="scroll"><table><thead><tr><th>Place</th><th>Makes it (cheap)</th><th>Short of it (in demand)</th><th>Blood</th><th>Ammunition</th></tr></thead><tbody>';
+  PLACES.forEach(pp=>{
+    if(!valleyOpen(pp.valley)) return;
+    h += "<tr><td class=\"nm\">"+pp.name+" <small>· "+VALLEYS[pp.valley]+
+      (pp.bureau?" · post":"")+(pp.farm?" · "+pp.farm+" farm":"")+"</small></td>"+
+      "<td>"+(pp.makes.map(g=>GOOD[g].name.toLowerCase()).join(", ")||"—")+"</td>"+
+      "<td>"+(pp.wants.map(g=>GOOD[g].name.toLowerCase()).join(", ")||"—")+"</td>"+
+      "<td>"+(pp.legal.blood?"open":'<span style="color:var(--rose)">restricted</span>')+"</td>"+
+      "<td>"+(pp.legal.ammo?"open":'<span style="color:var(--rose)">restricted</span>')+"</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  h += '<p class="note">Prices move every few days with the local events, so this tells you the shape of a '+
+    "market, not today's number. The shape is what a route is made of.</p>";
+  return h;
+}
+
+function btn(a,v,t,dis){
+  return '<button class="b'+(a==="go"||a==="hire"?" go":"")+'" data-a="'+a+'" data-v="'+v+'"'+
+         (dis?" disabled":"")+">"+t+"</button>";
+}
+
+/* ===================== wiring ===================== */
+function wire(){
+  const pane = document.getElementById("pane");
+  pane.querySelectorAll("button.b").forEach(b=>{
+    b.onclick = ()=>act(b.dataset.a, b.dataset.v);
+  });
+  pane.querySelectorAll("[data-map]").forEach(g=>{
+    const pick = ()=>{ MAPSEL = g.dataset.map; render(); };
+    g.onclick = pick;
+    g.onkeydown = e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } };
+  });
+}
+function act(a,v){
+  const t = truck();
+  if(a==="tutskip"){ S.tut.done = true; save(); render(); return; }
+  if(a==="buy1") buy(v,1);
+  else if(a==="buyx") buy(v, cargoCap()-cargoUsed());
+  else if(a==="sellx") sell(v, S.cargo[v]);
+  else if(a==="sell1") sell(v, 1);
+  else if(a==="go2"){ if(v==="map"){ S.mapValley = PLACE[S.at].valley; MAPSEL = S.at; }
+                      TAB = v; render(); }
+  else if(a==="valley"){ S.mapValley = +v; MAPSEL = null; render(); }
+  else if(a==="fuel") refuel();
+  else if(a==="fix") repair();
+  else if(a==="fangs") sellFangs();
+  else if(a==="berth") buyBerth();
+  else if(a==="tolm"){ const c = tolmContract(); if(c) c.go(); }
+  else if(a==="hire") hire(v);
+  else if(a==="fire") fire(v);
+  else if(a==="truck"){
+    const tk = TRUCKS[+v], net = tk.price - t.sell;
+    if(S.cash < net || tk.cargo < cargoUsed()) return;
+    S.cash -= net; S.truck = tk.id;
+    S.mounts = S.mounts.slice(0,tk.mounts); S.plating = S.plating.slice(0,tk.plating);
+    S.fittings = S.fittings.slice(0,tk.fittings);
+    while(S.crew.length > tk.seats){ const g = S.crew.pop(); say(CREWBY[g].name+" had no seat and stayed at "+PLACE[S.at].name+"."); }
+    S.hull = tk.hull; S.fuel = Math.min(S.fuel, tankCap());
+    say("Traded up to the "+tk.name.toLowerCase()+".");
+    save(); render();
+  }
+  else if(a==="mount"){ const m = MOUNTS[+v]; if(S.cash<m.price||S.mounts.length>=t.mounts) return;
+    S.cash-=m.price; S.mounts.push(m.id); save(); render(); }
+  else if(a==="plate"){ const m = PLATINGS[+v]; if(S.cash<m.price||S.plating.length>=t.plating) return;
+    S.cash-=m.price; S.plating.push(m.id); save(); render(); }
+  else if(a==="fitting"){ const m = FITTINGS[+v]; if(S.cash<m.price||S.fittings.includes(m.id)||S.fittings.length>=t.fittings) return;
+    S.cash-=m.price; S.fittings.push(m.id); if(m.id===4) {} save(); render(); }
+  else if(a==="go" || a==="gon"){
+    const [to,days,cp] = v.split(":");
+    beginTrip(to, +days, cp||null, a==="gon");
+    if(veil.hidden) render();
+  }
+}
+document.getElementById("readintro").onclick = e=>{ e.preventDefault(); modal(INTRO); };
+document.getElementById("newgame").onclick = e=>{
+  e.preventDefault();
+  modal({eyebrow:"Start again", title:"Throw this run away?", c:"--rose",
+    body:["Day "+S.day+", "+money(S.cash)+", "+band(S.warrant)+"."],
+    opts:[{t:"Start again from Fenner", go:()=>{ close(); newGame(); render(); }},
+          {t:"No", go:()=>close()}]});
+};
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !veil.hidden && !FIGHT) close(); });
+
+/* ===================== boot ===================== */
+if(!load()) newGame();
+if(!S.market || !S.market[S.at]) reprice();
+render();
+if(!S.flags.seenIntro) modal(INTRO);
+</script>
+</body>
+</html>
