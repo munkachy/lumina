@@ -53,7 +53,13 @@ is the licensed way to display these copyrighted translations.
   section headings, a Contents menu, and chapter and canon numbers; highlights, notes,
   favorites and search all work. **¶** gives a random paragraph, **Chapter** a random
   section, **Library** the list.
-- **🌳 The Psalm Tree** — a way into the Psalter by choice instead of chance.
+- **Ⓢ Scriptorium** — on the menu where the Tree used to be. Talk to Scriptorium, the AI
+  app on your Mac (Faith, Code and Mail), from anywhere. Locked with your password; every
+  message is encrypted on this device before it travels through a private GitHub repo, and
+  only your Mac can read it. Catechism and Douay citations in answers open right here in
+  Lumina. The code is in [`scriptorium.js`](scriptorium.js); set it up from Scriptorium's
+  Settings on the Mac.
+- **🌳 The Psalm Tree** *(retired from the menu; still reachable from history)* — a way into the Psalter by choice instead of chance.
   Twelve branches open like a flow chart, each closed until you open it:
   *Earth, Sky & Water · Things Made by Hands · Creatures · Places of the Soul ·
   The Body at Prayer · Names of God · States of the Soul · Gestures & Postures ·
