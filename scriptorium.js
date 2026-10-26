@@ -156,7 +156,8 @@
         '<p class="scr-hint scr-empty">' + ({ faith: "Ask about Scripture or the faith.", code: "Ask about your project.", mail: "Ask about your email." })[tab] + "</p>") +
       (current && current.tab === tab ? '<div id="scrLive">' + renderReply(current.state, true) + "</div>" : "") + "</div>" +
       '<div class="scr-compose"><textarea id="scrText" rows="2" placeholder="Message Scriptorium…"></textarea>' +
-      '<div class="scr-sendrow">' + (tab === "faith" ? '<button class="btn small' + (web ? " on" : "") + '" id="scrWeb">🌐 Web</button>' : "<span></span>") +
+      '<div class="scr-sendrow"><span>' + (tab === "faith" ? '<button class="btn small' + (web ? " on" : "") + '" id="scrWeb">🌐 Web</button>' : "") +
+      ' <button class="btn small" id="scrMic" title="Speak — Whisper on your Mac">🎙 Speak</button></span>' +
       (current ? '<button class="btn" id="scrStop">■ Stop</button>' : '<button class="btn primary" id="scrSend">Send</button>') + "</div></div></div>";
     wire();
     const th = view.querySelector("#scrThread"); th.scrollTop = th.scrollHeight;
@@ -207,6 +208,8 @@
       request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
       web = false;
     };
+    const mic = view.querySelector("#scrMic");
+    if (mic) mic.onclick = () => voice ? stopVoice() : startVoice();
     const stop = view.querySelector("#scrStop");
     if (stop) stop.onclick = () => { stop.disabled = true; postSealed("stop", { request: current.id }); };
     view.querySelector("#scrText").onkeydown = (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) view.querySelector("#scrSend") && view.querySelector("#scrSend").click(); };
@@ -228,6 +231,67 @@
     return ((data.history[tab] || [])[i] || {}).reply;
   }
   const val = (id) => (view.querySelector("#" + id) || {}).value?.trim() || "";
+
+  /* ---------- speaking: the recording goes to the Mac in encrypted pieces, Whisper
+     transcribes it there, and the text comes back as it forms ---------- */
+  let voice = null;
+  const blobToB64 = (blob) => blob.arrayBuffer().then((b) => b64(new Uint8Array(b)));
+
+  async function startVoice() {
+    const box = view.querySelector("#scrText"), mic = view.querySelector("#scrMic");
+    let stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+    catch (e) { return alert("Lumina couldn't use the microphone. Allow it in the browser's settings and try again."); }
+    const mime = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm"].find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || "";
+    const rec = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
+    voice = { sid: Math.random().toString(36).slice(2, 10), seq: 0, rec, stream, before: box.value.trim(), since: new Date(Date.now() - 60000).toISOString(), done: false };
+    const v = voice;
+    mic.textContent = "■ Stop"; mic.classList.add("on");
+    box.classList.add("scr-listening"); box.placeholder = "Listening… the words will appear here in a few seconds";
+    rec.ondataavailable = async (ev) => {
+      if (!ev.data.size) return;
+      const seq = v.seq++, final = rec.state === "inactive";
+      try { await postSealed("audio", { session: v.sid, seq, data: await blobToB64(ev.data), mime: rec.mimeType, final }); }
+      catch (e) { box.placeholder = "Couldn't send the audio: " + e.message; }
+    };
+    rec.start(3000);
+    touch();
+    pollTranscript(v);
+  }
+
+  function stopVoice() {
+    if (!voice) return;
+    const mic = view.querySelector("#scrMic");
+    if (mic) { mic.textContent = "… finishing"; mic.disabled = true; }
+    voice.rec.stop();
+    voice.stream.getTracks().forEach((t) => t.stop());
+  }
+
+  async function pollTranscript(v) {
+    const started = Date.now();
+    while (S && !v.done && Date.now() - started < 10 * 60000) {
+      await sleep(2000);
+      let comments;
+      try { comments = await gh("GET", "/repos/" + S.repo + "/issues/" + S.issue + "/comments?per_page=100&since=" + v.since); }
+      catch (e) { continue; }
+      for (const c of comments) {
+        if (!c.body.startsWith(MARK("transcript"))) continue;
+        let t;
+        try { t = JSON.parse(await decryptText(S.keys, c.body.slice(MARK("transcript").length).trim())); } catch (e) { continue; }
+        if (t.session !== v.sid) continue;
+        const box = view && view.querySelector("#scrText");
+        if (box && t.text) box.value = (v.before ? v.before + " " : "") + t.text;
+        if (t.complete) {
+          v.done = true;
+          gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.id).catch(() => {});
+        }
+      }
+    }
+    if (voice === v) voice = null;
+    const box = view && view.querySelector("#scrText"), mic = view && view.querySelector("#scrMic");
+    if (box) { box.classList.remove("scr-listening"); box.placeholder = "Message Scriptorium…"; box.focus(); }  // check it, edit, then Send
+    if (mic) { mic.textContent = "🎙 Speak"; mic.disabled = false; mic.classList.remove("on"); }
+  }
 
   /* ---------- talking to the Mac ---------- */
   async function hello() { request({ kind: "hello" }, true); }
@@ -325,7 +389,9 @@
 .scr-appr{border:1px solid var(--gold);border-radius:10px;padding:.5rem;margin:.4rem 0}
 .scr-appr pre{max-height:40vh;overflow:auto;font-size:.78em;white-space:pre}
 .scr-compose{position:sticky;bottom:0;background:var(--bg);padding:.4rem 0}
-.scr-sendrow{display:flex;justify-content:space-between;margin-top:.4rem}`;
+.scr-sendrow{display:flex;justify-content:space-between;margin-top:.4rem}
+.scr-listening{font-style:italic;color:var(--ink-soft)}
+#scrMic.on{border-color:#b3261e;color:#b3261e}`;
     document.head.appendChild(st);
   }
 

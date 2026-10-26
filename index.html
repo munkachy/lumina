@@ -931,7 +931,9 @@ const LuminaCore = (function () {
 
   const TRANSLATIONS = [
     { id:"drb",  kind:"local", abbr:"DR",    name:"Douay-Rheims", file:null,
-      credit:"Douay-Rheims Bible, Challoner Revision · with Challoner's notes" },
+      credit:"Douay-Rheims Bible, Challoner Revision · in plain modern English (you for thee, has for hath) · with Challoner's notes" },
+    { id:"dro",  kind:"local", abbr:"DR orig", name:"Douay-Rheims (original wording)", file:"data-dro.js",
+      credit:"Douay-Rheims Bible, Challoner Revision · the original wording" },
     { id:"grail", kind:"local", abbr:"Grail", name:"Grail Psalms", file:null, imported:true, only:"psalms",
       credit:"The Grail Psalms © 1963 The Grail (England) · your own copy, kept on this device only · numbered after the Vulgate" },
     { id:"cpdv", kind:"local", abbr:"CPDV",  name:"Catholic Public Domain Version", file:"data-cpdv.js",
@@ -966,6 +968,14 @@ const LuminaCore = (function () {
     }
   } catch(e){}
   if (!TRANSLATIONS.some(t => t.id === state.tx)) state.tx = "drb";
+  /* The Douay became plain English (Oct 2026). Highlights were made on the original wording,
+     so they move with it, to "Douay-Rheims (original wording)", where they still fit exactly. */
+  let movedHighlights = 0;
+  if (!state.plainDouay){
+    state.hls.forEach(h => { if (h.tx === "drb"){ h.tx = "dro"; movedHighlights++; } });
+    state.plainDouay = true;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+  }
   function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
   /* ask the browser to keep Lumina's saved data rather than clear it when space runs low */
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
@@ -1263,6 +1273,11 @@ const LuminaCore = (function () {
     }
   }
   function shorten(t, n){ return t.length > n ? t.slice(0, n - 1) + "…" : t; }
+  if (movedHighlights) setTimeout(() => {
+    showToast("The Douay now reads in plain English. Your " + movedHighlights + " highlight" +
+      (movedHighlights === 1 ? " is" : "s are") + " kept in Douay-Rheims (original wording) in the translation menu.");
+    clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove("show"), 7000);
+  }, 1500);
   function showToast(msg){ toast.textContent = msg; toast.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove("show"), 1700); }
   function esc(t){ const d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
   function loadingView(msg){ view.innerHTML = '<div class="view"><div class="card loading-card">' + (msg || "Fetching the sacred text…") + '</div></div>'; }
@@ -3736,7 +3751,7 @@ const LuminaCore = (function () {
     const go = () => window.Scriptorium.open(view);
     if (window.Scriptorium) return go();
     const s = document.createElement("script");
-    s.src = "scriptorium.js?v=1"; s.onload = go;
+    s.src = "scriptorium.js?v=2"; s.onload = go;
     s.onerror = () => showToast("Couldn't load Scriptorium. Check the connection.");
     document.body.appendChild(s);
   }
