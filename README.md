@@ -5,7 +5,7 @@ A contemplative reader for the complete Catholic Bible — all 73 books,
 
 | Translation | Source | Character |
 |---|---|---|
-| **Douay-Rheims** (Challoner) | built in | The classic — with Challoner's 1,222 chapter summaries and 1,749 notes |
+| **Douay-Rheims** (Challoner) | built in | The classic, in plain modern English (*you* for *thee*, *has* for *hath*, *Do not fear* for *Fear ye not*) — with Challoner's 1,222 chapter summaries and 1,749 notes. The **original wording** is one choice away in the translation menu; [`tools/build-plain.py`](tools/build-plain.py) makes the plain version |
 | **Grail Psalms** (1963) | your own file | The Psalms as chanted in the Divine Office; Psalms only (other books show the Douay). Under copyright, so not included: import your own copy (see below) |
 | **Catholic Public Domain Version** (2009) | built in | Modern English from the same Latin Vulgate |
 | **World English Bible, British Edition** | built in | Very easy modern English, complete with Deuterocanon |
@@ -57,8 +57,9 @@ is the licensed way to display these copyrighted translations.
   app on your Mac (Faith, Code and Mail), from anywhere. Locked with your password; every
   message is encrypted on this device before it travels through a private GitHub repo, and
   only your Mac can read it. Catechism and Douay citations in answers open right here in
-  Lumina. The code is in [`scriptorium.js`](scriptorium.js); set it up from Scriptorium's
-  Settings on the Mac.
+  Lumina. **🎙 Speak** sends your voice (encrypted) to Whisper on the Mac; the words appear a few
+  seconds behind you, and you can correct them before sending. The code is in
+  [`scriptorium.js`](scriptorium.js); set it up from Scriptorium's Settings on the Mac.
 - **🌳 The Psalm Tree** *(retired from the menu; still reachable from history)* — a way into the Psalter by choice instead of chance.
   Twelve branches open like a flow chart, each closed until you open it:
   *Earth, Sky & Water · Things Made by Hands · Creatures · Places of the Soul ·
