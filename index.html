@@ -2431,7 +2431,7 @@ const LuminaCore = (function () {
     const back = modal('<h3>Highlight</h3>' +
       '<div class="hl-colors">' + HLCOLORS.map(c => '<span class="hl-dot ' + c + (c === color ? " sel" : "") + '" data-c="' + c + '"></span>').join("") + '</div>' +
       '<textarea id="ehNote" placeholder="Note">' + esc(h.note || "") + '</textarea>' +
-      '<div class="rowbtns"><button class="btn danger" id="ehDel">Delete</button>' +
+      '<div class="rowbtns"><button class="btn danger" id="ehDel">Delete</button><button class="btn" id="ehCopy">Copy</button>' +
       '<button class="btn" id="ehCancel">Cancel</button><button class="btn primary" id="ehSave">Save</button></div>' +
       voicePanelHtml());
     wireVoicePanel(back, group.map(x => x.t || "").join(" "));
@@ -2440,6 +2440,18 @@ const LuminaCore = (function () {
       back.querySelectorAll(".hl-dot").forEach(x => x.classList.toggle("sel", x === d));
     });
     back.querySelector("#ehCancel").onclick = () => back.remove();
+    /* the highlighted words, with where they come from */
+    back.querySelector("#ehCopy").onclick = () => {
+      const words = group.map(x => (x.t || "").trim()).filter(Boolean).join(" ");
+      const h0 = group[0], hz = group[group.length - 1];
+      let cite = hlCiteOf(h0);
+      if (hz !== h0){                                   /* a highlight across verses: John 1:14–15 */
+        const bi = C.bookIdxById(hz.book);
+        const end = bi >= 0 && D.books[bi].ch[hz.c] ? C.vnum(D.books[bi].ch[hz.c], hz.i) : hz.i;
+        cite += hz.c === h0.c || h0.tx === "doc" || h0.tx === "ccc" ? "–" + end : "–" + (hz.c + 1) + ":" + end;
+      }
+      copy("“" + words + "” — " + cite);
+    };
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
