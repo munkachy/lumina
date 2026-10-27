@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 6;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 7;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -438,7 +438,9 @@
     const box = $("#scrText"), text = box.value.trim();
     if (!text || current) return;
     if (prefs.autoRead) primeSpeech();
+    if (voice) { voice.sent = true; if (voice.rec.state !== "inactive") stopVoice(); }   // a late transcript mustn't refill the box
     box.value = ""; box.blur();
+    [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
     request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
     web = false;
@@ -673,13 +675,13 @@
         try { t = JSON.parse(await decryptText(S.keys, c.body.slice(MARK("transcript").length).trim())); } catch (e) { continue; }
         if (t.session !== v.sid) continue;
         const box = $("#scrText");
-        if (box && t.text) box.value = (v.before ? v.before + " " : "") + t.text;
+        if (box && t.text && !v.sent) box.value = (v.before ? v.before + " " : "") + t.text;
         if (t.complete) { v.done = true; gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.id).catch(() => {}); }
       }
     }
     if (voice === v) voice = null;
     const box = $("#scrText");
-    if (box) { box.classList.remove("scr-listening"); box.placeholder = "Message Scriptorium…"; box.focus(); }  // check it, edit, then send
+    if (box) { box.classList.remove("scr-listening"); box.placeholder = "Message Scriptorium…"; if (!v.sent) box.focus(); }  // check it, edit, then send
     composerRow();
   }
 
