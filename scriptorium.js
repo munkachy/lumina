@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 8;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 9;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -250,7 +250,8 @@
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
-      (tab === "faith" ? '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
+      (tab === "faith" ? '<button class="scr-ib" data-act="journal" title="Journal">📖</button>' +
+        '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
       '<button class="scr-ib" data-act="size" title="' + (full ? "Smaller" : "Full screen") + '">' + (full ? "⤡" : "⤢") + "</button>" +
       (current ? '<button class="scr-send stop" data-act="stop" title="Stop">■</button>' : '<button class="scr-send" data-act="send" title="Send">↑</button>');
@@ -296,6 +297,7 @@
     else if (act === "stop") { t.disabled = true; postSealed("stop", { request: current.id }); }
     else if (act === "web") { web = !web; composerRow(); }
     else if (act === "mic") voice ? stopVoice() : startVoice();
+    else if (act === "journal" && !current) request({ kind: "journal", text: "📖 Journal" });
     else if (act === "models") openModels();
   }
 
@@ -347,6 +349,7 @@
     if (cc && (cc.corrected || []).length) h += '<div class="scr-mem">⚠ Quote check flagged ' + cc.corrected.map(esc).join("; ") + ". It reread the sources and corrected itself above.</div>";
     if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
+    if (!live && r.journal) h += '<div class="scr-actions"><button data-journal-today="1">✎ Write today\'s entry now</button></div>';
     if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button></div>';
     return h;
   }
@@ -396,6 +399,7 @@
   function threadClick(e) {
     const ap = e.target.closest("[data-appr]");
     if (ap) { ap.parentElement.querySelectorAll("button").forEach((b) => b.disabled = true); postSealed("approve", { id: ap.dataset.appr, ok: ap.dataset.ok === "1" }); return; }
+    if (e.target.closest("[data-journal-today]")) { if (!current) request({ kind: "journal", action: "today", text: "📖 Today's journal" }); return; }
     const pill = e.target.closest(".scr-pill");
     if (pill) {
       e.preventDefault();
@@ -448,7 +452,7 @@
     const box = $("#scrText"), text = box.value.trim();
     if (!text || current) return;
     if (prefs.autoRead) primeSpeech();
-    if (voice) { voice.sent = true; if (voice.rec.state !== "inactive") stopVoice(); }   // a late transcript mustn't refill the box
+    if (voice && !voice.sent) { voice.sent = true; if (voice.rec.state !== "inactive") stopVoice(); }   // a late transcript mustn't refill the box
     box.value = ""; box.blur();
     [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
@@ -462,7 +466,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel"].includes(req.kind) ? null : req.kind === "journal" ? "faith" : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -686,6 +690,7 @@
         if (t.session !== v.sid) continue;
         const box = $("#scrText");
         if (box && t.text && !v.sent) box.value = (v.before ? v.before + " " : "") + t.text;
+        if (t.complete && !v.sent && box && box.value.trim()) { v.sent = true; v.done = true; send(); }   // spoken notes go straight in
         if (t.complete) { v.done = true; gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.id).catch(() => {}); }
       }
     }
