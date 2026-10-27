@@ -336,6 +336,9 @@
     h += '<div class="scr-md">' + md(r.content || "", r.refs || []) + "</div>";
     if (r.sources && r.sources.length) h += '<details class="scr-src"><summary><span class="chev"></span>' + r.sources.length + " emails used</summary>" +
       r.sources.map((s) => "<div>" + s.n + ". " + esc(s.sender) + " — " + esc(s.subject) + "</div>").join("") + "</details>";
+    const cc = r.citecheck;
+    if (cc && (cc.corrected || []).length) h += '<div class="scr-mem">⚠ Quote check flagged ' + cc.corrected.map(esc).join("; ") + ". It reread the sources and corrected itself above.</div>";
+    if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
     if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button></div>';
     return h;
