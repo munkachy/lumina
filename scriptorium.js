@@ -30,8 +30,9 @@
   function savePrefs() { try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch (e) {} applyPrefs(); }
 
   /* ---------- illuminated initials ---------- */
-  function illum(letter) {   // an illuminated initial in the colors of the current Lumina theme
-    return '<svg class="scr-illum" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="6" style="fill:var(--panel2);stroke:var(--gold);stroke-width:1.6"/><rect x="4.5" y="4.5" width="31" height="31" rx="4" style="fill:var(--panel);stroke:var(--gold-line);stroke-width:.8"/><circle cx="8.5" cy="8.5" r="1.5" style="fill:var(--gold)"/><circle cx="31.5" cy="31.5" r="1.5" style="fill:var(--gold)"/><circle cx="31.5" cy="8.5" r="1" style="fill:var(--gold-line)"/><circle cx="8.5" cy="31.5" r="1" style="fill:var(--gold-line)"/><text x="20" y="28.6" text-anchor="middle" font-family="Georgia,\'Times New Roman\',serif" font-size="25" font-weight="700" style="fill:var(--gold);stroke:var(--ink);stroke-width:.35;paint-order:stroke">' + letter + '</text></svg>';
+  function illum(letter) {   // the illuminated initials; LCARS spells the words out instead
+    return '<img class="scr-illum" src="icon-' + letter.toLowerCase() + '.png" alt="">' +
+      '<span class="scr-lcars">' + (letter === "S" ? "SCRIPTORIUM" : "LUMINA") + "</span>";
   }
 
   /* ---------- crypto (must match relaycrypto.py on the Mac) ---------- */
@@ -681,7 +682,10 @@
     st.textContent = `
 :root{--scr-bar-h:52px;--scr-a-size:1rem;--scr-a-font:Georgia,serif;--scr-t-size:.9rem;--scr-t-font:-apple-system,sans-serif}
 body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));padding-bottom:160px}
-.scr-illum{width:30px;height:30px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.scr-illum{width:34px;height:34px;display:block;border-radius:6px;object-fit:cover}
+.scr-lcars{display:none;font-weight:700;letter-spacing:.08em;font-size:.8rem}
+:root[data-theme="lcars"] .scr-illum{display:none}
+:root[data-theme="lcars"] .scr-lcars{display:inline-block;background:var(--gold);color:#000;border-radius:999px;padding:4px 10px}
 #scrBar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 10px 6px;
   background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--gold-line)}
 #scrBar button{border:0;background:none;color:var(--ink);font:inherit;font-size:.92rem;padding:6px 8px;border-radius:10px;cursor:pointer}
@@ -700,7 +704,7 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-proj{display:flex;gap:8px;align-items:center;color:var(--ink-faint);font-size:.85rem;margin:4px 0 10px}
 .scr-proj select{flex:1;padding:6px 8px;border-radius:10px;border:1px solid var(--gold-line);background:var(--panel);color:var(--ink)}
 .scr-empty{text-align:center;color:var(--ink-faint);margin-top:16vh}
-.scr-empty .scr-illum{width:64px;height:64px;margin:0 auto 12px}
+.scr-empty .scr-illum{width:84px;height:84px;margin:0 auto 12px}
 .scr-turn{margin:0 0 26px}
 .scr-u{margin:0 0 12px auto;max-width:86%;width:fit-content;background:var(--panel2);border:1px solid var(--gold-line);border-radius:18px 18px 4px 18px;
   padding:10px 14px;white-space:pre-wrap;font-family:var(--scr-a-font);font-size:var(--scr-a-size);line-height:1.5}
@@ -796,7 +800,7 @@ details[open]>summary .chev{transform:rotate(45deg)}
 .scr-page{max-width:460px;margin:6vh auto 0;padding:0 8px;font-family:-apple-system,sans-serif}
 .scr-page label{display:block;margin:.8rem 0;font-weight:600;color:var(--ink-soft);font-size:.9rem}
 .scr-page input{display:block;width:100%;box-sizing:border-box;margin-top:.35rem;padding:.65rem .8rem;border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;font-size:16px}
-.scr-seal{display:flex;justify-content:center}.scr-seal .scr-illum{width:72px;height:72px}
+.scr-seal{display:flex;justify-content:center}.scr-seal .scr-illum{width:96px;height:96px}
 .scr-h{text-align:center;font-family:Georgia,serif;margin:.4rem 0}
 .scr-hint{color:var(--ink-faint);font-weight:400;font-size:.88rem;text-align:center}
 .scr-small{color:var(--ink-faint);font-size:.82rem;text-align:center;margin-top:1rem}

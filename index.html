@@ -490,7 +490,10 @@ noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
 /* Scriptorium mode: Lumina's own controls step aside (scriptorium.js adds body.scr-on) */
 body.scr-on .wrap > :not(#view), body.scr-on > :not(.wrap):not(.toast):not([id^="scr"]):not(script):not(style) { display: none !important; }
 body.scr-on .wrap { padding-top: 0; }
-.illum { width: 1.35em; height: 1.35em; vertical-align: -.3em; filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
+.ccc-notes { font-size: .82rem; color: var(--ink-soft); border-top: 1px solid var(--gold-line); margin: .4rem 0 .8rem; padding: .5rem 0 0 1.6rem; line-height: 1.45; }
+.ccc-notes li::marker { color: var(--gold); font-weight: 600; }
+.illum { width: 1.6em; height: 1.6em; vertical-align: -.4em; border-radius: 4px; object-fit: cover; }
+:root[data-theme="lcars"] .illum { display: none; }   /* LCARS spells it out: the button's label says SCRIPTORIUM */
 </style>
 </head>
 <body>
@@ -523,7 +526,7 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="btn ib primary" id="btnRandomVerse" title="Random verse"><span class="ic">✧</span><span class="lb" id="lbVerse">Verse</span></button>
     <button class="btn ib" id="btnRandomChapter" title="Random chapter"><span class="ic">❧</span><span class="lb">Chapter</span></button>
     <button class="btn ib" id="btnBooks" title="Books"><span class="ic">▤</span><span class="lb" id="lbBooks">Books</span></button>
-    <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><svg class="illum" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="6" style="fill:var(--panel2);stroke:var(--gold);stroke-width:1.6"/><rect x="4.5" y="4.5" width="31" height="31" rx="4" style="fill:var(--panel);stroke:var(--gold-line);stroke-width:.8"/><circle cx="8.5" cy="8.5" r="1.5" style="fill:var(--gold)"/><circle cx="31.5" cy="31.5" r="1.5" style="fill:var(--gold)"/><circle cx="31.5" cy="8.5" r="1" style="fill:var(--gold-line)"/><circle cx="8.5" cy="31.5" r="1" style="fill:var(--gold-line)"/><text x="20" y="28.6" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="25" font-weight="700" style="fill:var(--gold);stroke:var(--ink);stroke-width:.35;paint-order:stroke">S</text></svg></span><span class="lb">Scriptorium</span></button>
+    <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><img class="illum" src="icon-s.png" alt=""></span><span class="lb">Scriptorium</span></button>
     <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
     <button class="btn ib" id="btnFavs" title="Favorites"><span class="ic">♥</span><span class="lb">Favs</span></button>
     <button class="btn ib" id="btnReadings" title="Daily Mass readings"><span class="ic">✠</span><span class="lb">Daily</span></button>
@@ -1074,8 +1077,80 @@ const LuminaCore = (function () {
     const g = txData("grail");
     return g ? g.books[C.bookIdxById("psalms")].ch[ps - 1] : window.LUMINA_GRAIL_MAP[ps - 1];
   }
-  const loadCcc = () => loadScript("data-catechism.js", () => !!window.LUMINA_CCC);
-  const loadDocs = () => loadScript("data-docs.js", () => !!window.LUMINA_DOCS);
+  /* The Catechism and the Church documents are © Libreria Editrice Vaticana, so they're kept
+     encrypted (data-catechism.enc, data-docs.enc) with the same key as Scriptorium: once
+     Scriptorium is unlocked on this device they simply open; otherwise Lumina asks for the
+     Scriptorium password once. tools/encrypt-data.py makes the files. */
+  const LuminaLock = (() => {
+    const te = new TextEncoder(), td = new TextDecoder();
+    let cached = null;
+    const idb = r => new Promise((ok, no) => { r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
+    function store(mode){
+      return new Promise((ok, no) => {
+        const req = indexedDB.open("lumina-scriptorium", 1);
+        req.onupgradeneeded = () => req.result.createObjectStore("keys");
+        req.onsuccess = () => ok(req.result.transaction("keys", mode).objectStore("keys"));
+        req.onerror = () => no(req.error);
+      });
+    }
+    async function derive(password, login){
+      const salt = new Uint8Array(await crypto.subtle.digest("SHA-256", te.encode("scriptorium-relay:" + login.toLowerCase())));
+      const base = await crypto.subtle.importKey("raw", te.encode(password), "PBKDF2", false, ["deriveBits"]);
+      const bits = new Uint8Array(await crypto.subtle.deriveBits({ name:"PBKDF2", hash:"SHA-256", salt, iterations:600000 }, base, 512));
+      return { aes: await crypto.subtle.importKey("raw", bits.slice(0, 32), "AES-CBC", false, ["encrypt", "decrypt"]),
+               mac: await crypto.subtle.importKey("raw", bits.slice(32), { name:"HMAC", hash:"SHA-256" }, false, ["sign", "verify"]) };
+    }
+    async function decrypt(keys, blob){
+      const raw = Uint8Array.from(atob(blob.slice(3)), c => c.charCodeAt(0)), body = raw.slice(0, -32), tag = raw.slice(-32);
+      if (!(await crypto.subtle.verify("HMAC", keys.mac, tag, body))) throw new Error("locked");
+      return td.decode(await crypto.subtle.decrypt({ name:"AES-CBC", iv: body.slice(0, 16) }, keys.aes, body.slice(16)));
+    }
+    async function savedKeys(){
+      if (cached) return cached;
+      try { cached = await idb((await store("readonly")).get("keys")); } catch(e){}
+      return cached || null;
+    }
+    function ask(wrong){
+      return new Promise(resolve => {
+        const back = modal('<h3>' + (wrong ? "That password didn't open it" : "The Catechism is locked") + '</h3>' +
+          '<p style="text-align:center;margin:.2rem 0 .8rem">Enter your Scriptorium password once on this device.</p>' +
+          '<input type="password" id="lkPw" autocomplete="current-password" style="width:100%;box-sizing:border-box;padding:.6rem;font-size:16px">' +
+          '<div class="rowbtns"><button class="btn" id="lkNo">Cancel</button><button class="btn primary" id="lkGo">Unlock</button></div>');
+        const go = async () => {
+          const b = back.querySelector("#lkGo"); b.disabled = true; b.textContent = "Unlocking…";
+          let login = "munkachy";
+          try { login = (JSON.parse(localStorage.getItem("lumina.scriptorium.vault")) || {}).login || login; } catch(e){}
+          const keys = await derive(back.querySelector("#lkPw").value, login);
+          back.remove(); resolve(keys);
+        };
+        back.querySelector("#lkGo").onclick = go;
+        back.querySelector("#lkPw").onkeydown = e => { if (e.key === "Enter") go(); };
+        back.querySelector("#lkNo").onclick = () => { back.remove(); resolve(null); };
+        setTimeout(() => back.querySelector("#lkPw").focus(), 50);
+      });
+    }
+    async function open(file){
+      const blob = (await (await fetch(file, { cache: "no-cache" })).text()).trim();
+      let keys = await savedKeys(), wrong = false;
+      for (;;){
+        if (keys){
+          try {
+            const data = JSON.parse(await decrypt(keys, blob));
+            if (keys !== cached){ cached = keys; try { await idb((await store("readwrite")).put(keys, "keys")); } catch(e){} }
+            return data;
+          } catch(e){ wrong = true; }
+        }
+        keys = await ask(wrong);
+        if (!keys) throw new Error("locked");
+      }
+    }
+    return { open };
+  })();
+  let cccLoading = null, docsLoading = null;
+  const loadCcc = () => window.LUMINA_CCC ? Promise.resolve() :
+    (cccLoading = cccLoading || LuminaLock.open("data-catechism.enc").then(d => { window.LUMINA_CCC = d; }).catch(e => { cccLoading = null; throw e; }));
+  const loadDocs = () => window.LUMINA_DOCS ? Promise.resolve() :
+    (docsLoading = docsLoading || LuminaLock.open("data-docs.enc").then(d => { window.LUMINA_DOCS = d; }).catch(e => { docsLoading = null; throw e; }));
   const loadSums = () => loadScript("data-summaries.js", () => !!window.LUMINA_SUMMARIES);
 
   /* ---------- API.Bible fetch layer ---------- */
@@ -2773,6 +2848,7 @@ const LuminaCore = (function () {
       '<p style="text-align:center;font-style:italic;color:var(--ink-faint);font-size:.9rem;margin:-.4rem 0 .8rem">' +
         esc(C.cccTocTitle(t)) + '</p>' +
       '<p class="verse-text dropcap" id="vtext">' + renderTextWithHls(p.t, "ccc", "ccc", 0, n) + '</p>' +
+      (p.f && p.f.length ? '<ol class="ccc-notes">' + p.f.map(([num, t]) => '<li value="' + num + '">' + esc(t) + '</li>').join("") + '</ol>' : '') +
       '<div class="verse-actions">' +
         '<button class="btn nav-arrow" id="vPrev">←</button>' +
         '<button class="btn" id="vChapter">Chapter</button>' +
@@ -3763,7 +3839,7 @@ const LuminaCore = (function () {
     const go = () => window.Scriptorium.open(view);
     if (window.Scriptorium) return go();
     const s = document.createElement("script");
-    s.src = "scriptorium.js?v=3"; s.onload = go;
+    s.src = "scriptorium.js?v=4"; s.onload = go;
     s.onerror = () => showToast("Couldn't load Scriptorium. Check the connection.");
     document.body.appendChild(s);
   }
