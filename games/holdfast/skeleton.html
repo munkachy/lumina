@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Holdfast — Holdfast · skeleton</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap">
+</head>
+<body>
+<style>
+
+:root{
+  --bg:#07070a; --panel:#101016; --panel2:#15151c;
+  --ink:#e9e6df; --ink2:#a29d90; --ink3:#635e55;
+  --rule:#22222b; --accent:#7ea6d8; --accent2:#b39ad8;
+  --col:40rem;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Spectral,Georgia,"Times New Roman",serif;font-size:17px;line-height:1.72;
+  -webkit-text-size-adjust:100%;
+  background-image:radial-gradient(ellipse 70% 34% at 50% -4%,#7ea6d814,transparent 70%)}
+.wrap{max-width:58rem;margin:0 auto;padding:0 1.4rem 6rem}
+p,ul,ol,blockquote,h3{max-width:var(--col)}
+
+/* the elbow, once, as on the index */
+header{display:grid;grid-template-columns:9rem 1fr;gap:1.2rem;align-items:end;padding:2.8rem 0 .4rem}
+.elbow{height:6.2rem;position:relative}
+.elbow i{position:absolute;display:block;border-radius:1.6rem}
+.elbow i:nth-child(1){left:0;top:0;width:9rem;height:2.1rem;background:var(--accent);border-bottom-right-radius:0}
+.elbow i:nth-child(2){left:0;top:2.3rem;width:3.4rem;height:3.9rem;background:var(--accent2);border-top-right-radius:0}
+.elbow i:nth-child(3){left:3.6rem;top:2.3rem;width:2.4rem;height:1.7rem;background:#4a4a58}
+.elbow i:nth-child(4){left:6.2rem;top:2.3rem;width:2.8rem;height:1.7rem;background:#2c2c38}
+.kicker{font-family:"Barlow Condensed",Arial Narrow,sans-serif;letter-spacing:.32em;
+  text-transform:uppercase;font-size:.7rem;color:var(--accent)}
+h1{font-family:"Barlow Condensed",Arial Narrow,sans-serif;font-weight:600;
+  font-size:clamp(2.2rem,7vw,3.7rem);letter-spacing:.11em;text-transform:uppercase;
+  margin:.1rem 0 0;line-height:1;text-wrap:balance}
+
+/* contents: a real aid on a phone, not decoration */
+nav{margin:2.2rem 0 .6rem;padding:1rem 1.2rem;background:var(--panel);
+  border-radius:.2rem .9rem .9rem .2rem;border-left:.4rem solid var(--accent2)}
+nav .eyebrow{margin-bottom:.55rem}
+nav ol{margin:0;padding:0;list-style:none;max-width:none;
+  columns:2;column-gap:2rem;font-family:"Barlow Condensed",sans-serif;font-size:.98rem;
+  letter-spacing:.02em}
+nav li{break-inside:avoid;margin:0 0 .12rem}
+nav a{color:var(--ink2);text-decoration:none;border-bottom:1px solid transparent}
+nav a:hover,nav a:focus{color:var(--accent);border-bottom-color:var(--accent)}
+@media (max-width:38rem){nav ol{columns:1}}
+
+.eyebrow{font-family:"Barlow Condensed",sans-serif;letter-spacing:.26em;
+  text-transform:uppercase;font-size:.66rem;color:var(--ink3)}
+
+h2{font-family:"Barlow Condensed",Arial Narrow,sans-serif;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;font-size:.92rem;color:var(--accent);
+  margin:3.4rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule);
+  text-wrap:balance;scroll-margin-top:1rem}
+h3{font-family:"Barlow Condensed",Arial Narrow,sans-serif;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;font-size:1.06rem;color:var(--ink);
+  margin:2.1rem 0 .5rem;text-wrap:balance}
+p{margin:0 0 1.05rem}
+strong{color:#fff;font-weight:600}
+em{color:var(--ink)}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.86em;
+  background:var(--panel2);color:var(--accent2);padding:.08em .38em;border-radius:.2rem}
+hr{border:0;height:1px;background:var(--rule);margin:2.6rem 0;max-width:none}
+
+ul,ol{margin:0 0 1.05rem;padding-left:1.35rem}
+li{margin:0 0 .42rem}
+li::marker{color:var(--ink3)}
+ol li::marker{font-family:"Barlow Condensed",sans-serif;color:var(--accent)}
+
+blockquote{margin:1.4rem 0;padding:.85rem 1.15rem;background:var(--panel);
+  border-left:.28rem solid var(--accent);border-radius:0 .5rem .5rem 0;color:var(--ink)}
+blockquote strong{color:var(--accent)}
+
+pre.scene{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:.8rem;line-height:1.65;margin:1.2rem 0;padding:1rem 1.1rem;
+  background:var(--panel);border-left:.28rem solid var(--accent2);
+  border-radius:0 .5rem .5rem 0;overflow-x:auto;color:var(--ink2);
+  white-space:pre;max-width:none}
+pre.scene b{display:block;font-weight:600;color:var(--accent);letter-spacing:.04em;
+  margin-bottom:.35rem}
+pre.scene u{text-decoration:none;color:var(--ink3)}
+pre.scene i{color:var(--accent2);font-style:normal}
+
+.scroll{overflow-x:auto;margin:1.3rem 0 1.6rem;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;
+  font-variant-numeric:tabular-nums}
+th{font-family:"Barlow Condensed",sans-serif;font-weight:500;letter-spacing:.15em;
+  text-transform:uppercase;font-size:.68rem;color:var(--ink3);text-align:left;
+  padding:.62rem .8rem;white-space:nowrap;vertical-align:bottom}
+td{padding:.55rem .8rem;border-top:1px solid var(--rule);color:var(--ink2);
+  vertical-align:top;line-height:1.5}
+td:first-child{color:var(--ink)}
+tbody tr:hover td{background:var(--panel)}
+td strong{color:var(--ink)}
+
+/* the closing list is the point of these documents, so it gets its own footing */
+.reject{margin-top:4rem;padding:1.6rem 1.5rem 1.1rem;background:var(--panel);
+  border-radius:.2rem 1rem 1rem .2rem;border-left:.55rem solid var(--accent)}
+.reject h2{margin:.25rem 0 1rem;border-bottom-color:#2e2e3a}
+.reject ol{max-width:var(--col)}
+.reject li{margin-bottom:.9rem;color:var(--ink2)}
+.reject li strong{color:var(--accent2)}
+
+footer{margin-top:3.4rem;padding-top:1.1rem;border-top:1px solid var(--rule);
+  font-family:"Barlow Condensed",sans-serif;letter-spacing:.2em;text-transform:uppercase;
+  font-size:.66rem;color:var(--ink3);display:flex;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap}
+footer a{color:var(--ink3)}
+a:focus-visible,nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:34rem){
+  header{grid-template-columns:1fr}
+  .elbow{display:none}
+  body{font-size:16px}
+  .reject{padding:1.2rem 1.1rem .8rem}
+}
+
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="elbow"><i></i><i></i><i></i><i></i></div>
+  <div>
+    <div class="kicker">Holdfast · skeleton</div>
+    <h1>Holdfast</h1>
+  </div>
+</header>
+
+<nav aria-label="Contents">
+  <div class="eyebrow">Contents</div>
+  <ol><li><a href="#the-one-sentence-premise">The one-sentence premise</a></li><li><a href="#the-place">The place</a></li><li><a href="#the-cast-four-people-one-line-each">The cast — four people, one line each</a></li><li><a href="#the-ten-projects-the-only-state-this-game-keeps">The ten projects — the only state this game keeps</a></li><li><a href="#the-five-crises-one-arrives-weighted-by-what-you">The five crises — one arrives, weighted by what you learned</a></li><li><a href="#the-four-choices-that-no-wall-can-answer">The four choices that no wall can answer</a></li><li><a href="#the-scenes">The scenes</a></li><li><a href="#the-build-menu-how-spending-works">The build menu — how spending works</a></li><li><a href="#what-i-would-like-you-to-reject">What I would like you to reject</a></li></ol>
+</nav>
+
+<p><strong>Nothing is written yet.</strong> This is the document to argue with. Every want below is a claim I am making about why somebody does something, and any one of them you reject is cheap to change now and expensive to change in eleven thousand words of prose.</p>
+<h2 id="the-one-sentence-premise">The one-sentence premise</h2>
+<p>Forty-one people are living in a closed parish school with nine days of quiet left, and you are the one deciding what gets built with the time.</p>
+<p><strong>Super-objective (yours, all game):</strong> <em>I want these people to still be here at the end of the winter.</em> Every scene want below is a local version of that.</p>
+<p><strong>What makes it hard:</strong> you cannot build everything, you do not know what is coming, and the work you spend finding out what is coming is work you did not spend on the wall.</p>
+<h2 id="the-place">The place</h2>
+<p><strong>St. Basil's</strong>, a Catholic grade school closed in 2009, and the church attached to it by a covered walk. Brick. Chain-link on three sides and a loading dock on the fourth. A gym, a kitchen with two gas ranges and no gas, a boiler room, a nurse's office, a playground with four inches of topsoil under the asphalt, a dry well the parish capped in 1988, and a bell tower with a view down the highway to the county line.</p>
+<p>Forty-one people. Nine days before the weather turns and the roads move.</p>
+<h2 id="the-cast-four-people-one-line-each">The cast — four people, one line each</h2>
+<div class="scroll"><table><thead><tr><th></th><th>Want, all game</th><th>Voice</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Everyone alive in spring</td><td>Second person; a foreman's eye — you see loads, spans, and how long a job takes</td></tr><tr><td><strong>Fr. Peter Nowak</strong>, 52</td><td>To keep them a parish and not a garrison</td><td>Asks rather than tells. Will do any job assigned and will keep asking the question while he does it</td></tr><tr><td><strong>Dell Marchetti</strong>, 61, retired ironworker</td><td>To be useful before his hands go</td><td>Trade talk. Measures out loud. Never says a feeling; describes a job instead</td></tr><tr><td><strong>Ruthie Okonkwo</strong>, 29, was a vet tech</td><td>To not be the one who decides who is sick enough</td><td>Precise, clipped, asks for numbers. The only one who says the frightening thing at the table</td></tr></tbody></table></div>
+<h2 id="the-ten-projects-the-only-state-this-game-keeps">The ten projects — the only state this game keeps</h2>
+<p>Ten flags. Each one is a thing you could photograph. <strong>Twelve work-days to spend, and the ten projects cost thirty-one.</strong></p>
+<div class="scroll"><table><thead><tr><th>Project</th><th>Cost</th><th>What it is</th></tr></thead><tbody><tr><td><code>wall</code></td><td>4</td><td>The chain-link doubled with lockers, rebar and poured footings</td></tr><tr><td><code>gate</code></td><td>2</td><td>A vehicle gate one person can close in nine seconds</td></tr><tr><td><code>tower</code></td><td>2</td><td>A platform and a clear sightline four miles down the highway</td></tr><tr><td><code>well</code></td><td>4</td><td>The 1988 cap off, a hand pump, and water that is not from the roof</td></tr><tr><td><code>garden</code></td><td>3</td><td>The asphalt up, the beds in, and something planted before the freeze</td></tr><tr><td><code>clinic</code></td><td>3</td><td>The nurse's office cleared, instruments boiled, two people trained</td></tr><tr><td><code>heat</code></td><td>4</td><td>The boiler on wood, and ducting to two rooms instead of nine</td></tr><tr><td><code>quiet</code></td><td>2</td><td>Blackout, muffled doors, and a discipline everybody has agreed to</td></tr><tr><td><code>radio</code></td><td>3</td><td>The school PA amplifier on a mast — you can hear, and be heard</td></tr><tr><td><code>chapel</code></td><td>4</td><td>The church opened, the roof patched, the lamp lit and kept lit</td></tr></tbody></table></div>
+<p><strong>Scouting costs work too.</strong> Each of the four scouting trips costs 1 day and tells you which crisis is likeliest. That is the central decision of the game: <em>eleven days of building and no idea, or eight days of building and a good guess.</em></p>
+<h2 id="the-five-crises-one-arrives-weighted-by-what-you">The five crises — one arrives, weighted by what you learned</h2>
+<p>Each is telegraphed by something visible during the build. Each tests <strong>two</strong> projects, and no project is in every pair.</p>
+<div class="scroll"><table><thead><tr><th>Crisis</th><th>Sign you can find</th><th>Tests</th><th>Everything else gives partial credit</th></tr></thead><tbody><tr><td><strong>The column</strong> — thousands moving down the highway</td><td>Crows going the same way three mornings running</td><td><code>wall</code> + <code>quiet</code></td><td><code>tower</code> buys hours; <code>chapel</code> holds people still</td></tr><tr><td><strong>The freeze</strong> — nine days at minus twenty</td><td>The maples turned three weeks early</td><td><code>heat</code> + <code>well</code></td><td><code>garden</code> feeds; <code>clinic</code> keeps toes</td></tr><tr><td><strong>The living</strong> — eleven armed people who want in</td><td>A truck that turns around at the county line twice</td><td><code>gate</code> + <code>tower</code></td><td><code>radio</code> lets you talk first; <code>wall</code> matters less than you think</td></tr><tr><td><strong>The sickness</strong> — dysentery in a building with one toilet</td><td>The stream below the loading dock is wrong</td><td><code>clinic</code> + <code>well</code></td><td><code>quiet</code> is useless here and that is the point</td></tr><tr><td><strong>The fire</strong> — the school's east wing, at night</td><td>The boiler flue is cracked and nobody has looked</td><td><code>heat</code> + <code>garden</code> (the firebreak)</td><td><code>gate</code> gets people out; <code>tower</code> sees it early</td></tr></tbody></table></div>
+<h2 id="the-four-choices-that-no-wall-can-answer">The four choices that no wall can answer</h2>
+<p>These sit <strong>outside</strong> the build and cannot be solved by it. This is where the story is.</p>
+<ol><li><strong>Day two — nine people at the gate.</strong> Nine more pairs of hands, nine more mouths, and a winter that was already tight. <em>Fr. Nowak wants them in. Ruthie wants a number.</em></li><li><strong>Day six — Dell's hands.</strong> He is failing and hiding it and the wall crew is his. <em>He wants to finish the job. You want the footings to hold.</em></li><li><strong>The crisis — somebody is outside when the gate has to shut.</strong> Nine seconds is the design spec you either built or did not.</li><li><strong>After — one person is sick and you have four doses.</strong> Ruthie will do it if you tell her to, and she is asking you not to make her decide.</li></ol>
+<h2 id="the-scenes">The scenes</h2>
+<p>Twelve. About 11,000 words. Every block below is a claim to argue with.</p>
+<pre class="scene"><b>1 · THE LOADING DOCK · day one, morning</b>  <u>Here:</u>      you, Dell, forty people behind you not looking at each other
+  <u>I want:</u>    to know what we actually have before anybody asks me anything
+  <u>In my way:</u> a crowd that wants an answer today, and one working torch
+  <u>Dell:</u>      to be given a job before somebody decides he is old
+  <u>Changes:</u>   the twelve days is stated out loud, and becomes real
+  <u>Choices:</u>   count the food first / walk the fence first  <i>← both are "find out"</i>
+  <u>Sets:</u>      —</pre>
+<pre class="scene"><b>2 · THE TABLE · day one, evening</b>  <u>Here:</u>      you, Fr. Nowak, Dell, Ruthie, a floor plan on a lunch table
+  <u>I want:</u>    to get ten projects down to what twelve days can buy
+  <u>In my way:</u> everybody is right about their own project
+  <u>Nowak:</u>     the church opened — he will not say why, and it is not sentiment
+  <u>Ruthie:</u>    the clinic, and to say the sickness number out loud
+  <u>Dell:</u>      the wall, because it is the only one he can still do
+  <u>Changes:</u>   the ten projects are known; the budget is known; nothing is chosen
+  <u>Choices:</u>   let them argue / go round the table once / decide alone tonight
+  <u>Sets:</u>      —</pre>
+<pre class="scene"><b>3 · THE FIRST SPEND · day two</b>  <u>Here:</u>      you, a clipboard, crews forming
+  <u>I want:</u>    to buy the most survival per day
+  <u>In my way:</u> nothing is known about what is coming
+  <u>Changes:</u>   4 to 6 days committed
+  <u>Choices:</u>   [the build menu — see below]
+  <u>Sets:</u>      up to 3 project flags</pre>
+<pre class="scene"><b>4 · THE GATE · day two, afternoon</b>  <u>Here:</u>      nine people outside; Nowak beside you; Ruthie behind him
+  <u>I want:</u>    to not be the man who decides this
+  <u>In my way:</u> it is my decision and everybody is looking at me
+  <u>Nowak:</u>     them inside, and to have said so before you asked
+  <u>Ruthie:</u>    the arithmetic said out loud before anybody is kind
+  <u>Changes:</u>   41 becomes 50, or stays 41 and everybody knows why
+  <u>Choices:</u>   all nine in / the four children only / nobody
+  <u>Sets:</u>      `mouths`</pre>
+<pre class="scene"><b>5 · WHAT THE CROWS ARE DOING · day three</b>  <u>Here:</u>      you and whoever you take; a mile of highway
+  <u>I want:</u>    to know which of the five is coming
+  <u>In my way:</u> a day of looking is a day off the wall
+  <u>Changes:</u>   one crisis becomes likelier, or a day is gone and you know nothing
+  <u>Choices:</u>   scout / stay and build
+  <u>Sets:</u>      `sign1`</pre>
+<pre class="scene"><b>6 · DELL'S HANDS · day six</b>  <u>Here:</u>      you and Dell, on the footings, alone
+  <u>I want:</u>    the wall built right
+  <u>In my way:</u> the man who can build it right cannot any more
+  <u>Dell:</u>      to finish. Not to be thanked and not to be moved
+  <u>Changes:</u>   either the wall is his or it is somebody else's
+  <u>Choices:</u>   take him off it / let him finish / put a younger man under him
+  <u>Sets:</u>      `dell`</pre>
+<pre class="scene"><b>7 · THE SECOND SPEND · day seven</b>  <u>Here:</u>      you, the clipboard, less time than you thought
+  <u>I want:</u>    to cover the thing the signs point at
+  <u>In my way:</u> covering it means giving up something else already half-built
+  <u>Changes:</u>   the rest of the budget is committed
+  <u>Choices:</u>   [the build menu]
+  <u>Sets:</u>      up to 3 more project flags</pre>
+<pre class="scene"><b>8 · THE LAST QUIET NIGHT · day eight</b>  <u>Here:</u>      you; Nowak; the church, opened or not opened
+  <u>I want:</u>    to stop doing arithmetic for one hour
+  <u>In my way:</u> I am the only one who knows how thin it is
+  <u>Nowak:</u>     to ask the one question, and he has been saving it
+  <u>Changes:</u>   you say a true thing out loud, or you do not
+  <u>Choices:</u>   tell him the real numbers / ask him his question first / go to bed
+  <u>Sets:</u>      —</pre>
+<pre class="scene"><b>9 · THE ROLL · day nine</b>  <u>Here:</u>      the tower, or the dark
+  <u>Changes:</u>   one crisis arrives, weighted by the signs
+  <u>Choices:</u>   none — this is the only forced node in the game
+  <u>Sets:</u>      `crisis`</pre>
+<pre class="scene"><b>10 · THE HOLD · the crisis, in four beats</b>  <u>I want:</u>    everyone behind the wall at the end of the night
+  <u>In my way:</u> two of the ten projects, one of which you did not build
+  <u>Changes:</u>   the count
+  <u>Choices:</u>   four, and one of them is who is outside when the gate shuts
+  <u>Sets:</u>      `lost`</pre>
+<pre class="scene"><b>11 · THE FOUR DOSES · after</b>  <u>Here:</u>      you, Ruthie, the clinic, or the corridor if you never built one
+  <u>I want:</u>    to not decide
+  <u>In my way:</u> Ruthie is asking me not to make her
+  <u>Ruthie:</u>    to be given an order, and to hate it
+  <u>Choices:</u>   name them / let her / draw for it
+  <u>Sets:</u>      —</pre>
+<pre class="scene"><b>12 · SPRING · no choices</b>  Reads back every flag by name and says what it did, including the ones
+  that did nothing. Then the count.</pre>
+<h2 id="the-build-menu-how-spending-works">The build menu — how spending works</h2>
+<p>At scenes 3 and 7 you get the same list with the costs and the days remaining, and you take projects until the days run out. That is one node with a conditional list, not thirty branches. Each purchase sets a flag and subtracts. Scenes 5 and any other scouting trip take from the same pot.</p>
+<p><strong>Nothing is hidden.</strong> The costs, the days left, and what each project is believed to be good for are all on the page. The unknown is which crisis comes, and that is what scouting is for.</p>
+<section class="reject" id="what-i-would-like-you-to-reject">
+<div class="eyebrow">Open questions</div>
+<h2>What I would like you to reject</h2>
+<p>Places where I have guessed and would rather be told:</p>
+<ol><li><strong>Twelve days against thirty-one days of work.</strong> That is a 39% budget. It might want to be 45% — tight enough to hurt, loose enough that two good guesses feel like a plan.</li><li><strong>Five crises may be one too many</strong> for 11,000 words. Four gives every crisis more room.</li><li><strong>Fr. Nowak's want.</strong> <em>To keep them a parish and not a garrison</em> is the most interesting thing about him and also the thing most likely to be wrong. He could equally want to leave, or to have died in the first week and be ashamed of not having.</li><li><strong>Whether the priest should be right.</strong> The chapel project costs four days — as much as the wall. If it never pays off, it is a tax on piety. If it always pays off, it is a sermon. My instinct is that it pays off in exactly two of the five crises and everyone can see which.</li></ol>
+</section>
+
+<footer>
+  <span>Scriptorium · working document</span>
+  <span><a href="https://github.com/munkachy/lumina">github.com/munkachy/lumina</a></span>
+</footer>
+
+</div>
+</body>
+</html>

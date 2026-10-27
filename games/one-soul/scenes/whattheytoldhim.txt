@@ -1,0 +1,573 @@
+*comment ============================================================
+*comment SCENE SIX — WHAT THEY TOLD HIM
+*comment 1989–1993, ages fourteen to eighteen. ~3,500 words, 20 choices.
+*comment Job: four years of a boy crushed between a true teaching and
+*comment every bad version of it he is offered. Fair to everyone in it,
+*comment including the priest, including the father, including the boy.
+*comment First dark hour. The sideways jump. The needle to 3.
+*comment ============================================================
+
+*comment ---- 6.1 : A DOOR, AND A LIGHT. 1989, age fourteen ----
+
+March, and the house is asleep, and there is a light under a door at an hour there is no reason for a light.
+
+*page_break
+
+And then you cannot see him.
+
+*set_ward sight "dark"
+
+It is not that the room goes dark. The room is exactly as lit as it was. It is that where the boy was there is now a place your attention will not go into — you push at it and it is like pushing at the middle of your own blind spot, and the harder you look the more certain you are that you are looking at nothing.
+
+You are four feet from him. You have been four feet from him for fourteen years.
+
+*page_break
+
+"What is that," you say. "What is *happening.*"
+
+Your angel does not answer immediately, and that has never happened before, and that is the part that frightens you.
+
+"I cannot see him," it says.
+
+"I know you can't see him, I can't *see* him either, what is —"
+
+"I have never not been able to see him."
+
+*page_break
+
+And then, from somewhere off to the side, out of the dark:
+
+*line_break
+*line_break
+"You've no idea what's going on in there, have you."
+*line_break
+*line_break
+
+*page_break
+
+It is delighted. That is what you cannot get over afterwards. It is not menacing and it is not gloating exactly; it is *pleased*, in the ordinary way a man is pleased when a thing at work goes right, and it has waited fourteen years to say it and it has clearly been looking forward to it.
+
+You say something to it. You will not remember afterwards what.
+
+It says: "Oh, she talks."
+
+And then it is gone, and the light under the door goes off, and after a while the room comes back and there is a fourteen-year-old boy asleep in it.
+
+*set_ward sight "clear"
+
+*page_break
+
+*comment ---- Loretta's first misjudgment ----
+
+You are shaking, and you do not have a body, so you are not sure how that is working.
+
+"Right," you say. "Right. That's — how bad is that. On a scale. How bad."
+
+"I do not know."
+
+"Don't start. Don't do the — you *know*, you told me you know everything on the outside, so tell me —"
+
+"I know exactly what he did," your angel says. "I am telling you that I do not know what it *was*. Whether he understood it. Whether he agreed to it with the whole of himself or half of himself or almost none of himself. Whether he has been able to think straight about any of this since he was nine and started pointing at the floor."
+
+*page_break
+
+"It's a mortal sin," you say. "I've known that since I was seven."
+
+"You have known that the *matter* is grave. That is one of three things it takes and it is the only one anybody can see from out here." It says this without any heat at all. "The other two are in the room. And the Church herself says, in writing, that habit and immaturity and a mind under that much pressure can cut what a person is answerable for down to almost nothing."
+
+"*Almost* nothing."
+
+"Almost. Or not at all. Or a great deal. That word on the panel is not decoration, ${name}. It is the actual state of the case, and it is going to stay the actual state of the case for thirty-five years, and you are going to hate it."
+
+*page_break
+
+You look at the word.
+
+*line_break
+*line_break
+**unknown**
+*line_break
+*line_break
+
+*choice
+  #"Then how am I supposed to decide anything?"
+    "The same way everybody does," it says. "Without knowing. That is what it is like to be one of you and it has never once been otherwise and you have been doing it since 1953."
+    *set severity %+10
+    *set hope %-5
+    *goto after_dark
+
+  #"So it might be nothing."
+    "It might be very little. It is not nothing — the thing itself is not nothing whatever he is answerable for, and it is going to do to him what it does whether he is guilty of it or not." A pause. "That is the part people find hardest. A wound does not check your paperwork first."
+    *set charity %+15
+    *goto after_dark
+
+  #"I don't want to watch this."
+    "No," it says. "Neither do I. And neither of us is going to have to, which is the difficulty."
+    *set hope %-10
+    *goto after_dark
+
+  #Say nothing. Stay where you are until morning.
+    You stay where you are until morning. So does your angel. Neither of you does anything and there is nothing to do and it is the longest six hours of your life including the ones in the hospital.
+    *set valor %-20
+    *set charity %+20
+    *goto after_dark
+
+*label after_dark
+
+*page_break
+
+*comment ---- 6.2 : THE SATURDAY LINE. 1989–1992 ----
+
+He goes.
+
+Of course he goes. He is the boy who pointed at the floor forty times a day for four years. On the second Saturday he is in the line at St. Casimir with eleven other people, mostly women over sixty, and he says it, and he cannot get the words out properly, and it takes him three tries.
+
+And then he walks home.
+
+And halfway home, at the corner of Brereton and Herron, he is not certain he said it *properly.*
+
+*page_break
+
+So he goes back the following week and says it again.
+
+And the week after that.
+
+*page_break
+
+This is the machine. It is worth looking at squarely, because it runs for four years and it is the reason for everything that comes after.
+
+The scrupulosity was already there — that is 1984, that is the finger, that is an instrument that got bent before anybody could have known. What has happened now is that the bent instrument has been handed something that genuinely *is* serious, and it is doing what a bent instrument does with a real weight: it is grinding.
+
+He is not lax. He is the opposite of lax. He is fifteen years old and going to confession every week over one thing and never once feeling that it has taken.
+
+*page_break
+
+*choice
+  #Keep him going. Whatever else is wrong, he is going.
+    You keep him going. It is not hard; he wants to go. What you are keeping him in is a line he cannot get to the end of, and there are Saturdays where he comes out worse than he went in.
+    *line_break
+    *line_break
+    But he goes for four years, and he is inside the door for four years, and there are things that only happen to people who are inside the door.
+    *set valor %+15
+    *set severity %+15
+    *goto line_end
+
+  #Get him to a different priest.
+    This is the highest thing on the board and you do not know it yet.
+    *line_break
+    *line_break
+    You spend eleven months on it. There is a Dominican who comes through in Lent of 1991 who is exactly right and who would have taken about four minutes, and you get Adam into that church on the right afternoon, and he is at the back, and the line is long, and he leaves at ten past four because he has a bus.
+    *line_break
+    *line_break
+    "That was it," your angel says. "That was the whole of it. Four minutes."
+    *line_break
+    *line_break
+    "Bring him back."
+    *line_break
+    *line_break
+    "He has a bus," it says.
+    *set charity %+25
+    *set hope %-10
+    *goto line_end
+
+  #Work on the loop, not the sin.
+    You go at the counting. You blunt it where you can — a Saturday he oversleeps and nothing bad happens, a week the list gets left in a coat pocket and the world does not end.
+    *line_break
+    *line_break
+    It helps. It helps about as much as taking one brick out of a wall.
+    *set severity %-20
+    *set charity %+15
+    *goto line_end
+
+  #Let him stop going for a while. He is being taken apart.
+    "You are asking me to take a fifteen-year-old out of the sacraments," your angel says.
+    *line_break
+    *line_break
+    "I'm asking you to take him out of a *machine*."
+    *line_break
+    *line_break
+    "Yes. Those are both true descriptions and you have to pick one."
+    *line_break
+    *line_break
+    You pick. He misses four weeks in the autumn of 1990 and comes back in November, and he is better in November, and something else has got a little further in while the door was open.
+    *set severity %-25
+    *set hope %-5
+    *set_hidden overreach 2
+    *goto line_end
+
+*label line_end
+
+*page_break
+
+*comment ---- 6.3 : FORTY SECONDS. 1990, age fifteen ----
+
+Saturday, the eighth of December, 1990, four twenty in the afternoon.
+
+Father Jan Halakiewicz is sixty-one years old. He has said two funerals this week. He has eleven people still in the line and a wedding rehearsal at five and a boiler that has been out since Wednesday, and he has heard this particular thing nine times today, and four of those nine were this boy in the last five weeks.
+
+He is not a cruel man. Ask anyone in that parish. He sat with Mrs. Duda for two hours the night her husband went and he never told a soul.
+
+*page_break
+
+He is *brisk.*
+
+That is all. He is tired and he is behind and there is a screen between them so the boy cannot see a face, and he says four words, and the four words are true, and they are the compressed, exhausted, end-of-the-afternoon version of a true thing.
+
+*page_break
+
+And a fifteen-year-old with a bent conscience, on the other side of a screen, with no face to read, hears:
+
+*line_break
+*line_break
+*You are a disgusting thing, and everybody in this line knows it.*
+*line_break
+*line_break
+
+*set_ward needle 2
+
+*page_break
+
+That took forty seconds.
+
+The priest will never know he did it. If you could tell him — if there were any way at all to get it to him — he would be horrified, and he would go and find the boy, and he would probably fix it in an afternoon.
+
+There is no way at all to get it to him.
+
+*page_break
+
+*choice
+  #"Go and tell him. Get in there and tell him."
+    "I can move a curtain," your angel says. "I can put a thought in front of a man. I cannot put a sentence into a priest's head about a boy who has just left, and if I could I would not, and you know both of those things."
+    *line_break
+    *line_break
+    "I don't accept that."
+    *line_break
+    *line_break
+    "No," it agrees. "You will not accept it for another twenty years."
+    *set valor %+20
+    *set hope %-10
+    *goto halak_end
+
+  #"That's not his fault."
+    "No."
+    *line_break
+    *line_break
+    "It's genuinely not. He's been at it since seven this morning."
+    *line_break
+    *line_break
+    "No," your angel says again, and the way it says it the second time you understand that it is not agreeing with you to be kind. It has looked at the whole of Jan Halakiewicz at once and it is simply reporting.
+    *set severity %-15
+    *set charity %+20
+    *goto halak_end
+
+  #Watch the needle move and say nothing.
+    You watch it move. One to two. It takes no time at all, the way a bone breaking takes no time at all.
+    *set severity %+10
+    *set hope %-10
+    *goto halak_end
+
+*label halak_end
+
+*page_break
+
+*comment ---- 6.4 : THE CHURCH HALL. 1991, age sixteen ----
+
+There is a man in this parish called Dennis Wisniewski and you are going to want to hit him.
+
+He is fifty-four. He runs the Holy Name Society and the September festival and he runs both of them extremely well — the festival clears four thousand dollars a year and it clears it because of him. Nobody has ever seen him cut a corner in his life. He is at the six-thirty on weekdays. He has never done what Adam does and he has never been tempted to and he does not know that those are two different sentences.
+
+He gets Adam by the coffee urn after a meeting in April and talks to him about purity for eleven minutes.
+
+*page_break
+
+Every fact he says is true.
+
+That is the thing. He is not leering and he is not prurient and he is not enjoying it — he is *disciplined*, he is correct, he is quoting accurately, and he is completely certain.
+
+And in eleven minutes there is not one gram of mercy. Not a sentence of it. Not an inch of room left anywhere for a sixteen-year-old to stand.
+
+By the end of it Adam Kowalczyk has learned what the people who believe this are like.
+
+*page_break
+
+You are shouting. There is nothing here to shout with and you are shouting anyway.
+
+"Who does he think he is? Who *does* he — I have been listening to men like that my whole —" and then you stop, because a thought has arrived, and it arrives with a great deal of heat behind it.
+
+"Who did that to *him*?"
+
+*page_break
+
+*comment ---- THE SIDEWAYS JUMP ----
+
+And you are taken.
+
+*page_break
+
+It is 1953. It is a kitchen in Lawrenceville with a coal stove and a calendar from a funeral home. Dennis Wisniewski is fourteen years old and he is standing in the middle of the floor, and there is a man in the doorway who is his father, and the man is saying something to him, and there is a woman at the sink who does not turn around.
+
+It takes about thirty seconds. It is not violent. Nobody hits anybody.
+
+You would rather it had been violent.
+
+*page_break
+
+And then you are back by the coffee urn in 1991 and a fifty-four-year-old man is still talking, and he has got to the part about how these things get into a person and do not come out.
+
+*page_break
+
+"Well," you say, after a while. "That was a rotten trick."
+
+"You asked."
+
+"You could have just told me."
+
+"You would not have believed it," your angel says. "You would have decided I was making excuses for him."
+
+*page_break
+
+*choice
+  #"It doesn't excuse it."
+    "No."
+    *line_break
+    *line_break
+    "He's still doing it. He's still standing there doing it *right now*."
+    *line_break
+    *line_break
+    "Yes," your angel says. "Both of those are true at once and they are going to stay true, and there is no third thing coming that will resolve them."
+    *set severity %+15
+    *set charity %+15
+    *goto dennis_end
+
+  #"Get the boy out of that room."
+    You get him out. There is a friend at the door and a reason to leave and Adam takes it gratefully at the eight-minute mark.
+    *line_break
+    *line_break
+    Eight minutes was enough.
+    *set valor %+20
+    *goto dennis_end
+
+  #"Can we do anything for Dennis?"
+    Your angel is quiet for a moment.
+    *line_break
+    *line_break
+    "He is not our commission," it says. "He has his own. It has been standing beside him since 1939 and it is still there and it is not having an easy time either."
+    *line_break
+    *line_break
+    You had not thought about that. You think about it for a long while afterwards.
+    *set charity %+25
+    *set hope %+10
+    *goto dennis_end
+
+*label dennis_end
+
+*page_break
+
+*comment ---- 6.5 : NINE WORDS. 1991, age sixteen ----
+
+In October, Stan Kowalczyk says the only thing he will ever say to his son about any of this.
+
+It happens in a 1984 Buick Century on the Bloomfield Bridge, going north, with the radio off. Something has come up — a thing on the television the night before, a thing at school — and Stan has been working himself up to this for about four days, in the way of a man who is going to do a difficult thing once and never again.
+
+He says nine words.
+
+They are not cruel. They are not even wrong, exactly. They are the words of a man who has no equipment for this whatsoever and who is embarrassed to the roots of his hair, and what they do is close the subject, permanently, for both of them, in about four seconds.
+
+Neither of them ever mentions it again. Not in 1991, not in 2016 in a hospital bed, not once.
+
+*page_break
+
+*choice
+  #Work on Stan. He is the one who can still be reached.
+    Nobody thinks of this. Stan is not the ward and the panel does not have a column for him.
+    *line_break
+    *line_break
+    You spend two years on him and you get about four inches, and in 1993 those four inches turn into a spiral notebook in a drawer that nobody finds until 2016.
+    *line_break
+    *line_break
+    You will not know that until 2016 either.
+    *set charity %+25
+    *set splendor %-20
+    *goto buick_end
+
+  #Get him to say more. Now, in the car, while the door is open.
+    You push. You push harder than you have pushed at anything.
+    *line_break
+    *line_break
+    Stan Kowalczyk turns the radio on.
+    *set valor %+20
+    *set hope %-10
+    *goto buick_end
+
+  #Nothing. He has done what he can do.
+    "He has done what he can do," your angel says, "and it was more than his own father did, and he will not know that either."
+    *set severity %-15
+    *set charity %+15
+    *goto buick_end
+
+*label buick_end
+
+*page_break
+
+*comment ---- 6.6 : THE ARGUMENT. 1993, age eighteen ----
+
+It arrives on the 54 in February of 1993, between Butler Street and the bridge, fully formed, and it is good.
+
+*page_break
+
+*line_break
+*Why would He put this in me at thirteen, without asking, and then tell me it damns me?*
+*line_break
+*Either He is cruel, or people made the rule up.*
+*line_break
+*And I do not think He is cruel.*
+*line_break
+*line_break
+
+*page_break
+
+That is it. That is the whole argument. It is not sophisticated and it does not need to be. It has convinced a very large number of people, including people considerably cleverer than an eighteen-year-old on a bus, and it convinces him in about four seconds because he has been looking for it since he was fourteen.
+
+*page_break
+
+And you know the answer.
+
+You have known it since before you had legs. The answer is that *I am able to* was never an argument for *I should* — he is also able to lie, and to eat until he is sick, and to use a person and call it fondness — and that the thing he is being told is not a fence somebody put round his body. It is a description of what a person is. And therefore of what it costs to practise treating one as a thing.
+
+That is the answer. It takes about ninety seconds to say properly.
+
+*page_break
+
+And there is nobody in the city of Pittsburgh who is going to say it to him.
+
+His grandmother is dead. His father turned the radio on. The priest is brisk and behind and has eleven people in the line. And the one man who has ever tried to talk to him about this at any length is Dennis Wisniewski, by a coffee urn, in April of 1991, for eleven minutes, and Adam has already decided what that man is.
+
+*page_break
+
+*choice
+  #Find somebody who can say it. Spend everything.
+    You spend everything. You spend two years and you get him within nine feet of it three separate times, and the third time is a man at a wedding in 1994 who would have been perfect and who was called away to deal with his own father.
+    *line_break
+    *line_break
+    Nine feet.
+    *set valor %+25
+    *set hope %-15
+    *set_hidden overreach 3
+    *goto argument_end
+
+  #Put a book in front of him.
+    You put a book in front of him. It goes on a shelf in a house on Dobson Street in 1993 and it moves to three apartments and it is still on a shelf in 2017, and in 2017, at two in the morning, a forty-two-year-old man takes it down.
+    *line_break
+    *line_break
+    Twenty-four years. You will feel like a fool for twenty-four years.
+    *set splendor %-20
+    *set valor %-15
+    *set charity %+20
+    *goto argument_end
+
+  #Work on Renee instead. She is about to matter more than anything.
+    A cold decision and a correct one. He is eighteen and the argument is made and there is nothing you can do about the argument, and there is something you can do about who is standing next to him for the next five years.
+    *set severity %+15
+    *set charity %+20
+    *goto argument_end
+
+  #Let it stand. Arguing back is not the office.
+    You let it stand. It is the hardest thing you have done and it takes no effort at all.
+    *set valor %-30
+    *set severity %+10
+    *goto argument_end
+
+*label argument_end
+
+*set_ward needle 3
+
+*page_break
+
+*comment ---- 6.7 : THE RELIEF. 1993 ----
+
+He stops going in the autumn.
+
+And here is the part nobody tells you, and the part this is going to insist on: **it is wonderful.**
+
+*page_break
+
+No more Dennis Wisniewski by the coffee urn. No more standing in a line on a Saturday afternoon performing an accounting he has never once got right. No more lying in bed on a Friday going back over the week with a pencil.
+
+And the nine o'clock at St. Casimir in 1993 is, objectively, bad. This is not a slander and it is not a set-up for a correction later. There is a cantor who cannot sing and knows it and is doing her best. There is a homily read off a photocopy, badly, by a man who is exhausted. There are eighty-one people in a building built for six hundred, in coats, in October, because the boiler is out again.
+
+And there are four people in the third pew who were unkind to his mother in 1987 in a way he has not forgotten, and every single Sunday of his life he has watched them go up and come back with their hands folded.
+
+*page_break
+
+He does not decide anything.
+
+That is the other part. There is no scene, no argument, no door. He does not go one Sunday because he is tired. He does not go the next because he did not go the last. By November it is simply a thing he does not do, and nobody in the house says one word about it.
+
+*page_break
+
+He is eighteen years old and he is free, and it feels *exactly* like being free, and some of his reasons are good reasons.
+
+*page_break
+
+*choice
+  #"Some of that is fair."
+    "Yes," your angel says.
+    *line_break
+    *line_break
+    "The Mass really is bad."
+    *line_break
+    *line_break
+    "It is bad."
+    *line_break
+    *line_break
+    "And Dennis really is —"
+    *line_break
+    *line_break
+    "Yes."
+    *line_break
+    *line_break
+    You wait for the correction. There is no correction. Your angel is not going to argue him back into a building and neither are you, and both of you know exactly how long it is going to be.
+    *set charity %+20
+    *set hope %-5
+    *goto relief_end
+
+  #"He'll be back by Christmas."
+    "No."
+    *line_break
+    *line_break
+    "Easter."
+    *line_break
+    *line_break
+    "No."
+    *line_break
+    *line_break
+    "Don't tell me. Don't you dare tell me."
+    *line_break
+    *line_break
+    It does not tell you.
+    *set hope %-15
+    *goto relief_end
+
+  #Look at the number.
+    You look at Prayers. It has been at nothing since February 1986.
+    *line_break
+    *line_break
+    And then, in the third week of November 1993, without any warning and without anything in the text to explain it, it moves.
+    *line_break
+    *line_break
+    Not much. One. And it holds there.
+    *set_ward prayers 1
+    *set hope %+10
+    *goto relief_end
+
+*label relief_end
+
+*page_break
+
+Upstairs on Dobson Street, in the second drawer of a bureau, under a box of screws, there is a spiral notebook that was bought at a drugstore on Liberty Avenue for fifty-nine cents.
+
+On the first page, at the top, in pencil, there is one word.
+
+It is a name.
+
+*finish

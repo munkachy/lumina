@@ -1,0 +1,330 @@
+*comment ============================================================
+*comment SCENE EIGHT — WHAT HE DOESN'T TELL HER
+*comment 1996–97, ages 21–22. ~2,300 words, 14 choices.
+*comment Job: the hinge. Everything before is setup, everything after
+*comment is consequence. Loretta's second misjudgment, inverted: she
+*comment thinks the concealment is the small part.
+*comment ============================================================
+
+*comment ---- 8.1 : the scale changes ----
+
+In the autumn of 1996 a modem goes into the apartment on Semple Street.
+
+It is for the four of them and it costs nineteen dollars a month and it makes a noise like a small animal being posted somewhere.
+
+*page_break
+
+Here is how this scene is going to be told, and it is not squeamishness, it is the shape of the thing:
+
+You cannot see him.
+
+Not for any of it. Not once. The dark comes down the way it came down in 1989 and it comes down more often now, and what you get is what is left over — the hours, and the light under a door, and what a room looks like at four in the morning, and a young man who used to be on a roof by six and is now getting up at eleven.
+
+*set_ward sight "dark"
+
+*page_break
+
+You know the shape of it from outside, the way you know weather from inside a house.
+
+It is not the same as 1989. In 1989 it took effort — it took a magazine somebody's brother had, it took going somewhere, it took being a person who had done something. The effort was part of the machinery: he had to decide, each time, to be that.
+
+There is no effort now. That is the entire difference and it is not a small one.
+
+*page_break
+
+*comment ---- 8.2 : she nearly finds out ----
+
+Renee Sobek is twenty-one and doing her clinicals at Shadyside and is at the apartment three or four nights a week.
+
+In February she comes in early, and she asks him something completely ordinary, and there is a pause before he answers that is about a quarter of a second too long.
+
+*page_break
+
+She does not find out.
+
+That is what you have to hold on to here. She comes within about a foot of it and she does not get there. What she gets is the pause.
+
+And she notices the pause and not the reason for it, and she files it, the way people do, in the place where you keep things that do not fit and cannot be asked about.
+
+*set_ward sight "clear"
+
+*page_break
+
+*choice
+  #Arrange for him to tell her.
+    You spend three weeks on it. You clear the apartment, you get them both fed, you get the television broken, you put them in a room with two chairs and nothing to do.
+    *line_break
+    *line_break
+    And on the ninth of March, 1996, Adam Kowalczyk tells Renee Sobek the truth about the last seven years.
+    *line_break
+    *line_break
+    It goes badly.
+    *line_break
+    *line_break
+    She is twenty-one. She has no framework for it — nobody has given her one either — and what she does is cry, and then get angry, and then apologise for getting angry, which is worse, and then ask him a series of questions that are exactly the wrong questions.
+    *line_break
+    *line_break
+    They do not break up. It costs them about eight months and it very nearly does.
+    *line_break
+    *line_break
+    "That was terrible," you say. "That was worse than not telling her."
+    *line_break
+    *line_break
+    "No," your angel says.
+    *set charity %+25
+    *set valor %+15
+    *set hope %+10
+    *set_ward needle 3
+    *goto told
+
+  #Arrange for her to find out.
+    You do not make him say it. You make her see it, in April, in a way that cannot be walked back.
+    *line_break
+    *line_break
+    It is much faster and it is much worse, and the difference between a man telling you a thing and a woman discovering it is a difference she is going to feel for the rest of her life.
+    *line_break
+    *line_break
+    They do not break up either. But she is now a person who found out, and he is now a person who was caught, and neither of those is a thing you can put back.
+    *set severity %+25
+    *set_hidden overreach 4
+    *goto told
+
+  #Let him keep it.
+    You let him keep it. It is not even a decision, particularly; you simply do not do anything, and the moment goes past, and by April it is not a moment any more.
+    *line_break
+    *line_break
+    And something else starts.
+    *set valor %-20
+    *goto kept
+
+  #Ask her angel what it wants.
+    It is in the doorway. It has been in the doorway since 1985.
+    *line_break
+    *line_break
+    You ask, and it hands the answer over whole and without softening, and the answer is: *I want her told, and I want her told by him, and I want it tonight, and I have wanted it since February, and I cannot do it, and neither can you unless you decide to.*
+    *line_break
+    *line_break
+    "You've been standing there the whole time."
+    *line_break
+    *line_break
+    *It has been eleven years,* it says.
+    *set charity %+20
+    *set severity %+10
+    *goto choose_again
+
+*label choose_again
+
+*page_break
+
+Now choose.
+
+*choice
+  #Tell him. Get him to tell her tonight.
+    *set charity %+25
+    *set valor %+15
+    *set hope %+10
+    *goto told
+
+  #Still no.
+    *set valor %-25
+    *set hope %-10
+    *goto kept
+
+*label told
+
+*page_break
+
+*comment ---- the road that is not a magic fix ----
+
+Here is what telling her does and does not do.
+
+It does not fix him. He does not stop. He stops for eleven weeks and then he does not stop, and she knows about it now, which is its own kind of grinding for both of them.
+
+It does not make her wise. She is twenty-one and she handles it imperfectly, sometimes badly, and there are three or four things she says in 1996 that she would give a year of her life to take back.
+
+*page_break
+
+What it does is this.
+
+He remains, to himself, one person.
+
+There is no second man in the apartment on Semple Street. There is no room in him with a different Adam in it. Everything he does is done by somebody who is known, by at least one other human being, to be doing it — and a thing that is known is a thing that can still be talked about, and a thing that can be talked about is not yet a room with a door on it.
+
+That is all it buys. It is a small thing and it costs an enormous amount and the game is not going to pretend otherwise.
+
+*goto eight_end
+
+*label kept
+
+*page_break
+
+*comment ---- 8.3 : what concealment actually does ----
+
+He keeps it, and here is what you expect: distance.
+
+That is what you expect because that is what everybody expects. He will pull back. There will be less of him in the room. He will be somewhere else while he is standing there.
+
+*page_break
+
+That is not what happens.
+
+What happens is a *hierarchy.*
+
+*page_break
+
+He knows something she does not.
+
+He has looked at what people actually are, in the middle of the night, at close range, and she has not. He is honest with himself about the world; she lives in something comfortable that he is protecting her from. He is *free*, in a way that is slightly sad and slightly heroic, and she is naive, in a way that is sweet and requires managing.
+
+He would be appalled if you said any of this to him. He does not think it in words. Not once, not ever.
+
+*page_break
+
+And every week he does not tell her, that gap gets a little wider, and something moves in to fill it.
+
+*page_break
+
+*comment ---- Loretta's misjudgment, inverted ----
+
+"That's not the worst part, though," you say. "Whatever else — that's not the *worst* part. He's twenty-one. Half the men I ever knew were doing something like that at twenty-one and most of them turned out fine."
+
+Your angel does not say anything.
+
+"What."
+
+"You have the two of them the wrong way round."
+
+*page_break
+
+"I'm sorry?"
+
+"You have spent seven years appalled at what he does at four in the morning," it says, "and comfortable about what he does at the kitchen table. And I have spent seven years unable to tell you how much of the first one he is answerable for."
+
+"And the second?"
+
+"He is answerable for the second. All of it. Every week. He is twenty-one years old and he is entirely awake and he knows precisely what he is choosing and he chooses it again on Tuesday."
+
+*page_break
+
+"It's just *not telling her something.*"
+
+"It is deciding, once a week for two years, that a person he loves is a lesser kind of creature than he is," your angel says. "There is a word for that and it is not one of the words you were watching for. You were watching for the one they warn girls about in 1965."
+
+*page_break
+
+*choice
+  #"You're saying this is worse."
+    "I am saying that this is the one I can see, and that what I can see of it is bad, and that you have not looked at it once."
+    *set severity %+20
+    *set charity %+10
+    *goto contempt
+
+  #"Then why didn't you say something?"
+    "You did not ask," it says. "You asked about the nights."
+    *line_break
+    *line_break
+    And that is fair, and you hate that it is fair.
+    *set severity %+10
+    *set hope %-10
+    *goto contempt
+
+  #"I've been getting this wrong the whole time."
+    "You have been getting one half of it right with great vigilance," your angel says, "which is what most people do, and which is why the other half gets so much room."
+    *set charity %+20
+    *set hope %-5
+    *goto contempt
+
+*label contempt
+
+*page_break
+
+Nobody in this story ever uses the word contempt.
+
+What happens instead is that he starts finishing her sentences. He starts explaining things to her that she already knows and knew first. He becomes patient with her in a way that is not kindness and that she cannot object to, because how do you object to somebody being patient.
+
+*goto eight_end
+
+*label eight_end
+
+*page_break
+
+*comment ---- 8.4 : the kitchen table. 1997 ----
+
+Semple Street, a Thursday in October 1997, about nine at night. There is a kitchen table with a burn on it from before either of them lived there.
+
+She says: "What's wrong?"
+
+He says: "Nothing's wrong."
+
+*page_break
+
+And he is telling the truth.
+
+That is the thing to sit with. Whatever he has or has not told her, at this table, at nine o'clock, when he is asked directly, he is not conscious of concealing anything. Nothing feels wrong to him. He has a girlfriend he has known since he was nine and an apartment and a degree coming and there is genuinely nothing he could name.
+
+She can see there is. She has been able to see it since February of 1996.
+
+And she is twenty-two and she is a coward about exactly one thing in her whole life, which is conflict, and she has asked once, and he has said nothing's wrong, and she lets it go.
+
+*page_break
+
+She will think about that for twenty years.
+
+*page_break
+
+There are two angels in this kitchen. They have been within eleven feet of each other for twelve years. Neither of them can say a word to either of these people and both of them can see the whole thing, and the table is four feet across.
+
+*page_break
+
+*choice
+  #"Make her ask again."
+    You cannot make her do anything. What you can do is arrange, and what you arrange is that the phone does not ring and the roommate does not come home and there is nothing else in the room to look at.
+    *line_break
+    *line_break
+    She asks again.
+    *line_break
+    *line_break
+    He says: "I'm tired."
+    *line_break
+    *line_break
+    And that is also true.
+    *set valor %+20
+    *set charity %+15
+    *goto table_end
+
+  #"Make him look at her."
+    He looks at her. He looks at her for about three seconds longer than the conversation requires, and something crosses his face, and he does not have a name for it.
+    *line_break
+    *line_break
+    In 2017, at two in the morning, at a kitchen table in a different apartment, he is going to remember those three seconds without any warning at all and have to put a cup down.
+    *set charity %+25
+    *set splendor %-15
+    *goto table_end
+
+  #Nothing. Watch it.
+    You watch it. Both of you watch it. It takes four minutes and then she puts the kettle on.
+    *set valor %-25
+    *set hope %-15
+    *goto table_end
+
+  #"Is this it? Is this the important part?"
+    "Yes," your angel says.
+    *line_break
+    *line_break
+    "This? A kitchen? *This* is the —"
+    *line_break
+    *line_break
+    "If you had understood nothing else in twenty-two years," it says, "and you understood this table, you would have understood the thing."
+    *set charity %+20
+    *set hope %+5
+    *goto table_end
+
+*label table_end
+
+*page_break
+
+She puts the kettle on.
+
+He goes and turns the television on in the other room, and she stands in the kitchen with her hand on the counter for a moment before she follows him, and that is the whole of it, and neither of them ever refers to it again.
+
+*finish

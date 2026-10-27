@@ -1,0 +1,210 @@
+*comment ============================================================
+*comment SCENE TWO — FOUR HOURS
+*comment 1975. ~1,000 words, 4 choices.
+*comment Job: hit every limit inside ten minutes. Establish
+*comment culpability:unknown. First sight of them — and she cannot
+*comment get a count.
+*comment ============================================================
+
+Magee-Womens Hospital sits on the side of a hill in Oakland and it is the fourteenth of June, 1975, and it is raining the way it rains in June, warm and without conviction.
+
+You are inside before the doctor is.
+
+*page_break
+
+There is a woman on the bed who is twenty-two and whose name is Ewa, and she is doing this without much help because it is 1975 and that is the arrangement. Her husband is in a corridor. He has been in the corridor for two hours and he has smoked four cigarettes in a stairwell and come back each time and sat down again and not said anything to anybody.
+
+And there is a woman in the corridor too, seventy-seven years old, in a coat she has had since the war, working a rosary with her thumb.
+
+*page_break
+
+And then there is a person in the room who was not there four seconds ago.
+
+You have seen a lot of babies. You have had two. You are not prepared for this at all, because what you are looking at is not a baby, or not only — you are seeing him the way your angel sees him, which is all of him at once, from the outside, entirely.
+
+You know his weight. You know his temperature. You know the rate of his heart and that his left hand is a little slower to open than his right and that he will be right-handed and that this is already decided in him and nobody will know it for three years.
+
+*page_break
+
+And you cannot get in.
+
+Not a crack. Not a sliver. You are looking at a person from the outside with perfect clarity and there is a door in the middle of him that you are not going through, now or ever.
+
+"What's in there?" you say.
+
+"I do not know."
+
+"You don't *know?* You just told me the temperature of his —"
+
+"I know everything about him that can be known from outside," it says. "There is exactly one Person who can see into that room and I am not Him. Neither are you. Neither is anything else that was ever made."
+
+*page_break
+
+*comment ---- 2.2 : the panel, and the word that never changes ----
+
+And there is a thing you can see now, off to the side, the way you can see your own nose if you think about it.
+
+There are numbers.
+
+Some of them are about your angel — you do not understand them yet and you will spend forty-nine years learning to read them. Some of them are about the boy. And there is one that is not a number at all. It is a word, and the word is:
+
+*line_break
+*line_break
+**unknown**
+*line_break
+*line_break
+
+"What's that one?"
+
+"Whether he is guilty of anything."
+
+"He's four minutes old."
+
+"Yes. And that word will not change when he is nine, or eighteen, or forty-three, or in the last hour. Not once, in the whole of it."
+
+*page_break
+
+"Why not?"
+
+"Because to know whether a person is guilty you have to know what he understood and what he agreed to, and both of those are in the room I cannot enter." It does not say this heavily. It says it the way you would say the bus is late. "You are going to want that word to change. It is going to be the hardest thing about this. I am telling you now so that you stop waiting for it."
+
+You look at the word for a while.
+
+It does not change.
+
+*page_break
+
+*comment ---- 2.3 : the toolkit ----
+
+"So what *can* you do?"
+
+"Try something."
+
+*choice
+  #Move something. Anything. Move the curtain.
+    The curtain moves. It is not dramatic — it is about what a draught would do, and a nurse glances at the window and goes back to what she is doing.
+    *line_break
+    *line_break
+    "That is real," your angel says. "That is a genuine thing I can do and it is not nothing. In 2005 something roughly that size is going to be the difference between eighteen more years and none."
+    *set valor %+10
+    *goto tools
+
+  #Put a thought in the mother's head. Tell her it's going to be all right.
+    Nothing happens.
+    *line_break
+    *line_break
+    "Not *in*," it says. "I can put a thing in front of a person. I cannot put a thing inside one. There is no door on that side either."
+    *line_break
+    *line_break
+    "Then what's the point of —"
+    *line_break
+    *line_break
+    "I can make the old woman in the corridor stand up," it says, "and come in, and say it out loud to her daughter-in-law's face. That is the whole trade. Everything I do for the next forty-nine years, somebody else has to actually do."
+    *set charity %+15
+    *goto tools
+
+  #Touch him. Just once.
+    You reach out. There is nothing there to reach with. You feel the shape of the refusal before you feel anything else, and it is not cruelty, it is more like reaching for a word in a language you were never taught.
+    *line_break
+    *line_break
+    "No," your angel says. "Not once. Not in forty-nine years."
+    *set severity %-10
+    *set hope %-5
+    *goto tools
+
+  #Nothing. Watch him.
+    You watch him.
+    *line_break
+    *line_break
+    Your angel does not say anything, and you understand, some hours later, that this was the correct answer and that it was not going to tell you so.
+    *set valor %-15
+    *set charity %+20
+    *goto tools
+
+*label tools
+
+*page_break
+
+*comment ---- 2.4 : the others ----
+
+There is something else in the room.
+
+You find it the way you find a wasp — not by looking, by the change in the air. It is over by the door and it is not doing anything much and it does not acknowledge you.
+
+Then there is a second one.
+
+Then you are not sure whether the second one is a second one, or whether it is the first one and you have counted wrong, and you go back and forth on this for a while and get nowhere.
+
+*page_break
+
+"How many are there?"
+
+"I do not know."
+
+"You said you know everything that can be known from —"
+
+"About *him*," it says. "Not about those. Those are minds like mine and they can keep what they like, and what they have chosen to keep is how many of them there are."
+
+"That's it? That's the strategy? *Confusing you about the number?*"
+
+"Yes," it says.
+
+You laugh. It is the first time you have laughed since Thursday and it comes out badly.
+
+"That's *pathetic.*"
+
+"It has worked on me for a long time," it says.
+
+*page_break
+
+*comment ---- 2.5 : St Casimir ----
+
+Then it is three weeks later and you are in a church on Brereton Street with green tile in the sanctuary and a radiator that knocks.
+
+It is a small crowd. The father is here and does not know what to do with his hands. The mother has an aunt on one side of her and nobody on the other.
+
+The old woman is holding the baby, because when the moment came Ewa's hands were shaking too badly and Halina simply put out her arms and took him and nobody said anything about it.
+
+*page_break
+
+The priest pours the water and says the words.
+
+And something happens.
+
+You are not going to be able to describe this either. Nobody in the building sees it. The priest does not see it. He is thinking about the eleven o'clock and whether the boiler is going to hold.
+
+But something arrives in the boy that was not in him, and it is not a feeling and it is not a decoration, and the closest you can get is that a room in him that was shut is now open, and something is now living in it, and it is going to be very difficult to get out.
+
+*page_break
+
+"Is that —"
+
+"Yes."
+
+"Every time? Every baby?"
+
+"Every time. Every baby. In a hall in Manila this morning and in a hospital in Cairo tonight and here, now, in front of a radiator that knocks."
+
+You watch the old woman hand him back.
+
+"Nobody sees it," you say.
+
+"No."
+
+*page_break
+
+*comment ---- 2.6 : Halina begins ----
+
+That night, in a house on Dobson Street with four rooms and one furnace, an old woman gets down on the floor beside a bed — which at seventy-seven costs her something, and takes a while, and hurts — and says a name out loud.
+
+*set_ward prayers 5
+
+One of the numbers moves.
+
+You do not notice. There is no reason you would. It is a small number in the corner of a lot of numbers, and it has just gone up, and it is going to keep going up every night for eleven years, and then something is going to happen to it that you will not understand for another thirty.
+
+*page_break
+
+In the kitchen, Ewa hears her mother-in-law through the wall and rolls her eyes at the ceiling, affectionately, the way you do about an old woman who prays out loud.
+
+*finish
