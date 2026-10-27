@@ -7,3 +7,7 @@ private/
 data-grail.js
 grail-source.txt
 grail-fixes.js
+# The Catechism and the Church documents are © Libreria Editrice Vaticana: only their
+# encrypted copies (data-catechism.enc, data-docs.enc) go in the repo. See tools/encrypt-data.py.
+data-catechism.js
+data-docs.js

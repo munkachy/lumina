@@ -90,7 +90,7 @@ is the licensed way to display these copyrighted translations.
 - **Bible selector** — switch among all the translations anywhere; your place is kept.
 - **⇄ Compare** — on any verse, view every translation side by side (the Grail joins in the Psalms once imported).
 - **Text size** — A− / A+ buttons (or keyboard − / +) scale the whole app; remembered.
-- **Catechism of the Catholic Church** — choose it in the Book selector: all 2,865
+- **Catechism of the Catholic Church** (locked: it opens with your Scriptorium password, once per device, because the text is © Libreria Editrice Vaticana and is kept encrypted here) — choose it in the Book selector: all 2,865
   paragraphs, random paragraph, random chapter, full table of contents.
 - **Favorites in custom lists** — ♥ any verse or CCC paragraph; Lumina proposes
   your most recent list, or any other, or a new one. Deleting a list removes its
