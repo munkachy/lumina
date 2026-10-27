@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 7;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 8;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -367,6 +367,15 @@
     const endList = () => { if (list) out.push("</" + list + ">"); list = null; };
     for (const line of src.split("\n")) {
       let m;
+      const cells = (l) => l.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      if (/^\s*\|.*\|\s*$/.test(line)) {   // a Markdown table row
+        flush(); endList();
+        if (/^\s*\|[\s:|-]+\|\s*$/.test(line)) continue;   // the |---| line
+        const prev = out[out.length - 1] || "";
+        if (prev.endsWith("</tr>")) out[out.length - 1] = prev + "<tr>" + cells(line).map((c) => "<td>" + inline(c) + "</td>").join("") + "</tr>";
+        else out.push("<tr>" + cells(line).map((c) => "<th>" + inline(c) + "</th>").join("") + "</tr>");
+        continue;
+      }
       if ((m = line.match(/^\u0000(\d+)\u0000$/))) { flush(); endList(); out.push(blocks[+m[1]]); }
       else if ((m = line.match(/^#{1,6}\s+(.*)/))) { flush(); endList(); out.push("<h4>" + inline(m[1].replace(/[*#]+$/, "")) + "</h4>"); }
       else if (/^\s*([-*_])\1{2,}\s*$/.test(line)) { flush(); endList(); out.push("<hr>"); }
@@ -380,7 +389,8 @@
       else { if (list) endList(); para.push(line); }
     }
     flush(); endList();
-    return out.join("").replace(/<\/blockquote><blockquote>/g, "<br>");
+    return out.map((x) => x.startsWith("<tr>") ? '<div class="scr-tbl"><table>' + x + "</table></div>" : x)
+      .join("").replace(/<\/blockquote><blockquote>/g, "<br>");
   }
 
   function threadClick(e) {
@@ -708,6 +718,10 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-modes{display:flex;gap:1px;background:var(--panel);border-radius:10px;padding:2px}
 .scr-modes button{font-size:.78rem!important;padding:5px 7px!important}
 .scr-modes .ic{display:none}
+.scr-tbl{overflow-x:auto;margin:.6em 0}
+.scr-tbl table{border-collapse:collapse;font-size:.92em;min-width:100%}
+.scr-tbl th,.scr-tbl td{border-bottom:1px solid var(--gold-line);padding:6px 8px;text-align:left;vertical-align:top}
+.scr-tbl th{color:var(--gold);font-weight:600}
 .scr-build{font-size:.62rem;color:var(--ink-faint);opacity:.8;margin-left:1px;white-space:nowrap}
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
 .scr-conn{color:var(--ink-faint);font-size:.78rem;white-space:nowrap}
