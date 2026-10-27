@@ -10,6 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
+  const BUILD = 6;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -217,7 +218,8 @@
         '<button data-mode="' + k + '" class="' + (S && S.mode === k ? "on" : "") + '"><span class="lb">' + l + '</span><span class="ic">' + l[0] + "</span></button>").join("") + "</div>" +
       '<button data-act="theme" title="Light / dark">☾</button>' +
       '<button data-act="prefs" title="Text and voice">Aa</button>' +
-      '<button data-act="new" title="New conversation">＋</button>';
+      '<button data-act="new" title="New conversation">＋</button>' +
+      '<span class="scr-build" title="Scriptorium build">b' + BUILD + "</span>";
     if (!box) {
       box = document.createElement("div"); box.id = "scrCompose"; box.className = "normal"; document.body.appendChild(box);
       box.innerHTML = '<div class="scr-cbox"><textarea id="scrText" rows="3" placeholder="Message Scriptorium…"></textarea><div class="scr-crow"></div></div>';
@@ -226,10 +228,15 @@
       ta.addEventListener("blur", () => { delete box.dataset.shrunk; });
       box.addEventListener("click", composerClick);
       if (window.visualViewport) {
-        const fit = () => {   // keep the box above the iPhone keyboard
-          const vv = window.visualViewport;
-          box.style.bottom = Math.max(0, window.innerHeight - vv.height - vv.offsetTop) + "px";
+        const fit = () => {   // sit the box right on top of the iPhone keyboard, with no gap
+          const vv = window.visualViewport, kb = window.innerHeight - vv.height > 120;
+          box.classList.toggle("kb", kb);
+          const full = box.classList.contains("full"), barH = full ? (document.getElementById("scrBar") || {}).offsetHeight || 0 : 0;
+          if (kb && full) { box.style.bottom = "auto"; box.style.top = (vv.offsetTop + barH) + "px"; box.style.height = (vv.height - barH) + "px"; }
+          else if (kb) { box.style.bottom = "auto"; box.style.height = ""; box.style.top = (vv.offsetTop + vv.height - box.offsetHeight) + "px"; }
+          else { box.style.top = box.style.height = ""; box.style.bottom = "0px"; }
         };
+        new ResizeObserver(fit).observe(box);
         visualViewport.addEventListener("resize", fit); visualViewport.addEventListener("scroll", fit); fit();
       }
     }
@@ -699,6 +706,8 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-modes{display:flex;gap:1px;background:var(--panel);border-radius:10px;padding:2px}
 .scr-modes button{font-size:.78rem!important;padding:5px 7px!important}
 .scr-modes .ic{display:none}
+.scr-build{font-size:.62rem;color:var(--ink-faint);opacity:.8;margin-left:1px;white-space:nowrap}
+#scrCompose.kb{padding-bottom:4px;background:var(--bg)}
 .scr-conn{color:var(--ink-faint);font-size:.78rem;white-space:nowrap}
 .scr-conn.on{color:#2e8b57}
 @media (max-width:640px){.scr-tabs .lb,.scr-conn .lb,.scr-modes .lb{display:none}.scr-modes .ic{display:inline}.scr-tabs .ic{margin:0;font-size:1.05rem}#scrBar{gap:2px;padding-left:6px;padding-right:6px}}
