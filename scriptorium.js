@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 12;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 13;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -220,7 +220,7 @@
       '<button data-act="prefs" title="Text and voice">Aa</button>' +
       '<button data-act="convs" title="Past conversations">☰</button>' +
       '<button data-act="new" title="New conversation">＋</button>' +
-      '<span class="scr-build" title="Scriptorium build">b' + BUILD + "</span>";
+      '<button class="scr-build" data-act="update" title="Check for updates">b' + BUILD + (newerBuild ? ' <span class="scr-upd">↑</span>' : "") + "</button>";
     if (!box) {
       box = document.createElement("div"); box.id = "scrCompose"; box.className = "normal"; document.body.appendChild(box);
       box.innerHTML = '<div class="scr-cbox"><textarea id="scrText" rows="3" placeholder="Message Scriptorium…"></textarea><div class="scr-crow"></div></div>';
@@ -285,6 +285,7 @@
     else if (act === "prefs") openPrefs();
     else if (act === "new") newConversation();
     else if (act === "convs") openConvs();
+    else if (act === "update") checkUpdate(true);
   }
 
   function composerClick(e) {
@@ -310,6 +311,22 @@
     data.conv[tab] = null; data.history[tab] = [];
     await saveVault();
     renderMain();
+  }
+
+  /* ---------- updates: fetch the newest page, bypassing the iPhone's cache; nothing saved is lost ---------- */
+  let newerBuild = 0;
+  async function checkUpdate(ask) {
+    let latest = 0;
+    try {
+      const html = await (await fetch(location.pathname + "?check=" + Date.now(), { cache: "no-store" })).text();
+      latest = +((html.match(/scriptorium\.js\?v=(\d+)/) || [])[1] || 0);
+    } catch (e) { if (ask) alert("Couldn't check for updates: " + e.message); return; }
+    if (latest > BUILD) {
+      if (!newerBuild) { newerBuild = latest; chrome(true); }
+      if (ask && confirm("Build b" + latest + " is ready (you have b" + BUILD + "). Update now? Your key and conversations stay.")) {
+        location.replace(location.pathname + "?b=" + latest + "&t=" + Date.now() + location.hash);
+      }
+    } else if (ask) alert("You have the latest build, b" + BUILD + ".");
   }
 
   /* ---------- past conversations (kept on the Mac) ---------- */
@@ -503,7 +520,8 @@
     web = false;
   }
 
-  function hello() { request({ kind: "hello" }, true); }
+  function hello() { request({ kind: "hello" }, true); checkUpdate(false); }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && S) checkUpdate(false); });   // back in the app: anything new?
 
   async function request(req, quiet) {
     if (current && !quiet) return;
@@ -776,7 +794,8 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-conv .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scr-conv .d{font-size:.78rem;color:var(--ink-faint);white-space:nowrap}
 .scr-del{border:0;background:none;font-size:1rem;padding:4px 6px;cursor:pointer;opacity:.7}
-.scr-build{font-size:.62rem;color:var(--ink-faint);opacity:.8;margin-left:1px;white-space:nowrap}
+.scr-build{font-size:.62rem!important;color:var(--ink-faint)!important;opacity:.85;margin-left:1px;white-space:nowrap;padding:4px 3px!important}
+.scr-upd{color:#fff;background:var(--gold);border-radius:8px;padding:0 4px;font-weight:700}
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
 .scr-conn{color:var(--ink-faint);font-size:.78rem;white-space:nowrap}
 .scr-conn.on{color:#2e8b57}
