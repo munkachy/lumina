@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 11;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 12;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -21,7 +21,7 @@
   let view = null;          // Lumina's <main id="view">
   let S = null;             // unlocked session: { keys, token, login, repo, issue, mode, choices, projects, connected }
   let data = null;          // decrypted vault contents
-  let tab = "faith", web = false, current = null, voice = null, speaking = null;
+  let tab = "faith", web = false, study = false, current = null, voice = null, speaking = null;
   let prefs = Object.assign({
     answerSize: 1, answerFont: "serif", thinkSize: 0.9, thinkFont: "sans",
     autoRead: false, voice: { engine: "device", id: "" },
@@ -251,7 +251,8 @@
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
-      (tab === "faith" ? '<button class="scr-ib" data-act="journal" title="Journal">📖</button>' +
+      (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study: bring in the Catechism and Bible">✝</button>' +
+        '<button class="scr-ib" data-act="journal" title="Journal">📖</button>' +
         '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
       '<button class="scr-ib" data-act="size" title="' + (full ? "Smaller" : "Full screen") + '">' + (full ? "⤡" : "⤢") + "</button>" +
@@ -298,6 +299,7 @@
     } else if (act === "send") send();
     else if (act === "stop") { t.disabled = true; postSealed("stop", { request: current.id }); }
     else if (act === "web") { web = !web; composerRow(); }
+    else if (act === "study") { study = !study; composerRow(); const t = $("#scrText"); if (t) t.placeholder = study ? "Study: ask with the Catechism and Bible…" : "Message Scriptorium…"; }
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "journal" && !current) request({ kind: "journal", text: "📖 Journal" });
     else if (act === "models") openModels();
@@ -497,7 +499,7 @@
     box.value = ""; box.blur();
     [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
-    request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
+    request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web, study: tab === "faith" && study });
     web = false;
   }
 
