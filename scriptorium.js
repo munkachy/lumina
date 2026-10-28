@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 16;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 17;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -255,7 +255,6 @@
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
       (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study: bring in the Catechism and Bible">✝</button>' +
-        '<button class="scr-ib" data-act="journal" title="Journal">📖</button>' +
         '<button class="scr-ib" data-act="mind" title="Mind map">🧠</button>' +
         '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
@@ -309,7 +308,6 @@
     else if (act === "study") { study = !study; composerRow(); const t = $("#scrText"); if (t) t.placeholder = study ? "Study: ask with the Catechism and Bible…" : "Message Scriptorium…"; }
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
-    else if (act === "journal" && !current) request({ kind: "journal", text: "📖 Journal" });
     else if (act === "models") openModels();
   }
 
@@ -559,9 +557,8 @@
     if (cc && (cc.corrected || []).length) h += '<div class="scr-mem">⚠ Quote check flagged ' + cc.corrected.map(esc).join("; ") + ". It reread the sources and corrected itself above.</div>";
     if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
-    if (!live && r.journal) h += '<div class="scr-actions"><button data-journal-today="1">✎ Write today\'s entry now</button></div>';
     if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button>' +
-      (tab === "faith" && !r.journal ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + (mindSaved(r) ? "🧠 In mind map ✓" : "🧠 Save to mind map") + "</button>" : "") + "</div>";
+      (tab === "faith" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + (mindSaved(r) ? "🧠 In mind map ✓" : "🧠 Save to mind map") + "</button>" : "") + "</div>";
     return h;
   }
 
@@ -610,7 +607,6 @@
   function threadClick(e) {
     const ap = e.target.closest("[data-appr]");
     if (ap) { ap.parentElement.querySelectorAll("button").forEach((b) => b.disabled = true); postSealed("approve", { id: ap.dataset.appr, ok: ap.dataset.ok === "1" }); return; }
-    if (e.target.closest("[data-journal-today]")) { if (!current) request({ kind: "journal", action: "today", text: "📖 Today's journal" }); return; }
     const pill = e.target.closest(".scr-pill");
     if (pill) {
       e.preventDefault();
@@ -684,7 +680,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv"].includes(req.kind) ? null : req.kind === "journal" ? "faith" : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }

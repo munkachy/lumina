@@ -3839,7 +3839,7 @@ const LuminaCore = (function () {
     const go = () => window.Scriptorium.open(view, typeof mode === "string" ? mode : undefined);
     if (window.Scriptorium) return go();
     const s = document.createElement("script");
-    s.src = "scriptorium.js?v=16"; s.onload = go;
+    s.src = "scriptorium.js?v=17"; s.onload = go;
     s.onerror = () => showToast("Couldn't load Scriptorium. Check the connection.");
     document.body.appendChild(s);
   }
