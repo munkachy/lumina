@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 13;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 14;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -702,7 +702,9 @@
   function sheet(html) {
     let s = document.getElementById("scrSheet");
     if (!s) { s = document.createElement("div"); s.id = "scrSheet"; document.body.appendChild(s); }
-    s.innerHTML = '<div class="scr-sheet-card"><div class="scr-grab"></div>' + html + "</div>";
+    s.innerHTML = '<div class="scr-sheet-card"><div class="scr-grab"></div><button class="scr-x" title="Close">✕</button>' + html + "</div>";
+    s.onclick = (e) => { if (e.target.id === "scrSheet") closeSheet(); };   // tapping outside closes it; sheets may add more
+    $(".scr-x", s).onclick = (e) => { e.stopPropagation(); closeSheet(); };
   }
   function closeSheet() { const s = document.getElementById("scrSheet"); if (s) s.remove(); }
 
@@ -794,6 +796,8 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-conv .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scr-conv .d{font-size:.78rem;color:var(--ink-faint);white-space:nowrap}
 .scr-del{border:0;background:none;font-size:1rem;padding:4px 6px;cursor:pointer;opacity:.7}
+.scr-sheet-card{position:relative}
+.scr-x{position:absolute;top:10px;right:12px;border:0;background:var(--panel);color:var(--ink-soft);width:30px;height:30px;border-radius:50%;font-size:.9rem;cursor:pointer}
 .scr-build{font-size:.62rem!important;color:var(--ink-faint)!important;opacity:.85;margin-left:1px;white-space:nowrap;padding:4px 3px!important}
 .scr-upd{color:#fff;background:var(--gold);border-radius:8px;padding:0 4px;font-weight:700}
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
