@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 15;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 16;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -220,6 +220,7 @@
         '<button data-mode="' + k + '" class="' + (S && S.mode === k ? "on" : "") + '"><span class="lb">' + l + '</span><span class="ic">' + l[0] + "</span></button>").join("") + "</div>" +
       '<button data-act="theme" title="Light / dark">☾</button>' +
       '<button data-act="prefs" title="Text and voice">Aa</button>' +
+      '<button data-act="mind" title="Mind map">🧠</button>' +
       '<button data-act="convs" title="Past conversations">☰</button>' +
       '<button data-act="new" title="New conversation">＋</button>' +
       '<button class="scr-build" data-act="update" title="Check for updates">b' + BUILD + (newerBuild ? ' <span class="scr-upd">↑</span>' : "") + "</button>";
@@ -280,16 +281,18 @@
   function toolbarClick(e) {
     const t = e.target.closest("button");
     if (!t) return;
-    if (t.dataset.tab) { tab = t.dataset.tab; web = false; renderMain(); return; }
+    if (t.dataset.tab) { leaveMind(); tab = t.dataset.tab; web = false; renderMain(); return; }
     if (t.dataset.mode) { request({ kind: "mode", mode: t.dataset.mode }, true); S.mode = t.dataset.mode; chrome(true); return; }
     const act = t.dataset.act;
     if (act === "lumina") backToLumina();
     else if (act === "theme" && window.LuminaTheme) window.LuminaTheme.toggle();
     else if (act === "prefs") openPrefs();
-    else if (act === "new") newConversation();
-    else if (act === "convs") openConvs();
+    else if (act === "convs") { leaveMind(); openConvs(); }
+    else if (act === "new") { leaveMind(); newConversation(); }
+    else if (act === "mind") { if (mindMode) { leaveMind(); renderMain(); } else { mindMode = true; renderMind(); } }
     else if (act === "update") checkUpdate(true);
   }
+  function leaveMind() { if (!mindMode) return; mindMode = false; const box = $("#scrCompose"); if (box) box.style.display = ""; }
 
   function composerClick(e) {
     const t = e.target.closest("button");
@@ -371,7 +374,7 @@
     const topics = ((c.match(/\*\*Topics:\*\*\s*(.+)/) || [])[1] || "").split(";").map((t) => t.trim()).filter(Boolean);
     const qpart = (c.split("**Questions**")[1] || "").split(/\n\s*\*\*/)[0];
     const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
-    return { date: new Date().toISOString(), title, topics, questions, text: c, note: turn.text };
+    return { date: new Date().toISOString(), title, topics, questions, text: c, note: turn.text, refs: turn.reply.refs || [] };
   }
 
   async function toggleMind(turn, btn) {
@@ -400,9 +403,11 @@
   }
 
   const mindView = { range: "all", by: "topics", open: null };
+  const tidy = (p) => { p = p.replace(/^[\s"“'‘;:,.—–-]+|[\s"”'’;:,.—–-]+$/g, ""); return p.charAt(0).toUpperCase() + p.slice(1); };
   const boxLabel = (t, by) => {
-    const parts = t.split(" — ");
-    return by === "subjects" ? parts[0] : parts.length > 1 ? parts[0] + " · " + parts[parts.length - 1] : parts[0];
+    const parts = t.split(/\s+—\s+|\s*;\s*—\s*/).map(tidy).filter(Boolean);
+    if (!parts.length) return tidy(t);
+    return by === "subjects" || parts.length === 1 ? parts[0] : parts[0] + " · " + parts[parts.length - 1];
   };
 
   async function renderMind() {
@@ -438,15 +443,29 @@
         const hits = list.filter((m) => (m.topics || []).some((t) => boxLabel(t, mindView.by) === mindView.open));
         h += '<h3 class="scr-mind-sub">' + esc(mindView.open) + "</h3>" + hits.map((m) =>
           '<details class="scr-entry"><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
-          "</span> " + esc(m.title) + '</summary><div class="scr-md">' + md(m.text || "", []) + '</div><button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("");
+          "</span> " + esc(m.title) + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + '</div><button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("");
       }
     }
     view.innerHTML = h + "</div>";
   }
 
+  function entryRefs(m) {
+    if (m.refs && m.refs.length) return m.refs;
+    const seen = new Set();   // saved before links were kept: the Catechism numbers at least
+    return [...(m.text || "").matchAll(/CCC\s*(\d{1,4})/g)].filter((x) => !seen.has(x[0]) && seen.add(x[0])).map((x) => ({ text: x[0], ccc: +x[1] }));
+  }
+
   async function mindClick(e) {
     const t = e.target;
-    if (t.closest("[data-mind-close]")) { mindMode = false; const box = $("#scrCompose"); if (box) box.style.display = ""; tab = "faith"; return renderMain(); }
+    const pill = t.closest(".scr-pill");
+    if (pill) {
+      e.preventDefault();
+      const holder = pill.closest("[data-entry]"), m = holder && mind.find((x) => String(x.cid) === holder.dataset.entry);
+      const r = m && entryRefs(m)[+pill.dataset.ref];
+      if (r && window.LuminaNav) { leaveChrome(); r.ccc ? window.LuminaNav.ccc(r.ccc) : window.LuminaNav.verse(r.book, r.c, r.v || 1); }
+      return;
+    }
+    if (t.closest("[data-mind-close]")) { leaveMind(); tab = "faith"; return renderMain(); }
     const r = t.closest("[data-range]"), b = t.closest("[data-by]"), x = t.closest("[data-box]"), u = t.closest("[data-unmind]");
     if (r) { mindView.range = r.dataset.range; return drawMind(); }
     if (b) { mindView.by = b.dataset.by; mindView.open = null; return drawMind(); }
