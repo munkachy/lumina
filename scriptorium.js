@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 9;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 10;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -218,6 +218,7 @@
         '<button data-mode="' + k + '" class="' + (S && S.mode === k ? "on" : "") + '"><span class="lb">' + l + '</span><span class="ic">' + l[0] + "</span></button>").join("") + "</div>" +
       '<button data-act="theme" title="Light / dark">☾</button>' +
       '<button data-act="prefs" title="Text and voice">Aa</button>' +
+      '<button data-act="convs" title="Past conversations">☰</button>' +
       '<button data-act="new" title="New conversation">＋</button>' +
       '<span class="scr-build" title="Scriptorium build">b' + BUILD + "</span>";
     if (!box) {
@@ -282,6 +283,7 @@
     else if (act === "theme" && window.LuminaTheme) window.LuminaTheme.toggle();
     else if (act === "prefs") openPrefs();
     else if (act === "new") newConversation();
+    else if (act === "convs") openConvs();
   }
 
   function composerClick(e) {
@@ -306,6 +308,44 @@
     data.conv[tab] = null; data.history[tab] = [];
     await saveVault();
     renderMain();
+  }
+
+  /* ---------- past conversations (kept on the Mac) ---------- */
+  async function openConvs() {
+    const kindNow = tab;
+    sheet("<h3>" + PURPOSE[kindNow] + ' conversations</h3><p class="scr-hint">Asking your Mac…</p>');
+    const draw = (list) => {
+      const when = (t) => new Date(t * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      sheet("<h3>" + PURPOSE[kindNow] + " conversations</h3>" + (list.length ? list.map((c) =>
+        '<div class="scr-conv' + (c.id === data.conv[kindNow] ? " on" : "") + '" data-open="' + c.id + '"><span class="t">' + esc(c.title || "Untitled") +
+        '</span><span class="d">' + when(c.updated) + '</span><button class="scr-del" data-del="' + c.id + '" title="Delete">🗑</button></div>').join("")
+        : '<p class="scr-hint">No conversations yet.</p>'));
+      const card = $(".scr-sheet-card");
+      if (card) card.onclick = async (e) => {
+        const del = e.target.closest("[data-del]"), open = e.target.closest("[data-open]");
+        if (del) {
+          e.stopPropagation();
+          if (!confirm("Delete this conversation from your Mac? This can't be undone.")) return;
+          del.closest(".scr-conv").style.opacity = ".4";
+          const st = await request({ kind: "delconv", id: +del.dataset.del, tab: kindNow }, true);
+          if (+del.dataset.del === data.conv[kindNow]) { data.conv[kindNow] = null; data.history[kindNow] = []; await saveVault(); renderMain(); }
+          draw((st && st.convs) || []);
+        } else if (open) {
+          sheet("<h3>Opening…</h3>");
+          const st = await request({ kind: "openconv", id: +open.dataset.open }, true);
+          const turns = [];
+          ((st && st.messages) || []).forEach((m) => {
+            if (m.role === "user") turns.push({ text: m.content, reply: { content: "", done: true } });
+            else if (turns.length) turns[turns.length - 1].reply.content = m.content;
+          });
+          data.conv[kindNow] = +open.dataset.open; data.history[kindNow] = turns;
+          await saveVault();
+          closeSheet(); tab = kindNow; renderMain();
+        }
+      };
+    };
+    const st = await request({ kind: "convs", tab: kindNow }, true);
+    draw((st && st.convs) || []);
   }
 
   /* ---------- the conversation ---------- */
@@ -466,7 +506,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel"].includes(req.kind) ? null : req.kind === "journal" ? "faith" : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv"].includes(req.kind) ? null : req.kind === "journal" ? "faith" : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -499,6 +539,7 @@
     gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + reqComment.id).catch(() => {});
     if (job.replyComment) gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + job.replyComment).catch(() => {});
     finish(job);
+    return job.state;
   }
 
   async function finish(job) {
@@ -727,6 +768,11 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-tbl table{border-collapse:collapse;font-size:.92em;min-width:100%}
 .scr-tbl th,.scr-tbl td{border-bottom:1px solid var(--gold-line);padding:6px 8px;text-align:left;vertical-align:top}
 .scr-tbl th{color:var(--gold);font-weight:600}
+.scr-conv{display:flex;align-items:center;gap:8px;padding:11px 4px;border-bottom:1px solid var(--gold-line);cursor:pointer}
+.scr-conv.on .t{color:var(--gold);font-weight:600}
+.scr-conv .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scr-conv .d{font-size:.78rem;color:var(--ink-faint);white-space:nowrap}
+.scr-del{border:0;background:none;font-size:1rem;padding:4px 6px;cursor:pointer;opacity:.7}
 .scr-build{font-size:.62rem;color:var(--ink-faint);opacity:.8;margin-left:1px;white-space:nowrap}
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
 .scr-conn{color:var(--ink-faint);font-size:.78rem;white-space:nowrap}
