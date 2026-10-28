@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 17;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 18;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -504,7 +504,7 @@
           const turns = [];
           ((st && st.messages) || []).forEach((m) => {
             if (m.role === "user") turns.push({ text: m.content, reply: { content: "", done: true } });
-            else if (turns.length) turns[turns.length - 1].reply.content = m.content;
+            else if (turns.length) { turns[turns.length - 1].reply.content = m.content; turns[turns.length - 1].reply.refs = m.refs || []; }
           });
           data.conv[kindNow] = +open.dataset.open; data.history[kindNow] = turns;
           await saveVault();
@@ -550,7 +550,7 @@
     if (r.approval) h += '<div class="scr-appr"><div class="scr-appr-h">' + esc(r.approval.title) + '</div><pre>' + esc(r.approval.detail) + "</pre>" +
       '<div class="scr-appr-b"><button class="scr-primary" data-appr="' + esc(r.approval.id) + '" data-ok="1">Approve</button><button data-appr="' + esc(r.approval.id) + '" data-ok="0">Decline</button></div></div>';
     if (live && r.status) h += '<div class="scr-status"><span class="scr-dots"><i></i><i></i><i></i></span>' + esc(r.status) + "</div>";
-    h += '<div class="scr-md">' + md(r.content || "", r.refs || []) + "</div>";
+    h += '<div class="scr-md">' + md(r.content || "", r.refs && r.refs.length ? r.refs : entryRefs({ text: r.content })) + "</div>";
     if (r.sources && r.sources.length) h += '<details class="scr-src"><summary><span class="chev"></span>' + r.sources.length + " emails used</summary>" +
       r.sources.map((s) => "<div>" + s.n + ". " + esc(s.sender) + " — " + esc(s.subject) + "</div>").join("") + "</details>";
     const cc = r.citecheck;
@@ -610,7 +610,8 @@
     const pill = e.target.closest(".scr-pill");
     if (pill) {
       e.preventDefault();
-      const reply = replyFor(pill), r = reply && (reply.refs || [])[+pill.dataset.ref];
+      const reply = replyFor(pill), refs = reply ? (reply.refs && reply.refs.length ? reply.refs : entryRefs({ text: reply.content })) : [];
+      const r = refs[+pill.dataset.ref];
       if (r && window.LuminaNav) { leaveChrome(); r.ccc ? window.LuminaNav.ccc(r.ccc) : window.LuminaNav.verse(r.book, r.c, r.v || 1); }
       return;
     }
