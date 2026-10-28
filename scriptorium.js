@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 14;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 15;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -108,8 +108,9 @@
   }
 
   /* ---------- opening and closing ---------- */
-  async function open(v) {
+  async function open(v, mode) {
     view = v;
+    mindMode = mode === "mind";
     injectStyle();
     document.body.classList.add("scr-on");
     applyPrefs();
@@ -131,6 +132,7 @@
     if (!view) return;
     if (!readVault()) return renderSetup();
     if (!S) return renderUnlock();
+    if (mindMode) return renderMind();
     renderMain();
   }
 
@@ -253,6 +255,7 @@
       '<span class="grow"></span>' +
       (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study: bring in the Catechism and Bible">✝</button>' +
         '<button class="scr-ib" data-act="journal" title="Journal">📖</button>' +
+        '<button class="scr-ib" data-act="mind" title="Mind map">🧠</button>' +
         '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
       '<button class="scr-ib" data-act="size" title="' + (full ? "Smaller" : "Full screen") + '">' + (full ? "⤡" : "⤢") + "</button>" +
@@ -302,6 +305,7 @@
     else if (act === "web") { web = !web; composerRow(); }
     else if (act === "study") { study = !study; composerRow(); const t = $("#scrText"); if (t) t.placeholder = study ? "Study: ask with the Catechism and Bible…" : "Message Scriptorium…"; }
     else if (act === "mic") voice ? stopVoice() : startVoice();
+    else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "journal" && !current) request({ kind: "journal", text: "📖 Journal" });
     else if (act === "models") openModels();
   }
@@ -327,6 +331,133 @@
         location.replace(location.pathname + "?b=" + latest + "&t=" + Date.now() + location.hash);
       }
     } else if (ask) alert("You have the latest build, b" + BUILD + ".");
+  }
+
+  /* ---------- the mind map: notebook entries he chooses to keep, each an encrypted comment on the
+     relay repo's "Mind map" issue (a backup off the Mac, readable here even when the Mac is off).
+     Boxes are the Catechism-index topics the entries were filed under, sized by how often they recur. ---------- */
+  const MIND_TITLE = "Mind map";
+  let mind = null;          // [{cid, date, title, topics, questions, text, note}]
+  let mindMode = false;
+  const mindKey = (r) => { const c = (r && r.content) || ""; return c.length + ":" + c.slice(0, 60); };
+  const mindSaved = (r) => !!((data.mindSaved || {})[mindKey(r)]);
+
+  async function mindIssue() {
+    if (data.mindIssue) return data.mindIssue;
+    const found = (await gh("GET", "/repos/" + S.repo + "/issues?state=all&per_page=100") || []).find((i) => i.title === MIND_TITLE);
+    data.mindIssue = found ? found.number :
+      (await gh("POST", "/repos/" + S.repo + "/issues", { title: MIND_TITLE, body: "Scriptorium's mind map. Each entry is encrypted with your Scriptorium password." })).number;
+    await saveVault();
+    return data.mindIssue;
+  }
+
+  async function loadMind() {
+    const issue = await mindIssue(), out = [];
+    for (let page = 1; page < 50; page++) {
+      const batch = await gh("GET", "/repos/" + S.repo + "/issues/" + issue + "/comments?per_page=100&page=" + page) || [];
+      for (const c of batch) {
+        if (!c.body.startsWith(MARK("mind"))) continue;
+        try { out.push({ cid: c.id, ...JSON.parse(await decryptText(S.keys, c.body.slice(MARK("mind").length).trim())) }); } catch (e) { /* not ours */ }
+      }
+      if (batch.length < 100) break;
+    }
+    mind = out.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    return mind;
+  }
+
+  function entryFrom(turn) {
+    const c = turn.reply.content || "";
+    const title = ((c.match(/^###\s+(.+)$/m) || [])[1] || turn.text.slice(0, 60)).trim();
+    const topics = ((c.match(/\*\*Topics:\*\*\s*(.+)/) || [])[1] || "").split(";").map((t) => t.trim()).filter(Boolean);
+    const qpart = (c.split("**Questions**")[1] || "").split(/\n\s*\*\*/)[0];
+    const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
+    return { date: new Date().toISOString(), title, topics, questions, text: c, note: turn.text };
+  }
+
+  async function toggleMind(turn, btn) {
+    btn.disabled = true;
+    const key = mindKey(turn.reply);
+    data.mindSaved = data.mindSaved || {};
+    try {
+      if (data.mindSaved[key]) {
+        const cid = data.mindSaved[key];
+        await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + cid).catch(() => {});
+        delete data.mindSaved[key];
+        if (mind) mind = mind.filter((m) => m.cid !== cid);
+      } else {
+        const entry = entryFrom(turn);
+        const c = await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments",
+          { body: MARK("mind") + "\n" + (await encryptText(S.keys, JSON.stringify(entry))) });
+        data.mindSaved[key] = c.id;
+        if (mind) mind.unshift({ cid: c.id, ...entry });
+      }
+      await saveVault();
+    } catch (e) { alert("Couldn't update the mind map: " + e.message); }
+    btn.disabled = false;
+    const saved = !!data.mindSaved[key];
+    btn.classList.toggle("on", saved);
+    btn.textContent = saved ? "🧠 In mind map ✓" : "🧠 Save to mind map";
+  }
+
+  const mindView = { range: "all", by: "topics", open: null };
+  const boxLabel = (t, by) => {
+    const parts = t.split(" — ");
+    return by === "subjects" ? parts[0] : parts.length > 1 ? parts[0] + " · " + parts[parts.length - 1] : parts[0];
+  };
+
+  async function renderMind() {
+    chrome(true);
+    const box = $("#scrCompose"); if (box) box.style.display = "none";
+    view.innerHTML = '<div class="scr-mind"><div class="scr-mind-h"><h2>🧠 Mind map</h2><button class="scr-x2" data-mind-close="1" title="Back to the notebook">✕</button></div>' +
+      '<p class="scr-hint">Loading…</p></div>';
+    view.onclick = mindClick;
+    try { if (!mind) await loadMind(); } catch (e) { $(".scr-hint", view).textContent = "Couldn't load the mind map: " + e.message; return; }
+    drawMind();
+  }
+
+  function drawMind() {
+    const since = { month: 31, year: 366, all: 1e6 }[mindView.range] * 864e5;
+    const list = mind.filter((m) => Date.now() - Date.parse(m.date) <= since);
+    const counts = new Map(), recent = new Set();
+    for (const m of list) for (const t of new Set((m.topics || []).map((t) => boxLabel(t, mindView.by)))) {
+      counts.set(t, (counts.get(t) || 0) + 1);
+      if (Date.now() - Date.parse(m.date) < 14 * 864e5) recent.add(t);
+    }
+    const max = Math.max(1, ...counts.values());
+    const seg = (name, opts) => '<div class="scr-seg">' + opts.map(([k, l]) => '<button data-' + name + '="' + k + '" class="' + (mindView[name] === k ? "on" : "") + '">' + l + "</button>").join("") + "</div>";
+    let h = '<div class="scr-mind"><div class="scr-mind-h"><h2>🧠 Mind map</h2><button class="scr-x2" data-mind-close="1" title="Back to the notebook">✕</button></div>' +
+      '<div class="scr-mind-ctl">' + seg("range", [["month", "Month"], ["year", "Year"], ["all", "All"]]) + seg("by", [["topics", "Topics"], ["subjects", "Subjects"]]) + "</div>";
+    if (!list.length) {
+      h += '<p class="scr-hint">' + (mind.length ? "Nothing saved in this period." : "Nothing saved yet. Tap 🧠 under a notebook entry to add it here.") + "</p>";
+    } else {
+      h += '<p class="scr-hint">' + list.length + " entr" + (list.length === 1 ? "y" : "ies") + ". Bigger means more often; gold means the last two weeks.</p><div class=\"scr-cloud\">" +
+        [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([t, n]) =>
+          '<button class="scr-box' + (recent.has(t) ? " new" : "") + (mindView.open === t ? " on" : "") + '" data-box="' + esc(t) + '" style="font-size:' +
+          (0.8 + 0.9 * (n - 1) / Math.max(1, max - 1)).toFixed(2) + 'rem">' + esc(t) + (n > 1 ? ' <span class="n">' + n + "</span>" : "") + "</button>").join("") + "</div>";
+      if (mindView.open) {
+        const hits = list.filter((m) => (m.topics || []).some((t) => boxLabel(t, mindView.by) === mindView.open));
+        h += '<h3 class="scr-mind-sub">' + esc(mindView.open) + "</h3>" + hits.map((m) =>
+          '<details class="scr-entry"><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
+          "</span> " + esc(m.title) + '</summary><div class="scr-md">' + md(m.text || "", []) + '</div><button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("");
+      }
+    }
+    view.innerHTML = h + "</div>";
+  }
+
+  async function mindClick(e) {
+    const t = e.target;
+    if (t.closest("[data-mind-close]")) { mindMode = false; const box = $("#scrCompose"); if (box) box.style.display = ""; tab = "faith"; return renderMain(); }
+    const r = t.closest("[data-range]"), b = t.closest("[data-by]"), x = t.closest("[data-box]"), u = t.closest("[data-unmind]");
+    if (r) { mindView.range = r.dataset.range; return drawMind(); }
+    if (b) { mindView.by = b.dataset.by; mindView.open = null; return drawMind(); }
+    if (x) { mindView.open = mindView.open === x.dataset.box ? null : x.dataset.box; return drawMind(); }
+    if (u && confirm("Remove this entry from the mind map?")) {
+      await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + u.dataset.unmind).catch(() => {});
+      mind = mind.filter((m) => String(m.cid) !== u.dataset.unmind);
+      for (const k in data.mindSaved || {}) if (String(data.mindSaved[k]) === u.dataset.unmind) delete data.mindSaved[k];
+      await saveVault();
+      drawMind();
+    }
   }
 
   /* ---------- past conversations (kept on the Mac) ---------- */
@@ -410,7 +541,8 @@
     if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
     if (!live && r.journal) h += '<div class="scr-actions"><button data-journal-today="1">✎ Write today\'s entry now</button></div>';
-    if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button></div>';
+    if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button>' +
+      (tab === "faith" && !r.journal ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + (mindSaved(r) ? "🧠 In mind map ✓" : "🧠 Save to mind map") + "</button>" : "") + "</div>";
     return h;
   }
 
@@ -469,6 +601,12 @@
     }
     const sp = e.target.closest("[data-speak]");
     if (sp) { if (speaking === sp) stopSpeaking(); else { const reply = replyFor(sp); speak(reply && reply.content, sp); } return; }
+    const mb = e.target.closest("[data-mind]");
+    if (mb) {
+      const a = mb.closest(".scr-a"), turn = a && (data.history[tab] || [])[+a.dataset.i];
+      if (turn) toggleMind(turn, mb);
+      return;
+    }
     const cp = e.target.closest("[data-copy]");
     if (cp) { const reply = replyFor(cp); if (reply) navigator.clipboard.writeText(reply.content).then(() => { cp.textContent = "Copied"; setTimeout(() => cp.textContent = "Copy", 1500); }); }
   }
@@ -798,6 +936,25 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-del{border:0;background:none;font-size:1rem;padding:4px 6px;cursor:pointer;opacity:.7}
 .scr-sheet-card{position:relative}
 .scr-x{position:absolute;top:10px;right:12px;border:0;background:var(--panel);color:var(--ink-soft);width:30px;height:30px;border-radius:50%;font-size:.9rem;cursor:pointer}
+.scr-mind{max-width:760px;margin:0 auto;padding:4px 4px 40px}
+.scr-mind-h{display:flex;align-items:center;justify-content:space-between}
+.scr-mind-h h2{font-family:Georgia,serif;margin:.4rem 0}
+.scr-x2{border:0;background:var(--panel);color:var(--ink-soft);width:34px;height:34px;border-radius:50%;font-size:1rem;cursor:pointer}
+.scr-mind-ctl{display:flex;gap:10px;flex-wrap:wrap;margin:.3rem 0 .4rem}
+.scr-seg{display:flex;background:var(--panel);border-radius:10px;padding:2px}
+.scr-seg button{border:0;background:none;color:var(--ink);padding:6px 12px;border-radius:8px;font:inherit;font-size:.85rem;cursor:pointer}
+.scr-seg button.on{background:var(--panel2);color:var(--gold);font-weight:600;box-shadow:inset 0 0 0 1px var(--gold-line)}
+.scr-cloud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:14px 0}
+.scr-box{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink-soft);border-radius:10px;padding:6px 10px;font-family:Georgia,serif;line-height:1.2;cursor:pointer;max-width:100%;text-align:left}
+.scr-box.new{color:var(--gold);border-color:var(--gold)}
+.scr-box.on{background:var(--gold);color:var(--bg)}
+.scr-box .n{font-family:-apple-system,sans-serif;font-size:.7em;opacity:.7}
+.scr-mind-sub{font-family:Georgia,serif;margin:1rem 0 .4rem;border-top:1px solid var(--gold-line);padding-top:.8rem}
+.scr-entry{border-bottom:1px solid var(--gold-line);padding:8px 2px}
+.scr-entry summary{cursor:pointer;font-family:Georgia,serif}
+.scr-entry summary .d{font-family:-apple-system,sans-serif;font-size:.78rem;color:var(--ink-faint)}
+.scr-del2{border:0;background:none;color:var(--ink-faint);font-size:.8rem;cursor:pointer;padding:6px 0}
+.scr-actions button.on{color:var(--gold)}
 .scr-build{font-size:.62rem!important;color:var(--ink-faint)!important;opacity:.85;margin-left:1px;white-space:nowrap;padding:4px 3px!important}
 .scr-upd{color:#fff;background:var(--gold);border-radius:8px;padding:0 4px;font-weight:700}
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
