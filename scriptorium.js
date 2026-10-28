@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 10;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 11;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -327,12 +327,13 @@
           e.stopPropagation();
           if (!confirm("Delete this conversation from your Mac? This can't be undone.")) return;
           del.closest(".scr-conv").style.opacity = ".4";
-          const st = await request({ kind: "delconv", id: +del.dataset.del, tab: kindNow }, true);
+          const st = await request({ kind: "delconv", conv: +del.dataset.del, tab: kindNow }, true);
           if (+del.dataset.del === data.conv[kindNow]) { data.conv[kindNow] = null; data.history[kindNow] = []; await saveVault(); renderMain(); }
           draw((st && st.convs) || []);
         } else if (open) {
           sheet("<h3>Opening…</h3>");
-          const st = await request({ kind: "openconv", id: +open.dataset.open }, true);
+          const st = await request({ kind: "openconv", conv: +open.dataset.open }, true);
+          if (!st || !st.messages) return sheet("<h3>Couldn't open it</h3><p class=\"scr-hint\">" + esc((st && st.error) || "Your Mac didn't answer.") + "</p>");
           const turns = [];
           ((st && st.messages) || []).forEach((m) => {
             if (m.role === "user") turns.push({ text: m.content, reply: { content: "", done: true } });
