@@ -29,7 +29,9 @@ is the licensed way to display these copyrighted translations.
 - **♫ Psalter** — the Monastic Psalter of Saint Bernard Abbey (munkachy/sing-with-us, `psalter/`),
   shown inside Lumina: tap Psalter, and ❦ Bible to come back; each keeps its place. It is the
   monks' own page, unchanged, in a frame: its theme follows Lumina's (parchment → Cloister,
-  dark → Habit, LCARS → Stained glass), and everything it keeps on the device (the unlock key,
+  dark → Habit, LCARS → Stained glass), with Lumina's own thin bar in place of its header and rows
+  of buttons (‹ previous hour · Book · Week · Day · Hour · Today · 📅 ordo · p. page · next hour ›;
+  in Advent, Lent or Saints, the book's Section and Hour), and everything it keeps on the device (the unlock key,
   notes, marks, choices) travels in Lumina's encrypted sync, so other devices arrive unlocked.
 - **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
   wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
