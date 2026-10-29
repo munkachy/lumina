@@ -277,9 +277,15 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
 .sum-panel.open{display:block}
 .sum-panel .lbl{font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
 #psalterFrame{display:none; border:0; background:var(--bg)}
-body.psalter-on #psalterFrame{display:block; position:fixed; left:0; right:0; top:0; width:100%; height:calc(100% - var(--barH, 10.5rem)); z-index:18}
+body.psalter-on #psalterFrame{display:block; position:fixed; left:0; right:0; top:var(--pbarH, 2.8rem); width:100%; height:calc(100% - var(--barH, 10.5rem) - var(--pbarH, 2.8rem)); z-index:18}
 body.psalter-on{overflow:hidden}
-@media(min-width:700px){ body.psalter-on #psalterFrame{top:var(--barTop, 0); height:calc(100% - var(--barTop, 0px))} }
+#pbar{display:none}
+body.psalter-on #pbar{display:flex; position:fixed; left:0; right:0; top:0; margin:0; z-index:19; border-radius:0; padding:.35rem .4rem}
+#pbar select{flex:1 1 3.4rem; max-width:9rem} #pbar .pb-mid{flex:1}
+@media(min-width:700px){
+  body.psalter-on #pbar{top:var(--barTop, 0)}
+  body.psalter-on #psalterFrame{top:calc(var(--barTop, 0px) + var(--pbarH, 2.8rem)); height:calc(100% - var(--barTop, 0px) - var(--pbarH, 2.8rem))}
+}
 .fbar{position:sticky; top:0; z-index:15; display:flex; align-items:center; gap:.25rem; flex-wrap:wrap;
   margin:.6rem -.3rem .7rem; padding:.3rem .3rem; background:color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--border-soft); border-radius:.4rem}
@@ -4077,9 +4083,93 @@ const LuminaCore = (function () {
     d.documentElement.setAttribute("data-theme", PSALTER_THEME[currentTheme()] || "cloister");
     if (!d.getElementById("luminaStyle")){
       const st = d.createElement("style"); st.id = "luminaStyle";
-      st.textContent = ".themes{display:none!important} .skip-link{display:none!important}";   /* Lumina's ☾ chooses the theme */
+      /* inside Lumina only: Lumina's ☾ chooses the theme, and Lumina's own bar (below) replaces the site
+         header and the rows of buttons; the page-number box (opened from that bar's "p.") stays */
+      st.textContent = ".themes,.skip-link,.site-header,.pickbar-in{display:none!important}" +
+        ".pickbar{border:0!important;box-shadow:none!important;background:transparent!important}";
       (d.head || d.documentElement).appendChild(st);
     }
+  }
+  /* Lumina's own bar for the psalter: ‹ · Book · Week · Day · Hour · Today · 📅 · ›, in the place of the
+     psalter's rows of buttons (hidden inside Lumina only). It drives the psalter through those same
+     buttons and menus, so the psalter's own logic decides everything, and redraws itself whenever the
+     psalter changes. In Advent, Lent or Saints, Week and Day give way to the book's Section and Hour. */
+  const PS_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const PS_BOOKS = [["psalter", "Psalter"], ["Advent-Christmas", "Advent"], ["Lent", "Lent"], ["Sanctoral", "Saints"]];
+  function pq(sel){ const d = psalterDoc(); return d ? d.querySelector(sel) : null; }
+  function psalterNow(){
+    const d = psalterDoc();
+    if (!d || !d.querySelector("[data-hour]")) return null;            /* the calendar page, or still loading */
+    const on = a => { const b = d.querySelector("[" + a + '][aria-pressed="true"]'); return b ? b.getAttribute(a) : null; };
+    const opts = sel => { const s = d.querySelector(sel); return s ? [...s.options].map(o => [o.value, o.textContent]) : []; };
+    return { book: on("data-book") || "psalter", week: +on("data-week"), day: +on("data-day"), hour: +on("data-hour"),
+      inBook: !d.querySelector(".book-picks").hidden, secs: opts("#sec"), sec: (pq("#sec") || {}).value, jumps: opts("#jump"), jump: (pq("#jump") || {}).value,
+      hours: [...d.querySelectorAll("[data-hour]")].map(b => b.textContent) };
+  }
+  function psPress(attr, v){ const b = pq("[" + attr + '="' + v + '"]'); if (b) b.click(); }
+  function psSelect(id, v){ const s = pq("#" + id); if (!s) return; s.value = v; s.dispatchEvent(new Event("change")); }
+  function psStep(dir){
+    const s = psalterNow(); if (!s) return;
+    if (s.inBook){                                        /* in a book: its next or previous hour, then section */
+      const k = s.jumps.findIndex(j => j[0] === s.jump) + dir;
+      if (s.jump !== "" && k >= 0 && k < s.jumps.length) return psSelect("jump", s.jumps[k][0]);
+      const n = s.secs.findIndex(x => x[0] === s.sec) + dir;
+      if (n >= 0 && n < s.secs.length) psSelect("sec", s.secs[n][0]);
+      return;
+    }
+    let { week, day, hour } = s;                           /* the four-week psalter: hour by hour, Compline → Matins */
+    hour += dir;
+    if (hour > 4){ hour = 0; day++; if (day > 6){ day = 0; week = (week + 1) % 4; } }
+    if (hour < 0){ hour = 4; day--; if (day < 0){ day = 6; week = (week + 3) % 4; } }
+    if (week !== s.week) psPress("data-week", week);
+    if (day !== s.day) psPress("data-day", day);
+    psPress("data-hour", hour);
+    try { psalterFrame.contentWindow.scrollTo(0, 0); } catch(e){}
+  }
+  function drawPbar(){
+    const bar = $("pbar"); if (!bar) return;
+    const s = psalterNow(), sel = (id, list, val, title) => '<select id="' + id + '" title="' + title + '">' +
+      list.map(([v, t]) => '<option value="' + esc(String(v)) + '"' + (String(v) === String(val) ? " selected" : "") + '>' + esc(t) + '</option>').join("") + '</select>';
+    if (!s){
+      bar.innerHTML = '<button class="fb-btn" id="pbBack" title="Back to the psalter">‹ Psalter</button><span class="pb-mid"></span><button class="fb-btn" id="pbToday">Today</button>';
+    } else {
+      bar.innerHTML = '<button class="fb-arrow" id="pbPrev" title="Previous hour">‹</button>' +
+        sel("pbBook", PS_BOOKS, s.book, "Book") +
+        (s.inBook
+          ? sel("pbSec", s.secs, s.sec, "Section") + sel("pbJump", s.jumps, s.jump, "Hour in this section")
+          : sel("pbWeek", [[0, "I"], [1, "II"], [2, "III"], [3, "IV"]], s.week, "Week") +
+            sel("pbDay", PS_DAYS.map((d, k) => [k, d.slice(0, 3)]), s.day, "Day") +
+            sel("pbHour", s.hours.map((h, k) => [k, h]), s.hour, "Hour")) +
+        '<button class="fb-btn" id="pbToday" title="Today, this hour">Today</button>' +
+        '<button class="fb-btn" id="pbCal" title="The ordo: calendar for the year">📅</button>' +
+        '<button class="fb-btn" id="pbPage" title="Go to a page number in this book">p.</button>' +
+        '<button class="fb-arrow" id="pbNext" title="Next hour">›</button>';
+    }
+    const on = (id, ev, fn) => { const el = bar.querySelector("#" + id); if (el) el[ev] = fn; };
+    on("pbPrev", "onclick", () => psStep(-1));
+    on("pbNext", "onclick", () => psStep(1));
+    on("pbBook", "onchange", e => psPress("data-book", e.target.value));
+    on("pbWeek", "onchange", e => psPress("data-week", e.target.value));
+    on("pbDay", "onchange", e => psPress("data-day", e.target.value));
+    on("pbHour", "onchange", e => psPress("data-hour", e.target.value));
+    on("pbSec", "onchange", e => psSelect("sec", e.target.value));
+    on("pbJump", "onchange", e => { if (e.target.value !== "") psSelect("jump", e.target.value); });
+    on("pbCal", "onclick", () => { const a = pq(".cal-btn"); if (a) a.click(); });
+    on("pbPage", "onclick", () => { const b = pq("#page-btn"); if (b) b.click(); });
+    const home = () => { psalterFrame.src = PSALTER_URL; };
+    on("pbBack", "onclick", home);
+    on("pbToday", "onclick", () => { try { psalterFrame.contentWindow.location.replace(PSALTER_URL); } catch(e){ home(); } });
+    psalterFit();
+  }
+  /* redraw whenever the psalter changes what it shows */
+  let pbarWatch = null, pbarT = null;
+  function watchPsalter(){
+    if (pbarWatch) pbarWatch.disconnect();
+    const d = psalterDoc(); drawPbar();
+    const nav = d && d.querySelector(".pickbar");
+    if (!nav) return;
+    pbarWatch = new MutationObserver(() => { clearTimeout(pbarT); pbarT = setTimeout(drawPbar, 60); });
+    pbarWatch.observe(nav, { subtree: true, attributes: true, attributeFilter: ["aria-pressed", "hidden"], childList: true, characterData: true });
   }
   function psalterReload(){ if (psalterFrame) try { psalterFrame.contentWindow.location.reload(); } catch(e){} }
   function psalterOn(){ return document.body.classList.contains("psalter-on"); }
@@ -4087,7 +4177,9 @@ const LuminaCore = (function () {
     if (!psalterFrame){
       psalterFrame = document.createElement("iframe");
       psalterFrame.id = "psalterFrame"; psalterFrame.title = "Monastic Psalter";
-      psalterFrame.addEventListener("load", psalterDress);
+      psalterFrame.addEventListener("load", () => { psalterDress(); watchPsalter(); });
+      const bar = document.createElement("div"); bar.id = "pbar"; bar.className = "fbar pbar";
+      document.body.appendChild(bar);
       psalterFrame.src = PSALTER_URL;
       document.body.appendChild(psalterFrame);
     }
@@ -4107,6 +4199,7 @@ const LuminaCore = (function () {
     const bar = document.querySelector(".actions.main-bar"), r = bar.getBoundingClientRect(), root = document.documentElement.style;
     if (getComputedStyle(bar).position === "fixed"){ root.setProperty("--barH", Math.ceil(r.height) + "px"); root.setProperty("--barTop", "0px"); }
     else { root.setProperty("--barTop", Math.ceil(r.bottom) + "px"); root.setProperty("--barH", "0px"); }
+    const pb = $("pbar"); if (pb) root.setProperty("--pbarH", Math.ceil(pb.offsetHeight) + "px");
   }
   addEventListener("resize", () => { if (psalterOn()) psalterFit(); });
   $("btnPsalter").onclick = () => psalterOn() ? closePsalter() : openPsalter();
