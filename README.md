@@ -157,8 +157,10 @@ Scriptorium password, and stored as comments on the relay repo's "Lumina data" i
 changes a few seconds after you make them and fetches new ones when it opens, merging both ways
 (edits and deletions on either device carry over). Everything else you choose travels too:
 your reading place, translation, theme, text size, timer and voice settings, Scriptorium's display
-settings. Opening Lumina on another device takes you to where you stopped. Two things stay on the
-device: a running timer, and your Grail file (which Lumina never sends anywhere). They survive a lost phone or a cleared browser,
+settings. Opening Lumina on another device takes you to where you stopped. A running timer stays on its
+device. Your Grail file is kept too, encrypted in the private relay, so a new or cleared device
+gets it back without importing it again; replacing or removing it on one device does the same on
+the others. It is never shared with anyone. They survive a lost phone or a cleared browser,
 and match on every device where Scriptorium is unlocked. *Favs → ⇪ Back up & export* shows the
 last sync, a *Sync now* button, and a switch to turn it off.
 **⇪ Back up & export** (on the Favorites screen) saves them as a file you can keep anywhere;
@@ -178,7 +180,8 @@ device only:
    the Files app, iCloud Drive or Google Drive.
 2. In Lumina, open the **Book** menu and choose **Grail Psalms file…** (or simply choose
    **Grail Psalms**), then **Choose your Grail file**.
-3. That is all. The file is kept in this browser on this device, and never sent anywhere.
+3. That is all. The file is kept in this browser on this device, and, if Scriptorium sync is on,
+   encrypted in your private relay so your other devices get it; it is never shared.
    Do it once on each phone or computer. **Grail Psalms file…** also replaces or removes it.
 
 On an iPhone, Safari may clear a site's storage if the site is not opened for about a week;
