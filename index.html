@@ -2229,15 +2229,29 @@ const LuminaCore = (function () {
   const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls"];
   const SYNC_BASE = "lumina.sync.base";
   const syncOn = () => !!localStorage.getItem("lumina.scriptorium.vault") && state.syncOff !== true;
-  const syncedPart = () => { const o = {}; BACKUP_KEYS.forEach(k => { o[k] = state[k]; }); return o; };
+  /* everything Lumina keeps is synced, except what belongs to this one device: a timer that is
+     running here, and the sync switch itself. (The Grail file is not in here at all: it stays on
+     the device, as Lumina promises.) Scriptorium's own display settings ride along as scrPrefs. */
+  const SYNC_LOCAL_ONLY = ["timer", "syncOff"];
+  /* where you are reading: sent with the next real change or when you leave, not on every page turn */
+  const SYNC_QUIET = ["last", "cccLast", "docLast", "corpus", "lastFavList", "lastChapList", "treeKind"];
+  const SCR_PREFS = "lumina.scriptorium.prefs";
+  const syncedPart = () => {
+    const o = {};
+    Object.keys(state).forEach(k => { if (!SYNC_LOCAL_ONLY.includes(k)) o[k] = state[k]; });
+    try { o.scrPrefs = JSON.parse(localStorage.getItem(SCR_PREFS) || "null"); } catch(e){ o.scrPrefs = null; }
+    return o;
+  };
   const J = v => JSON.stringify(v === undefined ? null : v);
-  let syncTimer = null, syncing = false, syncAgain = false, lastSynced = null, syncNote = "";
-  try { lastSynced = J(JSON.parse(localStorage.getItem(SYNC_BASE) || "null")); } catch(e){}
+  const loud = o => { const c = Object.assign({}, o || {}); SYNC_QUIET.forEach(k => delete c[k]); return J(c); };
+  let syncTimer = null, syncing = false, syncAgain = false, lastSynced = null, lastSyncedObj = null, syncNote = "", firstSync = true;
+  try { lastSyncedObj = JSON.parse(localStorage.getItem(SYNC_BASE) || "null"); lastSynced = J(lastSyncedObj); } catch(e){}
   /* three-way merge: what changed here since the last sync wins over GitHub; otherwise GitHub's
      copy is taken, so additions, edits and deletions on either device all carry over */
   function merge3(base, local, remote){
-    const out = {};
-    BACKUP_KEYS.forEach(k => {
+    const out = {}, fresh = !base;
+    base = base || {};
+    [...new Set([...Object.keys(local), ...Object.keys(remote)])].forEach(k => {
       if (SYNC_LISTS.includes(k)){
         const by = a => { const m = new Map(); (a || []).forEach(x => { if (x && x.id) m.set(x.id, x); }); return m; };
         const B = by(base[k]), L = by(local[k]), R = by(remote[k]), ids = [...L.keys(), ...[...R.keys()].filter(id => !L.has(id))];
@@ -2247,7 +2261,9 @@ const LuminaCore = (function () {
           if (l) return !b || J(l) !== J(b) ? l : null;      /* gone from GitHub: deleted elsewhere, unless changed here */
           return !b || J(r) !== J(b) ? r : null;             /* gone from here: deleted here, unless changed elsewhere */
         }).filter(Boolean);
-      } else out[k] = J(local[k]) !== J(base[k]) || remote[k] === undefined ? local[k] : remote[k];
+      } else out[k] = remote[k] === undefined ? local[k]
+        : fresh ? remote[k]                                    /* this device's first sync: its defaults are not choices */
+        : J(local[k]) !== J(base[k]) ? local[k] : remote[k];
     });
     return out;
   }
@@ -2255,7 +2271,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=19"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=20"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2268,31 +2284,41 @@ const LuminaCore = (function () {
       if (!scr.data || !(await scr.data.ready())){ syncNote = "Open Scriptorium once to unlock syncing."; if (manual) showToast(syncNote); return; }
       const remote = await scr.data.load(), local = syncedPart();
       let base = null; try { base = JSON.parse(localStorage.getItem(SYNC_BASE) || "null"); } catch(e){}
-      const merged = remote ? merge3(base || {}, local, remote) : local;
+      const merged = remote ? merge3(base, local, remote) : local;
+      const moved = SYNC_QUIET.some(k => J(merged[k]) !== J(local[k]));
       if (J(merged) !== J(local)){
-        BACKUP_KEYS.forEach(k => { if (merged[k] !== undefined) state[k] = merged[k]; });
-        lastSynced = J(syncedPart()); save(); rerenderInPlace();
+        Object.keys(merged).forEach(k => {
+          if (k === "scrPrefs"){ if (merged.scrPrefs) try { localStorage.setItem(SCR_PREFS, J(merged.scrPrefs)); } catch(e){} }
+          else if (!SYNC_LOCAL_ONLY.includes(k) && merged[k] !== undefined) state[k] = merged[k];
+        });
+        lastSynced = J(syncedPart()); lastSyncedObj = JSON.parse(lastSynced); save();
+        if (J(merged.theme) !== J(local.theme)) try { applyTheme(); } catch(e){}
+        if (J(merged.font) !== J(local.font)) try { applyFont(); } catch(e){}
       }
       if (!remote || J(merged) !== J(remote)) await scr.data.store(merged);
-      lastSynced = J(merged);
+      lastSynced = J(merged); lastSyncedObj = merged;
       try { localStorage.setItem(SYNC_BASE, lastSynced); } catch(e){}
+      /* opened on this device after reading on another, and not yet moved: go to where you stopped */
+      if (firstSync && moved && nav.stack.length <= 1) { firstSync = false; location.reload(); return; }
+      if (J(merged) !== J(local)) rerenderInPlace();
       syncNote = "Saved to GitHub at " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
       if (manual) showToast(syncNote);
     } catch(e){
       syncNote = "Not synced yet: " + e.message;
       if (manual) showToast(syncNote);
     } finally {
-      syncing = false;
+      syncing = false; firstSync = false;
       const st = document.getElementById("syncState"); if (st) st.textContent = syncNote;
       if (syncAgain){ syncAgain = false; scheduleSync(); }
     }
   }
   function scheduleSync(){ if (!syncOn()) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => syncNow(), 8000); }
   /* called by save(): only real changes to the synced data start a sync, not every page turn */
-  function syncChanged(){ if (syncOn() && J(syncedPart()) !== lastSynced) scheduleSync(); }
+  function syncChanged(){ if (syncOn() && loud(syncedPart()) !== loud(lastSyncedObj)) scheduleSync(); }
+  window.LuminaSync = { changed: () => { try { syncChanged(); } catch(e){} } };   /* Scriptorium calls this when its settings change */
   let lastFetch = 0;
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden){ if (syncTimer) syncNow(); }                       /* leaving: send what is waiting */
+    if (document.hidden){ if (syncOn() && (syncTimer || J(syncedPart()) !== lastSynced)) syncNow(); }   /* leaving: send what is waiting, reading place included */
     else if (Date.now() - lastFetch > 60000){ lastFetch = Date.now(); syncNow(); }   /* back: fetch what changed elsewhere */
   });
   setTimeout(() => { lastFetch = Date.now(); syncNow(); }, 2500);
