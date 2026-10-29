@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 19;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 20;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -28,7 +28,7 @@
   }, readJSON(PREFS) || {});
 
   function readJSON(key) { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch (e) { return null; } }
-  function savePrefs() { try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch (e) {} applyPrefs(); }
+  function savePrefs() { try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch (e) {} applyPrefs(); if (window.LuminaSync) window.LuminaSync.changed(); }   // kept on GitHub with Lumina's data
 
   /* ---------- illuminated initials ---------- */
   function illum(letter) {   // the illuminated initials; LCARS spells the words out instead

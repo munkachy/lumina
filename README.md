@@ -155,7 +155,10 @@ Favorites, highlights, notes, search history, and plan progress are saved on the
 **With Scriptorium set up, they are also kept on GitHub**: compressed, encrypted with the
 Scriptorium password, and stored as comments on the relay repo's "Lumina data" issue. Lumina sends
 changes a few seconds after you make them and fetches new ones when it opens, merging both ways
-(edits and deletions on either device carry over). They survive a lost phone or a cleared browser,
+(edits and deletions on either device carry over). Everything else you choose travels too:
+your reading place, translation, theme, text size, timer and voice settings, Scriptorium's display
+settings. Opening Lumina on another device takes you to where you stopped. Two things stay on the
+device: a running timer, and your Grail file (which Lumina never sends anywhere). They survive a lost phone or a cleared browser,
 and match on every device where Scriptorium is unlocked. *Favs → ⇪ Back up & export* shows the
 last sync, a *Sync now* button, and a switch to turn it off.
 **⇪ Back up & export** (on the Favorites screen) saves them as a file you can keep anywhere;
