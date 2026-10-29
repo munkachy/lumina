@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 22;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 23;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -341,18 +341,32 @@
   let mind = null;          // [{cid, date, title, topics, questions, text, note}]
   let mindMode = false;
   const mindKey = (r) => { const c = (r && r.content) || ""; return c.length + ":" + c.slice(0, 60); };
-  /* One reply can hold several notebook entries, each with its own "### title" and "**Topics:**" line.
-     Such a reply is saved as that many mind-map entries, not one; anything before the first title
-     (a greeting, say) is left out. A reply whose "###" parts don't each have Topics stays whole. */
-  function mindParts(content) {
-    const c = content || "", starts = [...c.matchAll(/^###\s+.+$/gm)].map((m) => m.index);
-    if (starts.length < 2) return [c];
-    const parts = starts.map((s, k) => c.slice(s, k + 1 < starts.length ? starts[k + 1] : c.length).trim());
-    return parts.every((p) => /\*\*Topics:\*\*/.test(p)) ? parts : [c];
+  /* One answer can hold several notebook entries, each under its own heading. headingSplit finds the
+     highest heading level (#, ## or ###) used at least twice and cuts the answer there (text before the
+     first heading, a greeting say, is left out). If every part has its own Topics line the answer is split
+     without asking; otherwise the first tap asks "save as N entries, or as one?" and remembers the answer. */
+  function headingSplit(content) {
+    const c = content || "";
+    for (let lvl = 1; lvl <= 4; lvl++) {
+      const re = new RegExp("^#{" + lvl + "}(?!#)\\s+(.+)$", "gm"), hits = [...c.matchAll(re)];
+      if (hits.length < 2) continue;
+      const parts = hits.map((m, k) => c.slice(m.index, k + 1 < hits.length ? hits[k + 1].index : c.length).trim());
+      return { parts, titles: hits.map((m) => m[1].replace(/[*#]+$/, "").trim()) };
+    }
+    return null;
   }
-  const mindSaved = (r) => mindParts(r && r.content).every((p) => (data.mindSaved || {})[mindKey({ content: p })]);
-  const mindLabel = (r, saved) => { const n = mindParts(r && r.content).length;
-    return n > 1 ? (saved ? "🧠 " + n + " entries in mind map ✓" : "🧠 Save " + n + " entries to mind map") : (saved ? "🧠 In mind map ✓" : "🧠 Save to mind map"); };
+  const splitChoice = (r) => (data.mindSplit || {})[mindKey(r)];
+  function mindParts(r) {
+    const c = (r && r.content) || "", hs = headingSplit(c), choice = splitChoice(r);
+    if (!hs || choice === false) return [c];
+    if (choice === true || hs.parts.every((p) => /\bTopics\**\s*:/i.test(p))) return hs.parts;
+    return [c];
+  }
+  const mindAsks = (r) => { const hs = headingSplit(r && r.content); return !!hs && splitChoice(r) === undefined && mindParts(r).length === 1; };
+  const mindSaved = (r) => mindParts(r).every((p) => (data.mindSaved || {})[mindKey({ content: p })]);
+  const mindLabel = (r, saved) => { const n = mindParts(r).length;
+    return n > 1 ? (saved ? "🧠 " + n + " entries in mind map ✓" : "🧠 Save " + n + " entries to mind map")
+      : (saved ? "🧠 In mind map ✓" : "🧠 Save to mind map" + (mindAsks(r) ? "…" : "")); };
 
   async function mindIssue() {
     if (data.mindIssue) return data.mindIssue;
@@ -379,17 +393,27 @@
 
   function entryFrom(turn) {
     const c = turn.reply.content || "";
-    const title = ((c.match(/^###\s+(.+)$/m) || [])[1] || turn.text.slice(0, 60)).trim();
-    const topics = ((c.match(/\*\*Topics:\*\*\s*(.+)/) || [])[1] || "").split(";").map((t) => t.trim()).filter(Boolean);
-    const qpart = (c.split("**Questions**")[1] || "").split(/\n\s*\*\*/)[0];
+    const title = ((c.match(/^#{1,6}\s+(.+)$/m) || [])[1] || turn.text.slice(0, 60)).replace(/[*#]+$/, "").trim();
+    const topics = ((c.match(/\**Topics\**\s*:\**\s*(.+)/i) || [])[1] || "").split(/[;,]/).map((t) => t.replace(/\*+/g, "").trim()).filter(Boolean);
+    const qpart = (c.split(/\**Questions\**\s*:?\**/i)[1] || "").split(/\n\s*\*\*/)[0];
     const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
     return { date: new Date().toISOString(), title, topics, questions, text: c, note: turn.text, refs: turn.reply.refs || [] };
   }
 
   async function toggleMind(turn, btn) {
+    if (!mindSaved(turn.reply) && mindAsks(turn.reply)) {          // several headings: ask how to save it
+      const hs = headingSplit(turn.reply.content);
+      sheet("<h3>Save to the mind map</h3><p class=\"scr-hint\">This answer has " + hs.parts.length + " parts:</p><ol>" +
+        hs.titles.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ol>" +
+        '<div class="scr-appr-b"><button class="scr-primary" id="mmSplit">Save as ' + hs.parts.length + ' entries</button><button id="mmOne">Save as one</button></div>');
+      const go = async (split) => { data.mindSplit = data.mindSplit || {}; data.mindSplit[mindKey(turn.reply)] = split; closeSheet(); await toggleMind(turn, btn); };
+      $("#mmSplit").onclick = () => go(true);
+      $("#mmOne").onclick = () => go(false);
+      return;
+    }
     btn.disabled = true;
     data.mindSaved = data.mindSaved || {};
-    const parts = mindParts(turn.reply.content), whole = mindKey(turn.reply);
+    const parts = mindParts(turn.reply), whole = mindKey(turn.reply);
     const drop = async (key) => {
       const cid = data.mindSaved[key]; if (!cid) return;
       await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + cid).catch(() => {});
@@ -553,8 +577,14 @@
     window.scrollTo(0, document.documentElement.scrollHeight);
   }
 
+  const turnId = (t) => t.id || (t.id = Math.random().toString(36).slice(2, 10));
   function renderTurn(t, i) {
-    return '<div class="scr-turn"><div class="scr-u">' + esc(t.text) + '</div><div class="scr-a" data-i="' + i + '">' + renderReply(t.reply, false) + "</div></div>";
+    return '<div class="scr-turn"><div class="scr-u">' + esc(t.text) + '</div><div class="scr-a" data-i="' + i + '" data-tid="' + turnId(t) + '">' + renderReply(t.reply, false) + "</div></div>";
+  }
+  /* the turn an answer on screen belongs to: by its id, which doesn't shift when old turns drop off */
+  function turnOf(a) {
+    const h = data.history[tab] || [];
+    return (a.dataset.tid && h.find((t) => t.id === a.dataset.tid)) || h[+a.dataset.i];
   }
 
   function words(t) { return (t.match(/\S+/g) || []).length; }
@@ -638,8 +668,9 @@
     if (sp) { if (speaking === sp) stopSpeaking(); else { const reply = replyFor(sp); speak(reply && reply.content, sp); } return; }
     const mb = e.target.closest("[data-mind]");
     if (mb) {
-      const a = mb.closest(".scr-a"), turn = a && (data.history[tab] || [])[+a.dataset.i];
+      const a = mb.closest(".scr-a"), turn = a && turnOf(a);
       if (turn) toggleMind(turn, mb);
+      else alert("Couldn't find this answer. Close Scriptorium and open it again, then try once more.");
       return;
     }
     const cp = e.target.closest("[data-copy]");
@@ -649,7 +680,7 @@
     const a = el.closest(".scr-a");
     if (!a) return null;
     if (a.id === "scrLive") return current && current.state;
-    return ((data.history[tab] || [])[+a.dataset.i] || {}).reply;
+    return (turnOf(a) || {}).reply;
   }
 
   /* ---------- reading without being pulled to the bottom ---------- */
@@ -754,7 +785,7 @@
     if (!view || !document.body.classList.contains("scr-on")) return;
     if (wasCurrent && job.tab === tab) {
       const stick = atBottom(), live = $("#scrLive");
-      if (live) { live.removeAttribute("id"); live.dataset.i = data.history[tab].length - 1; live.innerHTML = renderReply(st, false); }
+      if (live) { const h = data.history[tab]; live.removeAttribute("id"); live.dataset.i = h.length - 1; live.dataset.tid = turnId(h[h.length - 1]); live.innerHTML = renderReply(st, false); }
       if (!stick) newPill(true);
       if (prefs.autoRead && st.content) speak(st.content, live && $("[data-speak]", live));
     }
