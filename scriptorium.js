@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 18;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 19;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1089,5 +1089,68 @@ details[open]>summary .chev{transform:rotate(45deg)}
     document.head.appendChild(st);
   }
 
-  window.Scriptorium = { open };
+
+  /* ---------- Lumina's saved data: highlights, notes, favorites, plans and settings, kept in the
+     relay repo's "Lumina data" issue, so they are safe off the phone and the same on every device.
+     The data is compressed and sealed with the Scriptorium key (GitHub holds only scrambled text),
+     then split into comments under GitHub's 65,536-character limit. A save writes the new set
+     first and only then removes the old one, so a reader never meets half a save. ---------- */
+  const DATA_TITLE = "Lumina data", DATA_PART = 40000;
+  async function quietOpen() {          // unlock with the key kept on this device, showing nothing
+    if (S) return true;
+    if (!readVault()) return false;
+    const keys = await recallKeys();
+    if (!keys) return false;
+    try { await openWith(keys); return true; } catch (e) { S = null; return false; }
+  }
+  async function dataIssue() {
+    if (data.dataIssue) return data.dataIssue;
+    const found = (await gh("GET", "/repos/" + S.repo + "/issues?state=all&per_page=100") || []).find((i) => i.title === DATA_TITLE);
+    data.dataIssue = found ? found.number :
+      (await gh("POST", "/repos/" + S.repo + "/issues", { title: DATA_TITLE, body: "Lumina's highlights, notes and favorites. Encrypted with your Scriptorium password." })).number;
+    await saveVault();
+    return data.dataIssue;
+  }
+  async function squeeze(text) {        // gzip, as base64 (plain text where the browser cannot)
+    if (!window.CompressionStream) return { z: 0, s: text };
+    const out = new Uint8Array(await new Response(new Blob([enc.encode(text)]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer());
+    return { z: 1, s: b64(out) };
+  }
+  async function unsqueeze(z, s) {
+    if (!z) return s;
+    return dec.decode(await new Response(new Blob([unb64(s)]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer());
+  }
+  async function dataComments() {
+    const issue = await dataIssue(), out = [];
+    for (let page = 1; page < 50; page++) {
+      const batch = await gh("GET", "/repos/" + S.repo + "/issues/" + issue + "/comments?per_page=100&page=" + page) || [];
+      for (const c of batch) {
+        if (!c.body.startsWith(MARK("lumdata"))) continue;
+        try { out.push({ cid: c.id, ...JSON.parse(await decryptText(S.keys, c.body.slice(MARK("lumdata").length).trim())) }); }
+        catch (e) { out.push({ cid: c.id, bad: true }); }
+      }
+      if (batch.length < 100) break;
+    }
+    return out;
+  }
+  async function loadData() {           // the newest complete save, or null if there is none yet
+    const parts = await dataComments(), sets = {};
+    parts.filter((p) => !p.bad).forEach((p) => { (sets[p.v] = sets[p.v] || []).push(p); });
+    const whole = Object.values(sets).filter((ps) => ps.length === ps[0].n).sort((a, b) => b[0].t - a[0].t)[0];
+    if (!whole) return null;
+    whole.sort((a, b) => a.i - b.i);
+    return JSON.parse(await unsqueeze(whole[0].z, whole.map((p) => p.part).join("")));
+  }
+  async function storeData(obj) {
+    const old = await dataComments(), issue = await dataIssue();
+    const { z, s } = await squeeze(JSON.stringify(obj));
+    const v = Date.now().toString(36) + Math.random().toString(36).slice(2, 6), t = Date.now();
+    const n = Math.max(1, Math.ceil(s.length / DATA_PART));
+    for (let i = 0; i < n; i++)
+      await gh("POST", "/repos/" + S.repo + "/issues/" + issue + "/comments",
+        { body: MARK("lumdata") + "\n" + (await encryptText(S.keys, JSON.stringify({ v, t, i, n, z, part: s.slice(i * DATA_PART, (i + 1) * DATA_PART) }))) });
+    for (const c of old) await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.cid).catch(() => {});
+  }
+
+  window.Scriptorium = { open, data: { ready: quietOpen, load: loadData, store: storeData } };
 })();

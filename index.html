@@ -983,7 +983,7 @@ const LuminaCore = (function () {
     state.plainDouay = true;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
   }
-  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} try { syncChanged(); } catch(e){} }   /* syncChanged is defined further on; before then it is not ready */
   /* ask the browser to keep Lumina's saved data rather than clear it when space runs low */
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -2221,17 +2221,102 @@ const LuminaCore = (function () {
       'mark{padding:0 .1em; border-radius:.15em} mark.gold{background:#f0dc9a} mark.rose{background:#f0c3bd} mark.sage{background:#cfdcb4} mark.sky{background:#c2d7e8}' +
       '</style></head><body><h1>✠ Lumina</h1><p class="sub">Highlights, notes and favorites · ' + esc(when) + '</p>' + body + '</body></html>';
   }
+  /* ---------- sync with GitHub, through Scriptorium's encrypted relay ---------- */
+  /* Highlights, notes, favorites, plans and voice settings are kept in GitHub (encrypted with the
+     Scriptorium password), so they survive a lost phone or a cleared browser and match on every
+     device. The copy on this device is the working copy: Lumina saves to it at once, then sends
+     the changes a few seconds later, and fetches anything new when it opens or comes back. */
+  const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls"];
+  const SYNC_BASE = "lumina.sync.base";
+  const syncOn = () => !!localStorage.getItem("lumina.scriptorium.vault") && state.syncOff !== true;
+  const syncedPart = () => { const o = {}; BACKUP_KEYS.forEach(k => { o[k] = state[k]; }); return o; };
+  const J = v => JSON.stringify(v === undefined ? null : v);
+  let syncTimer = null, syncing = false, syncAgain = false, lastSynced = null, syncNote = "";
+  try { lastSynced = J(JSON.parse(localStorage.getItem(SYNC_BASE) || "null")); } catch(e){}
+  /* three-way merge: what changed here since the last sync wins over GitHub; otherwise GitHub's
+     copy is taken, so additions, edits and deletions on either device all carry over */
+  function merge3(base, local, remote){
+    const out = {};
+    BACKUP_KEYS.forEach(k => {
+      if (SYNC_LISTS.includes(k)){
+        const by = a => { const m = new Map(); (a || []).forEach(x => { if (x && x.id) m.set(x.id, x); }); return m; };
+        const B = by(base[k]), L = by(local[k]), R = by(remote[k]), ids = [...L.keys(), ...[...R.keys()].filter(id => !L.has(id))];
+        out[k] = ids.map(id => {
+          const b = B.get(id), l = L.get(id), r = R.get(id);
+          if (l && r) return J(l) !== J(b) ? l : r;
+          if (l) return !b || J(l) !== J(b) ? l : null;      /* gone from GitHub: deleted elsewhere, unless changed here */
+          return !b || J(r) !== J(b) ? r : null;             /* gone from here: deleted here, unless changed elsewhere */
+        }).filter(Boolean);
+      } else out[k] = J(local[k]) !== J(base[k]) || remote[k] === undefined ? local[k] : remote[k];
+    });
+    return out;
+  }
+  function loadScriptorium(){
+    if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "scriptorium.js?v=19"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      document.body.appendChild(s);
+    });
+  }
+  async function syncNow(manual){
+    if (!syncOn()) return;
+    if (syncing){ syncAgain = true; return; }
+    syncing = true; clearTimeout(syncTimer); syncTimer = null;
+    try {
+      const scr = await loadScriptorium();
+      if (!scr.data || !(await scr.data.ready())){ syncNote = "Open Scriptorium once to unlock syncing."; if (manual) showToast(syncNote); return; }
+      const remote = await scr.data.load(), local = syncedPart();
+      let base = null; try { base = JSON.parse(localStorage.getItem(SYNC_BASE) || "null"); } catch(e){}
+      const merged = remote ? merge3(base || {}, local, remote) : local;
+      if (J(merged) !== J(local)){
+        BACKUP_KEYS.forEach(k => { if (merged[k] !== undefined) state[k] = merged[k]; });
+        lastSynced = J(syncedPart()); save(); rerenderInPlace();
+      }
+      if (!remote || J(merged) !== J(remote)) await scr.data.store(merged);
+      lastSynced = J(merged);
+      try { localStorage.setItem(SYNC_BASE, lastSynced); } catch(e){}
+      syncNote = "Saved to GitHub at " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      if (manual) showToast(syncNote);
+    } catch(e){
+      syncNote = "Not synced yet: " + e.message;
+      if (manual) showToast(syncNote);
+    } finally {
+      syncing = false;
+      const st = document.getElementById("syncState"); if (st) st.textContent = syncNote;
+      if (syncAgain){ syncAgain = false; scheduleSync(); }
+    }
+  }
+  function scheduleSync(){ if (!syncOn()) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => syncNow(), 8000); }
+  /* called by save(): only real changes to the synced data start a sync, not every page turn */
+  function syncChanged(){ if (syncOn() && J(syncedPart()) !== lastSynced) scheduleSync(); }
+  let lastFetch = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden){ if (syncTimer) syncNow(); }                       /* leaving: send what is waiting */
+    else if (Date.now() - lastFetch > 60000){ lastFetch = Date.now(); syncNow(); }   /* back: fetch what changed elsewhere */
+  });
+  setTimeout(() => { lastFetch = Date.now(); syncNow(); }, 2500);
+
   function openBackupSheet(){
     const back = modal('<h3>Back up &amp; export</h3>' +
       '<p style="text-align:center;margin:.2rem 0 .8rem">Your favorites, highlights and notes live only in this browser. Keep a copy somewhere safe: on a phone, choose <b>Save to Files</b>, then <b>Google Drive</b>.</p>' +
       '<div class="bk-row"><button class="btn primary" id="bkSave">Back up</button><span>a file Lumina can read back in, on this or another device</span></div>' +
       '<div class="bk-row"><button class="btn" id="bkRestore">Restore…</button><span>adds what a backup holds; nothing here is removed</span></div>' +
       '<div class="bk-row"><button class="btn" id="bkExport" disabled>Readable copy</button><span>your highlights and notes as a page to read or print, in Bible order</span></div>' +
+      (localStorage.getItem("lumina.scriptorium.vault")
+        ? '<div class="bk-row"><button class="btn" id="bkSync">Sync now</button><span><b>GitHub sync</b> ' +
+          '<label style="white-space:nowrap"><input type="checkbox" id="bkSyncOn"' + (state.syncOff ? "" : " checked") + '> on</label><br>' +
+          '<i id="syncState">' + esc(syncNote || "Saves itself, encrypted, to your Scriptorium relay.") + '</i></span></div>'
+        : '<p class="vs-note">Set up Scriptorium (✝) to keep these on GitHub automatically.</p>') +
       '<p class="bk-msg" style="text-align:center;display:none"></p>' +
       '<div class="rowbtns"><button class="btn" id="bkClose">Close</button></div>' +
       '<input type="file" id="bkFile" accept=".json,application/json" style="display:none">');
     const q = s => back.querySelector(s), say = t => { const m = q(".bk-msg"); m.textContent = t; m.style.display = ""; };
     q("#bkClose").onclick = () => back.remove();
+    if (q("#bkSync")){
+      q("#bkSync").onclick = () => { q("#syncState").textContent = "Syncing…"; syncNow(true); };
+      q("#bkSyncOn").onchange = () => { state.syncOff = !q("#bkSyncOn").checked; save(); if (!state.syncOff) syncNow(true); };
+    }
     q("#bkSave").onclick = () => giveFile("lumina-backup-" + fileDate() + ".json", "application/json", backupText());
     /* the readable copy needs the texts the highlights point into; load them first,
        so the file can be handed over straight from the tap (phones require that) */
@@ -3839,9 +3924,7 @@ const LuminaCore = (function () {
     const go = () => window.Scriptorium.open(view, typeof mode === "string" ? mode : undefined);
     if (window.Scriptorium) return go();
     const s = document.createElement("script");
-    s.src = "scriptorium.js?v=18"; s.onload = go;
-    s.onerror = () => showToast("Couldn't load Scriptorium. Check the connection.");
-    document.body.appendChild(s);
+    loadScriptorium().then(go, () => showToast("Couldn't load Scriptorium. Check the connection."));
   }
   window.LuminaNav = {
     ccc(n){ loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(n); }); },
