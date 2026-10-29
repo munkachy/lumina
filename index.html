@@ -276,6 +276,17 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
   padding:.8rem 1rem; margin:.6rem auto; max-width:40rem; font-size:1.0rem; line-height:1.6; text-align:left}
 .sum-panel.open{display:block}
 .sum-panel .lbl{font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
+.fbar{position:sticky; top:0; z-index:15; display:flex; align-items:center; gap:.25rem; flex-wrap:wrap;
+  margin:.6rem -.3rem .7rem; padding:.3rem .3rem; background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--border-soft); border-radius:.4rem}
+.fbar select{min-width:0; padding:.2rem .15rem; font-size:.9rem}
+.fbar #fbBook{flex:1 1 6.5rem; max-width:11rem} .fbar #fbCh{width:3.6rem} .fbar .verse-pick{width:3.6rem; max-width:none}
+.fb-arrow{flex:0 0 2rem; height:2rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--gold); font-size:1.3rem; line-height:1; cursor:pointer}
+.fb-arrow:disabled{opacity:.3}
+.fb-btn{height:2rem; padding:0 .45rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--gold); font-size:.85rem; cursor:pointer}
+.fb-btn.fav-on{color:var(--rubric)}
+.fbar .sum-panel{flex:1 1 100%; max-height:45vh; overflow:auto; margin:.3rem 0 0}
+#btnTimer.on{border-color:var(--gold-line)}
 .ch-nav{display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin:1rem 0 .6rem}
 .ch-nav .mid{flex:1; text-align:center; color:var(--ink-faint); font-style:italic; font-size:.92rem}
 .verses{margin-top:.6rem; font-size:calc(1em * var(--ts, 1))}
@@ -524,8 +535,8 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="btn ib" id="navBack" title="Back"><span class="ic">‹</span><span class="lb">Back</span></button>
     <button class="btn ib" id="navFwd" title="Forward"><span class="ic">›</span><span class="lb">Fwd</span></button>
     <button class="btn ib primary" id="btnRandomVerse" title="Random verse"><span class="ic">✧</span><span class="lb" id="lbVerse">Verse</span></button>
-    <button class="btn ib" id="btnRandomChapter" title="Random chapter"><span class="ic">❧</span><span class="lb">Chapter</span></button>
-    <button class="btn ib" id="btnBooks" title="Books"><span class="ic">▤</span><span class="lb" id="lbBooks">Books</span></button>
+    <button class="btn ib" id="btnPsalter" title="The Monastic Psalter (Saint Bernard Abbey)"><span class="ic">♫</span><span class="lb">Psalter</span></button>
+    <button class="btn ib" id="btnTimer" title="Timer"><span class="ic" id="btnTimerIc">⏱</span><span class="lb" id="btnTimerLb">Timer</span></button>
     <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><img class="illum" src="icon-s.png" alt=""></span><span class="lb">Scriptorium</span></button>
     <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
     <button class="btn ib" id="btnFavs" title="Favorites"><span class="ic">♥</span><span class="lb">Favs</span></button>
@@ -1342,7 +1353,7 @@ const LuminaCore = (function () {
     $("focusLbl").style.display = ccc || docs ? "none" : "";
     focusSel.style.display = ccc || docs ? "none" : "";
     $("lbVerse").textContent = ccc || docs ? "¶" : "Verse";
-    $("lbBooks").textContent = ccc ? "Contents" : docs ? "Library" : "Books";
+
     if (docs){
       $("subtitle").textContent = "Church Documents";
       $("credit").textContent = window.LUMINA_DOCS ? window.LUMINA_DOCS.credit : "Texts © Libreria Editrice Vaticana";
@@ -1982,8 +1993,12 @@ const LuminaCore = (function () {
   function fmtLeft(ms){ const s = Math.max(0, Math.ceil(ms / 1000)), m = Math.floor(s / 60); return m + ":" + String(s % 60).padStart(2, "0"); }
   function paintTimer(){
     const b = $("timerBtn"), left = timerLeft();
-    if (state.timer && left > 0){ b.textContent = Math.ceil(left / 60000) + "′"; b.classList.add("on"); b.title = "Timer: " + fmtLeft(left) + " left"; }
+    const on = state.timer && left > 0;
+    if (on){ b.textContent = Math.ceil(left / 60000) + "′"; b.classList.add("on"); b.title = "Timer: " + fmtLeft(left) + " left"; }
     else { b.textContent = "⏱"; b.classList.remove("on"); b.title = "Timer"; }
+    $("btnTimerIc").textContent = on ? Math.ceil(left / 60000) + "′" : "⏱";      /* the bottom bar's twin */
+    $("btnTimerLb").textContent = on ? fmtLeft(left) : "Timer";
+    $("btnTimer").classList.toggle("on", !!on);
     const big = document.getElementById("tmLeft"); if (big) big.textContent = state.timer && left > 0 ? fmtLeft(left) : "—";
   }
   function runTimer(){
@@ -2046,6 +2061,7 @@ const LuminaCore = (function () {
     paintTimer();
   }
   $("timerBtn").onclick = openTimerSheet;
+  $("btnTimer").onclick = openTimerSheet;
   /* a timer that was running when Lumina closed */
   if (state.timer){
     if (timerLeft() > 0) runTimer();
@@ -2903,16 +2919,18 @@ const LuminaCore = (function () {
           (isDrb && ch.s ? '<p class="ch-summary">' + esc(ch.s) + '</p>' : '') +
           (!isDrb && ch.title ? '<p class="ch-summary">' + esc(ch.title) + '</p>' : '') +
           (fell ? '<p class="ch-notice">' + fallNote(meta, err) + '</p>' : '') +
-          '<div class="sum-link"><button class="btn small" id="vSummary">Chapter Summary ▾</button> ' +
-            '<select class="verse-pick" id="versePick" title="Jump to a verse"><option value="">Verse…</option>' +
-            ch.v.map((_, j) => '<option value="' + j + '">' + C.vnum(ch, j) + '</option>').join("") + '</select> ' +
-            '<button class="btn small' + (chapFavsFor(b, c).length ? " fav-on" : "") + '" id="chFav" title="Save this chapter to favorites">' +
-            (chapFavsFor(b, c).length ? "♥ Chapter" : "♡ Chapter") + '</button></div>' +
         '</div>' +
-        '<div class="ch-nav">' +
-          '<button class="btn nav-arrow" id="cPrev" ' + (pc ? "" : "disabled") + '>← ' + (pc ? esc(C.chapterLabel(pc.b, pc.c)) : "") + '</button>' +
-          '<span class="mid">' + ch.v.length + ' verses</span>' +
-          '<button class="btn nav-arrow" id="cNext" ' + (nc ? "" : "disabled") + '>' + (nc ? esc(C.chapterLabel(nc.b, nc.c)) : "") + ' →</button>' +
+        /* the floating bar: stays at the top of the screen as you scroll */
+        '<div class="fbar" id="fbar">' +
+          '<button class="fb-arrow" id="cPrev" ' + (pc ? 'title="' + esc(C.chapterLabel(pc.b, pc.c)) + '"' : "disabled") + '>‹</button>' +
+          '<select id="fbBook" title="Book">' + D.books.map((x, k) => '<option value="' + k + '"' + (k === b ? " selected" : "") + '>' + esc(x.name) + '</option>').join("") + '</select>' +
+          '<select id="fbCh" title="Chapter">' + bk.ch.map((_, k) => '<option value="' + k + '"' + (k === c ? " selected" : "") + '>' + (k + 1) + '</option>').join("") + '</select>' +
+          '<select class="verse-pick" id="versePick" title="Jump to a verse"><option value="">v.</option>' +
+            ch.v.map((_, j) => '<option value="' + j + '">' + C.vnum(ch, j) + '</option>').join("") + '</select>' +
+          '<button class="fb-btn' + (chapFavsFor(b, c).length ? " fav-on" : "") + '" id="chFav" title="Save this chapter to favorites">' +
+            (chapFavsFor(b, c).length ? "♥" : "♡") + '</button>' +
+          '<button class="fb-btn" id="vSummary" title="Chapter summary">Summary</button>' +
+          '<button class="fb-arrow" id="cNext" ' + (nc ? 'title="' + esc(C.chapterLabel(nc.b, nc.c)) + '"' : "disabled") + '>›</button>' +
         '</div>' +
         '<div class="card"><div class="verses" id="versesHost">' + vs + '</div></div>' + attribution +
         '</div>';
@@ -2927,13 +2945,22 @@ const LuminaCore = (function () {
           copy("“" + ch.v[j] + "” — " + C.citation(b, c, C.vnum(ch, j)) + " (" + (fell ? "DR" : meta.abbr) + ")");
         });
       });
-      bindSummary(b, c, "#chHead");
+      bindSummary(b, c, "#fbar");
       $("chFav").onclick = () => openChapFavModal(b, c);
+      $("fbBook").onchange = e => { const nb = +e.target.value; renderChapter(nb, 0); };
+      $("fbCh").onchange = e => renderChapter(b, +e.target.value);
       $("versePick").onchange = e => {
         const j = e.target.value;
         if (j === "") return;
+        /* jump within the chapter: the verse is lit and brought just below the floating bar */
+        view.querySelectorAll(".v.hl").forEach(x => x.classList.remove("hl"));
+        const el = $("v" + j); if (!el) return;
+        el.classList.add("hl");
+        const barH = $("fbar").offsetHeight;
+        scrollTo({ top: el.getBoundingClientRect().top + scrollY - barH - 12, behavior: "smooth" });
         const drbI = isDrb ? +j : C.mapFromTx(D.books[b].ch[c], ch, +j);
-        renderVerse(b, c, drbI);
+        cur.i = drbI; state.last = { kind:"chapter", book: bk.id, c, i: drbI }; save();
+        e.target.value = "";
       };
       selCtx = { tx: hlTx, book: bk.id, c,
         list: [...view.querySelectorAll(".vt")].map(el => ({ el, i: parseInt(el.dataset.i, 10) })) };
@@ -3029,7 +3056,7 @@ const LuminaCore = (function () {
       '<p class="ch-notice">¶ ' + t.first + "–" + t.last + '</p></div>' +
       '<div class="ch-nav">' +
       '<button class="btn nav-arrow" id="cPrev" ' + (ti > 0 ? "" : "disabled") + '>←</button>' +
-      '<span class="mid">' + (t.last - t.first + 1) + ' paragraphs</span>' +
+      '<span class="mid"><button class="btn small" id="cccToc" title="' + (t.last - t.first + 1) + ' paragraphs">☰ Contents</button></span>' +
       '<button class="btn nav-arrow" id="cNext" ' + (ti < K.toc.length - 1 ? "" : "disabled") + '>→</button></div>' +
       '<div class="card"><div class="verses">';
     for (let n = t.first; n <= t.last; n++){
@@ -3044,6 +3071,7 @@ const LuminaCore = (function () {
     }
     html += '</div></div></div>';
     view.innerHTML = html;
+    $("cccToc").onclick = renderCccContents;
     if (ti > 0) $("cPrev").onclick = () => renderCccChapter(ti - 1);
     if (ti < K.toc.length - 1) $("cNext").onclick = () => renderCccChapter(ti + 1);
     view.querySelectorAll(".v").forEach(p => p.addEventListener("dblclick", () => {
@@ -3978,8 +4006,9 @@ const LuminaCore = (function () {
     renderChapter(r.b, r.c);
   }
   $("btnRandomVerse").onclick = doRandomVerse;
-  $("btnRandomChapter").onclick = doRandomChapter;
-  $("btnBooks").onclick = () => state.corpus === "ccc" ? renderCccContents() : state.corpus === "docs" ? renderDocLibrary() : renderBooks();
+  /* the Monastic Psalter, published from munkachy/sing-with-us (psalter/), opens beside Lumina */
+  const PSALTER_URL = "https://munkachy.github.io/sing-with-us/psalter/";
+  $("btnPsalter").onclick = () => { const w = window.open(PSALTER_URL, "_blank"); if (!w) location.href = PSALTER_URL; };
   $("btnSearch").onclick = () => renderSearch();
   $("btnFavs").onclick = renderFavorites;
   $("btnReadings").onclick = () => renderReadings();
