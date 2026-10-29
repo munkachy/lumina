@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 21;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 22;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -341,7 +341,18 @@
   let mind = null;          // [{cid, date, title, topics, questions, text, note}]
   let mindMode = false;
   const mindKey = (r) => { const c = (r && r.content) || ""; return c.length + ":" + c.slice(0, 60); };
-  const mindSaved = (r) => !!((data.mindSaved || {})[mindKey(r)]);
+  /* One reply can hold several notebook entries, each with its own "### title" and "**Topics:**" line.
+     Such a reply is saved as that many mind-map entries, not one; anything before the first title
+     (a greeting, say) is left out. A reply whose "###" parts don't each have Topics stays whole. */
+  function mindParts(content) {
+    const c = content || "", starts = [...c.matchAll(/^###\s+.+$/gm)].map((m) => m.index);
+    if (starts.length < 2) return [c];
+    const parts = starts.map((s, k) => c.slice(s, k + 1 < starts.length ? starts[k + 1] : c.length).trim());
+    return parts.every((p) => /\*\*Topics:\*\*/.test(p)) ? parts : [c];
+  }
+  const mindSaved = (r) => mindParts(r && r.content).every((p) => (data.mindSaved || {})[mindKey({ content: p })]);
+  const mindLabel = (r, saved) => { const n = mindParts(r && r.content).length;
+    return n > 1 ? (saved ? "🧠 " + n + " entries in mind map ✓" : "🧠 Save " + n + " entries to mind map") : (saved ? "🧠 In mind map ✓" : "🧠 Save to mind map"); };
 
   async function mindIssue() {
     if (data.mindIssue) return data.mindIssue;
@@ -377,27 +388,35 @@
 
   async function toggleMind(turn, btn) {
     btn.disabled = true;
-    const key = mindKey(turn.reply);
     data.mindSaved = data.mindSaved || {};
+    const parts = mindParts(turn.reply.content), whole = mindKey(turn.reply);
+    const drop = async (key) => {
+      const cid = data.mindSaved[key]; if (!cid) return;
+      await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + cid).catch(() => {});
+      delete data.mindSaved[key];
+      if (mind) mind = mind.filter((m) => m.cid !== cid);
+    };
     try {
-      if (data.mindSaved[key]) {
-        const cid = data.mindSaved[key];
-        await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + cid).catch(() => {});
-        delete data.mindSaved[key];
-        if (mind) mind = mind.filter((m) => m.cid !== cid);
+      if (mindSaved(turn.reply)) {                       // in the map: take it (all of its entries) out
+        for (const p of parts) await drop(mindKey({ content: p }));
       } else {
-        const entry = entryFrom(turn);
-        const c = await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments",
-          { body: MARK("mind") + "\n" + (await encryptText(S.keys, JSON.stringify(entry))) });
-        data.mindSaved[key] = c.id;
-        if (mind) mind.unshift({ cid: c.id, ...entry });
+        if (parts.length > 1) await drop(whole);         // saved earlier as one lump: replace it with its entries
+        for (const p of parts) {
+          const key = mindKey({ content: p });
+          if (data.mindSaved[key]) continue;
+          const entry = entryFrom({ text: turn.text, reply: { content: p, refs: turn.reply.refs } });
+          const c = await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments",
+            { body: MARK("mind") + "\n" + (await encryptText(S.keys, JSON.stringify(entry))) });
+          data.mindSaved[key] = c.id;
+          if (mind) mind.unshift({ cid: c.id, ...entry });
+        }
       }
       await saveVault();
     } catch (e) { alert("Couldn't update the mind map: " + e.message); }
     btn.disabled = false;
-    const saved = !!data.mindSaved[key];
+    const saved = mindSaved(turn.reply);
     btn.classList.toggle("on", saved);
-    btn.textContent = saved ? "🧠 In mind map ✓" : "🧠 Save to mind map";
+    btn.textContent = mindLabel(turn.reply, saved);
   }
 
   const mindView = { range: "all", by: "topics", open: null };
@@ -558,7 +577,7 @@
     if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
     if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button>' +
-      (tab === "faith" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + (mindSaved(r) ? "🧠 In mind map ✓" : "🧠 Save to mind map") + "</button>" : "") + "</div>";
+      (tab === "faith" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + mindLabel(r, mindSaved(r)) + "</button>" : "") + "</div>";
     return h;
   }
 
