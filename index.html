@@ -1011,7 +1011,8 @@ const LuminaCore = (function () {
   /* ---------- the Grail Psalms: your own file, kept on this device ----------
      The Grail is under copyright, so Lumina does not carry it. You import your own Grail
      file (grail.selah-pack.v1.json, made by tools/build-grail.js from your private copy);
-     it is kept in this browser on this device and never sent anywhere. Without it, the
+     it is kept in this browser on this device, and (with Scriptorium sync) encrypted in the
+     private relay so other devices get it; it is never shared. Without it, the
      Trees show the Douay, through data-grail-map.js (verse numbers only, no text).
      grailFromPack must stay in step with fromPack in tools/grail-pack.js. */
   const GRAIL_MAX = 4 * 1024 * 1024;
@@ -1291,9 +1292,9 @@ const LuminaCore = (function () {
   function grailSheet(onImported){
     loadGrail().then(() => true, () => false).then(has => {
       const back = modal('<h3>Grail Psalms</h3>' + (has
-        ? '<p style="text-align:center">Your Grail file is on this device. Lumina keeps it here, in this browser only, and never sends it anywhere.</p>' +
+        ? '<p style="text-align:center">Your Grail file is on this device' + (syncOn() ? ', and a copy is kept encrypted in your private Scriptorium relay on GitHub, so your other devices get it too' : '') + '. It is never shared with anyone.</p>' +
           '<div class="rowbtns"><button class="btn" id="gRemove">Remove</button><button class="btn" id="gChoose">Replace…</button><button class="btn primary" id="gClose">Close</button></div>'
-        : '<p style="text-align:center">The Grail Psalms are under copyright, so Lumina does not include them. If you have your own Grail file, choose it here. It stays on this device and is never sent anywhere.</p>' +
+        : '<p style="text-align:center">The Grail Psalms are under copyright, so Lumina does not include them. If you have your own Grail file, choose it here. It stays on this device' + (syncOn() ? ' and, encrypted, in your private Scriptorium relay' : '') + ', and is never shared with anyone.</p>' +
           '<div class="rowbtns"><button class="btn" id="gClose">Cancel</button><button class="btn primary" id="gChoose">Choose your Grail file</button></div>') +
         '<p class="g-msg" style="text-align:center;color:#b33;display:none"></p><input type="file" id="gFile" style="display:none">');
       const q = sel => back.querySelector(sel), file = q("#gFile");
@@ -1302,11 +1303,12 @@ const LuminaCore = (function () {
       q("#gChoose").onclick = () => { file.value = ""; file.click(); };
       if (has) q("#gRemove").onclick = () => {
         back.remove();
-        const sure = modal('<h3>Remove the Grail?</h3><p style="text-align:center">This removes your Grail file from this device. You can import it again at any time.</p>' +
+        const sure = modal('<h3>Remove the Grail?</h3><p style="text-align:center">This removes your Grail file from this device' + (syncOn() ? ', from your GitHub copy, and from your other devices' : '') + '. You can import it again at any time.</p>' +
           '<div class="rowbtns"><button class="btn" id="rCancel">Cancel</button><button class="btn danger" id="rGo">Remove</button></div>');
         sure.querySelector("#rCancel").onclick = () => sure.remove();
         sure.querySelector("#rGo").onclick = () => grailDel().catch(() => {}).then(() => {
           delete window.LUMINA_TX.grail;
+          if (syncOn()){ state.grailHash = "none"; save(); }   /* and from GitHub and your other devices */
           sure.remove(); showToast("The Grail is removed from this device");
           if (state.tx === "grail"){ state.tx = "drb"; if (state.corpus === "bible") txSel.value = "drb"; save(); applyMode(); }
           rerender();
@@ -1323,8 +1325,9 @@ const LuminaCore = (function () {
           try { p = JSON.parse(rd.result); } catch(e){ return say("This file is damaged, or it is not a Grail file."); }
           const why = grailCheck(p);
           if (why) return say(why);
-          grailPut(rd.result).then(() => {
+          grailPut(rd.result).then(() => grailHashOf(rd.result)).then(h => {
             window.LUMINA_TX.grail = grailFromPack(p);
+            state.grailHash = h; save();                    /* other devices fetch this file */
             try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch(e){}
             back.remove(); showToast("The Grail Psalms are on this device");
             if (onImported) onImported(); else rerender();
@@ -2271,7 +2274,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=20"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=21"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2295,6 +2298,7 @@ const LuminaCore = (function () {
         if (J(merged.theme) !== J(local.theme)) try { applyTheme(); } catch(e){}
         if (J(merged.font) !== J(local.font)) try { applyFont(); } catch(e){}
       }
+      await syncGrail(scr, merged);
       if (!remote || J(merged) !== J(remote)) await scr.data.store(merged);
       lastSynced = J(merged); lastSyncedObj = merged;
       try { localStorage.setItem(SYNC_BASE, lastSynced); } catch(e){}
@@ -2310,6 +2314,42 @@ const LuminaCore = (function () {
       syncing = false; firstSync = false;
       const st = document.getElementById("syncState"); if (st) st.textContent = syncNote;
       if (syncAgain){ syncAgain = false; scheduleSync(); }
+    }
+  }
+  /* The Grail file travels too, encrypted, as its own set of comments ("lumgrail"), so a new or
+     cleared device gets it back without importing it again. A fingerprint of the file (grailHash)
+     rides with the other settings: each device compares it with the file it has, and fetches or
+     sends the file only when they differ. "none" means it was removed on purpose, everywhere. */
+  const GRAIL_UP = "lumina.grail.up";          /* the fingerprint this device last sent or fetched */
+  async function grailHashOf(text){
+    const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)));
+    return [...d].map(x => x.toString(16).padStart(2, "0")).join("");
+  }
+  async function syncGrail(scr, merged){
+    const text = await grailGet().catch(() => null), here = text ? await grailHashOf(text) : null;
+    const want = merged.grailHash, up = localStorage.getItem(GRAIL_UP);
+    const setWant = h => { merged.grailHash = h; state.grailHash = h; try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} };
+    if (want === "none"){                                          /* removed on some device */
+      if (here){ await grailDel().catch(() => {}); delete window.LUMINA_TX.grail;
+        if (state.tx === "grail"){ state.tx = "drb"; if (state.corpus === "bible") txSel.value = "drb"; applyMode(); }
+        showToast("The Grail was removed on your other device"); }
+      if (up !== "none"){ await scr.data.remove("lumgrail"); localStorage.setItem(GRAIL_UP, "none"); }
+      return;
+    }
+    if (here && (!want || want === here)){                         /* this device's file is the current one */
+      if (!want) setWant(here);
+      if (up !== here){ await scr.data.store({ h: here, text }, "lumgrail"); localStorage.setItem(GRAIL_UP, here); }
+      return;
+    }
+    if (want && want !== here){                                    /* a newer file elsewhere, or none here */
+      const got = await scr.data.load("lumgrail");
+      if (!got || got.h !== want) return;                          /* not uploaded yet; try next time */
+      let p; try { p = JSON.parse(got.text); } catch(e){ return; }
+      if (grailCheck(p)) return;
+      await grailPut(got.text);
+      window.LUMINA_TX.grail = grailFromPack(p);
+      localStorage.setItem(GRAIL_UP, want);
+      showToast("Your Grail Psalms came back from GitHub");
     }
   }
   function scheduleSync(){ if (!syncOn()) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => syncNow(), 8000); }
