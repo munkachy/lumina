@@ -1214,12 +1214,14 @@ const LuminaCore = (function () {
       })
       .catch(() => undefined);
   }
-  function activeChapterAsync(b, c){
-    const meta = txMeta(state.tx);
+  /* tx: a translation for one screen only (the daily readings have their own); else the app's */
+  function activeChapterAsync(b, c, tx){
+    tx = tx || state.tx;
+    const meta = txMeta(tx);
     if (meta.kind === "local"){
-      const ch = C.txChapter(txData(state.tx), b, c);
+      const ch = C.txChapter(txData(tx), b, c);
       if (ch) return Promise.resolve({ ch, fell:false });
-      return Promise.resolve({ ch: D.books[b].ch[c], fell: state.tx !== "drb" });
+      return Promise.resolve({ ch: D.books[b].ch[c], fell: tx !== "drb" });
     }
     return apiSlotChapter(meta, b, c).then(ch => {
       if (ch) return { ch, fell:false };
@@ -3438,6 +3440,7 @@ const LuminaCore = (function () {
   /* ---------- daily readings ---------- */
   function isoToday(){ const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   const readingsCache = {};
+  const readTx = () => TRANSLATIONS.some(t => t.id === state.readTx && !t.only) ? state.readTx : "gnt";
   function renderReadings(dateStr){
     cur = { kind:"readings", date: dateStr || isoToday() };
     record(cur);
@@ -3449,10 +3452,16 @@ const LuminaCore = (function () {
       '<div class="ch-head"><h2 class="ch-title">Daily Mass Readings</h2></div>' +
       '<div class="search-row" style="max-width:20rem;margin:.6rem auto"><input type="date" id="rdate" value="' + date + '">' +
       '<button class="btn primary" id="goDate">Go</button></div>' +
+      /* the readings keep their own translation (Good News by default), apart from the Bible's */
+      '<div class="controls" style="margin:.2rem 0 .6rem"><label class="ctl-label" for="readTx">Read in</label><select id="readTx">' +
+        TRANSLATIONS.filter(t => !t.only).map(t => '<option value="' + t.id + '"' + (t.id === readTx() ? " selected" : "") + '>' + esc(t.name) + '</option>').join("") +
+      '</select></div>' +
       '<div id="rbody"><p class="ch-notice">Looking up the readings\u2026</p></div></div>';
     $("backMore").onclick = () => navBack();
     $("goDate").onclick = () => renderReadings($("rdate").value);
+    $("readTx").onchange = e => { state.readTx = e.target.value; save(); renderReadings(date); };
     const body = $("rbody");
+    const rtx = readTx();
 
     const draw = j => {
       const d = j.data || {};
@@ -3467,12 +3476,13 @@ const LuminaCore = (function () {
         if (!keys.some(k => k.b === p.b && k.c === p.c)) keys.push({ b: p.b, c: p.c });
       }));
       body.innerHTML = '<p class="ch-notice">Fetching the text\u2026</p>';
-      Promise.all(keys.map(k => activeChapterAsync(k.b, k.c).then(res => [k.b + ":" + k.c, res])))
+      const ready = txMeta(rtx).kind === "local" && rtx !== "drb" ? loadTx(rtx).catch(() => {}) : Promise.resolve();
+      ready.then(() => Promise.all(keys.map(k => activeChapterAsync(k.b, k.c, rtx).then(res => [k.b + ":" + k.c, res]))))
         .then(pairs => {
           if (seq !== renderSeq) return;
           const chmap = Object.fromEntries(pairs);
-          const meta = txMeta(state.tx);
-          const hlTx = activeHlTx();
+          const meta = txMeta(rtx);
+          const hlTx = rtx;
           let html = '<p class="season-line">' + esc((d.day && d.day.season) || "") +
             (d.day && d.day.title && d.day.title !== "Daily Readings" ? " \u00b7 " + esc(d.day.title) : "") + '</p>';
           groups.forEach(g => {
@@ -3509,7 +3519,7 @@ const LuminaCore = (function () {
           html += '<p class="attribution">Readings for ' + esc(date) + ' from the USCCB lectionary via Cathople' +
             ((d.source && d.source.usccbLink) ? ' \u00b7 <a href="' + esc(d.source.usccbLink) +
               '" target="_blank" rel="noopener" style="color:var(--gold)">USCCB</a>' : '') +
-            '<br>Scripture shown in <b>' + esc(meta.name) + '</b> \u2014 change it with the Bible selector above.' +
+            '<br>Scripture shown in <b>' + esc(meta.name) + '</b> \u2014 change it with \u201cRead in\u201d above.' +
             (apiCopyright[meta.id] ? '<br>' + esc(apiCopyright[meta.id]) : '') + '</p>';
           body.innerHTML = html;
           body.querySelectorAll(".opench").forEach(btn => btn.onclick = () =>
