@@ -25,9 +25,12 @@ is the licensed way to display these copyrighted translations.
 - **Floating chapter bar** — in a chapter, a thin bar stays at the top as you scroll:
   ‹ previous chapter · Book · Chapter · Verse (jumps within the chapter and lights the verse) ·
   ♡ save the chapter · Summary (opens in the bar, so you keep your place) · › next chapter.
-  The bottom bar's **Psalter** button opens the Monastic Psalter of Saint Bernard Abbey
-  (munkachy.github.io/sing-with-us/psalter), and its **Timer** works like ⏱ at the top,
-  showing the time left.
+  The bottom bar's **Timer** works like ⏱ at the top, showing the time left.
+- **♫ Psalter** — the Monastic Psalter of Saint Bernard Abbey (munkachy/sing-with-us, `psalter/`),
+  shown inside Lumina: tap Psalter, and ❦ Bible to come back; each keeps its place. It is the
+  monks' own page, unchanged, in a frame: its theme follows Lumina's (parchment → Cloister,
+  dark → Habit, LCARS → Stained glass), and everything it keeps on the device (the unlock key,
+  notes, marks, choices) travels in Lumina's encrypted sync, so other devices arrive unlocked.
 - **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
   wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
   minutes left. At the end: a chime, or a chime and then a sentence you write, said in your

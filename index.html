@@ -276,6 +276,10 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
   padding:.8rem 1rem; margin:.6rem auto; max-width:40rem; font-size:1.0rem; line-height:1.6; text-align:left}
 .sum-panel.open{display:block}
 .sum-panel .lbl{font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
+#psalterFrame{display:none; border:0; background:var(--bg)}
+body.psalter-on #psalterFrame{display:block; position:fixed; left:0; right:0; top:0; width:100%; height:calc(100% - var(--barH, 10.5rem)); z-index:18}
+body.psalter-on{overflow:hidden}
+@media(min-width:700px){ body.psalter-on #psalterFrame{top:var(--barTop, 0); height:calc(100% - var(--barTop, 0px))} }
 .fbar{position:sticky; top:0; z-index:15; display:flex; align-items:center; gap:.25rem; flex-wrap:wrap;
   margin:.6rem -.3rem .7rem; padding:.3rem .3rem; background:color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--border-soft); border-radius:.4rem}
@@ -1251,6 +1255,7 @@ const LuminaCore = (function () {
     $("themeBtn").title = "Theme: " + t + " — click for " + THEMES[(THEMES.indexOf(t) + 1) % 3];
     document.querySelector('meta[name="theme-color"]').setAttribute("content",
       t === "dark" ? "#161209" : t === "lcars" ? "#000000" : "#f3ead8");
+    try { psalterDress(); } catch(e){}
   }
   window.LuminaTheme = { toggle: () => $("themeBtn").click() };
   $("themeBtn").onclick = () => {
@@ -2261,6 +2266,7 @@ const LuminaCore = (function () {
     const o = {};
     Object.keys(state).forEach(k => { if (!SYNC_LOCAL_ONLY.includes(k)) o[k] = state[k]; });
     try { o.scrPrefs = JSON.parse(localStorage.getItem(SCR_PREFS) || "null"); } catch(e){ o.scrPrefs = null; }
+    o.psalterLS = psalterStore();
     return o;
   };
   const J = v => JSON.stringify(v === undefined ? null : v);
@@ -2269,11 +2275,28 @@ const LuminaCore = (function () {
   try { lastSyncedObj = JSON.parse(localStorage.getItem(SYNC_BASE) || "null"); lastSynced = J(lastSyncedObj); } catch(e){}
   /* three-way merge: what changed here since the last sync wins over GitHub; otherwise GitHub's
      copy is taken, so additions, edits and deletions on either device all carry over */
+  /* the Monastic Psalter shares this site's storage: everything it keeps under "psalter…" (its unlock
+     key, so a device arrives already unlocked; the monk's notes, marks and choices) travels with Lumina */
+  function psalterStore(){
+    const o = {};
+    try { for (let k = 0; k < localStorage.length; k++){ const key = localStorage.key(k);
+      if (/^psalter/.test(key) && key !== "psalter-beta-pw") o[key] = localStorage.getItem(key); } } catch(e){}
+    return o;
+  }
   function merge3(base, local, remote){
     const out = {}, fresh = !base;
     base = base || {};
     [...new Set([...Object.keys(local), ...Object.keys(remote)])].forEach(k => {
-      if (SYNC_LISTS.includes(k)){
+      if (k === "psalterLS"){                                 /* key by key, each like a setting */
+        const b = base[k] || {}, l = local[k] || {}, r = remote[k] || {}, o = {};
+        new Set([...Object.keys(l), ...Object.keys(r)]).forEach(x => {
+          const v = x in l && x in r ? (l[x] !== b[x] ? l[x] : r[x])
+            : x in l ? (!(x in b) || l[x] !== b[x] ? l[x] : undefined)
+            : (!(x in b) || r[x] !== b[x] ? r[x] : undefined);
+          if (v !== undefined) o[x] = v;
+        });
+        out[k] = o;
+      } else if (SYNC_LISTS.includes(k)){
         const by = a => { const m = new Map(); (a || []).forEach(x => { if (x && x.id) m.set(x.id, x); }); return m; };
         const B = by(base[k]), L = by(local[k]), R = by(remote[k]), ids = [...L.keys(), ...[...R.keys()].filter(id => !L.has(id))];
         out[k] = ids.map(id => {
@@ -2310,6 +2333,14 @@ const LuminaCore = (function () {
       if (J(merged) !== J(local)){
         Object.keys(merged).forEach(k => {
           if (k === "scrPrefs"){ if (merged.scrPrefs) try { localStorage.setItem(SCR_PREFS, J(merged.scrPrefs)); } catch(e){} }
+          else if (k === "psalterLS"){
+            const now = psalterStore(), want = merged.psalterLS || {};
+            try {
+              Object.keys(want).forEach(x => { if (now[x] !== want[x]) localStorage.setItem(x, want[x]); });
+              Object.keys(now).forEach(x => { if (!(x in want)) localStorage.removeItem(x); });
+            } catch(e){}
+            if (J(now) !== J(want)) psalterReload();
+          }
           else if (!SYNC_LOCAL_ONLY.includes(k) && merged[k] !== undefined) state[k] = merged[k];
         });
         lastSynced = J(syncedPart()); lastSyncedObj = JSON.parse(lastSynced); save();
@@ -2372,6 +2403,8 @@ const LuminaCore = (function () {
   }
   function scheduleSync(){ if (!syncOn()) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => syncNow(), 8000); }
   /* called by save(): only real changes to the synced data start a sync, not every page turn */
+  /* the psalter (in its frame) writes its storage itself: notice and sync it */
+  addEventListener("storage", e => { if (e.key && /^psalter/.test(e.key)) try { syncChanged(); } catch(x){} });
   function syncChanged(){ if (syncOn() && loud(syncedPart()) !== loud(lastSyncedObj)) scheduleSync(); }
   window.LuminaSync = { changed: () => { try { syncChanged(); } catch(e){} } };   /* Scriptorium calls this when its settings change */
   let lastFetch = 0;
@@ -4030,8 +4063,58 @@ const LuminaCore = (function () {
   }
   $("btnRandomVerse").onclick = doRandomVerse;
   /* the Monastic Psalter, published from munkachy/sing-with-us (psalter/), opens beside Lumina */
-  const PSALTER_URL = "https://munkachy.github.io/sing-with-us/psalter/";
-  $("btnPsalter").onclick = () => { const w = window.open(PSALTER_URL, "_blank"); if (!w) location.href = PSALTER_URL; };
+  /* ---------- the Monastic Psalter, inside Lumina ----------
+     The psalter page (munkachy/sing-with-us, psalter/) is on the same site as Lumina, so Lumina shows it
+     in a frame of its own and can reach into it: its theme follows Lumina's, and its storage is shared
+     (and synced, above). The page itself is not changed: the monks' own copy looks and works as before.
+     The frame is kept once opened, so going back and forth keeps your place in both. */
+  const PSALTER_URL = new URL("../sing-with-us/psalter/", location.href).href;
+  const PSALTER_THEME = { light: "cloister", dark: "habit", lcars: "glass" };
+  let psalterFrame = null;
+  function psalterDoc(){ try { return psalterFrame && psalterFrame.contentDocument; } catch(e){ return null; } }
+  function psalterDress(){
+    const d = psalterDoc(); if (!d || !d.documentElement) return;
+    d.documentElement.setAttribute("data-theme", PSALTER_THEME[currentTheme()] || "cloister");
+    if (!d.getElementById("luminaStyle")){
+      const st = d.createElement("style"); st.id = "luminaStyle";
+      st.textContent = ".themes{display:none!important} .skip-link{display:none!important}";   /* Lumina's ☾ chooses the theme */
+      (d.head || d.documentElement).appendChild(st);
+    }
+  }
+  function psalterReload(){ if (psalterFrame) try { psalterFrame.contentWindow.location.reload(); } catch(e){} }
+  function psalterOn(){ return document.body.classList.contains("psalter-on"); }
+  function openPsalter(){
+    if (!psalterFrame){
+      psalterFrame = document.createElement("iframe");
+      psalterFrame.id = "psalterFrame"; psalterFrame.title = "Monastic Psalter";
+      psalterFrame.addEventListener("load", psalterDress);
+      psalterFrame.src = PSALTER_URL;
+      document.body.appendChild(psalterFrame);
+    }
+    psalterDress();
+    document.body.classList.add("psalter-on");
+    psalterFit();
+    $("btnPsalter").querySelector(".ic").textContent = "❦"; $("btnPsalter").querySelector(".lb").textContent = "Bible";
+    $("btnPsalter").title = "Back to the Bible";
+  }
+  function closePsalter(){
+    document.body.classList.remove("psalter-on");
+    $("btnPsalter").querySelector(".ic").textContent = "♫"; $("btnPsalter").querySelector(".lb").textContent = "Psalter";
+    $("btnPsalter").title = "The Monastic Psalter (Saint Bernard Abbey)";
+  }
+  /* the frame fills the screen above the bottom bar (phones), or below it (wider screens, where the bar sits on top) */
+  function psalterFit(){
+    const bar = document.querySelector(".actions.main-bar"), r = bar.getBoundingClientRect(), root = document.documentElement.style;
+    if (getComputedStyle(bar).position === "fixed"){ root.setProperty("--barH", Math.ceil(r.height) + "px"); root.setProperty("--barTop", "0px"); }
+    else { root.setProperty("--barTop", Math.ceil(r.bottom) + "px"); root.setProperty("--barH", "0px"); }
+  }
+  addEventListener("resize", () => { if (psalterOn()) psalterFit(); });
+  $("btnPsalter").onclick = () => psalterOn() ? closePsalter() : openPsalter();
+  /* any other bottom button (except the timer) leaves the psalter first, then does its work */
+  document.querySelector(".actions.main-bar").addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (b && psalterOn() && b.id !== "btnPsalter" && b.id !== "btnTimer") closePsalter();
+  }, true);
   $("btnSearch").onclick = () => renderSearch();
   $("btnFavs").onclick = renderFavorites;
   $("btnReadings").onclick = () => renderReadings();
