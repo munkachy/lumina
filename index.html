@@ -2747,6 +2747,30 @@ const LuminaCore = (function () {
     return arr && arr[c] || null;
   }
   function summaryButtonHtml(){ return '<button class="btn" id="vSummary">Summary</button>'; }
+  /* the floating bar, on the chapter and the verse screens: ‹ previous chapter · Book · Chapter ·
+     Verse · ♡ · Summary · next chapter ›. It stays at the top of the screen as you scroll.
+     fav: { id, on, title } for the heart (the chapter's on the chapter screen, the verse's on the verse screen) */
+  function floatBarHtml(b, c, ch, fav){
+    const bk = D.books[b], pc = C.prevChapter(b, c), nc = C.nextChapter(b, c);
+    return '<div class="fbar" id="fbar">' +
+      '<button class="fb-arrow" id="cPrev" ' + (pc ? 'title="' + esc(C.chapterLabel(pc.b, pc.c)) + '"' : "disabled") + '>‹</button>' +
+      '<select id="fbBook" title="Book">' + D.books.map((x, k) => '<option value="' + k + '"' + (k === b ? " selected" : "") + '>' + esc(x.name) + '</option>').join("") + '</select>' +
+      '<select id="fbCh" title="Chapter">' + bk.ch.map((_, k) => '<option value="' + k + '"' + (k === c ? " selected" : "") + '>' + (k + 1) + '</option>').join("") + '</select>' +
+      '<select class="verse-pick" id="versePick" title="Jump to a verse"><option value="">v.</option>' +
+        ch.v.map((_, j) => '<option value="' + j + '">' + C.vnum(ch, j) + '</option>').join("") + '</select>' +
+      '<button class="fb-btn' + (fav.on ? " fav-on" : "") + '" id="' + fav.id + '" title="' + fav.title + '">' + (fav.on ? "♥" : "♡") + '</button>' +
+      '<button class="fb-btn" id="vSummary" title="Chapter summary">Summary</button>' +
+      '<button class="fb-arrow" id="cNext" ' + (nc ? 'title="' + esc(C.chapterLabel(nc.b, nc.c)) + '"' : "disabled") + '>›</button>' +
+    '</div>';
+  }
+  function wireFloatBar(b, c){
+    const pc = C.prevChapter(b, c), nc = C.nextChapter(b, c);
+    if (pc) $("cPrev").onclick = () => renderChapter(pc.b, pc.c);
+    if (nc) $("cNext").onclick = () => renderChapter(nc.b, nc.c);
+    $("fbBook").onchange = e => renderChapter(+e.target.value, 0);
+    $("fbCh").onchange = e => renderChapter(b, +e.target.value);
+    bindSummary(b, c, "#fbar");
+  }
   function bindSummary(b, c, containerSel){
     const btn = $("vSummary");
     if (!btn) return;
@@ -2798,7 +2822,8 @@ const LuminaCore = (function () {
       const isFav = favsFor(ref).length > 0;
       const hlTx = fell ? "drb" : activeHlTx();
       view.innerHTML =
-        '<div class="view"><div class="card" id="verseCard">' +
+        '<div class="view">' + floatBarHtml(b, c, ch, { id: "vFav", on: isFav, title: "Save this verse to favorites" }) +
+        '<div class="card" id="verseCard">' +
         '<div class="ornament">❦</div>' +
         '<div class="citation">' + esc(C.citation(b, c, C.vnum(ch, j))) +
           '<span class="tx-tag">' + (fell ? "DR" : meta.abbr) + '</span></div>' +
@@ -2809,9 +2834,7 @@ const LuminaCore = (function () {
         '<div class="verse-actions">' +
           '<button class="btn nav-arrow" id="vPrev" title="Previous verse">←</button>' +
           '<button class="btn" id="vChapter">Chapter</button>' +
-          summaryButtonHtml() +
           '<button class="btn" id="vCompare">⇄</button>' +
-          '<button class="btn' + (isFav ? " fav-on" : "") + '" id="vFav" title="Favorite">' + (isFav ? "♥" : "♡") + '</button>' +
           '<button class="btn" id="vCopy">Copy</button>' +
           '<button class="btn nav-arrow" id="vNext" title="Next verse">→</button>' +
         '</div></div></div>';
@@ -2824,7 +2847,12 @@ const LuminaCore = (function () {
       $("vCopy").onclick = () => copy("“" + ch.v[j] + "” — " + C.citation(b, c, C.vnum(ch, j)) + " (" + (fell ? "DR" : meta.abbr) + ")");
       $("vCompare").onclick = () => toggleCompare(b, c, i);
       $("vFav").onclick = () => openFavModal(ref);
-      bindSummary(b, c, "#verseCard");
+      wireFloatBar(b, c);
+      $("versePick").onchange = e => {               /* on the verse screen: open that verse */
+        if (e.target.value === "") return;
+        const jj = +e.target.value;
+        renderVerse(b, c, isDrb ? jj : C.mapFromTx(D.books[b].ch[c], ch, jj));
+      };
       selCtx = { tx: hlTx, book: D.books[b].id, c, list: [{ el: $("vtext"), i: j }] };
       applyMode();
       if (!opts || !opts.keepScroll) scrollTo({ top: 0, behavior: "smooth" });
@@ -2922,22 +2950,10 @@ const LuminaCore = (function () {
           (!isDrb && ch.title ? '<p class="ch-summary">' + esc(ch.title) + '</p>' : '') +
           (fell ? '<p class="ch-notice">' + fallNote(meta, err) + '</p>' : '') +
         '</div>' +
-        /* the floating bar: stays at the top of the screen as you scroll */
-        '<div class="fbar" id="fbar">' +
-          '<button class="fb-arrow" id="cPrev" ' + (pc ? 'title="' + esc(C.chapterLabel(pc.b, pc.c)) + '"' : "disabled") + '>‹</button>' +
-          '<select id="fbBook" title="Book">' + D.books.map((x, k) => '<option value="' + k + '"' + (k === b ? " selected" : "") + '>' + esc(x.name) + '</option>').join("") + '</select>' +
-          '<select id="fbCh" title="Chapter">' + bk.ch.map((_, k) => '<option value="' + k + '"' + (k === c ? " selected" : "") + '>' + (k + 1) + '</option>').join("") + '</select>' +
-          '<select class="verse-pick" id="versePick" title="Jump to a verse"><option value="">v.</option>' +
-            ch.v.map((_, j) => '<option value="' + j + '">' + C.vnum(ch, j) + '</option>').join("") + '</select>' +
-          '<button class="fb-btn' + (chapFavsFor(b, c).length ? " fav-on" : "") + '" id="chFav" title="Save this chapter to favorites">' +
-            (chapFavsFor(b, c).length ? "♥" : "♡") + '</button>' +
-          '<button class="fb-btn" id="vSummary" title="Chapter summary">Summary</button>' +
-          '<button class="fb-arrow" id="cNext" ' + (nc ? 'title="' + esc(C.chapterLabel(nc.b, nc.c)) + '"' : "disabled") + '>›</button>' +
-        '</div>' +
+        floatBarHtml(b, c, ch, { id: "chFav", on: chapFavsFor(b, c).length > 0, title: "Save this chapter to favorites" }) +
         '<div class="card"><div class="verses" id="versesHost">' + vs + '</div></div>' + attribution +
         '</div>';
-      if (pc) $("cPrev").onclick = () => renderChapter(pc.b, pc.c);
-      if (nc) $("cNext").onclick = () => renderChapter(nc.b, nc.c);
+      wireFloatBar(b, c);
       view.querySelectorAll(".notemark").forEach(btn => {
         btn.onclick = () => $("n" + btn.dataset.n).classList.toggle("open");
       });
@@ -2947,10 +2963,7 @@ const LuminaCore = (function () {
           copy("“" + ch.v[j] + "” — " + C.citation(b, c, C.vnum(ch, j)) + " (" + (fell ? "DR" : meta.abbr) + ")");
         });
       });
-      bindSummary(b, c, "#fbar");
       $("chFav").onclick = () => openChapFavModal(b, c);
-      $("fbBook").onchange = e => { const nb = +e.target.value; renderChapter(nb, 0); };
-      $("fbCh").onchange = e => renderChapter(b, +e.target.value);
       $("versePick").onchange = e => {
         const j = e.target.value;
         if (j === "") return;
