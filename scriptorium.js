@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 28;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 27;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -767,11 +767,6 @@
     refs.forEach((r, i) => { src = src.split(r.text).join("\u0002" + i + "\u0003"); });
     const blocks = [];
     src = src.replace(/```[\w-]*\n([\s\S]*?)(```|$)/g, (m, c) => { blocks.push("<pre><code>" + esc(c.replace(/\n$/, "")) + "</code></pre>"); return "\n\u0000" + (blocks.length - 1) + "\u0000\n"; });
-    src = src.replace(/^:::[ \t]*(.+)\n([\s\S]*?)\n:::[ \t]*$/gm, (m, title, body) => {   // a folded block: the verses a note names
-      const plain = (t) => t.replace(/\u0002(\d+)\u0003/g, (x, i) => refs[+i].text);   // links stay links outside, plain text inside
-      blocks.push('<details class="scr-fold"><summary><span class="chev"></span>' + esc(plain(title)) + "</summary><p>" + esc(plain(body)) + "</p></details>");
-      return "\n\u0000" + (blocks.length - 1) + "\u0000\n";
-    });
     const inline = (t) => esc(t)
       .replace(/`([^`\n]+)`/g, "<code>$1</code>")
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
@@ -1166,7 +1161,6 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-del{border:0;background:none;font-size:1rem;padding:4px 6px;cursor:pointer;opacity:.7}
 .scr-sheet-card{position:relative}
 .scr-x{position:absolute;top:10px;right:12px;border:0;background:var(--panel);color:var(--ink-soft);width:30px;height:30px;border-radius:50%;font-size:.9rem;cursor:pointer}
-.scr-fold{margin:.4rem 0}.scr-fold summary{cursor:pointer;color:var(--gold);font-size:.92em}.scr-fold p{font-family:Georgia,serif;margin:.4rem 0 .2rem}
 .scr-mind{max-width:760px;margin:0 auto;padding:4px 4px 40px}
 .scr-mind-h{display:flex;align-items:center;justify-content:space-between}
 .scr-mind-h h2{font-family:Georgia,serif;margin:.4rem 0}
