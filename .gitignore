@@ -11,3 +11,5 @@ grail-fixes.js
 # encrypted copies (data-catechism.enc, data-docs.enc) go in the repo. See tools/encrypt-data.py.
 data-catechism.js
 data-docs.js
+# The Society and Auxilium Christianorum prayers: only data-prayers.enc goes in the repo.
+data-prayers.js

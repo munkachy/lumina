@@ -1,7 +1,7 @@
-"""Make Lumina's encrypted data files: data-catechism.enc and data-docs.enc.
+"""Make Lumina's encrypted data files: data-catechism.enc, data-docs.enc and data-prayers.enc.
 
 The Catechism and the Church documents are © Libreria Editrice Vaticana, so the public repo
-holds them only encrypted, with the same key as Scriptorium (PBKDF2 from the Scriptorium
+holds them only encrypted (and the Society and Auxilium Christianorum prayers likewise), with the same key as Scriptorium (PBKDF2 from the Scriptorium
 password → AES-256-CBC + HMAC-SHA256; see scriptorium.js). The readable sources
 (data-catechism.js, data-docs.js) stay on this Mac only; .gitignore keeps them out of git.
 The Catechism's footnotes (from Scriptorium's ccc_footnotes.py) are folded in as paras[i].f.
@@ -41,8 +41,9 @@ def main():
         if notes.get(i):
             p["f"] = notes[i]
     docs = load_js("data-docs.js")
+    prayers = load_js("data-prayers.js")
 
-    for name, data in (("data-catechism.enc", ccc), ("data-docs.enc", docs)):
+    for name, data in (("data-catechism.enc", ccc), ("data-docs.enc", docs), ("data-prayers.enc", prayers)):
         blob = relaycrypto.encrypt(keys, json.dumps(data, ensure_ascii=False, separators=(",", ":")))
         open(os.path.join(HERE, name), "w").write(blob + "\n")
         print(f"{name}: {len(blob):,} characters")

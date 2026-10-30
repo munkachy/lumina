@@ -140,6 +140,20 @@
 .meta-text{font-style:italic; color:var(--ink-soft); font-size:.95rem; margin:.15rem 0 0; white-space:pre-wrap}
 .verse-pick{max-width:8rem}
 
+/* ---------- daily prayers ---------- */
+.prayers .pr-sec{margin:0 0 1.3rem}
+.prayers .pr-h{font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.1em;
+  color:var(--rubric); font-weight:600; font-size:1.15rem; text-align:center; margin:0 0 .4rem}
+.prayers .pr-p{margin:0 0 .6rem; line-height:1.7; text-indent:1.2em}
+.prayers .pr-vr{margin:0 0 .2rem}
+.prayers .pr-vr b, .prayers .pr-r{color:var(--rubric); font-weight:600}
+.prayers .pr-mid{text-align:center; font-style:italic; margin:.4rem 0}
+.prayers .pr-lit{margin:0 0 .7rem; padding:0; list-style:none; line-height:1.55}
+.prayers .pr-lit li{padding-left:1.2em; text-indent:-1.2em}
+.prayers .pr-lit i{color:var(--ink-soft)}
+.prayers .pr-today{text-align:center; font-style:italic; color:var(--ink-soft); margin:-.2rem 0 .8rem}
+.prayers .pr-credit{text-align:center; font-size:.85rem; color:var(--ink-faint); margin-top:1.5rem}
+
 /* ---------- favorites full page ---------- */
 .favfull{margin:0 0 1.1rem}
 .favfull .ff-cite{font-variant:small-caps; letter-spacing:.14em; color:var(--gold);
@@ -539,6 +553,7 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="round-btn" id="themeBtn" title="Toggle light / dark">☾</button>
     <button class="round-btn" id="btnSearch" title="Search">🔍</button>
     <button class="round-btn" id="timerBtn" title="Timer">⏱</button>
+    <button class="round-btn" id="btnFavs" title="Favorites">♥</button>
   </div>
 
   <div class="actions main-bar">
@@ -549,7 +564,7 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="btn ib" id="btnTimer" title="Timer"><span class="ic" id="btnTimerIc">⏱</span><span class="lb" id="btnTimerLb">Timer</span></button>
     <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><img class="illum" src="icon-s.png" alt=""></span><span class="lb">Scriptorium</span></button>
     <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
-    <button class="btn ib" id="btnFavs" title="Favorites"><span class="ic">♥</span><span class="lb">Favs</span></button>
+    <button class="btn ib" id="btnPrayers" title="Daily prayers: the Society and the Auxilium Christianorum"><span class="ic">✙</span><span class="lb">Prayers</span></button>
     <button class="btn ib" id="btnReadings" title="Daily Mass readings"><span class="ic">✠</span><span class="lb">Daily</span></button>
     <button class="btn ib" id="btnPlan" title="Mind map"><span class="ic">🧠</span><span class="lb">Mind</span></button>
   </div>
@@ -1134,7 +1149,7 @@ const LuminaCore = (function () {
     }
     function ask(wrong){
       return new Promise(resolve => {
-        const back = modal('<h3>' + (wrong ? "That password didn't open it" : "The Catechism is locked") + '</h3>' +
+        const back = modal('<h3>' + (wrong ? "That password didn't open it" : "This text is locked") + '</h3>' +
           '<p style="text-align:center;margin:.2rem 0 .8rem">Enter your Scriptorium password once on this device.</p>' +
           '<input type="password" id="lkPw" autocomplete="current-password" style="width:100%;box-sizing:border-box;padding:.6rem;font-size:16px">' +
           '<div class="rowbtns"><button class="btn" id="lkNo">Cancel</button><button class="btn primary" id="lkGo">Unlock</button></div>');
@@ -1173,6 +1188,9 @@ const LuminaCore = (function () {
     (cccLoading = cccLoading || LuminaLock.open("data-catechism.enc").then(d => { window.LUMINA_CCC = d; }).catch(e => { cccLoading = null; throw e; }));
   const loadDocs = () => window.LUMINA_DOCS ? Promise.resolve() :
     (docsLoading = docsLoading || LuminaLock.open("data-docs.enc").then(d => { window.LUMINA_DOCS = d; }).catch(e => { docsLoading = null; throw e; }));
+  let prayersLoading = null;
+  const loadPrayers = () => window.LUMINA_PRAYERS ? Promise.resolve() :
+    (prayersLoading = prayersLoading || LuminaLock.open("data-prayers.enc").then(d => { window.LUMINA_PRAYERS = d; }).catch(e => { prayersLoading = null; throw e; }));
   const loadSums = () => loadScript("data-summaries.js", () => !!window.LUMINA_SUMMARIES);
 
   /* ---------- API.Bible fetch layer ---------- */
@@ -1483,6 +1501,48 @@ const LuminaCore = (function () {
       rerender();
     };
   }
+  /* ---------- daily prayers: the Society of the Most Sorrowful Mother and the Auxilium
+     Christianorum (encrypted in data-prayers.enc; the readable data-prayers.js stays on the Mac).
+     The Auxilium set shows today's weekday prayer; the day row picks another. */
+  const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  function prayerBlock(b){
+    if (Array.isArray(b)) return '<ul class="pr-lit">' + b.map(l => {
+      const [call, resp] = l.split("|");
+      return '<li>' + esc(call) + (resp ? ' <i>' + esc(resp) + '</i>' : '') + '</li>';
+    }).join("") + '</ul>';
+    const vr = b.match(/^([VR])\. (.*)$/);
+    if (vr) return '<p class="pr-vr"><b>' + vr[1] + '.</b> ' + esc(vr[2]) + '</p>';
+    if (/^_.*_$/.test(b)) return '<p class="pr-mid">' + esc(b.slice(1, -1)) + '</p>';
+    return '<p class="pr-p">' + esc(b).replace(/ R\. Amen\.$/, ' <span class="pr-r">R.</span> Amen.') + '</p>';
+  }
+  function renderPrayers(setId, day){
+    view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">Opening the prayers…</p></div>';
+    loadPrayers().then(() => {
+      const sets = window.LUMINA_PRAYERS.sets;
+      const set = sets.find(s => s.id === (setId || state.lastPrayers)) || sets[0];
+      const today = new Date().getDay();
+      if (day == null) day = today;
+      state.lastPrayers = set.id; save();
+      cur = { kind:"prayers", set: set.id, day };
+      record(cur);
+      let html = '<div class="view prayers"><div class="crumb"><button class="btn" id="backMore">← Back</button></div>' +
+        '<div class="tabrow">' + sets.map(s => '<button class="btn small' + (s.id === set.id ? ' on' : '') + '" data-set="' + s.id + '">' + esc(s.name) + '</button>').join("") + '</div>' +
+        '<div class="ch-head"><h2 class="ch-title">' + esc(set.title) + '</h2></div>';
+      if (set.sections.some(x => x.day != null))
+        html += '<div class="tabrow">' + DAYS.map((d, i) => '<button class="btn small' + (i === day ? ' on' : '') + '" data-day="' + i + '">' + d.slice(0, 3) + '</button>').join("") + '</div>' +
+          (day !== today ? '<p class="pr-today">Showing ' + DAYS[day] + "'s prayer · today is " + DAYS[today] + '</p>' : '');
+      set.sections.filter(x => x.day == null || x.day === day).forEach(x => {
+        html += '<div class="pr-sec"><h3 class="pr-h">' + esc(x.h) + '</h3>' + x.b.map(prayerBlock).join("") + '</div>';
+      });
+      if (set.credit) html += '<p class="pr-credit">' + esc(set.credit) + '</p>';
+      view.innerHTML = html + '</div>';
+      $("backMore").onclick = () => navBack();
+      view.querySelectorAll("[data-set]").forEach(b => b.onclick = () => renderPrayers(b.dataset.set));
+      view.querySelectorAll("[data-day]").forEach(b => b.onclick = () => renderPrayers(set.id, +b.dataset.day));
+      scrollTo(0, 0);
+    }).catch(() => { view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">The prayers stay locked until you enter your Scriptorium password.</p></div>'; });
+  }
+
   function renderFavorites(){
     cur = { kind:"favs" };
     record(cur);
@@ -3982,6 +4042,7 @@ const LuminaCore = (function () {
       case "doc": return renderDoc(desc.id, desc.n, { restore:true });
       case "docPara": return renderDocPara(desc.id, desc.n, { keepScroll:true });
       case "favs": return renderFavorites();
+      case "prayers": return renderPrayers(desc.set, desc.day);
       case "favList": return renderFavList(desc.listId);
       case "chapFavs": return renderChapFavorites();
       case "chapFavList": return renderChapFavList(desc.listId);
@@ -4210,6 +4271,7 @@ const LuminaCore = (function () {
   }, true);
   $("btnSearch").onclick = () => renderSearch();
   $("btnFavs").onclick = renderFavorites;
+  $("btnPrayers").onclick = () => renderPrayers();
   $("btnReadings").onclick = () => renderReadings();
   $("btnPlan").onclick = () => openScriptorium("mind");   // the reading plan's button now opens the mind map
   $("btnScriptorium").onclick = openScriptorium;
