@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 35;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 36;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -461,10 +461,11 @@
     return parts.length > 1 ? parts[0] + " · " + parts[parts.length - 1] : parts[0] || tidy(t);
   };
   const merged = (k) => { const seen = new Set(); while (mindMeta.merges[k] && !seen.has(k)) { seen.add(k); k = mindMeta.merges[k]; } return k; };
-  const keysOf = (m) => [...new Set((m.keywords && m.keywords.length ? m.keywords.map(tidy) : (m.topics || []).map(topicLabel)).filter(Boolean).map(merged))];
+  const keysOf = (m) => [...new Set((m.keywords && m.keywords.length ? m.keywords.map(tidy) : (m.topics || []).map(topicLabel)).filter(Boolean).map(merged))]
+    .filter((k) => !(mindMeta.hidden || []).includes(k));   // words he removed from the map
 
   async function saveMeta() {
-    const body = MARK("mindmeta") + "\n" + (await encryptText(S.keys, JSON.stringify({ merges: mindMeta.merges })));
+    const body = MARK("mindmeta") + "\n" + (await encryptText(S.keys, JSON.stringify({ merges: mindMeta.merges, hidden: mindMeta.hidden || [] })));
     if (mindMeta.cid) await gh("PATCH", "/repos/" + S.repo + "/issues/comments/" + mindMeta.cid, { body });
     else mindMeta.cid = (await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments", { body })).id;
   }
@@ -514,7 +515,9 @@
     if (mindView.merging) {
       const ms = Object.entries(mindMeta.merges);
       h += '<p class="scr-hint">' + (mindView.pick ? "Now tap the keyword to merge “" + esc(mindView.pick) + "” into." : "Tap a keyword, then the one to merge it into.") + "</p>" +
-        (ms.length ? '<div class="scr-merges">' + ms.map(([a, b]) => '<span>' + esc(a) + " → " + esc(b) + ' <button data-unmerge="' + esc(a) + '" title="Undo">✕</button></span>').join("") + "</div>" : "");
+        (ms.length ? '<div class="scr-merges">' + ms.map(([a, b]) => '<span>' + esc(a) + " → " + esc(b) + ' <button data-unmerge="' + esc(a) + '" title="Undo">✕</button></span>').join("") + "</div>" : "") +
+        ((mindMeta.hidden || []).length ? '<p class="scr-hint">Removed words (✕ puts one back):</p><div class="scr-merges">' +
+          mindMeta.hidden.map((w) => '<span>' + esc(w) + ' <button data-unhide="' + esc(w) + '" title="Put it back">✕</button></span>').join("") + "</div>" : "");
     }
     if (!list.length) {
       h += '<p class="scr-hint">' + (mind.length ? "Nothing saved in this period." : "Nothing saved yet. Tap 🧠 under a notebook entry to add it here.") + "</p>";
@@ -529,6 +532,7 @@
     if (mindView.open && !mindView.merging) {
       const hits = list.filter((m) => keysOf(m).includes(mindView.open));
       h += '<div class="scr-mind-panel"><div class="scr-mind-panel-h"><h3>' + esc(mindView.open) + ' <span class="n">' + hits.length + "</span></h3>" +
+        '<span class="grow"></span><button class="scr-hide" data-hideword="' + esc(mindView.open) + '" title="Take this word out of the mind map; the entries stay">Remove word</button>' +
         '<button class="scr-x2" data-close-open="1" title="Back to the map">✕</button></div><div class="scr-mind-panel-b">' + hits.map((m) =>
         '<details class="scr-entry"' + (hits.length === 1 ? " open" : "") + '><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
         "</span> " + esc(m.title) + (m.annotations ? ' <span class="scr-annd">✳︎</span>' : "") + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + "</div>" +
@@ -642,6 +646,19 @@
     }
     if (t.closest("[data-mind-close]")) { leaveMind(); tab = "faith"; return renderMain(); }
     if (t.closest("[data-close-open]")) { mindView.open = null; return drawMind(); }
+    const hw = t.closest("[data-hideword]"), uh = t.closest("[data-unhide]");
+    if (hw) {
+      if (!confirm("Remove “" + hw.dataset.hideword + "” from the mind map? The entries stay; you can put the word back under Merge.")) return;
+      mindMeta.hidden = [...new Set([...(mindMeta.hidden || []), hw.dataset.hideword])];
+      mindView.open = null;
+      await saveMeta().catch((err) => alert("Couldn't save: " + err.message));
+      return drawMind();
+    }
+    if (uh) {
+      mindMeta.hidden = (mindMeta.hidden || []).filter((w) => w !== uh.dataset.unhide);
+      await saveMeta().catch((err) => alert("Couldn't save: " + err.message));
+      return drawMind();
+    }
     const cpe = t.closest("[data-copyentry]");
     if (cpe) {   // the whole entry, ready to paste to Claude: his words, the summary, and any sources
       const m = mind.find((x) => String(x.cid) === cpe.dataset.copyentry);
@@ -1215,6 +1232,8 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-entry{border-bottom:1px solid var(--gold-line);padding:8px 2px}
 .scr-entry summary{cursor:pointer;font-family:Georgia,serif}
 .scr-entry summary .d{font-family:-apple-system,sans-serif;font-size:.78rem;color:var(--ink-faint)}
+.scr-mind-panel-h .grow{flex:1}
+.scr-hide{border:1px solid var(--gold-line);background:none;color:var(--ink-soft);border-radius:8px;font-size:.8rem;padding:5px 10px;margin-right:8px;cursor:pointer}
 .scr-entry-act{display:flex;gap:14px;align-items:center}
 .scr-copy2{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink);border-radius:8px;font-size:.82rem;padding:5px 12px;cursor:pointer}
 .scr-del2{border:0;background:none;color:var(--ink-faint);font-size:.8rem;cursor:pointer;padding:6px 0}
