@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 34;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 35;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -404,7 +404,7 @@
     const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
     const kw = (c.split(/\**Keywords\**\s*:\**/i)[1] || "").trim().split(/\n\s*\n/)[0];
     const titleCase = (k) => k.replace(/\b([A-Za-z])([A-Za-z']*)/g, (m, a, b) => a.toUpperCase() + b.toLowerCase());
-    const keywords = kw.split(/\s*[·;,\n]\s*/).map((k) => k.replace(/^[\s*\-–•]+|[\s*.]+$/g, ""))
+    const keywords = kw.split(/\s*(?:[·;\n]|,(?!\d))\s*/)   // "1,400" stays one tag.map((k) => k.replace(/^[\s*\-–•]+|[\s*.]+$/g, ""))
       .map((k) => /[a-z]/.test(k) ? k : titleCase(k))   // ALL CAPS from the model becomes Title Case
       .map((k) => k.charAt(0).toUpperCase() + k.slice(1))
       .filter(Boolean).slice(0, 12);
