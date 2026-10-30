@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 31;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 32;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -528,11 +528,12 @@
     }
     if (mindView.open && !mindView.merging) {
       const hits = list.filter((m) => keysOf(m).includes(mindView.open));
-      h += '<h3 class="scr-mind-sub">' + esc(mindView.open) + "</h3>" + hits.map((m) =>
-        '<details class="scr-entry"><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
+      h += '<div class="scr-mind-panel"><div class="scr-mind-panel-h"><h3>' + esc(mindView.open) + ' <span class="n">' + hits.length + "</span></h3>" +
+        '<button class="scr-x2" data-close-open="1" title="Back to the map">✕</button></div><div class="scr-mind-panel-b">' + hits.map((m) =>
+        '<details class="scr-entry"' + (hits.length === 1 ? " open" : "") + '><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
         "</span> " + esc(m.title) + (m.annotations ? ' <span class="scr-annd">✳︎</span>' : "") + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + "</div>" +
         (m.annotations ? '<div class="scr-sources"><div class="h">✳︎ Sources (Claude)</div><div class="scr-md" data-entry="' + m.cid + '" data-ann="1">' + md(m.annotations, m.annotation_refs || []) + "</div></div>" : "") +
-        '<button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("");
+        '<button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("") + "</div></div>";
     }
     view.innerHTML = h + "</div>";
     if (mindView.view === "web") wireWeb();
@@ -639,6 +640,7 @@
       return;
     }
     if (t.closest("[data-mind-close]")) { leaveMind(); tab = "faith"; return renderMain(); }
+    if (t.closest("[data-close-open]")) { mindView.open = null; return drawMind(); }
     const ann = t.closest("[data-annotate]");
     if (ann) return annotateAll(ann);
     const r = t.closest("[data-range]"), v = t.closest("[data-view]"), x = t.closest("[data-box]"), u = t.closest("[data-unmind]");
@@ -1175,6 +1177,11 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-box.new{color:var(--gold);border-color:var(--gold)}
 .scr-box.on{background:var(--gold);color:var(--bg)}
 .scr-box .n{font-family:-apple-system,sans-serif;font-size:.7em;opacity:.7}
+.scr-mind-panel{position:fixed;left:0;right:0;bottom:0;top:calc(var(--scr-bar-h) + env(safe-area-inset-top));z-index:45;background:var(--bg);display:flex;flex-direction:column}
+.scr-mind-panel-h{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--gold-line);max-width:760px;width:100%;margin:0 auto;box-sizing:border-box}
+.scr-mind-panel-h h3{font-family:Georgia,serif;margin:0;font-size:1.15rem}
+.scr-mind-panel-h .n{font-family:-apple-system,sans-serif;font-size:.75em;color:var(--ink-faint)}
+.scr-mind-panel-b{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 14px calc(30px + env(safe-area-inset-bottom));max-width:760px;width:100%;margin:0 auto;box-sizing:border-box;flex:1}
 .scr-mind-sub{font-family:Georgia,serif;margin:1rem 0 .4rem;border-top:1px solid var(--gold-line);padding-top:.8rem}
 .scr-entry{border-bottom:1px solid var(--gold-line);padding:8px 2px}
 .scr-entry summary{cursor:pointer;font-family:Georgia,serif}
