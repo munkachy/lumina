@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 37;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 38;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -561,6 +561,21 @@
       }
       for (const A of nodes) { A.x *= 0.995; A.y *= 0.995; }
     }
+    /* then no word may overlap another: each word's box (from its length and size) is pushed apart
+       from any box it touches, until none touch */
+    const fs = (d) => 12 + 14 * (d.n - 1) / Math.max(1, max - 1);
+    const box = (d) => ({ w: d.k.length * fs(d) * 0.58 + 28, h: fs(d) * 1.4 + 18 })   // with room around each word;
+    for (let it = 0, moved = true; moved && it < 600; it++) {
+      moved = false;
+      for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+        const A = nodes[i], B = nodes[j], a = box(A), b = box(B);
+        const ox = (a.w + b.w) / 2 - Math.abs(A.x - B.x), oy = (a.h + b.h) / 2 - Math.abs(A.y - B.y);
+        if (ox <= 0 || oy <= 0) continue;
+        moved = true;
+        if (ox < oy) { const s = (A.x < B.x || (A.x === B.x && i < j) ? -1 : 1) * (ox / 2 + 0.5); A.x += s; B.x -= s; }
+        else { const s = (A.y < B.y || (A.y === B.y && i < j) ? -1 : 1) * (oy / 2 + 0.5); A.y += s; B.y -= s; }
+      }
+    }
     const xs = nodes.map((d) => d.x), ys = nodes.map((d) => d.y);
     const pad = 80, minX = Math.min(...xs) - pad, minY = Math.min(...ys) - pad, w = Math.max(...xs) - minX + pad, hgt = Math.max(...ys) - minY + pad;
     const near = mindView.open ? new Set(links.filter((l) => nodes[l.a].k === mindView.open || nodes[l.b].k === mindView.open).flatMap((l) => [nodes[l.a].k, nodes[l.b].k])) : null;
@@ -568,7 +583,7 @@
     return '<div class="scr-web"><svg id="scrWeb" viewBox="' + [minX, minY, w, hgt].map(Math.round).join(" ") + '" data-vb="' + [minX, minY, w, hgt].join(",") + '">' +
       links.map((l) => '<line x1="' + nodes[l.a].x.toFixed(1) + '" y1="' + nodes[l.a].y.toFixed(1) + '" x2="' + nodes[l.b].x.toFixed(1) + '" y2="' + nodes[l.b].y.toFixed(1) +
         '" stroke-width="' + (0.8 + l.w * 0.9) + '" class="' + (dim(nodes[l.a].k) || dim(nodes[l.b].k) ? "dim" : "") + '"/>').join("") +
-      nodes.map((d) => '<text x="' + d.x.toFixed(1) + '" y="' + d.y.toFixed(1) + '" data-box="' + esc(d.k) + '" font-size="' + (12 + 14 * (d.n - 1) / Math.max(1, max - 1)).toFixed(1) +
+      nodes.map((d) => '<text x="' + d.x.toFixed(1) + '" y="' + d.y.toFixed(1) + '" data-box="' + esc(d.k) + '" font-size="' + fs(d).toFixed(1) +
         '" class="' + (recent.has(d.k) ? "new " : "") + (d.k === mindView.open || d.k === mindView.pick ? "on " : "") + (dim(d.k) ? "dim" : "") + '">' + esc(d.k) + "</text>").join("") +
       "</svg></div>";
   }
