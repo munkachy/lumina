@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 18;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 19;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -254,7 +254,7 @@
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
-      (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study: bring in the Catechism and Bible">✝</button>' +
+      (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study with Claude: Catechism, Bible and Church documents">✝</button>' +
         '<button class="scr-ib" data-act="mind" title="Mind map">🧠</button>' +
         '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
@@ -305,7 +305,7 @@
     } else if (act === "send") send();
     else if (act === "stop") { t.disabled = true; postSealed("stop", { request: current.id }); }
     else if (act === "web") { web = !web; composerRow(); }
-    else if (act === "study") { study = !study; composerRow(); const t = $("#scrText"); if (t) t.placeholder = study ? "Study: ask with the Catechism and Bible…" : "Message Scriptorium…"; }
+    else if (act === "study") { study = !study; composerRow(); const t = $("#scrText"); if (t) t.placeholder = study ? "Study with Claude: ask anything…" : "Message Scriptorium…"; }
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
@@ -338,7 +338,8 @@
      relay repo's "Mind map" issue (a backup off the Mac, readable here even when the Mac is off).
      Boxes are the Catechism-index topics the entries were filed under, sized by how often they recur. ---------- */
   const MIND_TITLE = "Mind map";
-  let mind = null;          // [{cid, date, title, topics, questions, text, note}]
+  let mind = null;          // [{cid, date, title, keywords, questions, text, note, annotations?}]
+  let mindMeta = { merges: {} };   // his merges of one keyword into another, kept as one encrypted comment
   let mindMode = false;
   const mindKey = (r) => { const c = (r && r.content) || ""; return c.length + ":" + c.slice(0, 60); };
   const mindSaved = (r) => !!((data.mindSaved || {})[mindKey(r)]);
@@ -357,6 +358,10 @@
     for (let page = 1; page < 50; page++) {
       const batch = await gh("GET", "/repos/" + S.repo + "/issues/" + issue + "/comments?per_page=100&page=" + page) || [];
       for (const c of batch) {
+        if (c.body.startsWith(MARK("mindmeta"))) {
+          try { mindMeta = { cid: c.id, ...JSON.parse(await decryptText(S.keys, c.body.slice(MARK("mindmeta").length).trim())) }; } catch (e) { /* not ours */ }
+          continue;
+        }
         if (!c.body.startsWith(MARK("mind"))) continue;
         try { out.push({ cid: c.id, ...JSON.parse(await decryptText(S.keys, c.body.slice(MARK("mind").length).trim())) }); } catch (e) { /* not ours */ }
       }
@@ -372,7 +377,9 @@
     const topics = ((c.match(/\*\*Topics:\*\*\s*(.+)/) || [])[1] || "").split(";").map((t) => t.trim()).filter(Boolean);
     const qpart = (c.split("**Questions**")[1] || "").split(/\n\s*\*\*/)[0];
     const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
-    return { date: new Date().toISOString(), title, topics, questions, text: c, note: turn.text, refs: turn.reply.refs || [] };
+    const kw = (c.split("**Keywords:**")[1] || "").trim().split(/\n\s*\n/)[0];
+    const keywords = kw.split(/\s*[·;,\n]\s*/).map((k) => k.replace(/^[\s*\-–•]+|[\s*.]+$/g, "")).filter(Boolean).slice(0, 12);
+    return { date: new Date().toISOString(), title, keywords, topics, questions, text: c, note: turn.text, refs: turn.reply.refs || [] };
   }
 
   async function toggleMind(turn, btn) {
@@ -400,51 +407,157 @@
     btn.textContent = saved ? "🧠 In mind map ✓" : "🧠 Save to mind map";
   }
 
-  const mindView = { range: "all", by: "topics", open: null };
+  const mindView = { range: "all", view: "cloud", open: null, merging: false, pick: null, zoom: 1, panX: 0, panY: 0 };
   const tidy = (p) => { p = p.replace(/^[\s"“'‘;:,.—–-]+|[\s"”'’;:,.—–-]+$/g, ""); return p.charAt(0).toUpperCase() + p.slice(1); };
-  const boxLabel = (t, by) => {
+  const topicLabel = (t) => {   // entries saved before keywords: their Catechism-index topics, tidied
     const parts = t.split(/\s+—\s+|\s*;\s*—\s*/).map(tidy).filter(Boolean);
-    if (!parts.length) return tidy(t);
-    return by === "subjects" || parts.length === 1 ? parts[0] : parts[0] + " · " + parts[parts.length - 1];
+    return parts.length > 1 ? parts[0] + " · " + parts[parts.length - 1] : parts[0] || tidy(t);
+  };
+  const merged = (k) => { const seen = new Set(); while (mindMeta.merges[k] && !seen.has(k)) { seen.add(k); k = mindMeta.merges[k]; } return k; };
+  const keysOf = (m) => [...new Set((m.keywords && m.keywords.length ? m.keywords.map(tidy) : (m.topics || []).map(topicLabel)).filter(Boolean).map(merged))];
+
+  async function saveMeta() {
+    const body = MARK("mindmeta") + "\n" + (await encryptText(S.keys, JSON.stringify({ merges: mindMeta.merges })));
+    if (mindMeta.cid) await gh("PATCH", "/repos/" + S.repo + "/issues/comments/" + mindMeta.cid, { body });
+    else mindMeta.cid = (await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments", { body })).id;
+  }
+
+  const mindHead = () => {
+    const todo = (mind || []).filter((m) => !m.annotations).length;
+    return '<div class="scr-mind-h"><h2>🧠 Mind map</h2><span class="grow"></span>' +
+      (todo ? '<button class="scr-ann" data-annotate="1" title="Claude adds Catechism, Scripture and Church-document references">✳︎ Annotate ' + todo + "</button>" : "") +
+      '<button class="scr-x2" data-mind-close="1" title="Back to the notebook">✕</button></div>';
   };
 
   async function renderMind() {
     chrome(true);
     const box = $("#scrCompose"); if (box) box.style.display = "none";
-    view.innerHTML = '<div class="scr-mind"><div class="scr-mind-h"><h2>🧠 Mind map</h2><button class="scr-x2" data-mind-close="1" title="Back to the notebook">✕</button></div>' +
-      '<p class="scr-hint">Loading…</p></div>';
+    view.innerHTML = '<div class="scr-mind">' + mindHead() + '<p class="scr-hint">Loading…</p></div>';
     view.onclick = mindClick;
     try { if (!mind) await loadMind(); } catch (e) { $(".scr-hint", view).textContent = "Couldn't load the mind map: " + e.message; return; }
     drawMind();
   }
 
-  function drawMind() {
+  function mindData() {
     const since = { month: 31, year: 366, all: 1e6 }[mindView.range] * 864e5;
     const list = mind.filter((m) => Date.now() - Date.parse(m.date) <= since);
-    const counts = new Map(), recent = new Set();
-    for (const m of list) for (const t of new Set((m.topics || []).map((t) => boxLabel(t, mindView.by)))) {
-      counts.set(t, (counts.get(t) || 0) + 1);
-      if (Date.now() - Date.parse(m.date) < 14 * 864e5) recent.add(t);
+    const counts = new Map(), recent = new Set(), pairs = new Map();
+    for (const m of list) {
+      const ks = keysOf(m);
+      for (const k of ks) {
+        counts.set(k, (counts.get(k) || 0) + 1);
+        if (Date.now() - Date.parse(m.date) < 14 * 864e5) recent.add(k);
+      }
+      for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {
+        const key = [ks[i], ks[j]].sort().join("\u0001");
+        pairs.set(key, (pairs.get(key) || 0) + 1);
+      }
     }
-    const max = Math.max(1, ...counts.values());
+    return { list, counts, recent, pairs, max: Math.max(1, ...counts.values()) };
+  }
+
+  function drawMind() {
+    const { list, counts, recent, pairs, max } = mindData();
     const seg = (name, opts) => '<div class="scr-seg">' + opts.map(([k, l]) => '<button data-' + name + '="' + k + '" class="' + (mindView[name] === k ? "on" : "") + '">' + l + "</button>").join("") + "</div>";
-    let h = '<div class="scr-mind"><div class="scr-mind-h"><h2>🧠 Mind map</h2><button class="scr-x2" data-mind-close="1" title="Back to the notebook">✕</button></div>' +
-      '<div class="scr-mind-ctl">' + seg("range", [["month", "Month"], ["year", "Year"], ["all", "All"]]) + seg("by", [["topics", "Topics"], ["subjects", "Subjects"]]) + "</div>";
+    let h = '<div class="scr-mind">' + mindHead() +
+      '<div class="scr-mind-ctl">' + seg("range", [["month", "Month"], ["year", "Year"], ["all", "All"]]) +
+      seg("view", [["cloud", "Cloud"], ["web", "Connections"]]) +
+      '<button class="scr-merge' + (mindView.merging ? " on" : "") + '" data-merge="1">' + (mindView.merging ? "Done merging" : "Merge") + "</button></div>";
+    if (mindView.merging) {
+      const ms = Object.entries(mindMeta.merges);
+      h += '<p class="scr-hint">' + (mindView.pick ? "Now tap the keyword to merge “" + esc(mindView.pick) + "” into." : "Tap a keyword, then the one to merge it into.") + "</p>" +
+        (ms.length ? '<div class="scr-merges">' + ms.map(([a, b]) => '<span>' + esc(a) + " → " + esc(b) + ' <button data-unmerge="' + esc(a) + '" title="Undo">✕</button></span>').join("") + "</div>" : "");
+    }
     if (!list.length) {
       h += '<p class="scr-hint">' + (mind.length ? "Nothing saved in this period." : "Nothing saved yet. Tap 🧠 under a notebook entry to add it here.") + "</p>";
+    } else if (mindView.view === "web") {
+      h += '<p class="scr-hint">Lines join keywords that appear in the same entry. Pinch or scroll to zoom, drag to move.</p>' + webSvg(counts, recent, pairs, max);
     } else {
       h += '<p class="scr-hint">' + list.length + " entr" + (list.length === 1 ? "y" : "ies") + ". Bigger means more often; gold means the last two weeks.</p><div class=\"scr-cloud\">" +
         [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([t, n]) =>
-          '<button class="scr-box' + (recent.has(t) ? " new" : "") + (mindView.open === t ? " on" : "") + '" data-box="' + esc(t) + '" style="font-size:' +
+          '<button class="scr-box' + (recent.has(t) ? " new" : "") + (mindView.open === t || mindView.pick === t ? " on" : "") + '" data-box="' + esc(t) + '" style="font-size:' +
           (0.8 + 0.9 * (n - 1) / Math.max(1, max - 1)).toFixed(2) + 'rem">' + esc(t) + (n > 1 ? ' <span class="n">' + n + "</span>" : "") + "</button>").join("") + "</div>";
-      if (mindView.open) {
-        const hits = list.filter((m) => (m.topics || []).some((t) => boxLabel(t, mindView.by) === mindView.open));
-        h += '<h3 class="scr-mind-sub">' + esc(mindView.open) + "</h3>" + hits.map((m) =>
-          '<details class="scr-entry"><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
-          "</span> " + esc(m.title) + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + '</div><button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("");
-      }
+    }
+    if (mindView.open && !mindView.merging) {
+      const hits = list.filter((m) => keysOf(m).includes(mindView.open));
+      h += '<h3 class="scr-mind-sub">' + esc(mindView.open) + "</h3>" + hits.map((m) =>
+        '<details class="scr-entry"><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
+        "</span> " + esc(m.title) + (m.annotations ? ' <span class="scr-annd">✳︎</span>' : "") + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + "</div>" +
+        (m.annotations ? '<div class="scr-sources"><div class="h">✳︎ Sources (Claude)</div><div class="scr-md" data-entry="' + m.cid + '" data-ann="1">' + md(m.annotations, m.annotation_refs || []) + "</div></div>" : "") +
+        '<button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("");
     }
     view.innerHTML = h + "</div>";
+    if (mindView.view === "web") wireWeb();
+  }
+
+  /* the Connections view: keywords placed by a small force layout (linked words pull together), drawn in SVG */
+  function webSvg(counts, recent, pairs, max) {
+    const nodes = [...counts.keys()].map((k, i) => ({ k, n: counts.get(k), x: Math.cos(i * 2.4) * (60 + i * 6), y: Math.sin(i * 2.4) * (60 + i * 6) }));
+    const idx = new Map(nodes.map((d, i) => [d.k, i]));
+    const links = [...pairs.entries()].map(([key, w]) => { const [a, b] = key.split("\u0001"); return { a: idx.get(a), b: idx.get(b), w }; }).filter((l) => l.a !== undefined && l.b !== undefined);
+    for (let it = 0; it < 300; it++) {
+      const cool = 1 - it / 300;
+      for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+        const A = nodes[i], B = nodes[j]; let dx = A.x - B.x, dy = A.y - B.y; const d2 = dx * dx + dy * dy + 0.01, d = Math.sqrt(d2);
+        const f = Math.min(40, 9000 / d2) * cool; dx /= d; dy /= d; A.x += dx * f; A.y += dy * f; B.x -= dx * f; B.y -= dy * f;
+      }
+      for (const l of links) {
+        const A = nodes[l.a], B = nodes[l.b], dx = B.x - A.x, dy = B.y - A.y, d = Math.sqrt(dx * dx + dy * dy) + 0.01;
+        const f = (d - 90) * 0.02 * Math.min(3, l.w) * cool; A.x += dx / d * f; A.y += dy / d * f; B.x -= dx / d * f; B.y -= dy / d * f;
+      }
+      for (const A of nodes) { A.x *= 0.995; A.y *= 0.995; }
+    }
+    const xs = nodes.map((d) => d.x), ys = nodes.map((d) => d.y);
+    const pad = 80, minX = Math.min(...xs) - pad, minY = Math.min(...ys) - pad, w = Math.max(...xs) - minX + pad, hgt = Math.max(...ys) - minY + pad;
+    const near = mindView.open ? new Set(links.filter((l) => nodes[l.a].k === mindView.open || nodes[l.b].k === mindView.open).flatMap((l) => [nodes[l.a].k, nodes[l.b].k])) : null;
+    const dim = (k) => near && !near.has(k) && k !== mindView.open;
+    return '<div class="scr-web"><svg id="scrWeb" viewBox="' + [minX, minY, w, hgt].map(Math.round).join(" ") + '" data-vb="' + [minX, minY, w, hgt].join(",") + '">' +
+      links.map((l) => '<line x1="' + nodes[l.a].x.toFixed(1) + '" y1="' + nodes[l.a].y.toFixed(1) + '" x2="' + nodes[l.b].x.toFixed(1) + '" y2="' + nodes[l.b].y.toFixed(1) +
+        '" stroke-width="' + (0.8 + l.w * 0.9) + '" class="' + (dim(nodes[l.a].k) || dim(nodes[l.b].k) ? "dim" : "") + '"/>').join("") +
+      nodes.map((d) => '<text x="' + d.x.toFixed(1) + '" y="' + d.y.toFixed(1) + '" data-box="' + esc(d.k) + '" font-size="' + (12 + 14 * (d.n - 1) / Math.max(1, max - 1)).toFixed(1) +
+        '" class="' + (recent.has(d.k) ? "new " : "") + (d.k === mindView.open || d.k === mindView.pick ? "on " : "") + (dim(d.k) ? "dim" : "") + '">' + esc(d.k) + "</text>").join("") +
+      "</svg></div>";
+  }
+
+  function wireWeb() {
+    const svg = $("#scrWeb");
+    if (!svg) return;
+    const [x0, y0, w0, h0] = svg.dataset.vb.split(",").map(Number);
+    let vb = mindView.vb && mindView.vbFor === svg.dataset.vb ? mindView.vb.slice() : [x0, y0, w0, h0];
+    const apply = () => { svg.setAttribute("viewBox", vb.join(" ")); mindView.vb = vb.slice(); mindView.vbFor = svg.dataset.vb; };
+    apply();
+    const zoomAt = (factor, cx, cy) => {   // cx, cy in 0..1 of the box
+      const nw = Math.min(w0 * 4, Math.max(w0 / 8, vb[2] * factor)), nh = nw * h0 / w0;
+      vb = [vb[0] + (vb[2] - nw) * cx, vb[1] + (vb[3] - nh) * cy, nw, nh]; apply();
+    };
+    svg.addEventListener("wheel", (e) => { e.preventDefault(); const r = svg.getBoundingClientRect(); zoomAt(e.deltaY > 0 ? 1.12 : 0.89, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }, { passive: false });
+    let drag = null, pinch = null, moved = false;
+    svg.addEventListener("touchstart", (e) => {
+      moved = false;
+      if (e.touches.length === 2) { const [a, b] = e.touches; pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) }; drag = null; }
+      else if (e.touches.length === 1) drag = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    svg.addEventListener("touchmove", (e) => {
+      e.preventDefault(); moved = true;
+      const r = svg.getBoundingClientRect();
+      if (pinch && e.touches.length === 2) {
+        const [a, b] = e.touches, d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+        zoomAt(pinch.d / d, ((a.clientX + b.clientX) / 2 - r.left) / r.width, ((a.clientY + b.clientY) / 2 - r.top) / r.height); pinch.d = d;
+      } else if (drag && e.touches.length === 1) {
+        const t = e.touches[0];
+        vb[0] -= (t.clientX - drag.x) * vb[2] / r.width; vb[1] -= (t.clientY - drag.y) * vb[3] / r.height;
+        drag = { x: t.clientX, y: t.clientY }; apply();
+      }
+    }, { passive: false });
+    svg.addEventListener("touchend", (e) => { if (e.touches.length === 0) { drag = pinch = null; } if (moved) e.preventDefault(); });
+    let mdrag = null;
+    svg.addEventListener("mousedown", (e) => { mdrag = { x: e.clientX, y: e.clientY, moved: false }; });
+    window.addEventListener("mousemove", (e) => {
+      if (!mdrag) return; const r = svg.getBoundingClientRect();
+      if (Math.abs(e.clientX - mdrag.x) + Math.abs(e.clientY - mdrag.y) > 3) mdrag.moved = true;
+      vb[0] -= (e.clientX - mdrag.x) * vb[2] / r.width; vb[1] -= (e.clientY - mdrag.y) * vb[3] / r.height; mdrag.x = e.clientX; mdrag.y = e.clientY; apply();
+    });
+    window.addEventListener("mouseup", () => { if (mdrag && mdrag.moved) svg.dataset.dragged = "1"; mdrag = null; });
   }
 
   function entryRefs(m) {
@@ -453,21 +566,55 @@
     return [...(m.text || "").matchAll(/CCC\s*(\d{1,4})/g)].filter((x) => !seen.has(x[0]) && seen.add(x[0])).map((x) => ({ text: x[0], ccc: +x[1] }));
   }
 
+  async function annotateAll(btn) {
+    const todo = mind.filter((m) => !m.annotations);
+    if (!todo.length) return;
+    if (!confirm("Ask Claude to add Catechism, Scripture and Church-document references to " + todo.length + " entr" + (todo.length === 1 ? "y" : "ies") +
+      "? It uses your Claude plan, roughly 3,000–5,000 tokens each, and runs on your Mac.")) return;
+    btn.disabled = true; btn.textContent = "✳︎ Annotating…";
+    const st = await request({ kind: "annotate", cids: todo.map((m) => m.cid) }, true);
+    mind = null;
+    await loadMind().catch(() => {});
+    drawMind();
+    if (st && st.error) alert(st.error);
+  }
+
   async function mindClick(e) {
     const t = e.target;
     const pill = t.closest(".scr-pill");
     if (pill) {
       e.preventDefault();
       const holder = pill.closest("[data-entry]"), m = holder && mind.find((x) => String(x.cid) === holder.dataset.entry);
-      const r = m && entryRefs(m)[+pill.dataset.ref];
+      const refs = m ? (holder.dataset.ann ? m.annotation_refs || [] : entryRefs(m)) : [];
+      const r = refs[+pill.dataset.ref];
       if (r && window.LuminaNav) { leaveChrome(); r.ccc ? window.LuminaNav.ccc(r.ccc) : window.LuminaNav.verse(r.book, r.c, r.v || 1); }
       return;
     }
     if (t.closest("[data-mind-close]")) { leaveMind(); tab = "faith"; return renderMain(); }
-    const r = t.closest("[data-range]"), b = t.closest("[data-by]"), x = t.closest("[data-box]"), u = t.closest("[data-unmind]");
+    const ann = t.closest("[data-annotate]");
+    if (ann) return annotateAll(ann);
+    const r = t.closest("[data-range]"), v = t.closest("[data-view]"), x = t.closest("[data-box]"), u = t.closest("[data-unmind]");
+    const mg = t.closest("[data-merge]"), um = t.closest("[data-unmerge]");
     if (r) { mindView.range = r.dataset.range; return drawMind(); }
-    if (b) { mindView.by = b.dataset.by; mindView.open = null; return drawMind(); }
-    if (x) { mindView.open = mindView.open === x.dataset.box ? null : x.dataset.box; return drawMind(); }
+    if (v) { mindView.view = v.dataset.view; return drawMind(); }
+    if (mg) { mindView.merging = !mindView.merging; mindView.pick = null; return drawMind(); }
+    if (um) { delete mindMeta.merges[um.dataset.unmerge]; await saveMeta().catch((err) => alert(err.message)); return drawMind(); }
+    if (x) {
+      const svg = $("#scrWeb");
+      if (svg && svg.dataset.dragged) { delete svg.dataset.dragged; return; }
+      const k = x.dataset.box;
+      if (mindView.merging) {
+        if (!mindView.pick) { mindView.pick = k; return drawMind(); }
+        if (mindView.pick !== k && confirm("Merge “" + mindView.pick + "” into “" + k + "”?")) {
+          mindMeta.merges[mindView.pick] = k;
+          await saveMeta().catch((err) => alert("Couldn't save the merge: " + err.message));
+        }
+        mindView.pick = null;
+        return drawMind();
+      }
+      mindView.open = mindView.open === k ? null : k;
+      return drawMind();
+    }
     if (u && confirm("Remove this entry from the mind map?")) {
       await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + u.dataset.unmind).catch(() => {});
       mind = mind.filter((m) => String(m.cid) !== u.dataset.unmind);
@@ -681,7 +828,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv", "annotate"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -971,6 +1118,24 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-entry summary .d{font-family:-apple-system,sans-serif;font-size:.78rem;color:var(--ink-faint)}
 .scr-del2{border:0;background:none;color:var(--ink-faint);font-size:.8rem;cursor:pointer;padding:6px 0}
 .scr-actions button.on{color:var(--gold)}
+.scr-mind-h .grow{flex:1}
+.scr-ann{border:1px solid var(--gold);background:none;color:var(--gold);border-radius:10px;padding:6px 10px;margin-right:8px;font:inherit;font-size:.85rem;cursor:pointer}
+.scr-merge{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink);border-radius:10px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+.scr-merge.on{background:var(--gold);color:var(--bg)}
+.scr-merges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+.scr-merges span{font-size:.8rem;background:var(--panel);border-radius:8px;padding:3px 4px 3px 8px;color:var(--ink-soft)}
+.scr-merges button{border:0;background:none;color:var(--ink-faint);cursor:pointer}
+.scr-web{border:1px solid var(--gold-line);border-radius:14px;overflow:hidden;background:var(--panel);touch-action:none}
+.scr-web svg{width:100%;height:62vh;display:block;cursor:grab}
+.scr-web line{stroke:var(--gold-line)}
+.scr-web line.dim{opacity:.15}
+.scr-web text{fill:var(--ink-soft);font-family:Georgia,serif;text-anchor:middle;dominant-baseline:middle;cursor:pointer;paint-order:stroke;stroke:var(--panel);stroke-width:4px}
+.scr-web text.new{fill:var(--gold)}
+.scr-web text.on{fill:var(--gold);font-weight:700}
+.scr-web text.dim{opacity:.25}
+.scr-sources{margin:.6rem 0;padding:.6rem .8rem;border-left:3px solid var(--gold);background:var(--panel);border-radius:0 10px 10px 0}
+.scr-sources .h{font-size:.75rem;letter-spacing:.06em;color:var(--gold);margin-bottom:.3rem}
+.scr-annd{color:var(--gold);font-size:.8em}
 .scr-build{font-size:.62rem!important;color:var(--ink-faint)!important;opacity:.85;margin-left:1px;white-space:nowrap;padding:4px 3px!important}
 .scr-upd{color:#fff;background:var(--gold);border-radius:8px;padding:0 4px;font-weight:700}
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
