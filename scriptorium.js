@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 32;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 33;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -533,7 +533,8 @@
         '<details class="scr-entry"' + (hits.length === 1 ? " open" : "") + '><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
         "</span> " + esc(m.title) + (m.annotations ? ' <span class="scr-annd">✳︎</span>' : "") + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + "</div>" +
         (m.annotations ? '<div class="scr-sources"><div class="h">✳︎ Sources (Claude)</div><div class="scr-md" data-entry="' + m.cid + '" data-ann="1">' + md(m.annotations, m.annotation_refs || []) + "</div></div>" : "") +
-        '<button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></details>').join("") + "</div></div>";
+        '<div class="scr-entry-act"><button class="scr-copy2" data-copyentry="' + m.cid + '">Copy</button>' +
+        '<button class="scr-del2" data-unmind="' + m.cid + '">Remove from mind map</button></div></details>').join("") + "</div></div>";
     }
     view.innerHTML = h + "</div>";
     if (mindView.view === "web") wireWeb();
@@ -641,6 +642,17 @@
     }
     if (t.closest("[data-mind-close]")) { leaveMind(); tab = "faith"; return renderMain(); }
     if (t.closest("[data-close-open]")) { mindView.open = null; return drawMind(); }
+    const cpe = t.closest("[data-copyentry]");
+    if (cpe) {   // the whole entry, ready to paste to Claude: his words, the summary, and any sources
+      const m = mind.find((x) => String(x.cid) === cpe.dataset.copyentry);
+      if (!m) return;
+      const when = new Date(m.date).toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+      const text = "Notebook entry (" + when + ")\n\nMy words:\n" + (m.note || "").trim() + "\n\nSummary:\n" + (m.text || "").trim() +
+        (m.annotations ? "\n\nSources (Claude):\n" + m.annotations.trim() : "");
+      navigator.clipboard.writeText(text).then(() => { cpe.textContent = "Copied ✓"; setTimeout(() => cpe.textContent = "Copy", 1500); },
+        () => alert("Couldn't copy: the browser didn't allow it."));
+      return;
+    }
     const ann = t.closest("[data-annotate]");
     if (ann) return annotateAll(ann);
     const r = t.closest("[data-range]"), v = t.closest("[data-view]"), x = t.closest("[data-box]"), u = t.closest("[data-unmind]");
@@ -1186,6 +1198,8 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-entry{border-bottom:1px solid var(--gold-line);padding:8px 2px}
 .scr-entry summary{cursor:pointer;font-family:Georgia,serif}
 .scr-entry summary .d{font-family:-apple-system,sans-serif;font-size:.78rem;color:var(--ink-faint)}
+.scr-entry-act{display:flex;gap:14px;align-items:center}
+.scr-copy2{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink);border-radius:8px;font-size:.82rem;padding:5px 12px;cursor:pointer}
 .scr-del2{border:0;background:none;color:var(--ink-faint);font-size:.8rem;cursor:pointer;padding:6px 0}
 .scr-actions button.on{color:var(--gold)}
 .scr-mind-h .grow{flex:1}
