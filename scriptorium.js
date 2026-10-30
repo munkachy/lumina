@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 25;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 26;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -403,7 +403,10 @@
     const qpart = (c.split(/\**Questions\**\s*:?\**/i)[1] || "").split(/\n\s*\*\*/)[0];
     const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
     const kw = (c.split(/\**Keywords\**\s*:\**/i)[1] || "").trim().split(/\n\s*\n/)[0];
-    const keywords = kw.split(/\s*[·;,\n]\s*/).map((k) => k.replace(/^[\s*\-–•]+|[\s*.]+$/g, "")).filter(Boolean).slice(0, 12);
+    const titleCase = (k) => k.replace(/\b([A-Za-z])([A-Za-z']*)/g, (m, a, b) => a.toUpperCase() + b.toLowerCase());
+    const keywords = kw.split(/\s*[·;,\n]\s*/).map((k) => k.replace(/^[\s*\-–•]+|[\s*.]+$/g, ""))
+      .map((k) => /[a-z]/.test(k) ? k : titleCase(k))   // ALL CAPS from the model becomes Title Case
+      .filter(Boolean).slice(0, 12);
     return { date: new Date().toISOString(), title, keywords, topics, questions, text: c, note: turn.text, refs: turn.reply.refs || [] };
   }
 
