@@ -144,6 +144,7 @@
 .prayers .pr-sec{margin:0 0 1.3rem}
 .prayers .pr-h{font-family:"Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.1em;
   color:var(--rubric); font-weight:600; font-size:1.15rem; text-align:center; margin:0 0 .4rem}
+.prayers .pr-sec{font-size:calc(1.12rem * var(--ts, 1))}
 .prayers .pr-p{margin:0 0 .6rem; line-height:1.7; text-indent:1.2em}
 .prayers .pr-vr{margin:0 0 .2rem}
 .prayers .pr-vr b, .prayers .pr-r{color:var(--rubric); font-weight:600}
@@ -152,6 +153,8 @@
 .prayers .pr-lit li{padding-left:1.2em; text-indent:-1.2em}
 .prayers .pr-lit i{color:var(--ink-soft)}
 .prayers .pr-today{text-align:center; font-style:italic; color:var(--ink-soft); margin:-.2rem 0 .8rem}
+.prayers .pr-bishop{font:inherit; color:var(--gold); background:none; border:none; border-bottom:1px dotted var(--gold-line);
+  padding:0; cursor:pointer; text-indent:0}
 .prayers .pr-credit{text-align:center; font-size:.85rem; color:var(--ink-faint); margin-top:1.5rem}
 
 /* ---------- favorites full page ---------- */
@@ -1511,9 +1514,24 @@ const LuminaCore = (function () {
       return '<li>' + esc(call) + (resp ? ' <i>' + esc(resp) + '</i>' : '') + '</li>';
     }).join("") + '</ul>';
     const vr = b.match(/^([VR])\. (.*)$/);
-    if (vr) return '<p class="pr-vr"><b>' + vr[1] + '.</b> ' + esc(vr[2]) + '</p>';
+    if (vr) return '<p class="pr-vr"><b>' + vr[1] + '.</b> ' + bishopIn(esc(vr[2])) + '</p>';
     if (/^_.*_$/.test(b)) return '<p class="pr-mid">' + esc(b.slice(1, -1)) + '</p>';
-    return '<p class="pr-p">' + esc(b).replace(/ R\. Amen\.$/, ' <span class="pr-r">R.</span> Amen.') + '</p>';
+    return '<p class="pr-p">' + bishopIn(esc(b)).replace(/ R\. Amen\.$/, ' <span class="pr-r">R.</span> Amen.') + '</p>';
+  }
+  /* The Society's bishop: the Archbishop of Denver. Tapping his name asks Claude, on the Mac
+     through Scriptorium, whether he still is; a new bishop's name replaces it. */
+  const SOCIETY_SEE = "Denver";
+  const bishopIn = h => h.replace(/\{bishop\}/g, '<button class="pr-bishop" title="Check that he is still the bishop">' + esc(state.bishop || "Archbishop James Golka") + '</button>');
+  async function checkBishop(btn){
+    const name = state.bishop || "Archbishop James Golka";
+    if (!confirm("Ask Claude whether " + name + " still leads the Archdiocese of " + SOCIETY_SEE + "? It searches the web from your Mac and uses a little of your Claude plan.")) return;
+    view.querySelectorAll(".pr-bishop").forEach(b => { b.disabled = true; b.textContent = "checking…"; });
+    let st = null;
+    try { st = await (await loadScriptorium()).ask({ kind: "bishop", name, see: SOCIETY_SEE }); } catch(e){}
+    if (!st || st.error || !st.bishop) showToast((st && st.error) || "Couldn't check. Is Scriptorium running on the Mac?");
+    else if (st.bishop === name) showToast(name + " still leads the Archdiocese of " + SOCIETY_SEE + " ✓");
+    else { state.bishop = st.bishop; save(); showToast("The Archdiocese of " + SOCIETY_SEE + " is now led by " + st.bishop + (st.since ? " (since " + st.since + ")" : "")); }
+    if (cur && cur.kind === "prayers") rerenderInPlace();
   }
   function renderPrayers(setId, day){
     view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">Opening the prayers…</p></div>';
@@ -1532,13 +1550,14 @@ const LuminaCore = (function () {
         html += '<div class="tabrow">' + DAYS.map((d, i) => '<button class="btn small' + (i === day ? ' on' : '') + '" data-day="' + i + '">' + d.slice(0, 3) + '</button>').join("") + '</div>' +
           (day !== today ? '<p class="pr-today">Showing ' + DAYS[day] + "'s prayer · today is " + DAYS[today] + '</p>' : '');
       set.sections.filter(x => x.day == null || x.day === day).forEach(x => {
-        html += '<div class="pr-sec"><h3 class="pr-h">' + esc(x.h) + '</h3>' + x.b.map(prayerBlock).join("") + '</div>';
+        html += '<div class="pr-sec">' + (x.h ? '<h3 class="pr-h">' + esc(x.h) + '</h3>' : '') + x.b.map(prayerBlock).join("") + '</div>';
       });
       if (set.credit) html += '<p class="pr-credit">' + esc(set.credit) + '</p>';
       view.innerHTML = html + '</div>';
       $("backMore").onclick = () => navBack();
       view.querySelectorAll("[data-set]").forEach(b => b.onclick = () => renderPrayers(b.dataset.set));
       view.querySelectorAll("[data-day]").forEach(b => b.onclick = () => renderPrayers(set.id, +b.dataset.day));
+      view.querySelectorAll(".pr-bishop").forEach(b => b.onclick = () => checkBishop(b));
       scrollTo(0, 0);
     }).catch(() => { view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">The prayers stay locked until you enter your Scriptorium password.</p></div>'; });
   }
@@ -2381,7 +2400,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=36"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=37"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }

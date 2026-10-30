@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 36;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 37;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -922,7 +922,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv", "annotate"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -1440,5 +1440,9 @@ details[open]>summary .chev{transform:rotate(45deg)}
     for (const c of await dataComments(kind)) await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.cid).catch(() => {});
   }
 
-  window.Scriptorium = { open, data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
+  async function ask(req) {               // a one-off question for the Mac from Lumina itself (the bishop check)
+    if (!(await quietOpen())) throw new Error("Scriptorium is locked on this device");
+    return request(req, true);
+  }
+  window.Scriptorium = { open, ask, data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
 })();
