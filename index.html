@@ -276,6 +276,27 @@ details.note .sum-text{font-style:normal; color:var(--ink)}
   padding:.8rem 1rem; margin:.6rem auto; max-width:40rem; font-size:1.0rem; line-height:1.6; text-align:left}
 .sum-panel.open{display:block}
 .sum-panel .lbl{font-variant:small-caps; letter-spacing:.12em; color:var(--gold); font-size:.88rem}
+#psalterFrame{display:none; border:0; background:var(--bg)}
+body.psalter-on #psalterFrame{display:block; position:fixed; left:0; right:0; top:var(--pbarH, 2.8rem); width:100%; height:calc(100% - var(--barH, 10.5rem) - var(--pbarH, 2.8rem)); z-index:18}
+body.psalter-on{overflow:hidden}
+#pbar{display:none}
+body.psalter-on #pbar{display:flex; position:fixed; left:0; right:0; top:0; margin:0; z-index:19; border-radius:0; padding:.35rem .4rem}
+#pbar select{flex:1 1 3.4rem; max-width:9rem} #pbar .pb-mid{flex:1}
+@media(min-width:700px){
+  body.psalter-on #pbar{top:var(--barTop, 0)}
+  body.psalter-on #psalterFrame{top:calc(var(--barTop, 0px) + var(--pbarH, 2.8rem)); height:calc(100% - var(--barTop, 0px) - var(--pbarH, 2.8rem))}
+}
+.fbar{position:sticky; top:0; z-index:15; display:flex; align-items:center; gap:.25rem; flex-wrap:wrap;
+  margin:.6rem -.3rem .7rem; padding:.3rem .3rem; background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--border-soft); border-radius:.4rem}
+.fbar select{min-width:0; padding:.2rem .15rem; font-size:.9rem}
+.fbar #fbBook{flex:1 1 6.5rem; max-width:11rem} .fbar #fbCh{width:3.6rem} .fbar .verse-pick{width:3.6rem; max-width:none}
+.fb-arrow{flex:0 0 2rem; height:2rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--gold); font-size:1.3rem; line-height:1; cursor:pointer}
+.fb-arrow:disabled{opacity:.3}
+.fb-btn{height:2rem; padding:0 .45rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--gold); font-size:.85rem; cursor:pointer}
+.fb-btn.fav-on{color:var(--rubric)}
+.fbar .sum-panel{flex:1 1 100%; max-height:45vh; overflow:auto; margin:.3rem 0 0}
+#btnTimer.on{border-color:var(--gold-line)}
 .ch-nav{display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin:1rem 0 .6rem}
 .ch-nav .mid{flex:1; text-align:center; color:var(--ink-faint); font-style:italic; font-size:.92rem}
 .verses{margin-top:.6rem; font-size:calc(1em * var(--ts, 1))}
@@ -524,8 +545,8 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="btn ib" id="navBack" title="Back"><span class="ic">‹</span><span class="lb">Back</span></button>
     <button class="btn ib" id="navFwd" title="Forward"><span class="ic">›</span><span class="lb">Fwd</span></button>
     <button class="btn ib primary" id="btnRandomVerse" title="Random verse"><span class="ic">✧</span><span class="lb" id="lbVerse">Verse</span></button>
-    <button class="btn ib" id="btnRandomChapter" title="Random chapter"><span class="ic">❧</span><span class="lb">Chapter</span></button>
-    <button class="btn ib" id="btnBooks" title="Books"><span class="ic">▤</span><span class="lb" id="lbBooks">Books</span></button>
+    <button class="btn ib" id="btnPsalter" title="The Monastic Psalter (Saint Bernard Abbey)"><span class="ic">♫</span><span class="lb">Psalter</span></button>
+    <button class="btn ib" id="btnTimer" title="Timer"><span class="ic" id="btnTimerIc">⏱</span><span class="lb" id="btnTimerLb">Timer</span></button>
     <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><img class="illum" src="icon-s.png" alt=""></span><span class="lb">Scriptorium</span></button>
     <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
     <button class="btn ib" id="btnFavs" title="Favorites"><span class="ic">♥</span><span class="lb">Favs</span></button>
@@ -983,7 +1004,7 @@ const LuminaCore = (function () {
     state.plainDouay = true;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
   }
-  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} try { syncChanged(); } catch(e){} }   /* syncChanged is defined further on; before then it is not ready */
   /* ask the browser to keep Lumina's saved data rather than clear it when space runs low */
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -1011,7 +1032,8 @@ const LuminaCore = (function () {
   /* ---------- the Grail Psalms: your own file, kept on this device ----------
      The Grail is under copyright, so Lumina does not carry it. You import your own Grail
      file (grail.selah-pack.v1.json, made by tools/build-grail.js from your private copy);
-     it is kept in this browser on this device and never sent anywhere. Without it, the
+     it is kept in this browser on this device, and (with Scriptorium sync) encrypted in the
+     private relay so other devices get it; it is never shared. Without it, the
      Trees show the Douay, through data-grail-map.js (verse numbers only, no text).
      grailFromPack must stay in step with fromPack in tools/grail-pack.js. */
   const GRAIL_MAX = 4 * 1024 * 1024;
@@ -1202,12 +1224,14 @@ const LuminaCore = (function () {
       })
       .catch(() => undefined);
   }
-  function activeChapterAsync(b, c){
-    const meta = txMeta(state.tx);
+  /* tx: a translation for one screen only (the daily readings have their own); else the app's */
+  function activeChapterAsync(b, c, tx){
+    tx = tx || state.tx;
+    const meta = txMeta(tx);
     if (meta.kind === "local"){
-      const ch = C.txChapter(txData(state.tx), b, c);
+      const ch = C.txChapter(txData(tx), b, c);
       if (ch) return Promise.resolve({ ch, fell:false });
-      return Promise.resolve({ ch: D.books[b].ch[c], fell: state.tx !== "drb" });
+      return Promise.resolve({ ch: D.books[b].ch[c], fell: tx !== "drb" });
     }
     return apiSlotChapter(meta, b, c).then(ch => {
       if (ch) return { ch, fell:false };
@@ -1237,6 +1261,7 @@ const LuminaCore = (function () {
     $("themeBtn").title = "Theme: " + t + " — click for " + THEMES[(THEMES.indexOf(t) + 1) % 3];
     document.querySelector('meta[name="theme-color"]').setAttribute("content",
       t === "dark" ? "#161209" : t === "lcars" ? "#000000" : "#f3ead8");
+    try { psalterDress(); } catch(e){}
   }
   window.LuminaTheme = { toggle: () => $("themeBtn").click() };
   $("themeBtn").onclick = () => {
@@ -1291,9 +1316,9 @@ const LuminaCore = (function () {
   function grailSheet(onImported){
     loadGrail().then(() => true, () => false).then(has => {
       const back = modal('<h3>Grail Psalms</h3>' + (has
-        ? '<p style="text-align:center">Your Grail file is on this device. Lumina keeps it here, in this browser only, and never sends it anywhere.</p>' +
+        ? '<p style="text-align:center">Your Grail file is on this device' + (syncOn() ? ', and a copy is kept encrypted in your private Scriptorium relay on GitHub, so your other devices get it too' : '') + '. It is never shared with anyone.</p>' +
           '<div class="rowbtns"><button class="btn" id="gRemove">Remove</button><button class="btn" id="gChoose">Replace…</button><button class="btn primary" id="gClose">Close</button></div>'
-        : '<p style="text-align:center">The Grail Psalms are under copyright, so Lumina does not include them. If you have your own Grail file, choose it here. It stays on this device and is never sent anywhere.</p>' +
+        : '<p style="text-align:center">The Grail Psalms are under copyright, so Lumina does not include them. If you have your own Grail file, choose it here. It stays on this device' + (syncOn() ? ' and, encrypted, in your private Scriptorium relay' : '') + ', and is never shared with anyone.</p>' +
           '<div class="rowbtns"><button class="btn" id="gClose">Cancel</button><button class="btn primary" id="gChoose">Choose your Grail file</button></div>') +
         '<p class="g-msg" style="text-align:center;color:#b33;display:none"></p><input type="file" id="gFile" style="display:none">');
       const q = sel => back.querySelector(sel), file = q("#gFile");
@@ -1302,11 +1327,12 @@ const LuminaCore = (function () {
       q("#gChoose").onclick = () => { file.value = ""; file.click(); };
       if (has) q("#gRemove").onclick = () => {
         back.remove();
-        const sure = modal('<h3>Remove the Grail?</h3><p style="text-align:center">This removes your Grail file from this device. You can import it again at any time.</p>' +
+        const sure = modal('<h3>Remove the Grail?</h3><p style="text-align:center">This removes your Grail file from this device' + (syncOn() ? ', from your GitHub copy, and from your other devices' : '') + '. You can import it again at any time.</p>' +
           '<div class="rowbtns"><button class="btn" id="rCancel">Cancel</button><button class="btn danger" id="rGo">Remove</button></div>');
         sure.querySelector("#rCancel").onclick = () => sure.remove();
         sure.querySelector("#rGo").onclick = () => grailDel().catch(() => {}).then(() => {
           delete window.LUMINA_TX.grail;
+          if (syncOn()){ state.grailHash = "none"; save(); }   /* and from GitHub and your other devices */
           sure.remove(); showToast("The Grail is removed from this device");
           if (state.tx === "grail"){ state.tx = "drb"; if (state.corpus === "bible") txSel.value = "drb"; save(); applyMode(); }
           rerender();
@@ -1323,8 +1349,9 @@ const LuminaCore = (function () {
           try { p = JSON.parse(rd.result); } catch(e){ return say("This file is damaged, or it is not a Grail file."); }
           const why = grailCheck(p);
           if (why) return say(why);
-          grailPut(rd.result).then(() => {
+          grailPut(rd.result).then(() => grailHashOf(rd.result)).then(h => {
             window.LUMINA_TX.grail = grailFromPack(p);
+            state.grailHash = h; save();                    /* other devices fetch this file */
             try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch(e){}
             back.remove(); showToast("The Grail Psalms are on this device");
             if (onImported) onImported(); else rerender();
@@ -1339,7 +1366,7 @@ const LuminaCore = (function () {
     $("focusLbl").style.display = ccc || docs ? "none" : "";
     focusSel.style.display = ccc || docs ? "none" : "";
     $("lbVerse").textContent = ccc || docs ? "¶" : "Verse";
-    $("lbBooks").textContent = ccc ? "Contents" : docs ? "Library" : "Books";
+
     if (docs){
       $("subtitle").textContent = "Church Documents";
       $("credit").textContent = window.LUMINA_DOCS ? window.LUMINA_DOCS.credit : "Texts © Libreria Editrice Vaticana";
@@ -1979,8 +2006,12 @@ const LuminaCore = (function () {
   function fmtLeft(ms){ const s = Math.max(0, Math.ceil(ms / 1000)), m = Math.floor(s / 60); return m + ":" + String(s % 60).padStart(2, "0"); }
   function paintTimer(){
     const b = $("timerBtn"), left = timerLeft();
-    if (state.timer && left > 0){ b.textContent = Math.ceil(left / 60000) + "′"; b.classList.add("on"); b.title = "Timer: " + fmtLeft(left) + " left"; }
+    const on = state.timer && left > 0;
+    if (on){ b.textContent = Math.ceil(left / 60000) + "′"; b.classList.add("on"); b.title = "Timer: " + fmtLeft(left) + " left"; }
     else { b.textContent = "⏱"; b.classList.remove("on"); b.title = "Timer"; }
+    $("btnTimerIc").textContent = on ? Math.ceil(left / 60000) + "′" : "⏱";      /* the bottom bar's twin */
+    $("btnTimerLb").textContent = on ? fmtLeft(left) : "Timer";
+    $("btnTimer").classList.toggle("on", !!on);
     const big = document.getElementById("tmLeft"); if (big) big.textContent = state.timer && left > 0 ? fmtLeft(left) : "—";
   }
   function runTimer(){
@@ -2043,6 +2074,7 @@ const LuminaCore = (function () {
     paintTimer();
   }
   $("timerBtn").onclick = openTimerSheet;
+  $("btnTimer").onclick = openTimerSheet;
   /* a timer that was running when Lumina closed */
   if (state.timer){
     if (timerLeft() > 0) runTimer();
@@ -2221,17 +2253,193 @@ const LuminaCore = (function () {
       'mark{padding:0 .1em; border-radius:.15em} mark.gold{background:#f0dc9a} mark.rose{background:#f0c3bd} mark.sage{background:#cfdcb4} mark.sky{background:#c2d7e8}' +
       '</style></head><body><h1>✠ Lumina</h1><p class="sub">Highlights, notes and favorites · ' + esc(when) + '</p>' + body + '</body></html>';
   }
+  /* ---------- sync with GitHub, through Scriptorium's encrypted relay ---------- */
+  /* Highlights, notes, favorites, plans and voice settings are kept in GitHub (encrypted with the
+     Scriptorium password), so they survive a lost phone or a cleared browser and match on every
+     device. The copy on this device is the working copy: Lumina saves to it at once, then sends
+     the changes a few seconds later, and fetches anything new when it opens or comes back. */
+  const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls"];
+  const SYNC_BASE = "lumina.sync.base";
+  const syncOn = () => !!localStorage.getItem("lumina.scriptorium.vault") && state.syncOff !== true;
+  /* everything Lumina keeps is synced, except what belongs to this one device: a timer that is
+     running here, and the sync switch itself. (The Grail file is not in here at all: it stays on
+     the device, as Lumina promises.) Scriptorium's own display settings ride along as scrPrefs. */
+  const SYNC_LOCAL_ONLY = ["timer", "syncOff"];
+  /* where you are reading: sent with the next real change or when you leave, not on every page turn */
+  const SYNC_QUIET = ["last", "cccLast", "docLast", "corpus", "lastFavList", "lastChapList", "treeKind"];
+  const SCR_PREFS = "lumina.scriptorium.prefs";
+  const syncedPart = () => {
+    const o = {};
+    Object.keys(state).forEach(k => { if (!SYNC_LOCAL_ONLY.includes(k)) o[k] = state[k]; });
+    try { o.scrPrefs = JSON.parse(localStorage.getItem(SCR_PREFS) || "null"); } catch(e){ o.scrPrefs = null; }
+    o.psalterLS = psalterStore();
+    return o;
+  };
+  const J = v => JSON.stringify(v === undefined ? null : v);
+  const loud = o => { const c = Object.assign({}, o || {}); SYNC_QUIET.forEach(k => delete c[k]); return J(c); };
+  let syncTimer = null, syncing = false, syncAgain = false, lastSynced = null, lastSyncedObj = null, syncNote = "", firstSync = true;
+  try { lastSyncedObj = JSON.parse(localStorage.getItem(SYNC_BASE) || "null"); lastSynced = J(lastSyncedObj); } catch(e){}
+  /* three-way merge: what changed here since the last sync wins over GitHub; otherwise GitHub's
+     copy is taken, so additions, edits and deletions on either device all carry over */
+  /* the Monastic Psalter shares this site's storage: everything it keeps under "psalter…" (its unlock
+     key, so a device arrives already unlocked; the monk's notes, marks and choices) travels with Lumina */
+  function psalterStore(){
+    const o = {};
+    try { for (let k = 0; k < localStorage.length; k++){ const key = localStorage.key(k);
+      if (/^psalter/.test(key) && key !== "psalter-beta-pw") o[key] = localStorage.getItem(key); } } catch(e){}
+    return o;
+  }
+  function merge3(base, local, remote){
+    const out = {}, fresh = !base;
+    base = base || {};
+    [...new Set([...Object.keys(local), ...Object.keys(remote)])].forEach(k => {
+      if (k === "psalterLS"){                                 /* key by key, each like a setting */
+        const b = base[k] || {}, l = local[k] || {}, r = remote[k] || {}, o = {};
+        new Set([...Object.keys(l), ...Object.keys(r)]).forEach(x => {
+          const v = x in l && x in r ? (l[x] !== b[x] ? l[x] : r[x])
+            : x in l ? (!(x in b) || l[x] !== b[x] ? l[x] : undefined)
+            : (!(x in b) || r[x] !== b[x] ? r[x] : undefined);
+          if (v !== undefined) o[x] = v;
+        });
+        out[k] = o;
+      } else if (SYNC_LISTS.includes(k)){
+        const by = a => { const m = new Map(); (a || []).forEach(x => { if (x && x.id) m.set(x.id, x); }); return m; };
+        const B = by(base[k]), L = by(local[k]), R = by(remote[k]), ids = [...L.keys(), ...[...R.keys()].filter(id => !L.has(id))];
+        out[k] = ids.map(id => {
+          const b = B.get(id), l = L.get(id), r = R.get(id);
+          if (l && r) return J(l) !== J(b) ? l : r;
+          if (l) return !b || J(l) !== J(b) ? l : null;      /* gone from GitHub: deleted elsewhere, unless changed here */
+          return !b || J(r) !== J(b) ? r : null;             /* gone from here: deleted here, unless changed elsewhere */
+        }).filter(Boolean);
+      } else out[k] = remote[k] === undefined ? local[k]
+        : fresh ? remote[k]                                    /* this device's first sync: its defaults are not choices */
+        : J(local[k]) !== J(base[k]) ? local[k] : remote[k];
+    });
+    return out;
+  }
+  function loadScriptorium(){
+    if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "scriptorium.js?v=24"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      document.body.appendChild(s);
+    });
+  }
+  async function syncNow(manual){
+    if (!syncOn()) return;
+    if (syncing){ syncAgain = true; return; }
+    syncing = true; clearTimeout(syncTimer); syncTimer = null;
+    try {
+      const scr = await loadScriptorium();
+      if (!scr.data || !(await scr.data.ready())){ syncNote = "Open Scriptorium once to unlock syncing."; if (manual) showToast(syncNote); return; }
+      const remote = await scr.data.load(), local = syncedPart();
+      let base = null; try { base = JSON.parse(localStorage.getItem(SYNC_BASE) || "null"); } catch(e){}
+      const merged = remote ? merge3(base, local, remote) : local;
+      const moved = SYNC_QUIET.some(k => J(merged[k]) !== J(local[k]));
+      if (J(merged) !== J(local)){
+        Object.keys(merged).forEach(k => {
+          if (k === "scrPrefs"){ if (merged.scrPrefs) try { localStorage.setItem(SCR_PREFS, J(merged.scrPrefs)); } catch(e){} }
+          else if (k === "psalterLS"){
+            const now = psalterStore(), want = merged.psalterLS || {};
+            try {
+              Object.keys(want).forEach(x => { if (now[x] !== want[x]) localStorage.setItem(x, want[x]); });
+              Object.keys(now).forEach(x => { if (!(x in want)) localStorage.removeItem(x); });
+            } catch(e){}
+            if (J(now) !== J(want)) psalterReload();
+          }
+          else if (!SYNC_LOCAL_ONLY.includes(k) && merged[k] !== undefined) state[k] = merged[k];
+        });
+        lastSynced = J(syncedPart()); lastSyncedObj = JSON.parse(lastSynced); save();
+        if (J(merged.theme) !== J(local.theme)) try { applyTheme(); } catch(e){}
+        if (J(merged.font) !== J(local.font)) try { applyFont(); } catch(e){}
+      }
+      await syncGrail(scr, merged);
+      if (!remote || J(merged) !== J(remote)) await scr.data.store(merged);
+      lastSynced = J(merged); lastSyncedObj = merged;
+      try { localStorage.setItem(SYNC_BASE, lastSynced); } catch(e){}
+      /* opened on this device after reading on another, and not yet moved: go to where you stopped */
+      if (firstSync && moved && nav.stack.length <= 1) { firstSync = false; location.reload(); return; }
+      if (J(merged) !== J(local)) rerenderInPlace();
+      syncNote = "Saved to GitHub at " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      if (manual) showToast(syncNote);
+    } catch(e){
+      syncNote = "Not synced yet: " + e.message;
+      if (manual) showToast(syncNote);
+    } finally {
+      syncing = false; firstSync = false;
+      const st = document.getElementById("syncState"); if (st) st.textContent = syncNote;
+      if (syncAgain){ syncAgain = false; scheduleSync(); }
+    }
+  }
+  /* The Grail file travels too, encrypted, as its own set of comments ("lumgrail"), so a new or
+     cleared device gets it back without importing it again. A fingerprint of the file (grailHash)
+     rides with the other settings: each device compares it with the file it has, and fetches or
+     sends the file only when they differ. "none" means it was removed on purpose, everywhere. */
+  const GRAIL_UP = "lumina.grail.up";          /* the fingerprint this device last sent or fetched */
+  async function grailHashOf(text){
+    const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)));
+    return [...d].map(x => x.toString(16).padStart(2, "0")).join("");
+  }
+  async function syncGrail(scr, merged){
+    const text = await grailGet().catch(() => null), here = text ? await grailHashOf(text) : null;
+    const want = merged.grailHash, up = localStorage.getItem(GRAIL_UP);
+    const setWant = h => { merged.grailHash = h; state.grailHash = h; try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} };
+    if (want === "none"){                                          /* removed on some device */
+      if (here){ await grailDel().catch(() => {}); delete window.LUMINA_TX.grail;
+        if (state.tx === "grail"){ state.tx = "drb"; if (state.corpus === "bible") txSel.value = "drb"; applyMode(); }
+        showToast("The Grail was removed on your other device"); }
+      if (up !== "none"){ await scr.data.remove("lumgrail"); localStorage.setItem(GRAIL_UP, "none"); }
+      return;
+    }
+    if (here && (!want || want === here)){                         /* this device's file is the current one */
+      if (!want) setWant(here);
+      if (up !== here){ await scr.data.store({ h: here, text }, "lumgrail"); localStorage.setItem(GRAIL_UP, here); }
+      return;
+    }
+    if (want && want !== here){                                    /* a newer file elsewhere, or none here */
+      const got = await scr.data.load("lumgrail");
+      if (!got || got.h !== want) return;                          /* not uploaded yet; try next time */
+      let p; try { p = JSON.parse(got.text); } catch(e){ return; }
+      if (grailCheck(p)) return;
+      await grailPut(got.text);
+      window.LUMINA_TX.grail = grailFromPack(p);
+      localStorage.setItem(GRAIL_UP, want);
+      showToast("Your Grail Psalms came back from GitHub");
+    }
+  }
+  function scheduleSync(){ if (!syncOn()) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => syncNow(), 8000); }
+  /* called by save(): only real changes to the synced data start a sync, not every page turn */
+  /* the psalter (in its frame) writes its storage itself: notice and sync it */
+  addEventListener("storage", e => { if (e.key && /^psalter/.test(e.key)) try { syncChanged(); } catch(x){} });
+  function syncChanged(){ if (syncOn() && loud(syncedPart()) !== loud(lastSyncedObj)) scheduleSync(); }
+  window.LuminaSync = { changed: () => { try { syncChanged(); } catch(e){} } };   /* Scriptorium calls this when its settings change */
+  let lastFetch = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden){ if (syncOn() && (syncTimer || J(syncedPart()) !== lastSynced)) syncNow(); }   /* leaving: send what is waiting, reading place included */
+    else if (Date.now() - lastFetch > 60000){ lastFetch = Date.now(); syncNow(); }   /* back: fetch what changed elsewhere */
+  });
+  setTimeout(() => { lastFetch = Date.now(); syncNow(); }, 2500);
+
   function openBackupSheet(){
     const back = modal('<h3>Back up &amp; export</h3>' +
       '<p style="text-align:center;margin:.2rem 0 .8rem">Your favorites, highlights and notes live only in this browser. Keep a copy somewhere safe: on a phone, choose <b>Save to Files</b>, then <b>Google Drive</b>.</p>' +
       '<div class="bk-row"><button class="btn primary" id="bkSave">Back up</button><span>a file Lumina can read back in, on this or another device</span></div>' +
       '<div class="bk-row"><button class="btn" id="bkRestore">Restore…</button><span>adds what a backup holds; nothing here is removed</span></div>' +
       '<div class="bk-row"><button class="btn" id="bkExport" disabled>Readable copy</button><span>your highlights and notes as a page to read or print, in Bible order</span></div>' +
+      (localStorage.getItem("lumina.scriptorium.vault")
+        ? '<div class="bk-row"><button class="btn" id="bkSync">Sync now</button><span><b>GitHub sync</b> ' +
+          '<label style="white-space:nowrap"><input type="checkbox" id="bkSyncOn"' + (state.syncOff ? "" : " checked") + '> on</label><br>' +
+          '<i id="syncState">' + esc(syncNote || "Saves itself, encrypted, to your Scriptorium relay.") + '</i></span></div>'
+        : '<p class="vs-note">Set up Scriptorium (✝) to keep these on GitHub automatically.</p>') +
       '<p class="bk-msg" style="text-align:center;display:none"></p>' +
       '<div class="rowbtns"><button class="btn" id="bkClose">Close</button></div>' +
       '<input type="file" id="bkFile" accept=".json,application/json" style="display:none">');
     const q = s => back.querySelector(s), say = t => { const m = q(".bk-msg"); m.textContent = t; m.style.display = ""; };
     q("#bkClose").onclick = () => back.remove();
+    if (q("#bkSync")){
+      q("#bkSync").onclick = () => { q("#syncState").textContent = "Syncing…"; syncNow(true); };
+      q("#bkSyncOn").onchange = () => { state.syncOff = !q("#bkSyncOn").checked; save(); if (!state.syncOff) syncNow(true); };
+    }
     q("#bkSave").onclick = () => giveFile("lumina-backup-" + fileDate() + ".json", "application/json", backupText());
     /* the readable copy needs the texts the highlights point into; load them first,
        so the file can be handed over straight from the tap (phones require that) */
@@ -2578,6 +2786,30 @@ const LuminaCore = (function () {
     return arr && arr[c] || null;
   }
   function summaryButtonHtml(){ return '<button class="btn" id="vSummary">Summary</button>'; }
+  /* the floating bar, on the chapter and the verse screens: ‹ previous chapter · Book · Chapter ·
+     Verse · ♡ · Summary · next chapter ›. It stays at the top of the screen as you scroll.
+     fav: { id, on, title } for the heart (the chapter's on the chapter screen, the verse's on the verse screen) */
+  function floatBarHtml(b, c, ch, fav){
+    const bk = D.books[b], pc = C.prevChapter(b, c), nc = C.nextChapter(b, c);
+    return '<div class="fbar" id="fbar">' +
+      '<button class="fb-arrow" id="cPrev" ' + (pc ? 'title="' + esc(C.chapterLabel(pc.b, pc.c)) + '"' : "disabled") + '>‹</button>' +
+      '<select id="fbBook" title="Book">' + D.books.map((x, k) => '<option value="' + k + '"' + (k === b ? " selected" : "") + '>' + esc(x.name) + '</option>').join("") + '</select>' +
+      '<select id="fbCh" title="Chapter">' + bk.ch.map((_, k) => '<option value="' + k + '"' + (k === c ? " selected" : "") + '>' + (k + 1) + '</option>').join("") + '</select>' +
+      '<select class="verse-pick" id="versePick" title="Jump to a verse"><option value="">v.</option>' +
+        ch.v.map((_, j) => '<option value="' + j + '">' + C.vnum(ch, j) + '</option>').join("") + '</select>' +
+      '<button class="fb-btn' + (fav.on ? " fav-on" : "") + '" id="' + fav.id + '" title="' + fav.title + '">' + (fav.on ? "♥" : "♡") + '</button>' +
+      '<button class="fb-btn" id="vSummary" title="Chapter summary">Summary</button>' +
+      '<button class="fb-arrow" id="cNext" ' + (nc ? 'title="' + esc(C.chapterLabel(nc.b, nc.c)) + '"' : "disabled") + '>›</button>' +
+    '</div>';
+  }
+  function wireFloatBar(b, c){
+    const pc = C.prevChapter(b, c), nc = C.nextChapter(b, c);
+    if (pc) $("cPrev").onclick = () => renderChapter(pc.b, pc.c);
+    if (nc) $("cNext").onclick = () => renderChapter(nc.b, nc.c);
+    $("fbBook").onchange = e => renderChapter(+e.target.value, 0);
+    $("fbCh").onchange = e => renderChapter(b, +e.target.value);
+    bindSummary(b, c, "#fbar");
+  }
   function bindSummary(b, c, containerSel){
     const btn = $("vSummary");
     if (!btn) return;
@@ -2629,7 +2861,8 @@ const LuminaCore = (function () {
       const isFav = favsFor(ref).length > 0;
       const hlTx = fell ? "drb" : activeHlTx();
       view.innerHTML =
-        '<div class="view"><div class="card" id="verseCard">' +
+        '<div class="view">' + floatBarHtml(b, c, ch, { id: "vFav", on: isFav, title: "Save this verse to favorites" }) +
+        '<div class="card" id="verseCard">' +
         '<div class="ornament">❦</div>' +
         '<div class="citation">' + esc(C.citation(b, c, C.vnum(ch, j))) +
           '<span class="tx-tag">' + (fell ? "DR" : meta.abbr) + '</span></div>' +
@@ -2640,9 +2873,7 @@ const LuminaCore = (function () {
         '<div class="verse-actions">' +
           '<button class="btn nav-arrow" id="vPrev" title="Previous verse">←</button>' +
           '<button class="btn" id="vChapter">Chapter</button>' +
-          summaryButtonHtml() +
           '<button class="btn" id="vCompare">⇄</button>' +
-          '<button class="btn' + (isFav ? " fav-on" : "") + '" id="vFav" title="Favorite">' + (isFav ? "♥" : "♡") + '</button>' +
           '<button class="btn" id="vCopy">Copy</button>' +
           '<button class="btn nav-arrow" id="vNext" title="Next verse">→</button>' +
         '</div></div></div>';
@@ -2655,7 +2886,12 @@ const LuminaCore = (function () {
       $("vCopy").onclick = () => copy("“" + ch.v[j] + "” — " + C.citation(b, c, C.vnum(ch, j)) + " (" + (fell ? "DR" : meta.abbr) + ")");
       $("vCompare").onclick = () => toggleCompare(b, c, i);
       $("vFav").onclick = () => openFavModal(ref);
-      bindSummary(b, c, "#verseCard");
+      wireFloatBar(b, c);
+      $("versePick").onchange = e => {               /* on the verse screen: open that verse */
+        if (e.target.value === "") return;
+        const jj = +e.target.value;
+        renderVerse(b, c, isDrb ? jj : C.mapFromTx(D.books[b].ch[c], ch, jj));
+      };
       selCtx = { tx: hlTx, book: D.books[b].id, c, list: [{ el: $("vtext"), i: j }] };
       applyMode();
       if (!opts || !opts.keepScroll) scrollTo({ top: 0, behavior: "smooth" });
@@ -2752,21 +2988,11 @@ const LuminaCore = (function () {
           (isDrb && ch.s ? '<p class="ch-summary">' + esc(ch.s) + '</p>' : '') +
           (!isDrb && ch.title ? '<p class="ch-summary">' + esc(ch.title) + '</p>' : '') +
           (fell ? '<p class="ch-notice">' + fallNote(meta, err) + '</p>' : '') +
-          '<div class="sum-link"><button class="btn small" id="vSummary">Chapter Summary ▾</button> ' +
-            '<select class="verse-pick" id="versePick" title="Jump to a verse"><option value="">Verse…</option>' +
-            ch.v.map((_, j) => '<option value="' + j + '">' + C.vnum(ch, j) + '</option>').join("") + '</select> ' +
-            '<button class="btn small' + (chapFavsFor(b, c).length ? " fav-on" : "") + '" id="chFav" title="Save this chapter to favorites">' +
-            (chapFavsFor(b, c).length ? "♥ Chapter" : "♡ Chapter") + '</button></div>' +
         '</div>' +
-        '<div class="ch-nav">' +
-          '<button class="btn nav-arrow" id="cPrev" ' + (pc ? "" : "disabled") + '>← ' + (pc ? esc(C.chapterLabel(pc.b, pc.c)) : "") + '</button>' +
-          '<span class="mid">' + ch.v.length + ' verses</span>' +
-          '<button class="btn nav-arrow" id="cNext" ' + (nc ? "" : "disabled") + '>' + (nc ? esc(C.chapterLabel(nc.b, nc.c)) : "") + ' →</button>' +
-        '</div>' +
+        floatBarHtml(b, c, ch, { id: "chFav", on: chapFavsFor(b, c).length > 0, title: "Save this chapter to favorites" }) +
         '<div class="card"><div class="verses" id="versesHost">' + vs + '</div></div>' + attribution +
         '</div>';
-      if (pc) $("cPrev").onclick = () => renderChapter(pc.b, pc.c);
-      if (nc) $("cNext").onclick = () => renderChapter(nc.b, nc.c);
+      wireFloatBar(b, c);
       view.querySelectorAll(".notemark").forEach(btn => {
         btn.onclick = () => $("n" + btn.dataset.n).classList.toggle("open");
       });
@@ -2776,13 +3002,19 @@ const LuminaCore = (function () {
           copy("“" + ch.v[j] + "” — " + C.citation(b, c, C.vnum(ch, j)) + " (" + (fell ? "DR" : meta.abbr) + ")");
         });
       });
-      bindSummary(b, c, "#chHead");
       $("chFav").onclick = () => openChapFavModal(b, c);
       $("versePick").onchange = e => {
         const j = e.target.value;
         if (j === "") return;
+        /* jump within the chapter: the verse is lit and brought just below the floating bar */
+        view.querySelectorAll(".v.hl").forEach(x => x.classList.remove("hl"));
+        const el = $("v" + j); if (!el) return;
+        el.classList.add("hl");
+        const barH = $("fbar").offsetHeight;
+        scrollTo({ top: el.getBoundingClientRect().top + scrollY - barH - 12, behavior: "smooth" });
         const drbI = isDrb ? +j : C.mapFromTx(D.books[b].ch[c], ch, +j);
-        renderVerse(b, c, drbI);
+        cur.i = drbI; state.last = { kind:"chapter", book: bk.id, c, i: drbI }; save();
+        e.target.value = "";
       };
       selCtx = { tx: hlTx, book: bk.id, c,
         list: [...view.querySelectorAll(".vt")].map(el => ({ el, i: parseInt(el.dataset.i, 10) })) };
@@ -2878,7 +3110,7 @@ const LuminaCore = (function () {
       '<p class="ch-notice">¶ ' + t.first + "–" + t.last + '</p></div>' +
       '<div class="ch-nav">' +
       '<button class="btn nav-arrow" id="cPrev" ' + (ti > 0 ? "" : "disabled") + '>←</button>' +
-      '<span class="mid">' + (t.last - t.first + 1) + ' paragraphs</span>' +
+      '<span class="mid"><button class="btn small" id="cccToc" title="' + (t.last - t.first + 1) + ' paragraphs">☰ Contents</button></span>' +
       '<button class="btn nav-arrow" id="cNext" ' + (ti < K.toc.length - 1 ? "" : "disabled") + '>→</button></div>' +
       '<div class="card"><div class="verses">';
     for (let n = t.first; n <= t.last; n++){
@@ -2893,6 +3125,7 @@ const LuminaCore = (function () {
     }
     html += '</div></div></div>';
     view.innerHTML = html;
+    $("cccToc").onclick = renderCccContents;
     if (ti > 0) $("cPrev").onclick = () => renderCccChapter(ti - 1);
     if (ti < K.toc.length - 1) $("cNext").onclick = () => renderCccChapter(ti + 1);
     view.querySelectorAll(".v").forEach(p => p.addEventListener("dblclick", () => {
@@ -3259,6 +3492,7 @@ const LuminaCore = (function () {
   /* ---------- daily readings ---------- */
   function isoToday(){ const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   const readingsCache = {};
+  const readTx = () => TRANSLATIONS.some(t => t.id === state.readTx && !t.only) ? state.readTx : "gnt";
   function renderReadings(dateStr){
     cur = { kind:"readings", date: dateStr || isoToday() };
     record(cur);
@@ -3270,10 +3504,16 @@ const LuminaCore = (function () {
       '<div class="ch-head"><h2 class="ch-title">Daily Mass Readings</h2></div>' +
       '<div class="search-row" style="max-width:20rem;margin:.6rem auto"><input type="date" id="rdate" value="' + date + '">' +
       '<button class="btn primary" id="goDate">Go</button></div>' +
+      /* the readings keep their own translation (Good News by default), apart from the Bible's */
+      '<div class="controls" style="margin:.2rem 0 .6rem"><label class="ctl-label" for="readTx">Read in</label><select id="readTx">' +
+        TRANSLATIONS.filter(t => !t.only).map(t => '<option value="' + t.id + '"' + (t.id === readTx() ? " selected" : "") + '>' + esc(t.name) + '</option>').join("") +
+      '</select></div>' +
       '<div id="rbody"><p class="ch-notice">Looking up the readings\u2026</p></div></div>';
     $("backMore").onclick = () => navBack();
     $("goDate").onclick = () => renderReadings($("rdate").value);
+    $("readTx").onchange = e => { state.readTx = e.target.value; save(); renderReadings(date); };
     const body = $("rbody");
+    const rtx = readTx();
 
     const draw = j => {
       const d = j.data || {};
@@ -3288,12 +3528,13 @@ const LuminaCore = (function () {
         if (!keys.some(k => k.b === p.b && k.c === p.c)) keys.push({ b: p.b, c: p.c });
       }));
       body.innerHTML = '<p class="ch-notice">Fetching the text\u2026</p>';
-      Promise.all(keys.map(k => activeChapterAsync(k.b, k.c).then(res => [k.b + ":" + k.c, res])))
+      const ready = txMeta(rtx).kind === "local" && rtx !== "drb" ? loadTx(rtx).catch(() => {}) : Promise.resolve();
+      ready.then(() => Promise.all(keys.map(k => activeChapterAsync(k.b, k.c, rtx).then(res => [k.b + ":" + k.c, res]))))
         .then(pairs => {
           if (seq !== renderSeq) return;
           const chmap = Object.fromEntries(pairs);
-          const meta = txMeta(state.tx);
-          const hlTx = activeHlTx();
+          const meta = txMeta(rtx);
+          const hlTx = rtx;
           let html = '<p class="season-line">' + esc((d.day && d.day.season) || "") +
             (d.day && d.day.title && d.day.title !== "Daily Readings" ? " \u00b7 " + esc(d.day.title) : "") + '</p>';
           groups.forEach(g => {
@@ -3330,7 +3571,7 @@ const LuminaCore = (function () {
           html += '<p class="attribution">Readings for ' + esc(date) + ' from the USCCB lectionary via Cathople' +
             ((d.source && d.source.usccbLink) ? ' \u00b7 <a href="' + esc(d.source.usccbLink) +
               '" target="_blank" rel="noopener" style="color:var(--gold)">USCCB</a>' : '') +
-            '<br>Scripture shown in <b>' + esc(meta.name) + '</b> \u2014 change it with the Bible selector above.' +
+            '<br>Scripture shown in <b>' + esc(meta.name) + '</b> \u2014 change it with \u201cRead in\u201d above.' +
             (apiCopyright[meta.id] ? '<br>' + esc(apiCopyright[meta.id]) : '') + '</p>';
           body.innerHTML = html;
           body.querySelectorAll(".opench").forEach(btn => btn.onclick = () =>
@@ -3827,8 +4068,146 @@ const LuminaCore = (function () {
     renderChapter(r.b, r.c);
   }
   $("btnRandomVerse").onclick = doRandomVerse;
-  $("btnRandomChapter").onclick = doRandomChapter;
-  $("btnBooks").onclick = () => state.corpus === "ccc" ? renderCccContents() : state.corpus === "docs" ? renderDocLibrary() : renderBooks();
+  /* the Monastic Psalter, published from munkachy/sing-with-us (psalter/), opens beside Lumina */
+  /* ---------- the Monastic Psalter, inside Lumina ----------
+     The psalter page (munkachy/sing-with-us, psalter/) is on the same site as Lumina, so Lumina shows it
+     in a frame of its own and can reach into it: its theme follows Lumina's, and its storage is shared
+     (and synced, above). The page itself is not changed: the monks' own copy looks and works as before.
+     The frame is kept once opened, so going back and forth keeps your place in both. */
+  const PSALTER_URL = new URL("../sing-with-us/psalter/", location.href).href;
+  const PSALTER_THEME = { light: "cloister", dark: "habit", lcars: "glass" };
+  let psalterFrame = null;
+  function psalterDoc(){ try { return psalterFrame && psalterFrame.contentDocument; } catch(e){ return null; } }
+  function psalterDress(){
+    const d = psalterDoc(); if (!d || !d.documentElement) return;
+    d.documentElement.setAttribute("data-theme", PSALTER_THEME[currentTheme()] || "cloister");
+    if (!d.getElementById("luminaStyle")){
+      const st = d.createElement("style"); st.id = "luminaStyle";
+      /* inside Lumina only: Lumina's ☾ chooses the theme, and Lumina's own bar (below) replaces the site
+         header and the rows of buttons; the page-number box (opened from that bar's "p.") stays */
+      st.textContent = ".themes,.skip-link,.site-header,.pickbar-in{display:none!important}" +
+        ".pickbar{border:0!important;box-shadow:none!important;background:transparent!important}";
+      (d.head || d.documentElement).appendChild(st);
+    }
+  }
+  /* Lumina's own bar for the psalter: ‹ · Book · Week · Day · Hour · Today · 📅 · ›, in the place of the
+     psalter's rows of buttons (hidden inside Lumina only). It drives the psalter through those same
+     buttons and menus, so the psalter's own logic decides everything, and redraws itself whenever the
+     psalter changes. In Advent, Lent or Saints, Week and Day give way to the book's Section and Hour. */
+  const PS_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const PS_BOOKS = [["psalter", "Psalter"], ["Advent-Christmas", "Advent"], ["Lent", "Lent"], ["Sanctoral", "Saints"]];
+  function pq(sel){ const d = psalterDoc(); return d ? d.querySelector(sel) : null; }
+  function psalterNow(){
+    const d = psalterDoc();
+    if (!d || !d.querySelector("[data-hour]")) return null;            /* the calendar page, or still loading */
+    const on = a => { const b = d.querySelector("[" + a + '][aria-pressed="true"]'); return b ? b.getAttribute(a) : null; };
+    const opts = sel => { const s = d.querySelector(sel); return s ? [...s.options].map(o => [o.value, o.textContent]) : []; };
+    return { book: on("data-book") || "psalter", week: +on("data-week"), day: +on("data-day"), hour: +on("data-hour"),
+      inBook: !d.querySelector(".book-picks").hidden, secs: opts("#sec"), sec: (pq("#sec") || {}).value, jumps: opts("#jump"), jump: (pq("#jump") || {}).value,
+      hours: [...d.querySelectorAll("[data-hour]")].map(b => b.textContent) };
+  }
+  function psPress(attr, v){ const b = pq("[" + attr + '="' + v + '"]'); if (b) b.click(); }
+  function psSelect(id, v){ const s = pq("#" + id); if (!s) return; s.value = v; s.dispatchEvent(new Event("change")); }
+  function psStep(dir){
+    const s = psalterNow(); if (!s) return;
+    if (s.inBook){                                        /* in a book: its next or previous hour, then section */
+      const k = s.jumps.findIndex(j => j[0] === s.jump) + dir;
+      if (s.jump !== "" && k >= 0 && k < s.jumps.length) return psSelect("jump", s.jumps[k][0]);
+      const n = s.secs.findIndex(x => x[0] === s.sec) + dir;
+      if (n >= 0 && n < s.secs.length) psSelect("sec", s.secs[n][0]);
+      return;
+    }
+    let { week, day, hour } = s;                           /* the four-week psalter: hour by hour, Compline → Matins */
+    hour += dir;
+    if (hour > 4){ hour = 0; day++; if (day > 6){ day = 0; week = (week + 1) % 4; } }
+    if (hour < 0){ hour = 4; day--; if (day < 0){ day = 6; week = (week + 3) % 4; } }
+    if (week !== s.week) psPress("data-week", week);
+    if (day !== s.day) psPress("data-day", day);
+    psPress("data-hour", hour);
+    try { psalterFrame.contentWindow.scrollTo(0, 0); } catch(e){}
+  }
+  function drawPbar(){
+    const bar = $("pbar"); if (!bar) return;
+    const s = psalterNow(), sel = (id, list, val, title) => '<select id="' + id + '" title="' + title + '">' +
+      list.map(([v, t]) => '<option value="' + esc(String(v)) + '"' + (String(v) === String(val) ? " selected" : "") + '>' + esc(t) + '</option>').join("") + '</select>';
+    if (!s){
+      bar.innerHTML = '<button class="fb-btn" id="pbBack" title="Back to the psalter">‹ Psalter</button><span class="pb-mid"></span><button class="fb-btn" id="pbToday">Today</button>';
+    } else {
+      bar.innerHTML = '<button class="fb-arrow" id="pbPrev" title="Previous hour">‹</button>' +
+        sel("pbBook", PS_BOOKS, s.book, "Book") +
+        (s.inBook
+          ? sel("pbSec", s.secs, s.sec, "Section") + sel("pbJump", s.jumps, s.jump, "Hour in this section")
+          : sel("pbWeek", [[0, "I"], [1, "II"], [2, "III"], [3, "IV"]], s.week, "Week") +
+            sel("pbDay", PS_DAYS.map((d, k) => [k, d.slice(0, 3)]), s.day, "Day") +
+            sel("pbHour", s.hours.map((h, k) => [k, h]), s.hour, "Hour")) +
+        '<button class="fb-btn" id="pbToday" title="Today, this hour">Today</button>' +
+        '<button class="fb-btn" id="pbCal" title="The ordo: calendar for the year">📅</button>' +
+        '<button class="fb-btn" id="pbPage" title="Go to a page number in this book">p.</button>' +
+        '<button class="fb-arrow" id="pbNext" title="Next hour">›</button>';
+    }
+    const on = (id, ev, fn) => { const el = bar.querySelector("#" + id); if (el) el[ev] = fn; };
+    on("pbPrev", "onclick", () => psStep(-1));
+    on("pbNext", "onclick", () => psStep(1));
+    on("pbBook", "onchange", e => psPress("data-book", e.target.value));
+    on("pbWeek", "onchange", e => psPress("data-week", e.target.value));
+    on("pbDay", "onchange", e => psPress("data-day", e.target.value));
+    on("pbHour", "onchange", e => psPress("data-hour", e.target.value));
+    on("pbSec", "onchange", e => psSelect("sec", e.target.value));
+    on("pbJump", "onchange", e => { if (e.target.value !== "") psSelect("jump", e.target.value); });
+    on("pbCal", "onclick", () => { const a = pq(".cal-btn"); if (a) a.click(); });
+    on("pbPage", "onclick", () => { const b = pq("#page-btn"); if (b) b.click(); });
+    const home = () => { psalterFrame.src = PSALTER_URL; };
+    on("pbBack", "onclick", home);
+    on("pbToday", "onclick", () => { try { psalterFrame.contentWindow.location.replace(PSALTER_URL); } catch(e){ home(); } });
+    psalterFit();
+  }
+  /* redraw whenever the psalter changes what it shows */
+  let pbarWatch = null, pbarT = null;
+  function watchPsalter(){
+    if (pbarWatch) pbarWatch.disconnect();
+    const d = psalterDoc(); drawPbar();
+    const nav = d && d.querySelector(".pickbar");
+    if (!nav) return;
+    pbarWatch = new MutationObserver(() => { clearTimeout(pbarT); pbarT = setTimeout(drawPbar, 60); });
+    pbarWatch.observe(nav, { subtree: true, attributes: true, attributeFilter: ["aria-pressed", "hidden"], childList: true, characterData: true });
+  }
+  function psalterReload(){ if (psalterFrame) try { psalterFrame.contentWindow.location.reload(); } catch(e){} }
+  function psalterOn(){ return document.body.classList.contains("psalter-on"); }
+  function openPsalter(){
+    if (!psalterFrame){
+      psalterFrame = document.createElement("iframe");
+      psalterFrame.id = "psalterFrame"; psalterFrame.title = "Monastic Psalter";
+      psalterFrame.addEventListener("load", () => { psalterDress(); watchPsalter(); });
+      const bar = document.createElement("div"); bar.id = "pbar"; bar.className = "fbar pbar";
+      document.body.appendChild(bar);
+      psalterFrame.src = PSALTER_URL;
+      document.body.appendChild(psalterFrame);
+    }
+    psalterDress();
+    document.body.classList.add("psalter-on");
+    psalterFit();
+    $("btnPsalter").querySelector(".ic").textContent = "❦"; $("btnPsalter").querySelector(".lb").textContent = "Bible";
+    $("btnPsalter").title = "Back to the Bible";
+  }
+  function closePsalter(){
+    document.body.classList.remove("psalter-on");
+    $("btnPsalter").querySelector(".ic").textContent = "♫"; $("btnPsalter").querySelector(".lb").textContent = "Psalter";
+    $("btnPsalter").title = "The Monastic Psalter (Saint Bernard Abbey)";
+  }
+  /* the frame fills the screen above the bottom bar (phones), or below it (wider screens, where the bar sits on top) */
+  function psalterFit(){
+    const bar = document.querySelector(".actions.main-bar"), r = bar.getBoundingClientRect(), root = document.documentElement.style;
+    if (getComputedStyle(bar).position === "fixed"){ root.setProperty("--barH", Math.ceil(r.height) + "px"); root.setProperty("--barTop", "0px"); }
+    else { root.setProperty("--barTop", Math.ceil(r.bottom) + "px"); root.setProperty("--barH", "0px"); }
+    const pb = $("pbar"); if (pb) root.setProperty("--pbarH", Math.ceil(pb.offsetHeight) + "px");
+  }
+  addEventListener("resize", () => { if (psalterOn()) psalterFit(); });
+  $("btnPsalter").onclick = () => psalterOn() ? closePsalter() : openPsalter();
+  /* any other bottom button (except the timer) leaves the psalter first, then does its work */
+  document.querySelector(".actions.main-bar").addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (b && psalterOn() && b.id !== "btnPsalter" && b.id !== "btnTimer") closePsalter();
+  }, true);
   $("btnSearch").onclick = () => renderSearch();
   $("btnFavs").onclick = renderFavorites;
   $("btnReadings").onclick = () => renderReadings();
@@ -3838,10 +4217,7 @@ const LuminaCore = (function () {
   function openScriptorium(mode){
     const go = () => window.Scriptorium.open(view, typeof mode === "string" ? mode : undefined);
     if (window.Scriptorium) return go();
-    const s = document.createElement("script");
-    s.src = "scriptorium.js?v=19"; s.onload = go;
-    s.onerror = () => showToast("Couldn't load Scriptorium. Check the connection.");
-    document.body.appendChild(s);
+    loadScriptorium().then(go, () => showToast("Couldn't load Scriptorium. Check the connection."));
   }
   window.LuminaNav = {
     ccc(n){ loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(n); }); },

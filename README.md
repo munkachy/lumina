@@ -22,6 +22,17 @@ is the licensed way to display these copyrighted translations.
 
 ## Features
 
+- **Floating chapter bar** — in a chapter, a thin bar stays at the top as you scroll:
+  ‹ previous chapter · Book · Chapter · Verse (jumps within the chapter and lights the verse) ·
+  ♡ save the chapter · Summary (opens in the bar, so you keep your place) · › next chapter.
+  The bottom bar's **Timer** works like ⏱ at the top, showing the time left.
+- **♫ Psalter** — the Monastic Psalter of Saint Bernard Abbey (munkachy/sing-with-us, `psalter/`),
+  shown inside Lumina: tap Psalter, and ❦ Bible to come back; each keeps its place. It is the
+  monks' own page, unchanged, in a frame: its theme follows Lumina's (parchment → Cloister,
+  dark → Habit, LCARS → Stained glass), with Lumina's own thin bar in place of its header and rows
+  of buttons (‹ previous hour · Book · Week · Day · Hour · Today · 📅 ordo · p. page · next hour ›;
+  in Advent, Lent or Saints, the book's Section and Hour), and everything it keeps on the device (the unlock key,
+  notes, marks, choices) travels in Lumina's encrypted sync, so other devices arrive unlocked.
 - **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
   wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
   minutes left. At the end: a chime, or a chime and then a sentence you write, said in your
@@ -151,8 +162,18 @@ To update later, upload the changed files again the same way.
 | `vox/` | The voice: Vox Machina's eSpeak NG engine and effects (GPL v3, see `vox/lib/ESPEAK-NG-LICENSE.txt`), and `lumina-voice.js`, which reads Lumina aloud |
 | `data-docs.js` | Church documents: ten of Vatican II, *Veritatis Splendor*, *Reconciliatio et Paenitentia* (loads when first selected; built by `tools/build-docs.py` from vatican.va and `tools/councils/`) |
 
-Favorites, highlights, notes, search history, and plan progress live in your
-browser's local storage — private to each device, no account required.
+Favorites, highlights, notes, search history, and plan progress are saved on the device at once.
+**With Scriptorium set up, they are also kept on GitHub**: compressed, encrypted with the
+Scriptorium password, and stored as comments on the relay repo's "Lumina data" issue. Lumina sends
+changes a few seconds after you make them and fetches new ones when it opens, merging both ways
+(edits and deletions on either device carry over). Everything else you choose travels too:
+your reading place, translation, theme, text size, timer and voice settings, Scriptorium's display
+settings. Opening Lumina on another device takes you to where you stopped. A running timer stays on its
+device. Your Grail file is kept too, encrypted in the private relay, so a new or cleared device
+gets it back without importing it again; replacing or removing it on one device does the same on
+the others. It is never shared with anyone. They survive a lost phone or a cleared browser,
+and match on every device where Scriptorium is unlocked. *Favs → ⇪ Back up & export* shows the
+last sync, a *Sync now* button, and a switch to turn it off.
 **⇪ Back up & export** (on the Favorites screen) saves them as a file you can keep anywhere;
 on a phone the share sheet offers *Save to Files → Google Drive*. **Restore** reads a backup
 back in on this or another device, adding what is missing and never removing anything.
@@ -170,7 +191,8 @@ device only:
    the Files app, iCloud Drive or Google Drive.
 2. In Lumina, open the **Book** menu and choose **Grail Psalms file…** (or simply choose
    **Grail Psalms**), then **Choose your Grail file**.
-3. That is all. The file is kept in this browser on this device, and never sent anywhere.
+3. That is all. The file is kept in this browser on this device, and, if Scriptorium sync is on,
+   encrypted in your private relay so your other devices get it; it is never shared.
    Do it once on each phone or computer. **Grail Psalms file…** also replaces or removes it.
 
 On an iPhone, Safari may clear a site's storage if the site is not opened for about a week;

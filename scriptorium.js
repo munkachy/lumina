@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 19;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 24;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -28,7 +28,7 @@
   }, readJSON(PREFS) || {});
 
   function readJSON(key) { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch (e) { return null; } }
-  function savePrefs() { try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch (e) {} applyPrefs(); }
+  function savePrefs() { try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch (e) {} applyPrefs(); if (window.LuminaSync) window.LuminaSync.changed(); }   // kept on GitHub with Lumina's data
 
   /* ---------- illuminated initials ---------- */
   function illum(letter) {   // the illuminated initials; LCARS spells the words out instead
@@ -342,7 +342,32 @@
   let mindMeta = { merges: {} };   // his merges of one keyword into another, kept as one encrypted comment
   let mindMode = false;
   const mindKey = (r) => { const c = (r && r.content) || ""; return c.length + ":" + c.slice(0, 60); };
-  const mindSaved = (r) => !!((data.mindSaved || {})[mindKey(r)]);
+  /* One answer can hold several notebook entries, each under its own heading. headingSplit finds the
+     highest heading level (#, ## or ###) used at least twice and cuts the answer there (text before the
+     first heading, a greeting say, is left out). If every part has its own Topics or Keywords line the answer is split
+     without asking; otherwise the first tap asks "save as N entries, or as one?" and remembers the answer. */
+  function headingSplit(content) {
+    const c = content || "";
+    for (let lvl = 1; lvl <= 4; lvl++) {
+      const re = new RegExp("^#{" + lvl + "}(?!#)\\s+(.+)$", "gm"), hits = [...c.matchAll(re)];
+      if (hits.length < 2) continue;
+      const parts = hits.map((m, k) => c.slice(m.index, k + 1 < hits.length ? hits[k + 1].index : c.length).trim());
+      return { parts, titles: hits.map((m) => m[1].replace(/[*#]+$/, "").trim()) };
+    }
+    return null;
+  }
+  const splitChoice = (r) => (data.mindSplit || {})[mindKey(r)];
+  function mindParts(r) {
+    const c = (r && r.content) || "", hs = headingSplit(c), choice = splitChoice(r);
+    if (!hs || choice === false) return [c];
+    if (choice === true || hs.parts.every((p) => /\b(Topics|Keywords)\**\s*:/i.test(p))) return hs.parts;
+    return [c];
+  }
+  const mindAsks = (r) => { const hs = headingSplit(r && r.content); return !!hs && splitChoice(r) === undefined && mindParts(r).length === 1; };
+  const mindSaved = (r) => mindParts(r).every((p) => (data.mindSaved || {})[mindKey({ content: p })]);
+  const mindLabel = (r, saved) => { const n = mindParts(r).length;
+    return n > 1 ? (saved ? "🧠 " + n + " entries in mind map ✓" : "🧠 Save " + n + " entries to mind map")
+      : (saved ? "🧠 In mind map ✓" : "🧠 Save to mind map" + (mindAsks(r) ? "…" : "")); };
 
   async function mindIssue() {
     if (data.mindIssue) return data.mindIssue;
@@ -373,38 +398,56 @@
 
   function entryFrom(turn) {
     const c = turn.reply.content || "";
-    const title = ((c.match(/^###\s+(.+)$/m) || [])[1] || turn.text.slice(0, 60)).trim();
-    const topics = ((c.match(/\*\*Topics:\*\*\s*(.+)/) || [])[1] || "").split(";").map((t) => t.trim()).filter(Boolean);
-    const qpart = (c.split("**Questions**")[1] || "").split(/\n\s*\*\*/)[0];
+    const title = ((c.match(/^#{1,6}\s+(.+)$/m) || [])[1] || turn.text.slice(0, 60)).replace(/[*#]+$/, "").trim();
+    const topics = ((c.match(/\**Topics\**\s*:\**\s*(.+)/i) || [])[1] || "").split(/[;,]/).map((t) => t.replace(/\*+/g, "").trim()).filter(Boolean);
+    const qpart = (c.split(/\**Questions\**\s*:?\**/i)[1] || "").split(/\n\s*\*\*/)[0];
     const questions = [...qpart.matchAll(/^\s*[-•*]\s+(.+)$/gm)].map((m) => m[1].trim());
-    const kw = (c.split("**Keywords:**")[1] || "").trim().split(/\n\s*\n/)[0];
+    const kw = (c.split(/\**Keywords\**\s*:\**/i)[1] || "").trim().split(/\n\s*\n/)[0];
     const keywords = kw.split(/\s*[·;,\n]\s*/).map((k) => k.replace(/^[\s*\-–•]+|[\s*.]+$/g, "")).filter(Boolean).slice(0, 12);
     return { date: new Date().toISOString(), title, keywords, topics, questions, text: c, note: turn.text, refs: turn.reply.refs || [] };
   }
 
   async function toggleMind(turn, btn) {
+    if (!mindSaved(turn.reply) && mindAsks(turn.reply)) {          // several headings: ask how to save it
+      const hs = headingSplit(turn.reply.content);
+      sheet("<h3>Save to the mind map</h3><p class=\"scr-hint\">This answer has " + hs.parts.length + " parts:</p><ol>" +
+        hs.titles.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ol>" +
+        '<div class="scr-appr-b"><button class="scr-primary" id="mmSplit">Save as ' + hs.parts.length + ' entries</button><button id="mmOne">Save as one</button></div>');
+      const go = async (split) => { data.mindSplit = data.mindSplit || {}; data.mindSplit[mindKey(turn.reply)] = split; closeSheet(); await toggleMind(turn, btn); };
+      $("#mmSplit").onclick = () => go(true);
+      $("#mmOne").onclick = () => go(false);
+      return;
+    }
     btn.disabled = true;
-    const key = mindKey(turn.reply);
     data.mindSaved = data.mindSaved || {};
+    const parts = mindParts(turn.reply), whole = mindKey(turn.reply);
+    const drop = async (key) => {
+      const cid = data.mindSaved[key]; if (!cid) return;
+      await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + cid).catch(() => {});
+      delete data.mindSaved[key];
+      if (mind) mind = mind.filter((m) => m.cid !== cid);
+    };
     try {
-      if (data.mindSaved[key]) {
-        const cid = data.mindSaved[key];
-        await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + cid).catch(() => {});
-        delete data.mindSaved[key];
-        if (mind) mind = mind.filter((m) => m.cid !== cid);
+      if (mindSaved(turn.reply)) {                       // in the map: take it (all of its entries) out
+        for (const p of parts) await drop(mindKey({ content: p }));
       } else {
-        const entry = entryFrom(turn);
-        const c = await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments",
-          { body: MARK("mind") + "\n" + (await encryptText(S.keys, JSON.stringify(entry))) });
-        data.mindSaved[key] = c.id;
-        if (mind) mind.unshift({ cid: c.id, ...entry });
+        if (parts.length > 1) await drop(whole);         // saved earlier as one lump: replace it with its entries
+        for (const p of parts) {
+          const key = mindKey({ content: p });
+          if (data.mindSaved[key]) continue;
+          const entry = entryFrom({ text: turn.text, reply: { content: p, refs: turn.reply.refs } });
+          const c = await gh("POST", "/repos/" + S.repo + "/issues/" + (await mindIssue()) + "/comments",
+            { body: MARK("mind") + "\n" + (await encryptText(S.keys, JSON.stringify(entry))) });
+          data.mindSaved[key] = c.id;
+          if (mind) mind.unshift({ cid: c.id, ...entry });
+        }
       }
       await saveVault();
     } catch (e) { alert("Couldn't update the mind map: " + e.message); }
     btn.disabled = false;
-    const saved = !!data.mindSaved[key];
+    const saved = mindSaved(turn.reply);
     btn.classList.toggle("on", saved);
-    btn.textContent = saved ? "🧠 In mind map ✓" : "🧠 Save to mind map";
+    btn.textContent = mindLabel(turn.reply, saved);
   }
 
   const mindView = { range: "all", view: "cloud", open: null, merging: false, pick: null, zoom: 1, panX: 0, panY: 0 };
@@ -681,8 +724,14 @@
     window.scrollTo(0, document.documentElement.scrollHeight);
   }
 
+  const turnId = (t) => t.id || (t.id = Math.random().toString(36).slice(2, 10));
   function renderTurn(t, i) {
-    return '<div class="scr-turn"><div class="scr-u">' + esc(t.text) + '</div><div class="scr-a" data-i="' + i + '">' + renderReply(t.reply, false) + "</div></div>";
+    return '<div class="scr-turn"><div class="scr-u">' + esc(t.text) + '</div><div class="scr-a" data-i="' + i + '" data-tid="' + turnId(t) + '">' + renderReply(t.reply, false) + "</div></div>";
+  }
+  /* the turn an answer on screen belongs to: by its id, which doesn't shift when old turns drop off */
+  function turnOf(a) {
+    const h = data.history[tab] || [];
+    return (a.dataset.tid && h.find((t) => t.id === a.dataset.tid)) || h[+a.dataset.i];
   }
 
   function words(t) { return (t.match(/\S+/g) || []).length; }
@@ -705,7 +754,7 @@
     if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
     if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button>' +
-      (tab === "faith" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + (mindSaved(r) ? "🧠 In mind map ✓" : "🧠 Save to mind map") + "</button>" : "") + "</div>";
+      (tab === "faith" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + mindLabel(r, mindSaved(r)) + "</button>" : "") + "</div>";
     return h;
   }
 
@@ -766,8 +815,9 @@
     if (sp) { if (speaking === sp) stopSpeaking(); else { const reply = replyFor(sp); speak(reply && reply.content, sp); } return; }
     const mb = e.target.closest("[data-mind]");
     if (mb) {
-      const a = mb.closest(".scr-a"), turn = a && (data.history[tab] || [])[+a.dataset.i];
+      const a = mb.closest(".scr-a"), turn = a && turnOf(a);
       if (turn) toggleMind(turn, mb);
+      else alert("Couldn't find this answer. Close Scriptorium and open it again, then try once more.");
       return;
     }
     const cp = e.target.closest("[data-copy]");
@@ -777,7 +827,7 @@
     const a = el.closest(".scr-a");
     if (!a) return null;
     if (a.id === "scrLive") return current && current.state;
-    return ((data.history[tab] || [])[+a.dataset.i] || {}).reply;
+    return (turnOf(a) || {}).reply;
   }
 
   /* ---------- reading without being pulled to the bottom ---------- */
@@ -882,7 +932,7 @@
     if (!view || !document.body.classList.contains("scr-on")) return;
     if (wasCurrent && job.tab === tab) {
       const stick = atBottom(), live = $("#scrLive");
-      if (live) { live.removeAttribute("id"); live.dataset.i = data.history[tab].length - 1; live.innerHTML = renderReply(st, false); }
+      if (live) { const h = data.history[tab]; live.removeAttribute("id"); live.dataset.i = h.length - 1; live.dataset.tid = turnId(h[h.length - 1]); live.innerHTML = renderReply(st, false); }
       if (!stick) newPill(true);
       if (prefs.autoRead && st.content) speak(st.content, live && $("[data-speak]", live));
     }
@@ -1254,5 +1304,71 @@ details[open]>summary .chev{transform:rotate(45deg)}
     document.head.appendChild(st);
   }
 
-  window.Scriptorium = { open };
+
+  /* ---------- Lumina's saved data: highlights, notes, favorites, plans and settings, kept in the
+     relay repo's "Lumina data" issue, so they are safe off the phone and the same on every device.
+     The data is compressed and sealed with the Scriptorium key (GitHub holds only scrambled text),
+     then split into comments under GitHub's 65,536-character limit. A save writes the new set
+     first and only then removes the old one, so a reader never meets half a save. ---------- */
+  const DATA_TITLE = "Lumina data", DATA_PART = 40000;
+  async function quietOpen() {          // unlock with the key kept on this device, showing nothing
+    if (S) return true;
+    if (!readVault()) return false;
+    const keys = await recallKeys();
+    if (!keys) return false;
+    try { await openWith(keys); return true; } catch (e) { S = null; return false; }
+  }
+  async function dataIssue() {
+    if (data.dataIssue) return data.dataIssue;
+    const found = (await gh("GET", "/repos/" + S.repo + "/issues?state=all&per_page=100") || []).find((i) => i.title === DATA_TITLE);
+    data.dataIssue = found ? found.number :
+      (await gh("POST", "/repos/" + S.repo + "/issues", { title: DATA_TITLE, body: "Lumina's highlights, notes and favorites. Encrypted with your Scriptorium password." })).number;
+    await saveVault();
+    return data.dataIssue;
+  }
+  async function squeeze(text) {        // gzip, as base64 (plain text where the browser cannot)
+    if (!window.CompressionStream) return { z: 0, s: text };
+    const out = new Uint8Array(await new Response(new Blob([enc.encode(text)]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer());
+    return { z: 1, s: b64(out) };
+  }
+  async function unsqueeze(z, s) {
+    if (!z) return s;
+    return dec.decode(await new Response(new Blob([unb64(s)]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer());
+  }
+  async function dataComments(kind = "lumdata") {
+    const issue = await dataIssue(), out = [];
+    for (let page = 1; page < 50; page++) {
+      const batch = await gh("GET", "/repos/" + S.repo + "/issues/" + issue + "/comments?per_page=100&page=" + page) || [];
+      for (const c of batch) {
+        if (!c.body.startsWith(MARK(kind))) continue;
+        try { out.push({ cid: c.id, ...JSON.parse(await decryptText(S.keys, c.body.slice(MARK(kind).length).trim())) }); }
+        catch (e) { out.push({ cid: c.id, bad: true }); }
+      }
+      if (batch.length < 100) break;
+    }
+    return out;
+  }
+  async function loadData(kind) {       // the newest complete save, or null if there is none yet
+    const parts = await dataComments(kind), sets = {};
+    parts.filter((p) => !p.bad).forEach((p) => { (sets[p.v] = sets[p.v] || []).push(p); });
+    const whole = Object.values(sets).filter((ps) => ps.length === ps[0].n).sort((a, b) => b[0].t - a[0].t)[0];
+    if (!whole) return null;
+    whole.sort((a, b) => a.i - b.i);
+    return JSON.parse(await unsqueeze(whole[0].z, whole.map((p) => p.part).join("")));
+  }
+  async function storeData(obj, kind = "lumdata") {
+    const old = await dataComments(kind), issue = await dataIssue();
+    const { z, s } = await squeeze(JSON.stringify(obj));
+    const v = Date.now().toString(36) + Math.random().toString(36).slice(2, 6), t = Date.now();
+    const n = Math.max(1, Math.ceil(s.length / DATA_PART));
+    for (let i = 0; i < n; i++)
+      await gh("POST", "/repos/" + S.repo + "/issues/" + issue + "/comments",
+        { body: MARK(kind) + "\n" + (await encryptText(S.keys, JSON.stringify({ v, t, i, n, z, part: s.slice(i * DATA_PART, (i + 1) * DATA_PART) }))) });
+    for (const c of old) await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.cid).catch(() => {});
+  }
+  async function removeData(kind) {     // e.g. the Grail file, removed on purpose
+    for (const c of await dataComments(kind)) await gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.cid).catch(() => {});
+  }
+
+  window.Scriptorium = { open, data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
 })();
