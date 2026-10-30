@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 24;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 25;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -871,7 +871,15 @@
     web = false;
   }
 
-  function hello() { request({ kind: "hello" }, true); checkUpdate(false); }
+  function hello() { request({ kind: "hello" }, true); checkUpdate(false); syncMindSaved(); }
+  async function syncMindSaved() {   // forget "saved" marks for entries no longer in the mind map (removed elsewhere)
+    if (!data.mindSaved || !Object.keys(data.mindSaved).length) return;
+    try { await loadMind(); } catch (e) { return; }
+    const live = new Set(mind.map((m) => String(m.cid)));
+    let changed = false;
+    for (const k of Object.keys(data.mindSaved)) if (!live.has(String(data.mindSaved[k]))) { delete data.mindSaved[k]; changed = true; }
+    if (changed) { await saveVault(); if (!mindMode && view && document.body.classList.contains("scr-on")) renderMain(); }
+  }
   document.addEventListener("visibilitychange", () => { if (!document.hidden && S) checkUpdate(false); });   // back in the app: anything new?
 
   async function request(req, quiet) {
