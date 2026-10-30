@@ -481,7 +481,8 @@
     const box = $("#scrCompose"); if (box) box.style.display = "none";
     view.innerHTML = '<div class="scr-mind">' + mindHead() + '<p class="scr-hint">Loading…</p></div>';
     view.onclick = mindClick;
-    try { if (!mind) await loadMind(); } catch (e) { $(".scr-hint", view).textContent = "Couldn't load the mind map: " + e.message; return; }
+    // always read it afresh: entries added or removed elsewhere (the Mac, another device) must show here
+    try { await loadMind(); } catch (e) { if (!mind) { $(".scr-hint", view).textContent = "Couldn't load the mind map: " + e.message; return; } }
     drawMind();
   }
 
