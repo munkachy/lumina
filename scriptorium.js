@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 33;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 34;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1090,10 +1090,26 @@
      pieces, Whisper transcribes it there, and the text comes back as it forms ---------- */
   const blobToB64 = (blob) => blob.arrayBuffer().then((b) => b64(new Uint8Array(b)));
 
+  /* The microphone is kept open between recordings (released after 10 idle minutes, or when Lumina is
+     left), so the phone asks permission once a session rather than for every note. */
+  let micStream = null, micRelease = null;
+  async function microphone() {
+    clearTimeout(micRelease);
+    if (micStream && micStream.getAudioTracks().some((t) => t.readyState === "live")) return micStream;
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    return micStream;
+  }
+  function releaseMicrophone() {
+    clearTimeout(micRelease);
+    if (micStream) micStream.getTracks().forEach((t) => t.stop());
+    micStream = null;
+  }
+  document.addEventListener("visibilitychange", () => { if (document.hidden && !voice) releaseMicrophone(); });
+
   async function startVoice() {
     const box = $("#scrText");
     let stream;
-    try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+    try { stream = await microphone(); }
     catch (e) { return alert("Lumina couldn't use the microphone. Allow it in the browser's settings and try again."); }
     const mime = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm"].find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || "";
     const rec = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
@@ -1113,8 +1129,9 @@
 
   function stopVoice() {
     if (!voice) return;
-    voice.rec.stop();
-    voice.stream.getTracks().forEach((t) => t.stop());
+    voice.rec.stop();   // the microphone itself stays open for the next note, for 10 minutes
+    clearTimeout(micRelease);
+    micRelease = setTimeout(releaseMicrophone, 10 * 60000);
     const b = $('#scrCompose [data-act="mic"]'); if (b) { b.textContent = "…"; b.disabled = true; }
   }
 
