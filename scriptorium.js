@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 52;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 53;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -263,6 +263,8 @@
           esc(m.name.replace(/^Mr\. /, "")) + "</button>").join("") + "</span>" +
         '<span class="grow"></span>' +
         '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
+        '<button class="scr-ib" data-act="size" title="' + ($("#scrCompose").classList.contains("full") ? "Smaller" : "Full screen") + '">' +
+          ($("#scrCompose").classList.contains("full") ? "⤡" : "⤢") + "</button>" +
         (ch.busy ? '<button class="scr-send stop" data-act="chstop" title="Stop everyone">■</button>' : '<button class="scr-send" data-act="send" title="Send">↑</button>');
       return;
     }
@@ -768,15 +770,8 @@
           draw((st && st.convs) || []);
         } else if (open) {
           sheet("<h3>Opening…</h3>");
-          const st = await request({ kind: "openconv", conv: +open.dataset.open }, true);
-          if (!st || !st.messages) return sheet("<h3>Couldn't open it</h3><p class=\"scr-hint\">" + esc((st && st.error) || "Your Mac didn't answer.") + "</p>");
-          const turns = [];
-          ((st && st.messages) || []).forEach((m) => {
-            if (m.role === "user") turns.push({ text: m.content, reply: { content: "", done: true } });
-            else if (turns.length) { turns[turns.length - 1].reply.content = m.content; turns[turns.length - 1].reply.refs = m.refs || []; }
-          });
-          data.conv[kindNow] = +open.dataset.open; data.history[kindNow] = turns;
-          await saveVault();
+          const err = await loadConv(kindNow, +open.dataset.open);
+          if (err) return sheet("<h3>Couldn't open it</h3><p class=\"scr-hint\">" + esc(err) + "</p>");
           closeSheet(); tab = kindNow; renderMain();
         }
       };
@@ -889,11 +884,41 @@
     };
   }
 
+  /* A conversation from the Mac into this device's history (the Chats sheet, and the sync below) */
+  async function loadConv(kind, id) {
+    const st = await request({ kind: "openconv", conv: id }, true);
+    if (!st || !st.messages) return (st && st.error) || "Your Mac didn't answer.";
+    const turns = [];
+    st.messages.forEach((m) => {
+      if (m.role === "user") turns.push({ text: m.content, reply: { content: "", done: true } });
+      else if (turns.length) { turns[turns.length - 1].reply.content = m.content; turns[turns.length - 1].reply.refs = m.refs || []; }
+    });
+    data.conv[kind] = id; data.history[kind] = turns.slice(-30);
+    (data.seen = data.seen || {})[kind] = Date.now() / 1000;
+    await saveVault();
+    return "";
+  }
+  /* Opening a room on any device: if the Mac's latest conversation there is newer than what this device shows (it
+     was carried on from the phone, say, or the desktop), bring it in. Checked at most once a minute per room. */
+  const synced = {};
+  async function syncRoom(kind) {
+    if (current || (synced[kind] && Date.now() - synced[kind] < 60000)) return;
+    synced[kind] = Date.now();
+    const st = await request({ kind: "convs", tab: kind }, true);
+    const top = st && st.convs && st.convs[0];
+    if (!top || current) return;
+    const seen = (data.seen && data.seen[kind]) || 0;
+    if (top.id === data.conv[kind] && top.updated <= seen + 2) return;
+    if (await loadConv(kind, top.id)) return;
+    if (tab === kind && !mindMode && !current) renderMain();
+  }
+
   /* ---------- the conversation ---------- */
   function renderMain() {
     chrome(true);
     if (tab === "chapter") return renderChapter();
     const tb = $("#scrText"); if (tb && !voice && /Chapter/.test(tb.placeholder)) tb.placeholder = "Message Scriptorium…";
+    if (tab !== "code") syncRoom(tab);
     const hist = data.history[tab] || [];
     view.innerHTML = '<div class="scr-thread" id="scrThread">' +
       (tab === "code" ? '<div class="scr-proj"><span>Project</span><select id="scrProject">' + (S.projects || []).map((p) =>
@@ -1118,6 +1143,7 @@
     if (st.done !== undefined) S.connected = true;
     if (job.tab) {
       if (st.conversation) data.conv[job.tab] = st.conversation;
+      (data.seen = data.seen || {})[job.tab] = Date.now() / 1000 + 5;   // this device is up to date with its own turn
       (data.history[job.tab] = data.history[job.tab] || []).push({ text: job.text, reply: st });
       data.history[job.tab] = data.history[job.tab].slice(-30);
       await saveVault();
