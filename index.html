@@ -152,6 +152,8 @@
 .prayers .pr-lit{margin:0 0 .7rem; padding:0; list-style:none; line-height:1.55}
 .prayers .pr-lit li{padding-left:1.2em; text-indent:-1.2em}
 .prayers .pr-lit i{color:var(--ink-soft)}
+.prayers .pr-lit li.pr-litp{padding-left:0; text-indent:0; margin:.35rem 0 .5rem}
+.prayers .pr-lit .pr-litp b{font-weight:600}
 .prayers .pr-today{text-align:center; font-style:italic; color:var(--ink-soft); margin:-.2rem 0 .8rem}
 .prayers .pr-bishop{font:inherit; color:var(--gold); background:none; border:none; border-bottom:1px dotted var(--gold-line);
   padding:0; cursor:pointer; text-indent:0}
@@ -1508,11 +1510,40 @@ const LuminaCore = (function () {
      Christianorum (encrypted in data-prayers.enc; the readable data-prayers.js stays on the Mac).
      The Auxilium set shows today's weekday prayer; the day row picks another. */
   const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  /* A litany, condensed so there is less to scroll: lines with the same answer become one
+     paragraph with the answer given once at the end, and lines that also open with the same
+     words ("Blood of Christ, …") say them once: "Blood of Christ… only-begotten Son of the
+     Eternal Father. …incarnate Word of God." Short runs (one or two lines) stay as they were. */
+  const litKey = r => (r || "").toLowerCase().replace(/[^a-z ]/g, "").trim();
+  const litHead = c => { const m = c.match(/^([^,]+),\s*(.+)$/); return m ? [m[1].trim(), m[2]] : [null, c]; };
+  const litTrim = t => t.trim().replace(/[,;:.]+$/, "");
+  function litanyBlock(lines){
+    const rows = lines.map(l => { const [call, resp] = l.split("|"); return { call: call.trim(), resp: (resp || "").trim() }; });
+    const out = [];
+    for (let i = 0; i < rows.length; ){
+      let j = i + 1;
+      if (rows[i].resp) while (j < rows.length && litKey(rows[j].resp) === litKey(rows[i].resp)) j++;
+      if (j - i < 3){
+        for (; i < j; i++) out.push('<li>' + esc(rows[i].call) + (rows[i].resp ? ' <i>' + esc(rows[i].resp) + '</i>' : '') + '</li>');
+        continue;
+      }
+      const run = rows.slice(i, j), parts = [];
+      for (let k = 0; k < run.length; ){
+        const [head] = litHead(run[k].call);
+        let m = k + 1;
+        if (head) while (m < run.length && litHead(run[m].call)[0] === head) m++;
+        if (m - k >= 2){
+          parts.push('<b>' + esc(head) + '</b>… ' + run.slice(k, m).map(r => esc(litTrim(litHead(r.call)[1]))).join(". …") + ".");
+        } else parts.push(esc(litTrim(run[k].call)) + ".");
+        k = m;
+      }
+      out.push('<li class="pr-litp">' + parts.join(" ") + ' <i>' + esc(litTrim(run[0].resp)) + '.</i></li>');
+      i = j;
+    }
+    return '<ul class="pr-lit">' + out.join("") + '</ul>';
+  }
   function prayerBlock(b){
-    if (Array.isArray(b)) return '<ul class="pr-lit">' + b.map(l => {
-      const [call, resp] = l.split("|");
-      return '<li>' + esc(call) + (resp ? ' <i>' + esc(resp) + '</i>' : '') + '</li>';
-    }).join("") + '</ul>';
+    if (Array.isArray(b)) return litanyBlock(b);
     const vr = b.match(/^([VR])\. (.*)$/);
     if (vr) return '<p class="pr-vr"><b>' + vr[1] + '.</b> ' + bishopIn(esc(vr[2])) + '</p>';
     if (/^_.*_$/.test(b)) return '<p class="pr-mid">' + esc(b.slice(1, -1)) + '</p>';
