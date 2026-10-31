@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 41;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 42;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1207,7 +1207,7 @@
     const st = document.createElement("style"); st.id = "scrStyle";
     st.textContent = `
 :root{--scr-bar-h:0px;--scr-a-size:1rem;--scr-a-font:Georgia,serif;--scr-t-size:.9rem;--scr-t-font:-apple-system,sans-serif}
-body.scr-on{padding-top:env(safe-area-inset-top);padding-bottom:calc(160px + var(--scr-bbar-h,0px))}
+body.scr-on{padding-top:calc(2.2rem + env(safe-area-inset-top));padding-bottom:calc(160px + var(--scr-bbar-h,0px))}
 .scr-illum{width:34px;height:34px;display:block;border-radius:6px;object-fit:cover}
 .scr-lcars{display:none;font-weight:700;letter-spacing:.08em;font-size:.8rem}
 :root[data-theme="lcars"] .scr-illum{display:none}
