@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 48;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 50;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -201,7 +201,7 @@
   }
 
   /* ---------- the fixed toolbar and message box ---------- */
-  const TABS = { faith: [illum("J"), "Journal"], armarium: [illum("A"), "Armarium"], mail: ["✉", "Mail"] };   // "faith" is the Journal (always the local AI); the Armarium is always Claude
+  const TABS = { faith: [illum("J"), "Journal"], armarium: [illum("A"), "Armarium"], chapter: ["⛪", "Chapter"] };   // Mail lives in ☰   // "faith" is the Journal (always the local AI); the Armarium is always Claude
   const MODES = [["eco", "Eco"], ["normal", "Normal"], ["turbo", "Turbo"]];
   const MODE_IC = { eco: "🌿", normal: "◐", turbo: "⚡" };
 
@@ -256,6 +256,14 @@
     const row = $("#scrCompose .scr-crow");
     if (!row) return;
     const full = $("#scrCompose").classList.contains("full");
+    if (tab === "chapter") {
+      const who = ch.to === "all" ? "All" : ((ch.members.find((m) => m.id === ch.to) || {}).name || ch.to);
+      row.innerHTML = '<button class="scr-chip" data-act="chto" title="Whom your message is for (or start it with @p, @w, @r)">To: ' + esc(who) + " ▾</button>" +
+        '<span class="grow"></span>' +
+        '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
+        (ch.busy ? '<button class="scr-send stop" data-act="chstop" title="Stop everyone">■</button>' : '<button class="scr-send" data-act="send" title="Send">↑</button>');
+      return;
+    }
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
@@ -316,6 +324,8 @@
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
+    else if (act === "chto") { const ids = ["all", ...ch.members.map((m) => m.id)]; ch.to = ids[(ids.indexOf(ch.to) + 1) % ids.length]; composerRow(); }
+    else if (act === "chstop") { if (confirm("Stop everyone in the Chapter?")) chapterOp({ op: "stop" }); }
   }
 
   async function newConversation() {
@@ -727,16 +737,20 @@
 
   /* ---------- past conversations (kept on the Mac) ---------- */
   async function openConvs() {
+    if (tab === "chapter") return sheet('<h3>Rooms</h3><p class="scr-hint">The Chapter keeps one running conversation.</p>' +
+      '<button class="scr-primary" id="scrToMail">✉ Mail</button>'), $("#scrToMail").onclick = () => { closeSheet(); tab = "mail"; renderMain(); };
     const kindNow = tab;
     sheet("<h3>" + PURPOSE[kindNow] + ' conversations</h3><p class="scr-hint">Asking your Mac…</p>');
+    const mailRow = kindNow === "mail" ? "" : '<p class="scr-small"><a href="#" id="scrToMail">✉ Mail</a> · the mail room</p>';
     const draw = (list) => {
       const when = (t) => new Date(t * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-      sheet("<h3>" + PURPOSE[kindNow] + " conversations</h3>" + (list.length ? list.map((c) =>
+      sheet("<h3>" + PURPOSE[kindNow] + " conversations</h3>" + mailRow + (list.length ? list.map((c) =>
         '<div class="scr-conv' + (c.id === data.conv[kindNow] ? " on" : "") + '" data-open="' + c.id + '"><span class="t">' + esc(c.title || "Untitled") +
         '</span><span class="d">' + when(c.updated) + '</span><button class="scr-del" data-del="' + c.id + '" title="Delete">🗑</button></div>').join("")
         : '<p class="scr-hint">No conversations yet.</p>'));
       const card = $(".scr-sheet-card");
       if (card) card.onclick = async (e) => {
+        if (e.target.id === "scrToMail") { e.preventDefault(); closeSheet(); tab = "mail"; return renderMain(); }
         const del = e.target.closest("[data-del]"), open = e.target.closest("[data-open]");
         if (del) {
           e.stopPropagation();
@@ -764,9 +778,104 @@
     draw((st && st.convs) || []);
   }
 
+  /* ---------- the Chapter: one room with every Claude account (chapter.py on the Mac) ----------
+     Messages are polled through the relay while the tab is open: every 8 s while someone works, 30 s otherwise. */
+  const ch = { messages: [], members: [], busy: false, since: 0, to: "all", timer: null, polling: false };
+  const CH_STATE = { working: ["●", "working"], reserve: ["◌", "reserve"], resting: ["○", "resting"], paused: ["⏸", "paused"],
+                     limit: ["⏸", "at its limit"], capped: ["⏸", "at today's cap"] };
+  async function chapterOp(req) {
+    if (ch.polling && req.op === "get") return;
+    ch.polling = true;
+    let st = null;
+    try { st = await request({ kind: "chapter", since: ch.since, ...req }, true); } catch (e) {}
+    ch.polling = false;
+    const c = st && st.chapter;
+    if (c) {
+      (c.messages || []).forEach((m) => { if (m.id > ch.since) { ch.messages.push(m); ch.since = m.id; } });
+      ch.messages = ch.messages.slice(-150);
+      ch.members = c.members || ch.members; ch.busy = !!c.busy;
+      if (tab === "chapter" && !mindMode) renderChapter();
+    }
+    clearTimeout(ch.timer);
+    if (tab === "chapter" && document.body.classList.contains("scr-on")) ch.timer = setTimeout(() => chapterOp({ op: "get" }), ch.busy ? 8000 : 30000);
+    return c;
+  }
+  function chapterSay(text) {
+    if (ch.to !== "all" && !/(^|\s)@\w/.test(text)) text = "@" + ch.to + " " + text;
+    ch.messages.push({ id: 0, who: "you", kind: "user", text, meta: {} }); renderChapter();
+    chapterOp({ op: "say", text });
+  }
+  function renderChapter() {
+    const box = $("#scrText"); if (box && !voice) box.placeholder = "Message the Chapter… (@p, @w or @r for one)";
+    const names = Object.fromEntries(ch.members.map((m) => [m.id, m]));
+    const chips = ch.members.map((m) => {
+      const [dot, word] = CH_STATE[m.state] || ["○", m.state];
+      const pct = m.cap ? Math.round(100 * ((m.used && m.used.cost) || 0) / m.cap) : 0;
+      const full = m.context && m.context.window ? Math.round(100 * m.context.used / m.context.window) : null;
+      return '<button class="ch-chip st-' + m.state + '" data-chm="' + m.id + '" style="--c:' + m.color + '"><b>' + dot + " " + esc(m.name) + "</b>" +
+        "<span>" + (m.doing ? esc(m.doing) : esc(word) + (m.state === "limit" && m.rest_until ? " · back " + esc(m.rest_until) : " · " + pct + "% today" + (full != null ? " · session " + full + "%" : ""))) + "</span></button>";
+    }).join("");
+    const msgs = ch.messages.map((m) => {
+      if (m.who === "you") return '<div class="scr-turn"><div class="scr-u">' + esc(m.text) + "</div></div>";
+      if (m.who === "room") {
+        const mem = m.meta && m.meta.member, offer = m.meta && m.meta.offer;
+        const btns = (offer ? ch.members.filter((o) => o.id !== mem).map((o) => '<button data-chgive="' + o.id + '" data-text="' + esc(offer) + '">Give to ' + esc(o.name) + "</button>").join("") : "") +
+          (mem && names[mem] && names[mem].state !== "working" ? '<button data-chwake="' + mem + '">Wake ' + esc(names[mem].name) + "</button>" : "") +
+          (m.meta && m.meta.fresh && mem ? '<button data-chfresh="' + mem + '">Fresh session</button>' : "");
+        return '<div class="ch-card">⚠︎ ' + esc(m.text) + (btns ? '<div class="ch-btns">' + btns + "</div>" : "") + "</div>";
+      }
+      const mem = names[m.who] || { name: m.who, color: "#888" };
+      return '<div class="ch-msg' + (m.kind === "plan" ? " ch-plan" : "") + '" style="--c:' + mem.color + '"><div class="ch-who">' + esc(mem.name) +
+        (m.meta && m.meta.steps ? ' <span class="ch-meta">' + m.meta.steps + " steps</span>" : "") + "</div>" +
+        '<div class="scr-md">' + md(m.text || "", []) + "</div>" +
+        (m.kind === "plan" ? '<div class="ch-btns"><button class="scr-primary" data-chok="' + m.id + '">Approve</button><button data-chchange="' + m.who + '">Change</button></div>' : "") + "</div>";
+    }).join("");
+    view.innerHTML = '<div class="ch-members">' + chips + "</div>" +
+      '<div class="scr-thread" id="scrThread">' + (msgs || '<div class="scr-empty"><p>The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. ' +
+        "Write to everyone, or start with @p, @w or @r for one of them.</p></div>") + "</div>";
+    view.onclick = chapterClick;
+    composerRow();
+    window.scrollTo(0, document.documentElement.scrollHeight);
+    if (!ch.timer && !ch.polling) chapterOp({ op: "get" });
+  }
+  function chapterClick(e) {
+    const t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.chok) { t.disabled = true; chapterOp({ op: "approve", msg: +t.dataset.chok }); }
+    else if (t.dataset.chchange) { const box = $("#scrText"); box.value = "@" + t.dataset.chchange + " Change the plan: "; box.focus(); }
+    else if (t.dataset.chgive) chapterSay("@" + t.dataset.chgive + " " + t.dataset.text);
+    else if (t.dataset.chfresh) { t.disabled = true; chapterOp({ op: "fresh", id: t.dataset.chfresh }); }
+    else if (t.dataset.chwake) chapterOp({ op: "member", id: t.dataset.chwake, changes: { state: "working" } });
+    else if (t.dataset.chm) chapterMember(t.dataset.chm);
+  }
+  function chapterMember(id) {
+    const m = ch.members.find((x) => x.id === id); if (!m) return;
+    const seg = (key, opts) => '<div class="scr-seg">' + opts.map(([v, l]) => '<button data-chset="' + key + ":" + v + '" class="' + (String(m[key]) === String(v) ? "on" : "") + '">' + l + "</button>").join("") + "</div>";
+    sheet("<h3>" + esc(m.name) + "</h3>" + (m.signed_in || m.via === "app" ? "" : '<p class="scr-hint">Not signed in on the Mac yet.</p>') +
+      '<div class="scr-pref"><div class="scr-pref-l">State</div>' + seg("state", [["working", "Working"], ["reserve", "Reserve"], ["resting", "Resting"]]) + "</div>" +
+      '<div class="scr-pref"><div class="scr-pref-l">Model</div>' + seg("model", [["sonnet", "Sonnet (lighter)"], ["opus", "Opus (strongest)"]]) + "</div>" +
+      '<div class="scr-pref"><div class="scr-pref-l">Effort</div>' + seg("effort", [["low", "Low"], ["medium", "Medium"], ["high", "High"]]) + "</div>" +
+      '<div class="scr-pref"><div class="scr-pref-l">May</div>' + seg("level", [["read", "Read only"], ["edit", "Edit"], ["full", "Full"]]) + "</div>" +
+      '<div class="scr-pref"><div class="scr-pref-l">Publish</div>' + seg("push", [[false, "Not allowed"], [true, "May git push"]]) + "</div>" +
+      '<div class="scr-pref"><div class="scr-pref-l">Daily cap</div>' + seg("cap", [[5, "$5"], [15, "$15"], [30, "$30"], [60, "$60"]]) + "</div>" +
+      '<p class="scr-hint">Today: $' + (((m.used && m.used.cost) || 0).toFixed(2)) + " of usage, as Claude Code counts it. Folders: " + esc((m.dirs || []).join(", ")) + "</p>" +
+      (m.via === "app" ? "" : '<p class="scr-hint">Session: ' + (m.context && m.context.window ? Math.round(100 * m.context.used / m.context.window) + "% full" : "new") +
+        ' · <a href="#" id="chFresh">Start a fresh session</a> (it writes notes for the new one, which carry over)</p>'));
+    const fr = $("#chFresh"); if (fr) fr.onclick = (e) => { e.preventDefault(); closeSheet(); chapterOp({ op: "fresh", id }); };
+    $("#scrSheet").onclick = (e) => {
+      if (e.target.id === "scrSheet") return closeSheet();
+      const b = e.target.closest("[data-chset]"); if (!b) return;
+      const [k, v] = b.dataset.chset.split(":");
+      const val = k === "push" ? v === "true" : k === "cap" ? +v : v;
+      m[k] = val; b.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+      chapterOp({ op: "member", id, changes: { [k]: val } });
+    };
+  }
+
   /* ---------- the conversation ---------- */
   function renderMain() {
     chrome(true);
+    if (tab === "chapter") return renderChapter();
+    const tb = $("#scrText"); if (tb && !voice && /Chapter/.test(tb.placeholder)) tb.placeholder = "Message Scriptorium…";
     const hist = data.history[tab] || [];
     view.innerHTML = '<div class="scr-thread" id="scrThread">' +
       (tab === "code" ? '<div class="scr-proj"><span>Project</span><select id="scrProject">' + (S.projects || []).map((p) =>
@@ -925,6 +1034,7 @@
     box.value = ""; box.blur();
     [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
+    if (tab === "chapter") return chapterSay(text);
     request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
     web = false;
   }
@@ -944,7 +1054,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel", "effort", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "effort", "chapter", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -1007,7 +1117,7 @@
   }
 
   /* ---------- the model picker ---------- */
-  const PURPOSE = { faith: "Journal", armarium: "Armarium", code: "Code", mail: "Mail" };
+  const PURPOSE = { faith: "Journal", armarium: "Armarium", chapter: "Chapter", code: "Code", mail: "Mail" };
   function openModels() {
     const draw = () => {
       const c = S && S.choices;
@@ -1269,6 +1379,18 @@ body.scr-on{padding-top:calc(2.2rem + env(safe-area-inset-top));padding-bottom:c
   background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--border-soft)}
 @media (min-width:700px){#scrBar{padding-left:calc(50% - 380px);padding-right:calc(50% - 380px)}}
 body.scr-kb #scrBar{display:none}
+.ch-members{display:flex;gap:6px;overflow-x:auto;padding:6px 4px;max-width:740px;margin:0 auto;position:sticky;top:calc(2.2rem + env(safe-area-inset-top));z-index:5;background:var(--bg)}
+.ch-chip{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--gold-line);border-left:4px solid var(--c);
+  background:var(--panel);border-radius:10px;padding:6px 10px;font:inherit;color:var(--ink);cursor:pointer;max-width:60vw}
+.ch-chip b{font-size:.88rem;font-weight:600} .ch-chip span{font-size:.72rem;color:var(--ink-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55vw}
+.ch-chip.st-limit,.ch-chip.st-capped,.ch-chip.st-paused,.ch-chip.st-resting{opacity:.65}
+.ch-msg{border-left:3px solid var(--c);padding:2px 0 2px 10px;margin:12px 0}
+.ch-who{font-size:.8rem;font-weight:700;color:var(--c);letter-spacing:.02em} .ch-meta{font-weight:400;color:var(--ink-faint)}
+.ch-plan{background:var(--panel);border-radius:10px;padding:8px 10px}
+.ch-card{border:1px dashed var(--gold-line);border-radius:10px;padding:8px 10px;margin:10px 0;font-size:.88rem;color:var(--ink-soft)}
+.ch-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:flex-start}
+.ch-btns button{flex:0 0 auto;width:auto;height:auto;min-width:0;margin:0;border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
+.ch-btns button.scr-primary{background:var(--gold);color:#fff;border-color:var(--gold)}
 #scrBar .btn.ib.on{border-color:var(--gold-line);color:var(--gold);background:var(--panel2)}
 :root:not([data-theme="lcars"]) #scrBar .ic{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:2.3rem}
 #scrBar .scr-illum{width:2.3rem;height:2.3rem}
