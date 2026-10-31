@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 56;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 57;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -288,7 +288,10 @@
   const EFFORTS = [["low", "Low"], ["medium", "Medium"], ["high", "High"], ["xhigh", "X-High"], ["max", "Max"]];
   const effortName = (k) => (EFFORTS.find((e) => e[0] === k) || EFFORTS[1])[1];
   function modelName(purpose) {
-    if (purpose === "armarium") return "Claude · " + effortName((S && S.choices && S.choices.effort) || "low");
+    if (purpose === "armarium") {   // whose account, and how hard it thinks
+      const c = S && S.choices, a = c && (c.accounts || []).find((x) => x.id === c.account);
+      return (a ? a.name : "Claude") + " · " + effortName((c && c.effort) || "low");
+    }
     const c = S && S.choices;
     if (!c) return "Model";
     const id = c.current[purpose];
@@ -1144,7 +1147,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel", "effort", "chapter", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "effort", "account", "chapter", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -1216,6 +1219,9 @@
       if (tab === "armarium") {   // always Claude; he chooses how hard it thinks
         const cur = (c && c.effort) || "low";
         sheet('<h3>Claude in the Armarium</h3><p class="scr-hint">The Armarium always uses Claude, with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia. The Journal always uses the AI on your Mac.</p>' +
+          '<div class="scr-pref"><div class="scr-pref-l">Account</div><div class="scr-seg">' +
+          ((c && c.accounts) || []).map((a) => '<button data-acct="' + a.id + '" class="' + (a.id === (c.account || "p") ? "on" : "") + '"' + (a.signed_in ? "" : " disabled") +
+            ' title="' + (a.signed_in ? "Charge the Armarium to " + esc(a.name) : esc(a.name) + " isn't signed in on the Mac yet") + '">' + esc(a.name.replace(/^Mr\. /, "")) + "</button>").join("") + "</div></div>" +
           '<div class="scr-pref"><div class="scr-pref-l">Effort</div><div class="scr-seg">' +
           EFFORTS.map(([k, l]) => '<button data-effort="' + k + '" class="' + (k === cur ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
           '<p class="scr-hint">Higher effort thinks longer and reads more before answering, and uses more of your Claude limit.</p>');
@@ -1241,6 +1247,15 @@
     draw();
     $("#scrSheet").onclick = async (e) => {
       if (e.target.id === "scrSheet") return closeSheet();
+      const ac = e.target.closest("[data-acct]");   // the Armarium: whose account it runs on
+      if (ac && !ac.disabled) {
+        ac.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === ac));
+        if (S.choices) S.choices.account = ac.dataset.acct;
+        composerRow();
+        const st = await request({ kind: "account", account: ac.dataset.acct }, true);
+        if (st && st.choices) { S.choices = st.choices; composerRow(); }
+        return;
+      }
       const ef = e.target.closest("[data-effort]");   // the Armarium: how hard Claude thinks
       if (ef) {
         ef.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === ef));
