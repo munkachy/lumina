@@ -516,6 +516,12 @@ input:focus, textarea:focus{outline:2px solid var(--gold-line); outline-offset:1
   border-radius:.6rem; box-shadow:var(--shadow); padding:.7rem .8rem; width:17rem; display:none}
 #hlpop textarea{min-height:3.2rem; font-size:.95rem}
 #hlpop .rowbtns{display:flex; gap:.5rem; justify-content:flex-end; margin-top:.5rem}
+.rowbtns.hl-jrow{justify-content:flex-start; margin-top:.4rem}
+.hl-jdone{font-size:.85rem; color:var(--ink-soft); margin:.4rem 0 0}
+.jr-head{font-variant:small-caps; letter-spacing:.06em; color:var(--gold); margin:.9rem 0 .3rem; font-size:.95rem}
+.jr-entry{max-height:50vh; overflow:auto; border:1px solid var(--border-soft); border-radius:.6rem; padding:.6rem .8rem;
+  background:var(--panel); font-size:.95rem; line-height:1.5; white-space:normal}
+.jr-entry h3{font-size:1.05rem; margin:.2rem 0 .4rem} .jr-entry ul{padding-left:1.2rem; margin:.3rem 0}
 
 footer{text-align:center; color:var(--ink-faint); font-style:italic;
   font-size:.88rem; margin-top:2.2rem; letter-spacing:.03em}
@@ -2437,7 +2443,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=47"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=48"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2833,16 +2839,19 @@ const LuminaCore = (function () {
     /* read-first: show the note comfortably; edit only on request */
     const h = state.hls.find(x => x.id === id);
     if (!h) return;
-    if (!h.note) return openHlEdit(id);
+    if (!h.note && !h.journal) return openHlEdit(id);
     const back = modal('<h3>Note</h3>' +
       '<p style="text-align:center;margin:.1rem 0"><span class="hl-dot ' + h.color + '" style="display:inline-block;vertical-align:middle;width:1rem;height:1rem"></span>' +
       ' <span style="font-style:italic;color:var(--ink-soft);font-size:.95rem">' + esc(hlCiteOf(h)) + '</span></p>' +
       (h.t ? '<p style="text-align:center;font-style:italic;color:var(--ink-faint);font-size:.92rem;margin:.4rem 0">“' + esc(h.t.length > 140 ? h.t.slice(0,139) + "…" : h.t) + '”</p>' : '') +
-      '<div class="note-view">' + esc(h.note) + '</div>' +
+      (h.note ? '<div class="note-view">' + esc(h.note) + '</div>' : '') +
+      (h.journal ? '<div class="jr-head">✎ In your Journal</div><div class="jr-entry" id="nvJournal">' + esc(h.journal) + '</div>' : '') +
       '<div class="rowbtns"><button class="btn" id="nvClose">Close</button>' +
       '<button class="btn primary" id="nvEdit">Edit</button></div>');
     back.querySelector("#nvClose").onclick = () => back.remove();
     back.querySelector("#nvEdit").onclick = () => { back.remove(); openHlEdit(id); };
+    const jr = back.querySelector("#nvJournal");   /* the Journal's write-up, formatted as Scriptorium shows it */
+    if (jr) loadScriptorium().then(scr => { if (scr.md) jr.innerHTML = scr.md(h.journal); }).catch(() => {});
   }
   function hlCiteOf(h){
     if (h.tx === "psalter") return (h.where && h.where.label) || "Psalter";
@@ -2860,6 +2869,9 @@ const LuminaCore = (function () {
     const back = modal('<h3>Highlight</h3>' +
       '<div class="hl-colors">' + HLCOLORS.map(c => '<span class="hl-dot ' + c + (c === color ? " sel" : "") + '" data-c="' + c + '"></span>').join("") + '</div>' +
       '<textarea id="ehNote" placeholder="Note">' + esc(h.note || "") + '</textarea>' +
+      '<div class="rowbtns hl-jrow"><button class="btn" id="ehMic" title="Speak your thought: it goes into your Journal">🎙 Speak</button>' +
+      '<button class="btn" id="ehJournal" title="Make this note an entry in your Journal">✎ To Journal</button></div>' +
+      (h.journaled ? '<p class="hl-jdone">In your Journal ✓ <a href="#" id="ehOpenJ">Open the Journal</a></p>' : "") +
       '<div class="rowbtns"><button class="btn danger" id="ehDel">Delete</button><button class="btn" id="ehCopy">Copy</button>' +
       '<button class="btn" id="ehCancel">Cancel</button><button class="btn primary" id="ehSave">Save</button></div>' +
       voicePanelHtml());
@@ -2870,7 +2882,7 @@ const LuminaCore = (function () {
     });
     back.querySelector("#ehCancel").onclick = () => back.remove();
     /* the highlighted words, with where they come from */
-    back.querySelector("#ehCopy").onclick = () => {
+    const quoted = () => {
       const words = group.map(x => (x.t || "").trim()).filter(Boolean).join(" ");
       const h0 = group[0], hz = group[group.length - 1];
       let cite = hlCiteOf(h0);
@@ -2879,8 +2891,45 @@ const LuminaCore = (function () {
         const end = bi >= 0 && D.books[bi].ch[hz.c] ? C.vnum(D.books[bi].ch[hz.c], hz.i) : hz.i;
         cite += hz.c === h0.c || h0.tx === "doc" || h0.tx === "ccc" ? "–" + end : "–" + (hz.c + 1) + ":" + end;
       }
-      copy("“" + words + "” — " + cite);
+      return { words, cite };
     };
+    back.querySelector("#ehCopy").onclick = () => { const q = quoted(); copy("“" + q.words + "” — " + q.cite); };
+    /* the note becomes a Journal entry: the highlighted words and where they are from, then his thought, written up by
+       the AI on his Mac like any other note (today's Journal page) */
+    const note = back.querySelector("#ehNote"), mic = back.querySelector("#ehMic");
+    const toJournal = () => {
+      const thought = note.value.trim();
+      if (!thought) return showToast("Write or speak your thought first");
+      group.forEach(x => { x.color = color; x.note = thought; });
+      save(); back.remove(); rerenderInPlace(); psalterMarks();
+      const q = quoted();
+      showToast("Sending to your Journal…");
+      loadScriptorium().then(scr => scr.ask({ kind: "faith", text: "On “" + q.words + "” (" + q.cite + "):\n\n" + thought }))
+        .then(st => {
+          if (st && st.error) return showToast("Journal: " + st.error);
+          group.forEach(x => { x.journaled = Date.now(); x.journal = (st && st.content) || ""; }); save();   /* the entry, to read from the highlight */
+          showToast("Written in your Journal");
+        })
+        .catch(e => showToast(/locked/.test(e.message) ? "Open Scriptorium once to unlock it, then try again" : "Couldn't reach Scriptorium: " + e.message));
+    };
+    back.querySelector("#ehJournal").onclick = toJournal;
+    let rec = null;
+    mic.onclick = async () => {
+      if (rec){ rec.stop(); rec = null; mic.textContent = "…"; mic.disabled = true; return; }
+      try {
+        const scr = await loadScriptorium();
+        note.placeholder = "Listening… your words appear here a few seconds behind you";
+        rec = await scr.dictate(note, (text, complete) => {   /* spoken: straight into the Journal */
+          rec = null; mic.disabled = false; mic.textContent = "🎙 Speak"; note.placeholder = "Note";
+          if (complete && text && document.body.contains(back)) toJournal();
+        });
+        mic.textContent = "■ Stop";
+      } catch(e){
+        showToast(/locked/.test(e.message) ? "Open Scriptorium once to unlock it, then try again" : "Couldn't use the microphone: " + e.message);
+      }
+    };
+    const openJ = back.querySelector("#ehOpenJ");
+    if (openJ) openJ.onclick = e => { e.preventDefault(); back.remove(); $("btnScriptorium").click(); };
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
@@ -4402,7 +4451,7 @@ const LuminaCore = (function () {
     d.addEventListener("click", e => {
       const m = e.target.closest && e.target.closest("mark.lhl");
       const sel = win.getSelection();
-      if (m && (!sel || sel.isCollapsed)){ e.stopPropagation(); openHlEdit(m.dataset.hl); }
+      if (m && (!sel || sel.isCollapsed)){ e.stopPropagation(); openHlView(m.dataset.hl); }
     }, true);
     if (psHlWatch) psHlWatch.disconnect();
     psHlWatch = new MutationObserver(() => { if (psHlBusy) return; clearTimeout(psHlWatch.t); psHlWatch.t = setTimeout(psalterMarks, 120); });

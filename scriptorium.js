@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 47;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 48;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1218,6 +1218,40 @@
     composerRow();
   }
 
+  /* Dictation into one of Lumina's own boxes (a highlight's note): Whisper on the Mac, as in the composer. The words
+     appear in the box as they come; done(text, complete) when it has finished. */
+  async function dictate(box, done) {
+    if (!(await quietOpen())) throw new Error("Scriptorium is locked on this device");
+    const stream = await microphone();
+    const mime = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm"].find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || "";
+    const rec = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
+    const v = { sid: Math.random().toString(36).slice(2, 10), seq: 0, before: box.value.trim(), since: new Date(Date.now() - 60000).toISOString(), done: false };
+    rec.ondataavailable = async (ev) => {
+      if (!ev.data.size) return;
+      const seq = v.seq++, final = rec.state === "inactive";
+      try { await postSealed("audio", { session: v.sid, seq, data: await blobToB64(ev.data), mime: rec.mimeType, final }); } catch (e) {}
+    };
+    rec.start(3000);
+    (async () => {
+      const started = Date.now();
+      while (S && !v.done && Date.now() - started < 10 * 60000) {
+        await sleep(2000);
+        let comments;
+        try { comments = await gh("GET", "/repos/" + S.repo + "/issues/" + S.issue + "/comments?per_page=100&since=" + v.since); } catch (e) { continue; }
+        for (const c of comments) {
+          if (!c.body.startsWith(MARK("transcript"))) continue;
+          let t;
+          try { t = JSON.parse(await decryptText(S.keys, c.body.slice(MARK("transcript").length).trim())); } catch (e) { continue; }
+          if (t.session !== v.sid) continue;
+          if (t.text) box.value = (v.before ? v.before + " " : "") + t.text;
+          if (t.complete) { v.done = true; gh("DELETE", "/repos/" + S.repo + "/issues/comments/" + c.id).catch(() => {}); }
+        }
+      }
+      done(box.value.trim(), v.done);
+    })();
+    return { stop() { if (rec.state !== "inactive") rec.stop(); clearTimeout(micRelease); micRelease = setTimeout(releaseMicrophone, 10 * 60000); } };
+  }
+
   const val = (id) => (($("#" + id, view) || {}).value || "").trim();
 
   /* ---------- look ---------- */
@@ -1491,5 +1525,5 @@ details[open]>summary .chev{transform:rotate(45deg)}
     if (!(await quietOpen())) throw new Error("Scriptorium is locked on this device");
     return request(req, true);
   }
-  window.Scriptorium = { open, ask, data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
+  window.Scriptorium = { open, ask, dictate, md: (src) => md(src || "", []), data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
 })();
