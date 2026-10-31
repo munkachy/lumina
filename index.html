@@ -2436,7 +2436,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=45"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=46"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2606,6 +2606,7 @@ const LuminaCore = (function () {
   }
   /* verse preview with the highlighted portion marked */
   function hlVersePreview(h){
+    if (h.tx === "psalter") return '<mark class="hl ' + h.color + '">' + esc(h.t || "") + "</mark>";
     const text = hlVerseText(h);
     if (!text) return h.t ? esc(h.t) : "";
     let s = h.s, e = h.e;
@@ -2645,7 +2646,7 @@ const LuminaCore = (function () {
     shown.forEach(g => {
       const h0 = g.items[0];
       let cite = hlCiteOf(h0);
-      if (g.items.length > 1){
+      if (g.items.length > 1 && h0.tx !== "psalter"){
         const hz = g.items.at(-1);
         const bi = C.bookIdxById(hz.book);
         cite += "–" + (bi >= 0 && D.books[bi].ch[hz.c] ? C.vnum(D.books[bi].ch[hz.c], hz.i) : hz.i);
@@ -2684,7 +2685,8 @@ const LuminaCore = (function () {
     view.querySelectorAll("[data-go]").forEach(el => el.onclick = () => {
       const h = state.hls.find(x => x.id === el.dataset.go);
       if (!h) return;
-      if (h.tx === "ccc" || h.book === "ccc"){
+      if (h.tx === "psalter") psalterGo(h);
+      else if (h.tx === "ccc" || h.book === "ccc"){
         loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(h.i); });
       } else if (h.tx === "doc"){
         toDocs(() => docShow(h.book, h.i));
@@ -2842,6 +2844,7 @@ const LuminaCore = (function () {
     back.querySelector("#nvEdit").onclick = () => { back.remove(); openHlEdit(id); };
   }
   function hlCiteOf(h){
+    if (h.tx === "psalter") return (h.where && h.where.label) || "Psalter";
     if (h.tx === "ccc" || h.book === "ccc") return "CCC ¶ " + h.i;
     if (h.tx === "doc") return docCite(h.book, h.i);
     const b = C.bookIdxById(h.book);
@@ -2870,7 +2873,7 @@ const LuminaCore = (function () {
       const words = group.map(x => (x.t || "").trim()).filter(Boolean).join(" ");
       const h0 = group[0], hz = group[group.length - 1];
       let cite = hlCiteOf(h0);
-      if (hz !== h0){                                   /* a highlight across verses: John 1:14–15 */
+      if (hz !== h0 && h0.tx !== "psalter"){            /* a highlight across verses: John 1:14–15 */
         const bi = C.bookIdxById(hz.book);
         const end = bi >= 0 && D.books[bi].ch[hz.c] ? C.vnum(D.books[bi].ch[hz.c], hz.i) : hz.i;
         cite += hz.c === h0.c || h0.tx === "doc" || h0.tx === "ccc" ? "–" + end : "–" + (hz.c + 1) + ":" + end;
@@ -2880,12 +2883,12 @@ const LuminaCore = (function () {
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
-      save(); back.remove(); showToast("Highlight removed"); rerenderInPlace();
+      save(); back.remove(); showToast("Highlight removed"); rerenderInPlace(); psalterMarks();
     };
     back.querySelector("#ehSave").onclick = () => {
       const note = back.querySelector("#ehNote").value.trim();
       group.forEach(x => { x.color = color; x.note = note; });
-      save(); back.remove(); rerenderInPlace();
+      save(); back.remove(); rerenderInPlace(); psalterMarks();
     };
   }
   view.addEventListener("click", e => {
@@ -4223,6 +4226,14 @@ const LuminaCore = (function () {
       hours: [...d.querySelectorAll("[data-hour]")].map(b => b.textContent) };
   }
   function psPress(attr, v){ const b = pq("[" + attr + '="' + v + '"]'); if (b) b.click(); }
+  /* Tapping a week in the psalter makes this phone keep that week ("psalter-anchor") until it is tapped back. Lumina's
+     ‹ › stepping into the next week, or a jump to a highlight, only looks: the phone's week is put back as it was. */
+  function psKeepWeek(fn){
+    let before = null;
+    try { before = localStorage.getItem("psalter-anchor"); } catch(e){}
+    fn();
+    try { if (before === null) localStorage.removeItem("psalter-anchor"); else localStorage.setItem("psalter-anchor", before); } catch(e){}
+  }
   function psSelect(id, v){ const s = pq("#" + id); if (!s) return; s.value = v; s.dispatchEvent(new Event("change")); }
   function psStep(dir){
     const s = psalterNow(); if (!s) return;
@@ -4237,7 +4248,7 @@ const LuminaCore = (function () {
     hour += dir;
     if (hour > 4){ hour = 0; day++; if (day > 6){ day = 0; week = (week + 1) % 4; } }
     if (hour < 0){ hour = 4; day--; if (day < 0){ day = 6; week = (week + 3) % 4; } }
-    if (week !== s.week) psPress("data-week", week);
+    if (week !== s.week) psKeepWeek(() => psPress("data-week", week));
     if (day !== s.day) psPress("data-day", day);
     psPress("data-hour", hour);
     try { psalterFrame.contentWindow.scrollTo(0, 0); } catch(e){}
@@ -4274,7 +4285,10 @@ const LuminaCore = (function () {
     on("pbPage", "onclick", () => { const b = pq("#page-btn"); if (b) b.click(); });
     const home = () => { psalterFrame.src = PSALTER_URL; };
     on("pbBack", "onclick", home);
-    on("pbToday", "onclick", () => { try { psalterFrame.contentWindow.location.replace(PSALTER_URL); } catch(e){ home(); } });
+    on("pbToday", "onclick", () => {   /* today, this hour, in the ordo's week: forget any week kept on this phone */
+      try { localStorage.removeItem("psalter-anchor"); } catch(e){}
+      try { psalterFrame.contentWindow.location.replace(PSALTER_URL); } catch(e){ home(); }
+    });
     psalterFit();
   }
   /* redraw whenever the psalter changes what it shows */
@@ -4287,13 +4301,160 @@ const LuminaCore = (function () {
     pbarWatch = new MutationObserver(() => { clearTimeout(pbarT); pbarT = setTimeout(drawPbar, 60); });
     pbarWatch.observe(nav, { subtree: true, attributes: true, attributeFilter: ["aria-pressed", "hidden"], childList: true, characterData: true });
   }
+  /* ---------- Lumina's highlights inside the psalter ----------
+     Inside Lumina, Lumina's own highlighter works on the psalter's text: the Matins readings and, in Lectio and
+     Cantus, the psalms, antiphons, hymns and prayers. Highlights live in state.hls with the Bible's (tx "psalter"),
+     so they show in Favorites › Highlights and sync like the rest. A reading paragraph is keyed as the psalter
+     itself keys it (lect:<rid>, its data-i); a text block by its page and a hash of its words. Lumina acts a little
+     sooner than the psalter's own highlighter and clears the selection, so that one never fires; the psalter's own
+     marks are hidden here (its highlights were brought over once, below). The monks' own copy is untouched. */
+  const PS_HL_BLOCKS = ".lect-r .lect-text p, .tx-strip > :not(figure)";
+  let psHlBusy = false, psHlWatch = null, psHlT = null, psHlTouch = false, psGoPending = null;
+  function psHash(t){ let h = 5381; for (let k = 0; k < t.length; k++) h = (h * 33 + t.charCodeAt(k)) | 0; return (h >>> 0).toString(36); }
+  function psBlockKey(el){
+    const art = el.closest(".lect-r");
+    if (art) return { book: "lect:" + art.dataset.rid, i: el.dataset.i };
+    const sec = el.closest(".tx-strip");
+    return sec ? { book: "tx:" + sec.dataset.src + "|" + sec.dataset.pg, i: psHash(el.textContent) } : null;
+  }
+  function psWhere(){
+    const s = psalterNow(); if (!s) return null;
+    const d = psalterDoc(), IN = psalterFrame.contentWindow.PSALTER_IN;
+    let hash = (d && d.location.hash) || "";
+    try { if (IN && IN.dayDate) hash = "#date=" + IN.ymd(IN.dayDate()); } catch(e){}
+    const roman = ["I", "II", "III", "IV"], hour = s.hours[s.hour] || "";
+    const sec = (s.secs.find(x => x[0] === s.sec) || [])[1] || "", jump = (s.jumps.find(x => x[0] === s.jump) || [])[1] || "";
+    const label = s.inBook ? "Psalter · " + [sec, jump].filter(Boolean).join(" · ")
+                           : "Psalter · " + hour + " · " + PS_DAYS[s.day] + ", Week " + roman[s.week];
+    return { label, hash, book: s.book, week: s.week, day: s.day, hour: s.hour, sec: s.sec, jump: s.jump };
+  }
+  function psHlColors(){
+    const cs = getComputedStyle(document.documentElement), v = n => cs.getPropertyValue("--hl-" + n).trim();
+    return "mark.lhl{border-radius:.25em;padding:.02em .05em;cursor:pointer;color:inherit}" +
+      HLCOLORS.map(c => "mark.lhl." + c + "{background:" + v(c) + "}").join("") +
+      "mark.lhl.noted{border-bottom:2px dotted currentColor}" +
+      ".lect-r mark.hl:not(.lhl){background:none!important;border:0!important;padding:0!important;pointer-events:none}";
+  }
+  /* the marks: unwrap Lumina's old ones, then wrap each highlight's characters in its block */
+  function psalterMarks(){
+    const d = psalterDoc(); if (!d || !d.body) return;
+    psHlBusy = true;
+    try {
+      let st = d.getElementById("luminaHl");
+      if (!st){ st = d.createElement("style"); st.id = "luminaHl"; (d.head || d.documentElement).appendChild(st); }
+      st.textContent = psHlColors();
+      d.querySelectorAll("mark.lhl").forEach(m => { const p = m.parentNode; while (m.firstChild) p.insertBefore(m.firstChild, m); p.removeChild(m); p.normalize(); });
+      const mine = state.hls.filter(h => h.tx === "psalter");
+      if (!mine.length) return;
+      d.querySelectorAll(PS_HL_BLOCKS).forEach(el => {
+        const k = psBlockKey(el); if (!k) return;
+        const hs = mine.filter(h => h.book === k.book && String(h.i) === String(k.i)).sort((a, b) => b.s - a.s);
+        hs.forEach(h => psWrap(d, el, h));
+      });
+    } finally { setTimeout(() => { psHlBusy = false; }, 0); }
+  }
+  function psWrap(d, el, h){
+    let pos = 0;
+    const w = d.createTreeWalker(el, NodeFilter.SHOW_TEXT), parts = [];
+    let n;
+    while ((n = w.nextNode())){
+      const a = pos, b = pos + n.textContent.length;
+      if (b > h.s && a < h.e) parts.push([n, Math.max(0, h.s - a), Math.min(n.textContent.length, h.e - a)]);
+      pos = b;
+    }
+    parts.forEach(([node, x, y]) => {
+      if (y <= x) return;
+      const r = d.createRange(); r.setStart(node, x); r.setEnd(node, y);
+      const m = d.createElement("mark"); m.className = "lhl " + h.color + (h.note ? " noted" : ""); m.dataset.hl = h.id;
+      try { r.surroundContents(m); } catch(e){}
+    });
+  }
+  /* a selection in the psalter becomes a Lumina highlight (0.6 s after it settles; the psalter's own waits 0.9 s) */
+  function psalterHlAuto(){
+    const d = psalterDoc(); if (psHlTouch || !d) return;
+    const win = psalterFrame.contentWindow, sel = win.getSelection();
+    if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0), touched = [];
+    d.querySelectorAll(PS_HL_BLOCKS).forEach(el => {
+      if (!range.intersectsNode(el)) return;
+      const k = psBlockKey(el), off = k && offsetsWithin(el, range);
+      if (off && off.e > off.s) touched.push({ ...k, ...off, t: el.textContent.slice(off.s, off.e) });
+    });
+    const fresh = touched.filter(t => t.t.trim() && !C.rangesOverlap(hlsFor("psalter", t.book, 0, t.i), t.s, t.e));
+    if (!fresh.length){ if (touched.length) sel.removeAllRanges(); return; }   /* already highlighted: leave it to us, not the psalter */
+    const g = uid(), where = psWhere();
+    fresh.forEach(t => state.hls.push({ id: uid(), g, tx: "psalter", book: t.book, c: 0, i: t.i, s: t.s, e: t.e,
+      color: "gold", note: "", added: Date.now(), t: t.t, where }));
+    save(); sel.removeAllRanges(); psalterMarks();
+    showToast("Highlighted — tap it to change or remove");
+  }
+  function psalterHlInit(){
+    const d = psalterDoc(), win = psalterFrame && psalterFrame.contentWindow;
+    if (!d || !win || win._luminaHl) return;
+    win._luminaHl = true;
+    psalterHlMigrate();
+    const arm = () => { clearTimeout(psHlT); psHlT = setTimeout(psalterHlAuto, 600); };
+    win.addEventListener("touchstart", () => { psHlTouch = true; }, { passive: true });
+    win.addEventListener("touchend", () => { psHlTouch = false; arm(); }, { passive: true });
+    win.addEventListener("mouseup", arm);
+    d.addEventListener("selectionchange", arm);
+    d.addEventListener("click", e => {
+      const m = e.target.closest && e.target.closest("mark.lhl");
+      const sel = win.getSelection();
+      if (m && (!sel || sel.isCollapsed)){ e.stopPropagation(); openHlEdit(m.dataset.hl); }
+    }, true);
+    if (psHlWatch) psHlWatch.disconnect();
+    psHlWatch = new MutationObserver(() => { if (psHlBusy) return; clearTimeout(psHlWatch.t); psHlWatch.t = setTimeout(psalterMarks, 120); });
+    psHlWatch.observe(d.body, { childList: true, subtree: true });
+    psalterMarks();
+    if (psGoPending){ const h = psGoPending; psGoPending = null; setTimeout(() => psalterGoNow(h), 400); }
+  }
+  /* the psalter's own reading highlights, brought into Lumina once (the psalter's copy is left as it was) */
+  function psalterHlMigrate(){
+    if (state.psHlMoved) return;
+    let notes = null;
+    try { notes = JSON.parse(localStorage.getItem("psalter-notes") || "null"); } catch(e){}
+    (notes && notes.hls || []).forEach(x => {
+      if (state.hls.some(h => h.from === x.id)) return;
+      state.hls.push({ id: uid(), from: x.id, g: x.g ? "ps" + x.g : undefined, tx: "psalter", book: "lect:" + x.rid, c: 0, i: x.i,
+        s: x.s, e: x.e, t: x.t, color: x.color || "gold", note: x.note || "", added: x.added || Date.now(),
+        where: { label: "Psalter · Matins reading · " + (x.name || x.day || ""), hash: x.day ? "#date=" + x.day : "", hour: 0 } });
+    });
+    state.psHlMoved = true; save();
+  }
+  /* Favorites › Highlights → the psalter, at that hour, with the highlight in view */
+  function psalterGo(h){
+    openPsalter();
+    const d = psalterDoc(), want = (h.where && h.where.hash) || "";
+    if (d && d.location.hash !== want && want){ psGoPending = h; psalterFrame.contentWindow.location.hash = want; return; }
+    if (!d || !d.querySelector("[data-hour]")){ psGoPending = h; return; }
+    psalterGoNow(h);
+  }
+  function psalterGoNow(h){
+    const w = h.where || {};
+    if (w.book && w.book !== "psalter"){
+      psPress("data-book", w.book);
+      setTimeout(() => { if (w.sec != null) psSelect("sec", w.sec); setTimeout(() => { if (w.jump != null && w.jump !== "") psSelect("jump", w.jump); }, 300); }, 300);
+    } else {
+      if (w.week != null) psKeepWeek(() => psPress("data-week", w.week));
+      if (w.day != null) psPress("data-day", w.day);
+      if (w.hour != null) psPress("data-hour", w.hour);
+    }
+    let tries = 0;
+    const find = () => {
+      const m = psalterDoc() && psalterDoc().querySelector('mark.lhl[data-hl="' + h.id + '"]');
+      if (m) m.scrollIntoView({ block: "center", behavior: "smooth" });
+      else if (++tries < 20) setTimeout(find, 400);
+    };
+    setTimeout(find, 600);
+  }
   function psalterReload(){ if (psalterFrame) try { psalterFrame.contentWindow.location.reload(); } catch(e){} }
   function psalterOn(){ return document.body.classList.contains("psalter-on"); }
   function openPsalter(){
     if (!psalterFrame){
       psalterFrame = document.createElement("iframe");
       psalterFrame.id = "psalterFrame"; psalterFrame.title = "Monastic Psalter";
-      psalterFrame.addEventListener("load", () => { psalterDress(); watchPsalter(); });
+      psalterFrame.addEventListener("load", () => { psalterDress(); watchPsalter(); psalterHlInit(); });
       const bar = document.createElement("div"); bar.id = "pbar"; bar.className = "fbar pbar";
       document.body.appendChild(bar);
       psalterFrame.src = PSALTER_URL;
