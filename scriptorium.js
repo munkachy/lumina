@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 39;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 40;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -21,7 +21,7 @@
   let view = null;          // Lumina's <main id="view">
   let S = null;             // unlocked session: { keys, token, login, repo, issue, mode, choices, projects, connected }
   let data = null;          // decrypted vault contents
-  let tab = "faith", web = false, study = false, current = null, voice = null, speaking = null;
+  let tab = "faith", web = false, current = null, voice = null, speaking = null;
   let prefs = Object.assign({
     answerSize: 1, answerFont: "serif", thinkSize: 0.9, thinkFont: "sans",
     autoRead: false, voice: { engine: "device", id: "" },
@@ -201,7 +201,7 @@
   }
 
   /* ---------- the fixed toolbar and message box ---------- */
-  const TABS = { faith: ["✝", "Faith"], code: ["⌘", "Code"], mail: ["✉", "Mail"] };
+  const TABS = { faith: ["✎", "Journal"], armarium: ["📚", "Armarium"], mail: ["✉", "Mail"] };   // "faith" is the Journal (always the local AI); the Armarium is always Claude
   const MODES = [["eco", "Eco"], ["normal", "Normal"], ["turbo", "Turbo"]];
   const MODE_IC = { eco: "🌿", normal: "◐", turbo: "⚡" };
 
@@ -259,8 +259,7 @@
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
-      (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study with Claude: Catechism, Bible and Church documents">✝</button>' +
-        '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
+      (tab === "faith" || tab === "armarium" ? '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
       '<button class="scr-ib" data-act="size" title="' + (full ? "Smaller" : "Full screen") + '">' + (full ? "⤡" : "⤢") + "</button>" +
       (current ? '<button class="scr-send stop" data-act="stop" title="Stop">■</button>' : '<button class="scr-send" data-act="send" title="Send">↑</button>');
@@ -275,6 +274,7 @@
   }
 
   function modelName(purpose) {
+    if (purpose === "armarium") return "Claude";
     const c = S && S.choices;
     if (!c) return "Model";
     const id = c.current[purpose];
@@ -311,7 +311,6 @@
     } else if (act === "send") send();
     else if (act === "stop") { t.disabled = true; postSealed("stop", { request: current.id }); }
     else if (act === "web") { web = !web; composerRow(); }
-    else if (act === "study") { study = !study; composerRow(); const t = $("#scrText"); if (t) t.placeholder = study ? "Study with Claude: ask anything…" : "Message Scriptorium…"; }
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
@@ -772,7 +771,7 @@
         '<option value="' + esc(p) + '"' + (p === data.project ? " selected" : "") + ">" + esc(p.split("/").pop()) + "</option>").join("") +
         (S.projects && S.projects.length ? "" : "<option>Add a project on the Mac first</option>") + "</select></div>" : "") +
       (hist.length ? hist.map(renderTurn).join("") : '<div class="scr-empty">' + illum("S") + "<p>" +
-        ({ faith: "Ask about Scripture or the faith, or share a reflection to check.", code: "Ask about your project.", mail: "Ask about your email." })[tab] + "</p></div>") +
+        ({ faith: "Write or speak a note for your journal.", armarium: "Ask about Scripture, the Fathers, St Thomas or the faith.", code: "Ask about your project.", mail: "Ask about your email." })[tab] + "</p></div>") +
       (current && current.tab === tab ? '<div class="scr-turn"><div class="scr-u">' + esc(current.text) + '</div><div class="scr-a" id="scrLive">' + renderReply(current.state, true) + "</div></div>" : "") +
       "</div>";
     const proj = $("#scrProject", view);
@@ -811,7 +810,7 @@
     if (cc && (cc.unverified || []).length + (cc.misquoted || []).length) h += '<div class="scr-err">⚠ Still unverified: ' + cc.unverified.concat(cc.misquoted).map(esc).join("; ") + ". Check before relying on it.</div>";
     if (r.error) h += '<div class="scr-err">' + esc(r.error) + "</div>";
     if (!live && r.content) h += '<div class="scr-actions"><button data-speak="1">🔊 Listen</button><button data-copy="1">Copy</button>' +
-      (tab === "faith" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + mindLabel(r, mindSaved(r)) + "</button>" : "") + "</div>";
+      (tab === "faith" || tab === "armarium" ? '<button data-mind="1" class="' + (mindSaved(r) ? "on" : "") + '">' + mindLabel(r, mindSaved(r)) + "</button>" : "") + "</div>";
     return h;
   }
 
@@ -924,7 +923,7 @@
     box.value = ""; box.blur();
     [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
-    request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web, study: tab === "faith" && study });
+    request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
     web = false;
   }
 
@@ -1006,21 +1005,22 @@
   }
 
   /* ---------- the model picker ---------- */
-  const PURPOSE = { faith: "Faith", code: "Code", mail: "Mail" };
+  const PURPOSE = { faith: "Journal", armarium: "Armarium", code: "Code", mail: "Mail" };
   function openModels() {
     const draw = () => {
       const c = S && S.choices;
+      if (tab === "armarium") return sheet('<h3>Model for the Armarium</h3><p class="scr-hint">The Armarium always uses Claude, with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia. The Journal always uses the AI on your Mac.</p>');
       if (!c) return sheet('<h3>Models</h3><p class="scr-hint">Waiting for your Mac to say which models it has…</p>');
       const cur = c.current[tab];
       const dots = (n) => "●".repeat(n || 0) + '<span class="off">' + "●".repeat(5 - (n || 0)) + "</span>";
       sheet("<h3>Model for " + PURPOSE[tab] + '</h3><p class="scr-hint">' + (c.mode === "eco" ? "Eco mode has its own lighter choices." : "Used in Normal and Turbo.") + " Tap ? for each one's strengths.</p>" +
-        Object.entries(c.models).filter(([, m]) => m.installed).map(([id, m]) =>
+        Object.entries(c.models).filter(([id, m]) => m.installed && !(tab === "faith" && id === "claude")).map(([id, m]) =>
           '<div class="scr-model ' + (id === cur ? "on" : "") + '" data-model="' + esc(id) + '">' +
             '<div class="scr-model-top"><div><div class="scr-model-name">' + esc(m.name) + (id === cur ? ' <span class="scr-tick">✓</span>' : "") + "</div>" +
             '<div class="scr-model-spec">' + esc(m.specialty) + "</div></div>" +
             '<button class="scr-q" data-q="1" title="Strengths and weaknesses">?</button></div>' +
             '<div class="scr-model-more">' +
-              '<div class="scr-uses">' + ["faith", "code", "mail"].map((u) => "<span><b>" + PURPOSE[u] + "</b> " + dots((m.uses || {})[u]) + "</span>").join("") + "</div>" +
+              '<div class="scr-uses">' + ["faith", "mail"].map((u) => "<span><b>" + PURPOSE[u] + "</b> " + dots((m.uses || {})[u]) + "</span>").join("") + "</div>" +
               "<p><b>Best at</b> " + esc(m.best) + "</p><p><b>Watch out</b> " + esc(m.weak) + "</p>" +
               '<p class="scr-meta">' + esc(m.speed || "") + " · " + esc(m.memory || "") + "</p></div></div>").join(""));
       $("#scrSheet").dataset.kind = "models";
