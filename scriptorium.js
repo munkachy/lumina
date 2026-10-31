@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 42;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 43;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -273,8 +273,10 @@
     composerRow();
   }
 
+  const EFFORTS = [["low", "Low"], ["medium", "Medium"], ["high", "High"], ["xhigh", "X-High"], ["max", "Max"]];
+  const effortName = (k) => (EFFORTS.find((e) => e[0] === k) || EFFORTS[1])[1];
   function modelName(purpose) {
-    if (purpose === "armarium") return "Claude";
+    if (purpose === "armarium") return "Claude · " + effortName((S && S.choices && S.choices.effort) || "medium");
     const c = S && S.choices;
     if (!c) return "Model";
     const id = c.current[purpose];
@@ -942,7 +944,7 @@
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
-    const job = { id, tab: ["hello", "mode", "setmodel", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
+    const job = { id, tab: ["hello", "mode", "setmodel", "effort", "convs", "openconv", "delconv", "annotate", "bishop"].includes(req.kind) ? null : req.kind, text: req.text, state: { status: "Sent — waiting for your Mac…" }, quiet };
     if (!quiet) { current = job; renderMain(); }
     let reqComment;
     try { reqComment = await postSealed("request", { ...req, id }); }
@@ -1009,7 +1011,24 @@
   function openModels() {
     const draw = () => {
       const c = S && S.choices;
-      if (tab === "armarium") return sheet('<h3>Model for the Armarium</h3><p class="scr-hint">The Armarium always uses Claude, with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia. The Journal always uses the AI on your Mac.</p>');
+      if (tab === "armarium") {   // always Claude; he chooses how hard it thinks
+        const cur = (c && c.effort) || "medium";
+        sheet('<h3>Claude in the Armarium</h3><p class="scr-hint">The Armarium always uses Claude, with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia. The Journal always uses the AI on your Mac.</p>' +
+          '<div class="scr-pref"><div class="scr-pref-l">Effort</div><div class="scr-seg">' +
+          EFFORTS.map(([k, l]) => '<button data-effort="' + k + '" class="' + (k === cur ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
+          '<p class="scr-hint">Higher effort thinks longer and reads more before answering, and uses more of your Claude limit.</p>');
+        $("#scrSheet").onclick = async (e) => {
+          if (e.target.id === "scrSheet") return closeSheet();
+          const b = e.target.closest("[data-effort]");
+          if (!b) return;
+          b.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+          if (S.choices) S.choices.effort = b.dataset.effort;
+          composerRow();
+          const st = await request({ kind: "effort", effort: b.dataset.effort }, true);
+          if (st && st.choices) { S.choices = st.choices; composerRow(); }
+        };
+        return;
+      }
       if (!c) return sheet('<h3>Models</h3><p class="scr-hint">Waiting for your Mac to say which models it has…</p>');
       const cur = c.current[tab];
       const dots = (n) => "●".repeat(n || 0) + '<span class="off">' + "●".repeat(5 - (n || 0)) + "</span>";
