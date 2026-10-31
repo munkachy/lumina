@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 59;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 60;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1506,7 +1506,7 @@ body.scr-on{padding-top:calc(2.2rem + env(safe-area-inset-top));padding-bottom:c
 .scr-lcars{display:none;font-weight:700;letter-spacing:.08em;font-size:.8rem}
 :root[data-theme="lcars"] .scr-illum{display:none}
 :root[data-theme="lcars"] .scr-lcars{display:inline-block;background:var(--gold);color:#000;border-radius:999px;padding:4px 10px}
-#scrBar{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:.6rem .5rem calc(.6rem + env(safe-area-inset-bottom));
+#scrBar{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:.6rem .5rem calc(.6rem + max(env(safe-area-inset-bottom), 1.4rem));
   background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--border-soft)}
 @media (min-width:700px){#scrBar{padding-left:calc(50% - 380px);padding-right:calc(50% - 380px)}}
 body.scr-kb #scrBar{display:none}
