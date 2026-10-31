@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 38;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 39;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -203,6 +203,7 @@
   /* ---------- the fixed toolbar and message box ---------- */
   const TABS = { faith: ["✝", "Faith"], code: ["⌘", "Code"], mail: ["✉", "Mail"] };
   const MODES = [["eco", "Eco"], ["normal", "Normal"], ["turbo", "Turbo"]];
+  const MODE_IC = { eco: "🌿", normal: "◐", turbo: "⚡" };
 
   function chrome(show) {
     let bar = document.getElementById("scrBar"), box = document.getElementById("scrCompose");
@@ -211,19 +212,23 @@
       bar = document.createElement("div"); bar.id = "scrBar"; document.body.appendChild(bar);
       bar.onclick = toolbarClick;
     }
+    // Lumina's big bottom bar, two rows of five; "Lumina" sits where Lumina's own bar has "Scriptorium"
+    const b = (attrs, ic, lb, on) => '<button class="btn ib' + (on ? " on" : "") + '" ' + attrs + '><span class="ic">' + ic + '</span><span class="lb">' + lb + "</span></button>";
+    const mode = (S && S.mode) || "normal";
+    bar.className = "actions main-bar";
     bar.innerHTML =
-      '<button class="scr-l" data-act="lumina" title="Back to Lumina">' + illum("L") + "</button>" +
-      '<div class="scr-tabs">' + Object.entries(TABS).map(([k, [ic, l]]) =>
-        '<button data-tab="' + k + '" class="' + (k === tab ? "on" : "") + '"><span class="ic">' + ic + '</span><span class="lb">' + l + "</span></button>").join("") + "</div>" +
-      '<span class="scr-conn ' + (S && S.connected ? "on" : "") + '" title="' + (S && S.connected ? "Mac connected" : "Reaching your Mac…") + '">●<span class="lb"> Mac</span></span>' +
-      '<div class="scr-modes">' + MODES.map(([k, l]) =>
-        '<button data-mode="' + k + '" class="' + (S && S.mode === k ? "on" : "") + '"><span class="lb">' + l + '</span><span class="ic">' + l[0] + "</span></button>").join("") + "</div>" +
-      '<button data-act="theme" title="Light / dark">☾</button>' +
-      '<button data-act="prefs" title="Text and voice">Aa</button>' +
-      '<button data-act="mind" title="Mind map">🧠</button>' +
-      '<button data-act="convs" title="Past conversations">☰</button>' +
-      '<button data-act="new" title="New conversation">＋</button>' +
-      '<button class="scr-build" data-act="update" title="Check for updates">b' + BUILD + (newerBuild ? ' <span class="scr-upd">↑</span>' : "") + "</button>";
+      Object.entries(TABS).map(([k, [ic, l]]) => b('data-tab="' + k + '"', ic, l, k === tab)).join("") +
+      b('data-act="mind" title="Mind map"', "🧠", "Mind", mindMode) +
+      b('data-act="convs" title="Past conversations"', "☰", "Chats") +
+      b('data-act="lumina" title="Back to Lumina"', illum("L") + '<i class="scr-dot' + (S && S.connected ? " on" : "") + '" title="' + (S && S.connected ? "Mac connected" : "Reaching your Mac…") + '"></i>', "Lumina") +
+      b('data-act="new" title="New conversation"', "＋", "New") +
+      b('data-act="mode" title="Eco, Normal or Turbo"', MODE_IC[mode] || "◐", (MODES.find((m) => m[0] === mode) || MODES[1])[1]) +
+      b('data-act="prefs" title="Text, voice and updates"', "Aa" + (newerBuild ? '<i class="scr-dot upd"></i>' : ""), "Text") +
+      b('data-act="theme" title="Light / dark"', "☾", "Theme");
+    if (!bar.dataset.measured) {   // the message box and panels sit on top of the bar
+      bar.dataset.measured = "1";
+      new ResizeObserver(() => document.documentElement.style.setProperty("--scr-bbar-h", bar.offsetHeight + "px")).observe(bar);
+    }
     if (!box) {
       box = document.createElement("div"); box.id = "scrCompose"; box.className = "normal"; document.body.appendChild(box);
       box.innerHTML = '<div class="scr-cbox"><textarea id="scrText" rows="3" placeholder="Message Scriptorium…"></textarea><div class="scr-crow"></div></div>';
@@ -234,11 +239,11 @@
       if (window.visualViewport) {
         const fit = () => {   // sit the box right on top of the iPhone keyboard, with no gap
           const vv = window.visualViewport, kb = window.innerHeight - vv.height > 120;
-          box.classList.toggle("kb", kb);
-          const full = box.classList.contains("full"), barH = full ? (document.getElementById("scrBar") || {}).offsetHeight || 0 : 0;
+          box.classList.toggle("kb", kb); document.body.classList.toggle("scr-kb", kb);   // the bar steps aside for the keyboard
+          const full = box.classList.contains("full"), barH = 0;
           if (kb && full) { box.style.bottom = "auto"; box.style.top = (vv.offsetTop + barH) + "px"; box.style.height = (vv.height - barH) + "px"; }
           else if (kb) { box.style.bottom = "auto"; box.style.height = ""; box.style.top = (vv.offsetTop + vv.height - box.offsetHeight) + "px"; }
-          else { box.style.top = box.style.height = ""; box.style.bottom = "0px"; }
+          else { box.style.top = box.style.height = box.style.bottom = ""; }
         };
         new ResizeObserver(fit).observe(box);
         visualViewport.addEventListener("resize", fit); visualViewport.addEventListener("scroll", fit); fit();
@@ -255,7 +260,6 @@
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
       (tab === "faith" ? '<button class="scr-ib ' + (study ? "on" : "") + '" data-act="study" title="Study with Claude: Catechism, Bible and Church documents">✝</button>' +
-        '<button class="scr-ib" data-act="mind" title="Mind map">🧠</button>' +
         '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Let Faith use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
       '<button class="scr-ib" data-act="size" title="' + (full ? "Smaller" : "Full screen") + '">' + (full ? "⤡" : "⤢") + "</button>" +
@@ -281,15 +285,17 @@
     const t = e.target.closest("button");
     if (!t) return;
     if (t.dataset.tab) { leaveMind(); tab = t.dataset.tab; web = false; renderMain(); return; }
-    if (t.dataset.mode) { request({ kind: "mode", mode: t.dataset.mode }, true); S.mode = t.dataset.mode; chrome(true); return; }
+    if (t.dataset.act === "mode") {   // one button cycles Eco → Normal → Turbo
+      const i = MODES.findIndex((m) => m[0] === ((S && S.mode) || "normal")), next = MODES[(i + 1) % MODES.length][0];
+      request({ kind: "mode", mode: next }, true); S.mode = next; chrome(true); return;
+    }
     const act = t.dataset.act;
     if (act === "lumina") backToLumina();
     else if (act === "theme" && window.LuminaTheme) window.LuminaTheme.toggle();
     else if (act === "prefs") openPrefs();
     else if (act === "convs") { leaveMind(); openConvs(); }
     else if (act === "new") { leaveMind(); newConversation(); }
-    else if (act === "mind") { if (mindMode) { leaveMind(); renderMain(); } else { mindMode = true; renderMind(); } }
-    else if (act === "update") checkUpdate(true);
+    else if (act === "mind") { if (mindMode) { leaveMind(); renderMain(); } else { mindMode = true; renderMind(); } chrome(true); }
   }
   function leaveMind() { if (!mindMode) return; mindMode = false; const box = $("#scrCompose"); if (box) box.style.display = ""; }
 
@@ -1062,6 +1068,7 @@
         (presets.length ? '<optgroup label="Vox Machina">' + presets.map((p) => opt("vox", p, p)).join("") + "</optgroup>" : "") +
       "</select></div>" +
       '<label class="scr-pref scr-check"><input type="checkbox" id="scrAuto"' + (prefs.autoRead ? " checked" : "") + "> Read every new answer aloud</label>" +
+      '<p class="scr-small">Build ' + BUILD + (newerBuild ? " · b" + newerBuild + " is ready" : "") + ' · <a href="#" id="scrUpd">' + (newerBuild ? "Update now" : "Check for updates") + "</a></p>" +
       '<p class="scr-small"><a href="#" id="scrForget2">Forget this device</a></p>');
     const sh = $("#scrSheet");
     sh.dataset.kind = "prefs";
@@ -1071,6 +1078,7 @@
       if (f) { const [k, val] = f.dataset.font.split(":"); prefs[k] = val; savePrefs(); f.parentElement.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b === f)); }
       if (z) { const [k, d] = z.dataset.size.split(":"); prefs[k] = Math.min(1.6, Math.max(0.75, Math.round((prefs[k] + 0.08 * d) * 100) / 100)); savePrefs(); }
       if (e.target.id === "scrForget2") { e.preventDefault(); forgetDevice(); }
+      if (e.target.id === "scrUpd") { e.preventDefault(); closeSheet(); checkUpdate(true); }
     };
     $("#scrVoice").onchange = (e) => { const [engine, ...rest] = e.target.value.split(":"); prefs.voice = { engine, id: rest.join(":") }; savePrefs(); };
     $("#scrAuto").onchange = (e) => { prefs.autoRead = e.target.checked; savePrefs(); };
@@ -1198,16 +1206,22 @@
     if (document.getElementById("scrStyle")) return;
     const st = document.createElement("style"); st.id = "scrStyle";
     st.textContent = `
-:root{--scr-bar-h:52px;--scr-a-size:1rem;--scr-a-font:Georgia,serif;--scr-t-size:.9rem;--scr-t-font:-apple-system,sans-serif}
-body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));padding-bottom:160px}
+:root{--scr-bar-h:0px;--scr-a-size:1rem;--scr-a-font:Georgia,serif;--scr-t-size:.9rem;--scr-t-font:-apple-system,sans-serif}
+body.scr-on{padding-top:env(safe-area-inset-top);padding-bottom:calc(160px + var(--scr-bbar-h,0px))}
 .scr-illum{width:34px;height:34px;display:block;border-radius:6px;object-fit:cover}
 .scr-lcars{display:none;font-weight:700;letter-spacing:.08em;font-size:.8rem}
 :root[data-theme="lcars"] .scr-illum{display:none}
 :root[data-theme="lcars"] .scr-lcars{display:inline-block;background:var(--gold);color:#000;border-radius:999px;padding:4px 10px}
-#scrBar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 10px 6px;
-  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--gold-line)}
-#scrBar button{border:0;background:none;color:var(--ink);font:inherit;font-size:.92rem;padding:6px 8px;border-radius:10px;cursor:pointer}
-#scrBar .scr-l{padding:2px}
+#scrBar{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:.6rem .5rem calc(.6rem + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--border-soft)}
+@media (min-width:700px){#scrBar{padding-left:calc(50% - 380px);padding-right:calc(50% - 380px)}}
+body.scr-kb #scrBar{display:none}
+#scrBar .btn.ib.on{border-color:var(--gold-line);color:var(--gold);background:var(--panel2)}
+:root:not([data-theme="lcars"]) #scrBar .ic{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:2.3rem}
+#scrBar .scr-illum{width:2.3rem;height:2.3rem}
+.scr-dot{position:absolute;right:-5px;top:-1px;width:10px;height:10px;border-radius:50%;background:var(--ink-faint);border:2px solid var(--bg)}
+.scr-dot.on{background:#2e8b57}
+.scr-dot.upd{background:var(--gold)}
 .scr-tabs{display:flex;gap:2px;flex:1;min-width:0}
 .scr-tabs button.on,.scr-modes button.on{background:var(--panel2);color:var(--gold);font-weight:600;box-shadow:inset 0 0 0 1px var(--gold-line)}
 .scr-tabs .ic{margin-right:4px}
@@ -1238,7 +1252,7 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 .scr-box.new{color:var(--gold);border-color:var(--gold)}
 .scr-box.on{background:var(--gold);color:var(--bg)}
 .scr-box .n{font-family:-apple-system,sans-serif;font-size:.7em;opacity:.7}
-.scr-mind-panel{position:fixed;left:0;right:0;bottom:0;top:calc(var(--scr-bar-h) + env(safe-area-inset-top));z-index:45;background:var(--bg);display:flex;flex-direction:column}
+.scr-mind-panel{position:fixed;left:0;right:0;bottom:var(--scr-bbar-h,0px);top:calc(var(--scr-bar-h) + env(safe-area-inset-top));z-index:45;background:var(--bg);display:flex;flex-direction:column}
 .scr-mind-panel-h{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--gold-line);max-width:760px;width:100%;margin:0 auto;box-sizing:border-box}
 .scr-mind-panel-h h3{font-family:Georgia,serif;margin:0;font-size:1.15rem}
 .scr-mind-panel-h .n{font-family:-apple-system,sans-serif;font-size:.75em;color:var(--ink-faint)}
@@ -1276,7 +1290,6 @@ body.scr-on{padding-top:calc(var(--scr-bar-h) + env(safe-area-inset-top));paddin
 #scrCompose.kb{padding-bottom:4px;background:var(--bg)}
 .scr-conn{color:var(--ink-faint);font-size:.78rem;white-space:nowrap}
 .scr-conn.on{color:#2e8b57}
-@media (max-width:640px){.scr-tabs .lb,.scr-conn .lb,.scr-modes .lb{display:none}.scr-modes .ic{display:inline}.scr-tabs .ic{margin:0;font-size:1.05rem}#scrBar{gap:2px;padding-left:6px;padding-right:6px}}
 
 .scr-thread{max-width:740px;margin:0 auto;padding:10px 4px 20px}
 .scr-proj{display:flex;gap:8px;align-items:center;color:var(--ink-faint);font-size:.85rem;margin:4px 0 10px}
@@ -1327,7 +1340,7 @@ details[open]>summary .chev{transform:rotate(45deg)}
 .scr-appr-b button{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink);border-radius:10px;padding:6px 14px;font-weight:600;margin:0}
 .scr-err{color:#b3261e;font-family:-apple-system,sans-serif;font-size:.86rem;margin:6px 0}
 
-#scrCompose{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 70%,transparent)}
+#scrCompose{position:fixed;left:0;right:0;bottom:var(--scr-bbar-h,0px);z-index:40;padding:8px 10px 8px;background:linear-gradient(to top,var(--bg) 70%,transparent)}
 .scr-cbox{max-width:740px;margin:0 auto;border:1px solid var(--gold-line);border-radius:22px;background:var(--panel);box-shadow:0 4px 18px rgba(0,0,0,.08);
   display:flex;flex-direction:column;padding:10px 12px 8px}
 #scrText{border:0;outline:none;resize:none;background:none;color:var(--ink);font-family:var(--scr-a-font);font-size:max(16px,var(--scr-a-size));line-height:1.5;min-height:4.5em;max-height:4.5em}
@@ -1343,7 +1356,7 @@ details[open]>summary .chev{transform:rotate(45deg)}
 .scr-ib.rec{color:#b3261e;animation:scrDot 1.2s infinite}
 .scr-send{border:0;width:36px;height:36px;border-radius:50%;background:var(--gold);color:var(--bg);font-size:1.1rem;font-weight:700;cursor:pointer;padding:0}
 .scr-send.stop{background:var(--ink);font-size:.8rem}
-#scrNewPill{position:fixed;left:50%;transform:translateX(-50%);bottom:150px;z-index:45;border:1px solid var(--gold-line);background:var(--panel2);color:var(--gold);
+#scrNewPill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(150px + var(--scr-bbar-h,0px));z-index:45;border:1px solid var(--gold-line);background:var(--panel2);color:var(--gold);
   border-radius:999px;padding:6px 14px;font-family:-apple-system,sans-serif;font-size:.8rem;font-weight:600;box-shadow:0 3px 12px rgba(0,0,0,.15);cursor:pointer}
 
 #scrSheet{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center}
