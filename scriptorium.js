@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 58;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 59;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -21,6 +21,12 @@
   let view = null;          // Lumina's <main id="view">
   let S = null;             // unlocked session: { keys, token, login, repo, issue, mode, choices, projects, connected }
   let data = null;          // decrypted vault contents
+  let entryMode = true;   // the Armarium's ✎ Entry switch: a note is written up as a Journal entry (stays as he left it)
+  try { entryMode = localStorage.getItem("scr-entry") !== "0"; } catch (e) {}
+  function placeholderFor() {
+    const b = document.getElementById("scrText");
+    if (b && !voice && tab === "armarium") b.placeholder = entryMode ? "A note for your Journal…" : "Ask Armarium…";
+  }
   let tab = "faith", web = false, current = null, voice = null, speaking = null;
   let prefs = Object.assign({
     answerSize: 1, answerFont: "serif", thinkSize: 0.9, thinkFont: "sans",
@@ -271,6 +277,8 @@
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
       '<span class="grow"></span>' +
+      (tab === "armarium" ? '<button class="scr-ib scr-entry ' + (entryMode ? "on" : "") + '" data-act="entry" title="' +
+        (entryMode ? "✎ Entry is on: your message is written up as a Journal entry. Tap to talk with Armarium instead." : "✎ Entry is off: you're talking with Armarium. Tap to write notes up as entries.") + '">✎</button>' : "") +
       (tab === "faith" || tab === "armarium" ? '<button class="scr-ib ' + (web ? "on" : "") + '" data-act="web" title="Use the web for this message">🌐</button>' : "") +
       '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
       '<button class="scr-ib" data-act="size" title="' + (full ? "Smaller" : "Full screen") + '">' + (full ? "⤡" : "⤢") + "</button>" +
@@ -328,6 +336,10 @@
     } else if (act === "send") send();
     else if (act === "stop") { t.disabled = true; postSealed("stop", { request: current.id }); }
     else if (act === "web") { web = !web; composerRow(); }
+    else if (act === "entry") {
+      entryMode = !entryMode; try { localStorage.setItem("scr-entry", entryMode ? "1" : "0"); } catch (e) {}
+      composerRow(); placeholderFor();
+    }
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
@@ -969,6 +981,7 @@
     if (tab === "chapter") return renderChapter();
     const tb = $("#scrText"); if (tb && !voice && /Chapter/.test(tb.placeholder)) tb.placeholder = "Message Scriptorium…";
     if (tab !== "code") syncRoom(tab);
+    placeholderFor(); if (tb && !voice && tab !== "armarium" && /Journal…|Armarium…/.test(tb.placeholder)) tb.placeholder = "Message Scriptorium…";
     const hist = data.history[tab] || [];
     view.innerHTML = '<div class="scr-thread" id="scrThread">' +
       (tab === "code" ? '<div class="scr-proj"><span>Project</span><select id="scrProject">' + (S.projects || []).map((p) =>
@@ -1128,7 +1141,7 @@
     [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
     if (tab === "chapter") return chapterSay(text);
-    request({ kind: tab, text, conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
+    request({ kind: tab, text, ...(tab === "armarium" ? { entry: entryMode } : {}), conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
     web = false;
   }
 
@@ -1518,6 +1531,7 @@ body.scr-kb #scrBar{display:none}
 .ch-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:flex-start}
 .ch-btns button{flex:0 0 auto;width:auto;height:auto;min-width:0;margin:0;border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
 .ch-btns button.scr-primary{background:var(--gold);color:#fff;border-color:var(--gold)}
+.scr-ib.scr-entry.on{color:#fff;background:var(--gold);border-radius:999px}
 #scrBar .btn.ib.on{border-color:var(--gold-line);color:var(--gold);background:var(--panel2)}
 :root:not([data-theme="lcars"]) #scrBar .ic{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:2.3rem}
 #scrBar .scr-illum{width:2.3rem;height:2.3rem}
