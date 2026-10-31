@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 50;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 51;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -257,8 +257,10 @@
     if (!row) return;
     const full = $("#scrCompose").classList.contains("full");
     if (tab === "chapter") {
-      const who = ch.to === "all" ? "All" : ((ch.members.find((m) => m.id === ch.to) || {}).name || ch.to);
-      row.innerHTML = '<button class="scr-chip" data-act="chto" title="Whom your message is for (or start it with @p, @w, @r)">To: ' + esc(who) + " ▾</button>" +
+      // one button per member: tap to write to them only; they stay chosen until tapped again (none chosen: all)
+      row.innerHTML = '<span class="ch-to">' + '<button class="ch-tob' + (ch.sel.length ? "" : " on") + '" data-act="chall">All</button>' +
+        ch.members.map((m) => '<button class="ch-tob' + (ch.sel.includes(m.id) ? " on" : "") + '" data-act="chto" data-id="' + m.id + '" style="--c:' + m.color + '">' +
+          esc(m.name.replace(/^Mr\. /, "")) + "</button>").join("") + "</span>" +
         '<span class="grow"></span>' +
         '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
         (ch.busy ? '<button class="scr-send stop" data-act="chstop" title="Stop everyone">■</button>' : '<button class="scr-send" data-act="send" title="Send">↑</button>');
@@ -324,7 +326,12 @@
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
-    else if (act === "chto") { const ids = ["all", ...ch.members.map((m) => m.id)]; ch.to = ids[(ids.indexOf(ch.to) + 1) % ids.length]; composerRow(); }
+    else if (act === "chto" || act === "chall") {
+      const id = t.dataset.id;
+      ch.sel = act === "chall" ? [] : ch.sel.includes(id) ? ch.sel.filter((x) => x !== id) : [...ch.sel, id];
+      try { localStorage.setItem("scr-chapter-to", JSON.stringify(ch.sel)); } catch (e) {}
+      composerRow();
+    }
     else if (act === "chstop") { if (confirm("Stop everyone in the Chapter?")) chapterOp({ op: "stop" }); }
   }
 
@@ -780,7 +787,8 @@
 
   /* ---------- the Chapter: one room with every Claude account (chapter.py on the Mac) ----------
      Messages are polled through the relay while the tab is open: every 8 s while someone works, 30 s otherwise. */
-  const ch = { messages: [], members: [], busy: false, since: 0, to: "all", timer: null, polling: false };
+  const ch = { messages: [], members: [], busy: false, since: 0, timer: null, polling: false, sel: [] };
+  try { ch.sel = JSON.parse(localStorage.getItem("scr-chapter-to") || "[]"); } catch (e) {}   // whom he's writing to stays chosen
   const CH_STATE = { working: ["●", "working"], reserve: ["◌", "reserve"], resting: ["○", "resting"], paused: ["⏸", "paused"],
                      limit: ["⏸", "at its limit"], capped: ["⏸", "at today's cap"] };
   async function chapterOp(req) {
@@ -801,12 +809,12 @@
     return c;
   }
   function chapterSay(text) {
-    if (ch.to !== "all" && !/(^|\s)@\w/.test(text)) text = "@" + ch.to + " " + text;
+    if (ch.sel.length && !/(^|\s)@\w/.test(text)) text = ch.sel.map((id) => "@" + id).join(" ") + " " + text;
     ch.messages.push({ id: 0, who: "you", kind: "user", text, meta: {} }); renderChapter();
     chapterOp({ op: "say", text });
   }
   function renderChapter() {
-    const box = $("#scrText"); if (box && !voice) box.placeholder = "Message the Chapter… (@p, @w or @r for one)";
+    const box = $("#scrText"); if (box && !voice) box.placeholder = "Message the Chapter…";
     const names = Object.fromEntries(ch.members.map((m) => [m.id, m]));
     const chips = ch.members.map((m) => {
       const [dot, word] = CH_STATE[m.state] || ["○", m.state];
@@ -1388,6 +1396,9 @@ body.scr-kb #scrBar{display:none}
 .ch-who{font-size:.8rem;font-weight:700;color:var(--c);letter-spacing:.02em} .ch-meta{font-weight:400;color:var(--ink-faint)}
 .ch-plan{background:var(--panel);border-radius:10px;padding:8px 10px}
 .ch-card{border:1px dashed var(--gold-line);border-radius:10px;padding:8px 10px;margin:10px 0;font-size:.88rem;color:var(--ink-soft)}
+.ch-to{display:flex;gap:4px;flex-wrap:wrap}
+.ch-tob{border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink-soft);border-radius:999px;padding:4px 10px;font:inherit;font-size:.78rem;cursor:pointer}
+.ch-tob.on{background:var(--c, var(--gold));border-color:var(--c, var(--gold));color:#fff;font-weight:600}
 .ch-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:flex-start}
 .ch-btns button{flex:0 0 auto;width:auto;height:auto;min-width:0;margin:0;border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
 .ch-btns button.scr-primary{background:var(--gold);color:#fff;border-color:var(--gold)}
