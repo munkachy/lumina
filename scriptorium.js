@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 43;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 44;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -276,7 +276,7 @@
   const EFFORTS = [["low", "Low"], ["medium", "Medium"], ["high", "High"], ["xhigh", "X-High"], ["max", "Max"]];
   const effortName = (k) => (EFFORTS.find((e) => e[0] === k) || EFFORTS[1])[1];
   function modelName(purpose) {
-    if (purpose === "armarium") return "Claude · " + effortName((S && S.choices && S.choices.effort) || "medium");
+    if (purpose === "armarium") return "Claude · " + effortName((S && S.choices && S.choices.effort) || "low");
     const c = S && S.choices;
     if (!c) return "Model";
     const id = c.current[purpose];
@@ -1012,7 +1012,7 @@
     const draw = () => {
       const c = S && S.choices;
       if (tab === "armarium") {   // always Claude; he chooses how hard it thinks
-        const cur = (c && c.effort) || "medium";
+        const cur = (c && c.effort) || "low";
         sheet('<h3>Claude in the Armarium</h3><p class="scr-hint">The Armarium always uses Claude, with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia. The Journal always uses the AI on your Mac.</p>' +
           '<div class="scr-pref"><div class="scr-pref-l">Effort</div><div class="scr-seg">' +
           EFFORTS.map(([k, l]) => '<button data-effort="' + k + '" class="' + (k === cur ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
