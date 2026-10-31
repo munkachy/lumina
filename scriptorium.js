@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 53;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 54;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -782,35 +782,55 @@
 
   /* ---------- the Chapter: one room with every Claude account (chapter.py on the Mac) ----------
      Messages are polled through the relay while the tab is open: every 8 s while someone works, 30 s otherwise. */
-  const ch = { messages: [], members: [], busy: false, since: 0, timer: null, polling: false, sel: [] };
+  const ch = { messages: [], members: [], busy: false, since: 0, timer: null, sel: [] };
   try { ch.sel = JSON.parse(localStorage.getItem("scr-chapter-to") || "[]"); } catch (e) {}   // whom he's writing to stays chosen
   const CH_STATE = { working: ["●", "working"], reserve: ["◌", "reserve"], resting: ["○", "resting"], paused: ["⏸", "paused"],
                      limit: ["⏸", "at its limit"], capped: ["⏸", "at today's cap"] };
-  async function chapterOp(req) {
-    if (ch.polling && req.op === "get") return;
+  /* The room itself is read straight from GitHub: the Mac keeps one encrypted "chapterlog" comment on the relay repo's
+     "Chapter" issue up to date (chapter.py), so every device shows the same conversation, even with the Mac asleep.
+     Unchanged reads cost nothing (GitHub answers 304 to the ETag). Every 3 s while someone works, 20 s otherwise. */
+  let chLog = { issue: 0, etag: "", comment: 0 };
+  function applyLog(c) {
+    const pending = ch.messages.filter((x) => !x.id && !(c.messages || []).some((m) => m.who === "you" && m.text === x.text));
+    const older = ch.messages.filter((x) => x.id && c.messages && c.messages.length && x.id < c.messages[0].id);
+    ch.messages = [...older, ...(c.messages || []), ...pending];
+    ch.older = ch.older === undefined || !older.length ? !!c.older : ch.older;
+    ch.since = (c.messages || []).reduce((n, m) => Math.max(n, m.id), ch.since);
+    ch.members = c.members || ch.members; ch.busy = !!c.busy;
+  }
+  async function chapterRead() {
     clearTimeout(ch.timer);
-    ch.polling = true;
+    try {
+      if (!chLog.issue) {
+        const found = (await gh("GET", "/repos/" + S.repo + "/issues?state=all&per_page=100") || []).find((i) => i.title === "Chapter");
+        chLog.issue = found ? found.number : 0;
+      }
+      if (chLog.issue) {
+        const r = await fetch(API + "/repos/" + S.repo + "/issues/" + chLog.issue + "/comments?per_page=100", { cache: "no-store",
+          headers: { Authorization: "Bearer " + S.token, Accept: "application/vnd.github+json", ...(chLog.etag ? { "If-None-Match": chLog.etag } : {}) } });
+        if (r.status === 200) {
+          chLog.etag = r.headers.get("ETag") || "";
+          const c = (await r.json()).find((x) => x.body.startsWith(MARK("chapterlog")));
+          if (c) {
+            const before = JSON.stringify([ch.messages.length, ch.since, ch.members, ch.busy]);
+            applyLog(JSON.parse(await decryptText(S.keys, c.body.slice(MARK("chapterlog").length).trim())));
+            if (before !== JSON.stringify([ch.messages.length, ch.since, ch.members, ch.busy]) && tab === "chapter" && !mindMode) renderChapter();
+          }
+        }
+      }
+    } catch (e) {}
+    if (tab === "chapter" && document.body.classList.contains("scr-on")) ch.timer = setTimeout(chapterRead, ch.busy ? 3000 : 20000);
+  }
+  async function chapterOp(req) {   // an action for the Mac (say, approve, member, stop, fresh); the room then follows on GitHub
     let st = null;
-    const take = (c) => {   // new messages in (his own replaces the copy shown when he sent it), members, busy
-      if (!c) return;
-      let changed = false;
-      (c.messages || []).forEach((m) => {
-        if (ch.messages.some((x) => x.id === m.id)) return;
-        if (m.who === "you") { const k = ch.messages.findIndex((x) => !x.id && x.text === m.text); if (k >= 0) ch.messages.splice(k, 1); }
-        ch.messages.push(m); ch.since = Math.max(ch.since, m.id); changed = true;
-      });
-      ch.messages = ch.messages.slice(-150);
-      const was = JSON.stringify([ch.members, ch.busy]);
-      ch.members = c.members || ch.members; ch.busy = !!c.busy;
-      if ((changed || was !== JSON.stringify([ch.members, ch.busy])) && tab === "chapter" && !mindMode) renderChapter();
-    };
-    // while anyone works, the Mac keeps this request open and sends the room as it changes
-    try { st = await request({ kind: "chapter", since: ch.since, ...req }, true, (s2) => take(s2.chapter)); } catch (e) {}
-    ch.polling = false;
+    try { st = await request({ kind: "chapter", since: ch.since, ...req }, true); } catch (e) {}
     const c = st && st.chapter;
-    take(c);
-    clearTimeout(ch.timer);
-    if (tab === "chapter" && document.body.classList.contains("scr-on")) ch.timer = setTimeout(() => chapterOp({ op: "get" }), ch.busy ? 3000 : 45000);
+    if (c && req.before) {   // earlier messages, put in front
+      ch.messages = [...(c.messages || []).filter((m) => !ch.messages.some((x) => x.id === m.id)), ...ch.messages];
+      ch.older = !!c.older && (c.messages || []).length > 0;
+    } else if (c) { ch.members = c.members || ch.members; ch.busy = !!c.busy; }
+    if (tab === "chapter" && !mindMode) renderChapter();
+    chLog.etag = ""; setTimeout(chapterRead, 400);
     return c;
   }
   function chapterSay(text) {
@@ -844,16 +864,17 @@
         (m.kind === "plan" ? '<div class="ch-btns"><button class="scr-primary" data-chok="' + m.id + '">Approve</button><button data-chchange="' + m.who + '">Change</button></div>' : "") + "</div>";
     }).join("");
     view.innerHTML = '<div class="ch-members">' + chips + "</div>" +
-      '<div class="scr-thread" id="scrThread">' + (msgs || '<div class="scr-empty"><p>The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. ' +
+      '<div class="scr-thread" id="scrThread">' + (ch.older ? '<div class="ch-btns" style="justify-content:center"><button data-chold="1">Earlier messages</button></div>' : "") + (msgs || '<div class="scr-empty"><p>The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. ' +
         "Write to everyone, or start with @p, @w or @r for one of them.</p></div>") + "</div>";
     view.onclick = chapterClick;
     composerRow();
     window.scrollTo(0, document.documentElement.scrollHeight);
-    if (!ch.timer && !ch.polling) chapterOp({ op: "get" });
+    if (!ch.timer) chapterRead();
   }
   function chapterClick(e) {
     const t = e.target.closest("button"); if (!t) return;
-    if (t.dataset.chok) { t.disabled = true; chapterOp({ op: "approve", msg: +t.dataset.chok }); }
+    if (t.dataset.chold) { t.disabled = true; const first = ch.messages.find((m) => m.id); if (first) chapterOp({ op: "get", before: first.id }); }
+    else if (t.dataset.chok) { t.disabled = true; chapterOp({ op: "approve", msg: +t.dataset.chok }); }
     else if (t.dataset.chchange) { const box = $("#scrText"); box.value = "@" + t.dataset.chchange + " Change the plan: "; box.focus(); }
     else if (t.dataset.chgive) chapterSay("@" + t.dataset.chgive + " " + t.dataset.text);
     else if (t.dataset.chfresh) { t.disabled = true; chapterOp({ op: "fresh", id: t.dataset.chfresh }); }
@@ -1091,7 +1112,7 @@
     for (const k of Object.keys(data.mindSaved)) if (!live.has(String(data.mindSaved[k]))) { delete data.mindSaved[k]; changed = true; }
     if (changed) { await saveVault(); if (!mindMode && view && document.body.classList.contains("scr-on")) renderMain(); }
   }
-  document.addEventListener("visibilitychange", () => { if (!document.hidden && S) checkUpdate(false); });   // back in the app: anything new?
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && S) { checkUpdate(false); if (tab === "chapter") chapterRead(); } });   // back in the app: anything new?
 
   async function request(req, quiet, onUpdate) {   // onUpdate: each state as it comes (the Chapter shows its room live)
     if (current && !quiet) return;
