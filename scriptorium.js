@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 51;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 52;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -793,19 +793,29 @@
                      limit: ["⏸", "at its limit"], capped: ["⏸", "at today's cap"] };
   async function chapterOp(req) {
     if (ch.polling && req.op === "get") return;
+    clearTimeout(ch.timer);
     ch.polling = true;
     let st = null;
-    try { st = await request({ kind: "chapter", since: ch.since, ...req }, true); } catch (e) {}
+    const take = (c) => {   // new messages in (his own replaces the copy shown when he sent it), members, busy
+      if (!c) return;
+      let changed = false;
+      (c.messages || []).forEach((m) => {
+        if (ch.messages.some((x) => x.id === m.id)) return;
+        if (m.who === "you") { const k = ch.messages.findIndex((x) => !x.id && x.text === m.text); if (k >= 0) ch.messages.splice(k, 1); }
+        ch.messages.push(m); ch.since = Math.max(ch.since, m.id); changed = true;
+      });
+      ch.messages = ch.messages.slice(-150);
+      const was = JSON.stringify([ch.members, ch.busy]);
+      ch.members = c.members || ch.members; ch.busy = !!c.busy;
+      if ((changed || was !== JSON.stringify([ch.members, ch.busy])) && tab === "chapter" && !mindMode) renderChapter();
+    };
+    // while anyone works, the Mac keeps this request open and sends the room as it changes
+    try { st = await request({ kind: "chapter", since: ch.since, ...req }, true, (s2) => take(s2.chapter)); } catch (e) {}
     ch.polling = false;
     const c = st && st.chapter;
-    if (c) {
-      (c.messages || []).forEach((m) => { if (m.id > ch.since) { ch.messages.push(m); ch.since = m.id; } });
-      ch.messages = ch.messages.slice(-150);
-      ch.members = c.members || ch.members; ch.busy = !!c.busy;
-      if (tab === "chapter" && !mindMode) renderChapter();
-    }
+    take(c);
     clearTimeout(ch.timer);
-    if (tab === "chapter" && document.body.classList.contains("scr-on")) ch.timer = setTimeout(() => chapterOp({ op: "get" }), ch.busy ? 8000 : 30000);
+    if (tab === "chapter" && document.body.classList.contains("scr-on")) ch.timer = setTimeout(() => chapterOp({ op: "get" }), ch.busy ? 3000 : 45000);
     return c;
   }
   function chapterSay(text) {
@@ -1058,7 +1068,7 @@
   }
   document.addEventListener("visibilitychange", () => { if (!document.hidden && S) checkUpdate(false); });   // back in the app: anything new?
 
-  async function request(req, quiet) {
+  async function request(req, quiet, onUpdate) {   // onUpdate: each state as it comes (the Chapter shows its room live)
     if (current && !quiet) return;
     const id = Math.random().toString(36).slice(2, 10);
     const since = new Date(Date.now() - 60000).toISOString();
@@ -1089,6 +1099,7 @@
       }
       if (Date.now() - started > 60 * 60000) { job.state.error = "Gave up waiting after an hour."; job.state.done = true; break; }
       if (!quiet && current === job) updateLive(job.state);
+      if (onUpdate && job.replyComment) try { onUpdate(job.state); } catch (e) {}
       if (job.state.done) break;
     }
     // Leave nothing behind on GitHub.
