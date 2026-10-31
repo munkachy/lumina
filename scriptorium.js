@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 57;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 58;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -290,7 +290,7 @@
   function modelName(purpose) {
     if (purpose === "armarium") {   // whose account, and how hard it thinks
       const c = S && S.choices, a = c && (c.accounts || []).find((x) => x.id === c.account);
-      return (a ? a.name : "Claude") + " · " + effortName((c && c.effort) || "low");
+      return (a ? a.name.replace(/^Mr\. /, "") : "Claude") + " · " + ((c && c.claude_model) === "opus" ? "Opus" : "Sonnet") + " · " + effortName((c && c.effort) || "medium");
     }
     const c = S && S.choices;
     if (!c) return "Model";
@@ -1222,6 +1222,8 @@
           '<div class="scr-pref"><div class="scr-pref-l">Account</div><div class="scr-seg">' +
           ((c && c.accounts) || []).map((a) => '<button data-acct="' + a.id + '" class="' + (a.id === (c.account || "p") ? "on" : "") + '"' + (a.signed_in ? "" : " disabled") +
             ' title="' + (a.signed_in ? "Charge the Armarium to " + esc(a.name) : esc(a.name) + " isn't signed in on the Mac yet") + '">' + esc(a.name.replace(/^Mr\. /, "")) + "</button>").join("") + "</div></div>" +
+          '<div class="scr-pref"><div class="scr-pref-l">Model</div><div class="scr-seg">' +
+          [["sonnet", "Sonnet"], ["opus", "Opus"]].map(([k, l]) => '<button data-cmodel="' + k + '" class="' + (k === ((c && c.claude_model) || "sonnet") ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
           '<div class="scr-pref"><div class="scr-pref-l">Effort</div><div class="scr-seg">' +
           EFFORTS.map(([k, l]) => '<button data-effort="' + k + '" class="' + (k === cur ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
           '<p class="scr-hint">Higher effort thinks longer and reads more before answering, and uses more of your Claude limit.</p>');
@@ -1247,6 +1249,15 @@
     draw();
     $("#scrSheet").onclick = async (e) => {
       if (e.target.id === "scrSheet") return closeSheet();
+      const cm = e.target.closest("[data-cmodel]");   // the Armarium: Sonnet or Opus
+      if (cm) {
+        cm.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === cm));
+        if (S.choices) S.choices.claude_model = cm.dataset.cmodel;
+        composerRow();
+        const st = await request({ kind: "account", model: cm.dataset.cmodel }, true);
+        if (st && st.choices) { S.choices = st.choices; composerRow(); }
+        return;
+      }
       const ac = e.target.closest("[data-acct]");   // the Armarium: whose account it runs on
       if (ac && !ac.disabled) {
         ac.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === ac));
