@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 54;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 55;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -782,7 +782,8 @@
 
   /* ---------- the Chapter: one room with every Claude account (chapter.py on the Mac) ----------
      Messages are polled through the relay while the tab is open: every 8 s while someone works, 30 s otherwise. */
-  const ch = { messages: [], members: [], busy: false, since: 0, timer: null, sel: [] };
+  const ch = { messages: [], members: [], busy: false, since: 0, timer: null, sel: [], active: Date.now(), asleep: false };
+  const CH_SLEEP = 30 * 60000;   // no messages and nobody working for 30 minutes: stop checking until he comes back
   try { ch.sel = JSON.parse(localStorage.getItem("scr-chapter-to") || "[]"); } catch (e) {}   // whom he's writing to stays chosen
   const CH_STATE = { working: ["●", "working"], reserve: ["◌", "reserve"], resting: ["○", "resting"], paused: ["⏸", "paused"],
                      limit: ["⏸", "at its limit"], capped: ["⏸", "at today's cap"] };
@@ -814,13 +815,19 @@
           if (c) {
             const before = JSON.stringify([ch.messages.length, ch.since, ch.members, ch.busy]);
             applyLog(JSON.parse(await decryptText(S.keys, c.body.slice(MARK("chapterlog").length).trim())));
-            if (before !== JSON.stringify([ch.messages.length, ch.since, ch.members, ch.busy]) && tab === "chapter" && !mindMode) renderChapter();
+            if (before !== JSON.stringify([ch.messages.length, ch.since, ch.members, ch.busy])) {
+              ch.active = Date.now();
+              if (tab === "chapter" && !mindMode) renderChapter();
+            }
           }
         }
       }
     } catch (e) {}
+    if (ch.busy) ch.active = Date.now();
+    if (!ch.busy && Date.now() - ch.active > CH_SLEEP) { ch.asleep = true; ch.timer = null; if (tab === "chapter" && !mindMode) renderChapter(); return; }
     if (tab === "chapter" && document.body.classList.contains("scr-on")) ch.timer = setTimeout(chapterRead, ch.busy ? 3000 : 20000);
   }
+  function chapterWake() { ch.asleep = false; ch.active = Date.now(); chLog.etag = ""; chapterRead(); }
   async function chapterOp(req) {   // an action for the Mac (say, approve, member, stop, fresh); the room then follows on GitHub
     let st = null;
     try { st = await request({ kind: "chapter", since: ch.since, ...req }, true); } catch (e) {}
@@ -834,6 +841,7 @@
     return c;
   }
   function chapterSay(text) {
+    ch.active = Date.now(); if (ch.asleep) chapterWake();
     if (ch.sel.length && !/(^|\s)@\w/.test(text)) text = ch.sel.map((id) => "@" + id).join(" ") + " " + text;
     ch.messages.push({ id: 0, who: "you", kind: "user", text, meta: {} }); renderChapter();
     chapterOp({ op: "say", text });
@@ -864,16 +872,19 @@
         (m.kind === "plan" ? '<div class="ch-btns"><button class="scr-primary" data-chok="' + m.id + '">Approve</button><button data-chchange="' + m.who + '">Change</button></div>' : "") + "</div>";
     }).join("");
     view.innerHTML = '<div class="ch-members">' + chips + "</div>" +
+      (ch.asleep ? '<div class="ch-card ch-sleep">☾ The Chapter is resting: nobody has written for half an hour, so this device stopped checking. ' +
+        'Nothing is lost.<div class="ch-btns"><button class="scr-primary" data-chwakeup="1">Wake the room</button></div></div>' : "") +
       '<div class="scr-thread" id="scrThread">' + (ch.older ? '<div class="ch-btns" style="justify-content:center"><button data-chold="1">Earlier messages</button></div>' : "") + (msgs || '<div class="scr-empty"><p>The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. ' +
         "Write to everyone, or start with @p, @w or @r for one of them.</p></div>") + "</div>";
     view.onclick = chapterClick;
     composerRow();
     window.scrollTo(0, document.documentElement.scrollHeight);
-    if (!ch.timer) chapterRead();
+    if (!ch.timer && !ch.asleep) chapterRead();
   }
   function chapterClick(e) {
     const t = e.target.closest("button"); if (!t) return;
-    if (t.dataset.chold) { t.disabled = true; const first = ch.messages.find((m) => m.id); if (first) chapterOp({ op: "get", before: first.id }); }
+    if (t.dataset.chwakeup) chapterWake();
+    else if (t.dataset.chold) { t.disabled = true; const first = ch.messages.find((m) => m.id); if (first) chapterOp({ op: "get", before: first.id }); }
     else if (t.dataset.chok) { t.disabled = true; chapterOp({ op: "approve", msg: +t.dataset.chok }); }
     else if (t.dataset.chchange) { const box = $("#scrText"); box.value = "@" + t.dataset.chchange + " Change the plan: "; box.focus(); }
     else if (t.dataset.chgive) chapterSay("@" + t.dataset.chgive + " " + t.dataset.text);
@@ -1112,7 +1123,7 @@
     for (const k of Object.keys(data.mindSaved)) if (!live.has(String(data.mindSaved[k]))) { delete data.mindSaved[k]; changed = true; }
     if (changed) { await saveVault(); if (!mindMode && view && document.body.classList.contains("scr-on")) renderMain(); }
   }
-  document.addEventListener("visibilitychange", () => { if (!document.hidden && S) { checkUpdate(false); if (tab === "chapter") chapterRead(); } });   // back in the app: anything new?
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && S) { checkUpdate(false); if (tab === "chapter") chapterWake(); } });   // back in the app: anything new?
 
   async function request(req, quiet, onUpdate) {   // onUpdate: each state as it comes (the Chapter shows its room live)
     if (current && !quiet) return;
