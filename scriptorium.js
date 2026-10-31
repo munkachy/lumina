@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 44;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 45;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1017,16 +1017,7 @@
           '<div class="scr-pref"><div class="scr-pref-l">Effort</div><div class="scr-seg">' +
           EFFORTS.map(([k, l]) => '<button data-effort="' + k + '" class="' + (k === cur ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
           '<p class="scr-hint">Higher effort thinks longer and reads more before answering, and uses more of your Claude limit.</p>');
-        $("#scrSheet").onclick = async (e) => {
-          if (e.target.id === "scrSheet") return closeSheet();
-          const b = e.target.closest("[data-effort]");
-          if (!b) return;
-          b.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
-          if (S.choices) S.choices.effort = b.dataset.effort;
-          composerRow();
-          const st = await request({ kind: "effort", effort: b.dataset.effort }, true);
-          if (st && st.choices) { S.choices = st.choices; composerRow(); }
-        };
+        $("#scrSheet").dataset.kind = "models";
         return;
       }
       if (!c) return sheet('<h3>Models</h3><p class="scr-hint">Waiting for your Mac to say which models it has…</p>');
@@ -1046,8 +1037,17 @@
     };
     openModels.refresh = () => { const s = document.getElementById("scrSheet"); if (s && s.dataset.kind === "models") draw(); };
     draw();
-    $("#scrSheet").onclick = (e) => {
+    $("#scrSheet").onclick = async (e) => {
       if (e.target.id === "scrSheet") return closeSheet();
+      const ef = e.target.closest("[data-effort]");   // the Armarium: how hard Claude thinks
+      if (ef) {
+        ef.parentElement.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === ef));
+        if (S.choices) S.choices.effort = ef.dataset.effort;
+        composerRow();
+        const st = await request({ kind: "effort", effort: ef.dataset.effort }, true);
+        if (st && st.choices) { S.choices = st.choices; composerRow(); }
+        return;
+      }
       const q = e.target.closest("[data-q]");
       if (q) { q.closest(".scr-model").classList.toggle("open"); return; }
       const row = e.target.closest("[data-model]");
