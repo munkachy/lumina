@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 55;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 56;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -846,6 +846,17 @@
     ch.messages.push({ id: 0, who: "you", kind: "user", text, meta: {} }); renderChapter();
     chapterOp({ op: "say", text });
   }
+  /* an account's limits as Claude Code reports them: the 5-hour period and the week, with when each resets */
+  function chLimits(m, long) {
+    const L = m.limits || {}, bar = (w, label) => {
+      if (!w) return "";
+      const pct = Math.round(100 * w.used), when = w.resets ? new Date(w.resets * 1000) : null;
+      const at = when ? (when - Date.now() < 86400000 ? when.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : when.toLocaleDateString([], { weekday: "short", hour: "numeric" })) : "";
+      return '<span class="ch-lim' + (pct >= 85 ? " hot" : pct >= 60 ? " warm" : "") + '"><i style="width:' + Math.min(100, pct) + '%"></i><em>' + label + " " + pct + "%" +
+        (long && at ? " · resets " + esc(at) : "") + "</em></span>";
+    };
+    return bar(L.five_hour, "5h") + bar(L.seven_day, "week");
+  }
   function renderChapter() {
     const box = $("#scrText"); if (box && !voice) box.placeholder = "Message the Chapter…";
     const names = Object.fromEntries(ch.members.map((m) => [m.id, m]));
@@ -854,7 +865,7 @@
       const pct = m.cap ? Math.round(100 * ((m.used && m.used.cost) || 0) / m.cap) : 0;
       const full = m.context && m.context.window ? Math.round(100 * m.context.used / m.context.window) : null;
       return '<button class="ch-chip st-' + m.state + '" data-chm="' + m.id + '" style="--c:' + m.color + '"><b>' + dot + " " + esc(m.name) + "</b>" +
-        "<span>" + (m.doing ? esc(m.doing) : esc(word) + (m.state === "limit" && m.rest_until ? " · back " + esc(m.rest_until) : " · " + pct + "% today" + (full != null ? " · session " + full + "%" : ""))) + "</span></button>";
+        chLimits(m, false) + "<span>" + (m.doing ? esc(m.doing) : esc(word) + (m.state === "limit" && m.rest_until ? " · back " + esc(m.rest_until) : " · " + pct + "% today" + (full != null ? " · session " + full + "%" : ""))) + "</span></button>";
     }).join("");
     const msgs = ch.messages.map((m) => {
       if (m.who === "you") return '<div class="scr-turn"><div class="scr-u">' + esc(m.text) + "</div></div>";
@@ -903,8 +914,12 @@
       '<div class="scr-pref"><div class="scr-pref-l">Publish</div>' + seg("push", [[false, "Not allowed"], [true, "May git push"]]) + "</div>" +
       '<div class="scr-pref"><div class="scr-pref-l">Daily cap</div>' + seg("cap", [[5, "$5"], [15, "$15"], [30, "$30"], [60, "$60"]]) + "</div>" +
       '<p class="scr-hint">Today: $' + (((m.used && m.used.cost) || 0).toFixed(2)) + " of usage, as Claude Code counts it. Folders: " + esc((m.dirs || []).join(", ")) + "</p>" +
+      '<div class="scr-pref"><div class="scr-pref-l">Limits</div><div class="ch-limits">' + (chLimits(m, true) || '<span class="scr-hint">Not known yet</span>') + "</div>" +
+        (m.via === "app" ? "" : '<p class="scr-hint">' + (m.limits && m.limits.at ? "As of " + new Date(m.limits.at * 1000).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) + " · " : "") +
+          '<a href="#" id="chLim">Check now</a> (a tiny turn, a fraction of a cent)</p>') + "</div>" +
       (m.via === "app" ? "" : '<p class="scr-hint">Session: ' + (m.context && m.context.window ? Math.round(100 * m.context.used / m.context.window) + "% full" : "new") +
         ' · <a href="#" id="chFresh">Start a fresh session</a> (it writes notes for the new one, which carry over)</p>'));
+    const cl = $("#chLim"); if (cl) cl.onclick = (e) => { e.preventDefault(); cl.textContent = "Checking…"; chapterOp({ op: "limits", id }).then(() => chapterMember(id)); };
     const fr = $("#chFresh"); if (fr) fr.onclick = (e) => { e.preventDefault(); closeSheet(); chapterOp({ op: "fresh", id }); };
     $("#scrSheet").onclick = (e) => {
       if (e.target.id === "scrSheet") return closeSheet();
@@ -1461,6 +1476,12 @@ body.scr-kb #scrBar{display:none}
   background:var(--panel);border-radius:10px;padding:6px 10px;font:inherit;color:var(--ink);cursor:pointer;max-width:60vw}
 .ch-chip b{font-size:.88rem;font-weight:600} .ch-chip span{font-size:.72rem;color:var(--ink-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55vw}
 .ch-chip.st-limit,.ch-chip.st-capped,.ch-chip.st-paused,.ch-chip.st-resting{opacity:.65}
+.ch-lim{position:relative;display:block;width:100%;min-width:7.5rem;height:13px;border-radius:4px;background:var(--panel2);overflow:hidden;margin:1px 0}
+.ch-lim i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,var(--c, var(--gold)) 45%,transparent)}
+.ch-lim.warm i{background:#d9a441} .ch-lim.hot i{background:#c0504d}
+.ch-lim em{position:relative;font-style:normal;font-size:.66rem;line-height:13px;padding-left:4px;color:var(--ink)}
+.ch-limits{display:flex;flex-direction:column;gap:4px;min-width:12rem}
+.ch-limits .ch-lim{height:18px} .ch-limits .ch-lim em{font-size:.78rem;line-height:18px}
 .ch-msg{border-left:3px solid var(--c);padding:2px 0 2px 10px;margin:12px 0}
 .ch-who{font-size:.8rem;font-weight:700;color:var(--c);letter-spacing:.02em} .ch-meta{font-weight:400;color:var(--ink-faint)}
 .ch-plan{background:var(--panel);border-radius:10px;padding:8px 10px}
