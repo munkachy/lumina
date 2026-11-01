@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 61;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 62;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -39,7 +39,7 @@
   /* ---------- illuminated initials ---------- */
   function illum(letter) {   // the illuminated initials; LCARS spells the words out instead
     return '<img class="scr-illum" src="icon-' + letter.toLowerCase() + '.png" alt="">' +
-      '<span class="scr-lcars">' + ({ S: "SCRIPTORIUM", L: "LUMINA", J: "JOURNAL", A: "ARMARIUM" })[letter] + "</span>";
+      '<span class="scr-lcars">' + ({ S: "SCRIPTORIUM", L: "LUMINA", J: "JOURNAL", A: "ARMARIUM", LIB: "LIBRARY" })[letter] + "</span>";
   }
 
   /* ---------- crypto (must match relaycrypto.py on the Mac) ---------- */
@@ -207,7 +207,7 @@
   }
 
   /* ---------- the fixed toolbar and message box ---------- */
-  const TABS = { armarium: [illum("A"), "Armarium"], library: ["📚", "Library"], chapter: ["⛪", "Chapter"] };   // the Journal is retired: Armarium's ✎ Entry writes notes up (its old pages are under Chats)   // Mail lives in ☰   // "faith" is the Journal (always the local AI); the Armarium is always Claude
+  const TABS = { armarium: [illum("A"), "Armarium"], library: [illum("LIB"), "Library"], chapter: ["⛪", "Chapter"] };   // the Journal is retired: Armarium's ✎ Entry writes notes up (its old pages are under Chats)   // Mail lives in ☰   // "faith" is the Journal (always the local AI); the Armarium is always Claude
   const MODES = [["eco", "Eco"], ["normal", "Normal"], ["turbo", "Turbo"]];
   const MODE_IC = { eco: "🌿", normal: "◐", turbo: "⚡" };
 
