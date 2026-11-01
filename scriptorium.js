@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 63;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 64;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -558,8 +558,8 @@
 
   function drawMind() {
     const { list, counts, recent, pairs, stars, max } = mindData();
-    /* ★: a word with a starred entry in it takes the highlighter colour; opening it shows which entry */
-    const starCls = (k) => stars.get(k) ? " star" : "";
+    /* ★: a word with starred entries in it takes rose, deeper the more stars (1, 2, 3 or more); opening it shows which */
+    const starCls = (k) => stars.get(k) ? " star s" + Math.min(3, stars.get(k)) : "";
     const seg = (name, opts) => '<div class="scr-seg">' + opts.map(([k, l]) => '<button data-' + name + '="' + k + '" class="' + (mindView[name] === k ? "on" : "") + '">' + l + "</button>").join("") + "</div>";
     let h = '<div class="scr-mind">' + mindHead() +
       '<div class="scr-mind-ctl">' + seg("range", [["month", "Month"], ["year", "Year"], ["all", "All"]]) +
@@ -1665,9 +1665,13 @@ body.scr-kb #scrBar{display:none}
 .scr-box{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink-soft);border-radius:10px;padding:6px 10px;font-family:Georgia,serif;line-height:1.2;cursor:pointer;max-width:100%;text-align:left}
 .scr-box.new{color:var(--gold);border-color:var(--gold)}
 .scr-box.on{background:var(--gold);color:var(--bg)}
-.scr-box.star,.scr-box.star.new{background:var(--hl-rose);color:var(--hl-ink,#1b1610);border-color:var(--hl-rose)}
+.scr-box.star,.scr-box.star.new{--rose:#f2c6c0;background:var(--rose);border-color:var(--rose);color:#2a1512}
+.scr-box.star.s2,.scr-box.star.s2.new{--rose:#e08a80}
+.scr-box.star.s3,.scr-box.star.s3.new{--rose:#b8443a;color:#fff}
 .scr-box.star.on{outline:2px solid var(--gold)}
-.scr-web text.star,.scr-web text.star.new{fill:var(--hl-ink,#1b1610);stroke:var(--hl-rose);stroke-width:9px;stroke-linejoin:round}
+.scr-web text.star,.scr-web text.star.new{fill:#2a1512;stroke:#f2c6c0;stroke-width:9px;stroke-linejoin:round}
+.scr-web text.star.s2,.scr-web text.star.s2.new{stroke:#e08a80}
+.scr-web text.star.s3,.scr-web text.star.s3.new{stroke:#b8443a;fill:#fff}
 .scr-star{border:0;background:none;color:var(--ink-faint);font-size:1.1rem;padding:0 6px 0 0;cursor:pointer;line-height:1}
 .scr-star.on{color:var(--gold)}
 .scr-entry.starred > summary{background:color-mix(in srgb,var(--hl-gold) 45%,transparent);border-radius:6px}
