@@ -2910,7 +2910,10 @@ const LuminaCore = (function () {
       save(); back.remove(); rerenderInPlace(); psalterMarks();
       const q = quoted();
       showToast("Sending to your Journal…");
-      loadScriptorium().then(scr => scr.ask({ kind: "faith", text: "On “" + q.words + "” (" + q.cite + "):\n\n" + thought }))
+      const text = "On “" + q.words + "” (" + q.cite + "):\n\n" + thought;
+      /* Sonnet (the Armarium, ✎ Entry) writes it up; the local AI only if Claude can't (limits, offline) */
+      loadScriptorium().then(scr => scr.ask({ kind: "armarium", entry: true, text })
+          .then(st => (!st || st.error || !st.content) ? (showToast("Claude unavailable — the local AI is writing it…"), scr.ask({ kind: "faith", text })) : st))
         .then(st => {
           if (st && st.error) return showToast("Journal: " + st.error);
           group.forEach(x => { x.journaled = Date.now(); x.journal = (st && st.content) || ""; }); save();   /* the entry, to read from the highlight */
