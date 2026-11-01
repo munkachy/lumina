@@ -924,7 +924,7 @@
         lib.hits.map((h) => '<div class="lib-hit" data-lib-read="' + h.id + '"><div class="lib-w">' + esc(h.work) + "</div><div class=\"lib-t\">" + where(h) +
           '</div><div class="lib-s">' + esc(h.snip) + "</div></div>").join("");
     } else if (lib.hits) body = '<p class="scr-hint">' + (lib.err ? esc(lib.err) : "Nothing found. Try other words, or All books.") + "</p>";
-    else body = '<div class="scr-empty"><div style="font-size:64px">📚</div><p>Search the Church Fathers, the Summa, the Catena Aurea, the Holy Rule and the Catholic Encyclopedia, ' +
+    else body = '<div class="scr-empty">' + illum("LIB") + '<p>Search the Church Fathers, the Summa, the Catena Aurea, the Holy Rule and the Catholic Encyclopedia, ' +
       "by words or by meaning. Or open a passage by its name: <i>ST I-II q.109 a.2</i>, <i>Rule ch. 7</i>, <i>Confessions X.27</i>, <i>CE Purgatory</i>.</p>" +
       '<p class="scr-small">It all runs on your Mac and uses no Claude tokens.</p></div>';
     view.innerHTML = '<div class="scr-thread lib">' + body + "</div>";
