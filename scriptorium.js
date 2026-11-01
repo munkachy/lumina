@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 62;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 63;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -540,11 +540,12 @@
   function mindData() {
     const since = { month: 31, year: 366, all: 1e6 }[mindView.range] * 864e5;
     const list = mind.filter((m) => Date.now() - Date.parse(m.date) <= since);
-    const counts = new Map(), recent = new Set(), pairs = new Map();
+    const counts = new Map(), recent = new Set(), pairs = new Map(), stars = new Map();
     for (const m of list) {
       const ks = keysOf(m);
       for (const k of ks) {
         counts.set(k, (counts.get(k) || 0) + 1);
+        if (m.star) stars.set(k, (stars.get(k) || 0) + 1);
         if (Date.now() - Date.parse(m.date) < 14 * 864e5) recent.add(k);
       }
       for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {
@@ -552,11 +553,13 @@
         pairs.set(key, (pairs.get(key) || 0) + 1);
       }
     }
-    return { list, counts, recent, pairs, max: Math.max(1, ...counts.values()) };
+    return { list, counts, recent, pairs, stars, max: Math.max(1, ...counts.values()) };
   }
 
   function drawMind() {
-    const { list, counts, recent, pairs, max } = mindData();
+    const { list, counts, recent, pairs, stars, max } = mindData();
+    /* ★: a word with a starred entry in it takes the highlighter colour; opening it shows which entry */
+    const starCls = (k) => stars.get(k) ? " star" : "";
     const seg = (name, opts) => '<div class="scr-seg">' + opts.map(([k, l]) => '<button data-' + name + '="' + k + '" class="' + (mindView[name] === k ? "on" : "") + '">' + l + "</button>").join("") + "</div>";
     let h = '<div class="scr-mind">' + mindHead() +
       '<div class="scr-mind-ctl">' + seg("range", [["month", "Month"], ["year", "Year"], ["all", "All"]]) +
@@ -572,19 +575,21 @@
     if (!list.length) {
       h += '<p class="scr-hint">' + (mind.length ? "Nothing saved in this period." : "Nothing saved yet. Tap 🧠 under a notebook entry to add it here.") + "</p>";
     } else if (mindView.view === "web") {
-      h += '<p class="scr-hint">Lines join keywords that appear in the same entry. Pinch or scroll to zoom, drag to move.</p>' + webSvg(counts, recent, pairs, max);
+      h += '<p class="scr-hint">Lines join keywords that appear in the same entry. Pinch or scroll to zoom, drag to move.</p>' + webSvg(counts, recent, pairs, max, starCls);
     } else {
       h += '<p class="scr-hint">' + list.length + " entr" + (list.length === 1 ? "y" : "ies") + ". Bigger means more often; gold means the last two weeks.</p><div class=\"scr-cloud\">" +
         [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([t, n]) =>
-          '<button class="scr-box' + (recent.has(t) ? " new" : "") + (mindView.open === t || mindView.pick === t ? " on" : "") + '" data-box="' + esc(t) + '" style="font-size:' +
+          '<button class="scr-box' + (recent.has(t) ? " new" : "") + starCls(t) + (mindView.open === t || mindView.pick === t ? " on" : "") + '" data-box="' + esc(t) + '" style="font-size:' +
           (0.8 + 0.9 * (n - 1) / Math.max(1, max - 1)).toFixed(2) + 'rem">' + esc(t) + (n > 1 ? ' <span class="n">' + n + "</span>" : "") + "</button>").join("") + "</div>";
     }
     if (mindView.open && !mindView.merging) {
-      const hits = list.filter((m) => keysOf(m).includes(mindView.open));
+      const hits = list.filter((m) => keysOf(m).includes(mindView.open)).sort((a, b) => (b.star ? 1 : 0) - (a.star ? 1 : 0));
       h += '<div class="scr-mind-panel"><div class="scr-mind-panel-h"><h3>' + esc(mindView.open) + ' <span class="n">' + hits.length + "</span></h3>" +
         '<span class="grow"></span><button class="scr-hide" data-hideword="' + esc(mindView.open) + '" title="Take this word out of the mind map; the entries stay">Remove word</button>' +
         '<button class="scr-x2" data-close-open="1" title="Back to the map">✕</button></div><div class="scr-mind-panel-b">' + hits.map((m) =>
-        '<details class="scr-entry"' + (hits.length === 1 ? " open" : "") + '><summary><span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
+        '<details class="scr-entry' + (m.star ? " starred" : "") + '"' + (hits.length === 1 ? " open" : "") + '><summary>' +
+        '<button class="scr-star' + (m.star ? " on" : "") + '" data-star="' + m.cid + '" title="' + (m.star ? "Starred: tap to unstar" : "Star it: one you want to come back to") + '">' + (m.star ? "★" : "☆") + "</button>" +
+        '<span class="d">' + new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
         "</span> " + esc(m.title) + (m.annotations ? ' <span class="scr-annd">✳︎</span>' : "") + '</summary><div class="scr-md" data-entry="' + m.cid + '">' + md(m.text || "", entryRefs(m)) + "</div>" +
         (m.annotations ? '<div class="scr-sources"><div class="h">✳︎ Sources (Claude)</div><div class="scr-md" data-entry="' + m.cid + '" data-ann="1">' + md(m.annotations, m.annotation_refs || []) + "</div></div>" : "") +
         '<div class="scr-entry-act"><button class="scr-copy2" data-copyentry="' + m.cid + '">Copy</button>' +
@@ -595,7 +600,7 @@
   }
 
   /* the Connections view: keywords placed by a small force layout (linked words pull together), drawn in SVG */
-  function webSvg(counts, recent, pairs, max) {
+  function webSvg(counts, recent, pairs, max, starCls) {
     const nodes = [...counts.keys()].map((k, i) => ({ k, n: counts.get(k), x: Math.cos(i * 2.4) * (60 + i * 6), y: Math.sin(i * 2.4) * (60 + i * 6) }));
     const idx = new Map(nodes.map((d, i) => [d.k, i]));
     const links = [...pairs.entries()].map(([key, w]) => { const [a, b] = key.split("\u0001"); return { a: idx.get(a), b: idx.get(b), w }; }).filter((l) => l.a !== undefined && l.b !== undefined);
@@ -634,7 +639,7 @@
       links.map((l) => '<line x1="' + nodes[l.a].x.toFixed(1) + '" y1="' + nodes[l.a].y.toFixed(1) + '" x2="' + nodes[l.b].x.toFixed(1) + '" y2="' + nodes[l.b].y.toFixed(1) +
         '" stroke-width="' + (0.8 + l.w * 0.9) + '" class="' + (dim(nodes[l.a].k) || dim(nodes[l.b].k) ? "dim" : "") + '"/>').join("") +
       nodes.map((d) => '<text x="' + d.x.toFixed(1) + '" y="' + d.y.toFixed(1) + '" data-box="' + esc(d.k) + '" font-size="' + fs(d).toFixed(1) +
-        '" class="' + (recent.has(d.k) ? "new " : "") + (d.k === mindView.open || d.k === mindView.pick ? "on " : "") + (dim(d.k) ? "dim" : "") + '">' + esc(d.k) + "</text>").join("") +
+        '" class="' + (starCls(d.k) || "") + " " + (recent.has(d.k) ? "new " : "") + (d.k === mindView.open || d.k === mindView.pick ? "on " : "") + (dim(d.k) ? "dim" : "") + '">' + esc(d.k) + "</text>").join("") +
       "</svg></div>";
   }
 
@@ -723,6 +728,21 @@
       mindMeta.hidden = (mindMeta.hidden || []).filter((w) => w !== uh.dataset.unhide);
       await saveMeta().catch((err) => alert("Couldn't save: " + err.message));
       return drawMind();
+    }
+    const sb = t.closest("[data-star]");
+    if (sb) {   // ★ an entry: kept in the entry itself, so every device sees it
+      e.preventDefault(); e.stopPropagation();
+      const m = mind.find((x) => String(x.cid) === sb.dataset.star);
+      if (!m) return;
+      m.star = !m.star; if (!m.star) delete m.star;
+      const keep = [...view.querySelectorAll("details.scr-entry[open] [data-star]")].map((b) => b.dataset.star);
+      drawMind();
+      keep.forEach((c) => { const b = view.querySelector('[data-star="' + c + '"]'); if (b) b.closest("details").open = true; });
+      try {
+        const { cid, ...entry } = m;
+        await gh("PATCH", "/repos/" + S.repo + "/issues/comments/" + cid, { body: MARK("mind") + "\n" + (await encryptText(S.keys, JSON.stringify(entry))) });
+      } catch (err) { m.star = !m.star; if (!m.star) delete m.star; drawMind(); alert("Couldn't save the star: " + err.message); }
+      return;
     }
     const cpe = t.closest("[data-copyentry]");
     if (cpe) {   // the whole entry, ready to paste to Claude: his words, the summary, and any sources
@@ -1645,6 +1665,12 @@ body.scr-kb #scrBar{display:none}
 .scr-box{border:1px solid var(--gold-line);background:var(--panel);color:var(--ink-soft);border-radius:10px;padding:6px 10px;font-family:Georgia,serif;line-height:1.2;cursor:pointer;max-width:100%;text-align:left}
 .scr-box.new{color:var(--gold);border-color:var(--gold)}
 .scr-box.on{background:var(--gold);color:var(--bg)}
+.scr-box.star,.scr-box.star.new{background:var(--hl-rose);color:var(--hl-ink,#1b1610);border-color:var(--hl-rose)}
+.scr-box.star.on{outline:2px solid var(--gold)}
+.scr-web text.star,.scr-web text.star.new{fill:var(--hl-ink,#1b1610);stroke:var(--hl-rose);stroke-width:9px;stroke-linejoin:round}
+.scr-star{border:0;background:none;color:var(--ink-faint);font-size:1.1rem;padding:0 6px 0 0;cursor:pointer;line-height:1}
+.scr-star.on{color:var(--gold)}
+.scr-entry.starred > summary{background:color-mix(in srgb,var(--hl-gold) 45%,transparent);border-radius:6px}
 .scr-box .n{font-family:-apple-system,sans-serif;font-size:.7em;opacity:.7}
 .scr-mind-panel{position:fixed;left:0;right:0;bottom:var(--scr-bbar-h,0px);top:calc(var(--scr-bar-h) + env(safe-area-inset-top));z-index:45;background:var(--bg);display:flex;flex-direction:column}
 .scr-mind-panel-h{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--gold-line);max-width:760px;width:100%;margin:0 auto;box-sizing:border-box}
