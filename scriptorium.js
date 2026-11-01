@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 60;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 61;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -27,7 +27,7 @@
     const b = document.getElementById("scrText");
     if (b && !voice && tab === "armarium") b.placeholder = entryMode ? "A note for your Journal…" : "Ask Armarium…";
   }
-  let tab = "faith", web = false, current = null, voice = null, speaking = null;
+  let tab = "armarium", web = false, current = null, voice = null, speaking = null;
   let prefs = Object.assign({
     answerSize: 1, answerFont: "serif", thinkSize: 0.9, thinkFont: "sans",
     autoRead: false, voice: { engine: "device", id: "" },
@@ -207,7 +207,7 @@
   }
 
   /* ---------- the fixed toolbar and message box ---------- */
-  const TABS = { faith: [illum("J"), "Journal"], armarium: [illum("A"), "Armarium"], chapter: ["⛪", "Chapter"] };   // Mail lives in ☰   // "faith" is the Journal (always the local AI); the Armarium is always Claude
+  const TABS = { armarium: [illum("A"), "Armarium"], library: ["📚", "Library"], chapter: ["⛪", "Chapter"] };   // the Journal is retired: Armarium's ✎ Entry writes notes up (its old pages are under Chats)   // Mail lives in ☰   // "faith" is the Journal (always the local AI); the Armarium is always Claude
   const MODES = [["eco", "Eco"], ["normal", "Normal"], ["turbo", "Turbo"]];
   const MODE_IC = { eco: "🌿", normal: "◐", turbo: "⚡" };
 
@@ -262,6 +262,13 @@
     const row = $("#scrCompose .scr-crow");
     if (!row) return;
     const full = $("#scrCompose").classList.contains("full");
+    if (tab === "library") {
+      row.innerHTML = '<button class="scr-chip" data-act="libwork" title="Which books to search">' + esc(LIB_WORKS[lib.work][1]) + " ▾</button>" +
+        '<span class="grow"></span>' +
+        '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
+        '<button class="scr-send" data-act="send" title="Search">⌕</button>';
+      return;
+    }
     if (tab === "chapter") {
       // one button per member: tap to write to them only; they stay chosen until tapped again (none chosen: all)
       row.innerHTML = '<span class="ch-to">' + '<button class="ch-tob' + (ch.sel.length ? "" : " on") + '" data-act="chall">All</button>' +
@@ -298,6 +305,7 @@
   function modelName(purpose) {
     if (purpose === "armarium") {   // whose account, and how hard it thinks
       const c = S && S.choices, a = c && (c.accounts || []).find((x) => x.id === c.account);
+      if ((c && c.claude_model) === "local") return "Local AI (on your Mac)";
       return (a ? a.name.replace(/^Mr\. /, "") : "Claude") + " · " + ((c && c.claude_model) === "opus" ? "Opus" : "Sonnet") + " · " + effortName((c && c.effort) || "medium");
     }
     const c = S && S.choices;
@@ -343,6 +351,7 @@
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
+    else if (act === "libwork") { lib.work = (lib.work + 1) % LIB_WORKS.length; composerRow(); if (lib.q) librarySearch(lib.q); }
     else if (act === "chto" || act === "chall") {
       const id = t.dataset.id;
       ch.sel = act === "chall" ? [] : ch.sel.includes(id) ? ch.sel.filter((x) => x !== id) : [...ch.sel, id];
@@ -700,7 +709,7 @@
       if (r && window.LuminaNav) { leaveChrome(); r.ccc ? window.LuminaNav.ccc(r.ccc) : window.LuminaNav.verse(r.book, r.c, r.v || 1); }
       return;
     }
-    if (t.closest("[data-mind-close]")) { leaveMind(); tab = "faith"; return renderMain(); }
+    if (t.closest("[data-mind-close]")) { leaveMind(); tab = "armarium"; return renderMain(); }
     if (t.closest("[data-close-open]")) { mindView.open = null; return drawMind(); }
     const hw = t.closest("[data-hideword]"), uh = t.closest("[data-unhide]");
     if (hw) {
@@ -761,11 +770,14 @@
 
   /* ---------- past conversations (kept on the Mac) ---------- */
   async function openConvs() {
+    if (tab === "library") { tab = "armarium"; renderMain(); }
     if (tab === "chapter") return sheet('<h3>Rooms</h3><p class="scr-hint">The Chapter keeps one running conversation.</p>' +
       '<button class="scr-primary" id="scrToMail">✉ Mail</button>'), $("#scrToMail").onclick = () => { closeSheet(); tab = "mail"; renderMain(); };
     const kindNow = tab;
     sheet("<h3>" + PURPOSE[kindNow] + ' conversations</h3><p class="scr-hint">Asking your Mac…</p>');
-    const mailRow = kindNow === "mail" ? "" : '<p class="scr-small"><a href="#" id="scrToMail">✉ Mail</a> · the mail room</p>';
+    const mailRow = (kindNow === "mail" ? "" : '<p class="scr-small"><a href="#" id="scrToMail">✉ Mail</a> · the mail room</p>') +
+      (kindNow === "armarium" ? '<p class="scr-small"><a href="#" id="scrToJournal">📓 Journal pages</a> · your notebook before Nov 1</p>' :
+       kindNow === "faith" ? '<p class="scr-small"><a href="#" id="scrToArm">' + illum("A") + ' Armarium</a> · back to its conversations</p>' : "");
     const draw = (list) => {
       const when = (t) => new Date(t * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
       sheet("<h3>" + PURPOSE[kindNow] + " conversations</h3>" + mailRow + (list.length ? list.map((c) =>
@@ -775,6 +787,8 @@
       const card = $(".scr-sheet-card");
       if (card) card.onclick = async (e) => {
         if (e.target.id === "scrToMail") { e.preventDefault(); closeSheet(); tab = "mail"; return renderMain(); }
+        if (e.target.closest("#scrToJournal")) { e.preventDefault(); tab = "faith"; return openConvs(); }
+        if (e.target.closest("#scrToArm")) { e.preventDefault(); tab = "armarium"; renderMain(); return openConvs(); }
         const del = e.target.closest("[data-del]"), open = e.target.closest("[data-open]");
         if (del) {
           e.stopPropagation();
@@ -872,6 +886,67 @@
     };
     return bar(L.five_hour, "5h") + bar(L.seven_day, "week");
   }
+  /* ---------- the Library: the classics on the Mac, searched by words and meaning, read whole (no tokens) ---------- */
+  const LIB_WORKS = [["", "All books"], ["Church Fathers", "Fathers"], ["Summa", "St Thomas"], ["Catena", "Catena Aurea"],
+                     ["Rule", "Holy Rule"], ["Encyclopedia", "Encyclopedia"]];
+  const lib = { q: "", work: 0, hits: null, reading: null, busy: false, scroll: 0 };
+  async function librarySearch(q) {
+    lib.q = q; lib.busy = true; lib.reading = null; renderLibrary();
+    const st = await request({ kind: "library", op: "search", query: q, work: LIB_WORKS[lib.work][0], limit: 25 }, true);
+    lib.busy = false;
+    lib.hits = (st && st.library && st.library.hits) || [];
+    lib.err = st && st.error;
+    if (tab === "library") { renderLibrary(); window.scrollTo(0, 0); }
+  }
+  async function libraryRead(ref) {
+    if (lib.reading == null) lib.scroll = window.scrollY;
+    lib.busy = true; renderLibrary();
+    const st = await request({ kind: "library", op: "read", ref: String(ref) }, true);
+    lib.busy = false;
+    lib.reading = (st && st.library && st.library.passages) || [];
+    if (tab === "library") { renderLibrary(); window.scrollTo(0, 0); }
+  }
+  function renderLibrary() {
+    const box = $("#scrText"); if (box && !voice) box.placeholder = "Search the Fathers, St Thomas, the Catena, the Rule…";
+    const where = (h) => esc(h.author ? h.author + " · " : "") + esc(h.title) + (h.ref ? ' <span class="d">' + esc(h.ref) + "</span>" : "");
+    let body;
+    if (lib.busy) body = '<p class="scr-hint">Asking your Mac…</p>';
+    else if (lib.reading) {
+      body = '<p class="scr-small"><a href="#" data-lib-back="1">‹ Back to the results</a></p>' + (lib.reading.length ? lib.reading.map((p) =>
+        '<article class="lib-pass"><div class="lib-w">' + esc(p.work) + "</div><h3>" + where(p) + "</h3>" +
+        String(p.text || "").split(/\n\s*\n/).map((x) => "<p>" + esc(x.trim()) + "</p>").join("") +
+        '<div class="lib-act">' + (p.prev ? '<button data-lib-read="' + p.prev + '">‹ Before</button>' : "") +
+        '<button data-lib-copy="' + p.id + '">Copy</button><button data-lib-ask="' + p.id + '">' + illum("A") + " Ask Armarium</button>" +
+        (p.next ? '<button data-lib-read="' + p.next + '">After ›</button>' : "") + "</div></article>").join("")
+        : '<p class="scr-hint">That passage wasn\'t found.</p>');
+    } else if (lib.hits && lib.hits.length) {
+      body = '<p class="scr-small">' + lib.hits.length + " passages for <b>" + esc(lib.q) + "</b> · " + esc(LIB_WORKS[lib.work][1]) + "</p>" +
+        lib.hits.map((h) => '<div class="lib-hit" data-lib-read="' + h.id + '"><div class="lib-w">' + esc(h.work) + "</div><div class=\"lib-t\">" + where(h) +
+          '</div><div class="lib-s">' + esc(h.snip) + "</div></div>").join("");
+    } else if (lib.hits) body = '<p class="scr-hint">' + (lib.err ? esc(lib.err) : "Nothing found. Try other words, or All books.") + "</p>";
+    else body = '<div class="scr-empty"><div style="font-size:64px">📚</div><p>Search the Church Fathers, the Summa, the Catena Aurea, the Holy Rule and the Catholic Encyclopedia, ' +
+      "by words or by meaning. Or open a passage by its name: <i>ST I-II q.109 a.2</i>, <i>Rule ch. 7</i>, <i>Confessions X.27</i>, <i>CE Purgatory</i>.</p>" +
+      '<p class="scr-small">It all runs on your Mac and uses no Claude tokens.</p></div>';
+    view.innerHTML = '<div class="scr-thread lib">' + body + "</div>";
+    view.onclick = (e) => {
+      const back = e.target.closest("[data-lib-back]");
+      if (back) { e.preventDefault(); lib.reading = null; renderLibrary(); return window.scrollTo(0, lib.scroll); }
+      const rd = e.target.closest("[data-lib-read]");
+      if (rd) return libraryRead(rd.dataset.libRead);
+      const passage = (id) => (lib.reading || []).find((p) => String(p.id) === id);
+      const cp = e.target.closest("[data-lib-copy]");
+      if (cp) { const p = passage(cp.dataset.libCopy); if (p) navigator.clipboard.writeText(p.text + "\n\n— " + (p.author ? p.author + ", " : "") + p.title + (p.ref ? " (" + p.ref + ")" : "")); cp.textContent = "Copied"; return; }
+      const ask = e.target.closest("[data-lib-ask]");
+      if (ask) {
+        const p = passage(ask.dataset.libAsk); if (!p) return;
+        tab = "armarium"; entryMode = false; try { localStorage.setItem("scr-entry", "0"); } catch (x) {}
+        renderMain(); composerRow(); placeholderFor();
+        const tb = $("#scrText"); tb.value = "About this passage (#" + p.id + ", " + (p.author ? p.author + " — " : "") + p.title + "): "; tb.focus();
+      }
+    };
+    composerRow();
+  }
+
   function renderChapter() {
     const box = $("#scrText"); if (box && !voice) box.placeholder = "Message the Chapter…";
     const names = Object.fromEntries(ch.members.map((m) => [m.id, m]));
@@ -979,6 +1054,7 @@
   function renderMain() {
     chrome(true);
     if (tab === "chapter") return renderChapter();
+    if (tab === "library") return renderLibrary();
     const tb = $("#scrText"); if (tb && !voice && /Chapter/.test(tb.placeholder)) tb.placeholder = "Message Scriptorium…";
     if (tab !== "code") syncRoom(tab);
     placeholderFor(); if (tb && !voice && tab !== "armarium" && /Journal…|Armarium…/.test(tb.placeholder)) tb.placeholder = "Message Scriptorium…";
@@ -1141,6 +1217,7 @@
     [60, 400].forEach((ms) => setTimeout(() => { box.value = ""; }, ms));   // iOS can re-insert its last word after blur
     setComposer("normal");
     if (tab === "chapter") return chapterSay(text);
+    if (tab === "library") return librarySearch(text);
     request({ kind: tab, text, ...(tab === "armarium" ? { entry: entryMode } : {}), conversation: data.conv[tab] || null, project: tab === "code" ? data.project || (S.projects || [])[0] : null, web });
     web = false;
   }
@@ -1231,15 +1308,16 @@
       const c = S && S.choices;
       if (tab === "armarium") {   // always Claude; he chooses how hard it thinks
         const cur = (c && c.effort) || "low";
-        sheet('<h3>Claude in the Armarium</h3><p class="scr-hint">The Armarium always uses Claude, with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia. The Journal always uses the AI on your Mac.</p>' +
+        sheet('<h3>Claude in the Armarium</h3><p class="scr-hint">The Armarium uses Claude (or, when you choose, the AI on your Mac), with the Catechism, the Bible, the Church documents and the classics: the Fathers, St Thomas, the Rule and the Catholic Encyclopedia.</p>' +
           '<div class="scr-pref"><div class="scr-pref-l">Account</div><div class="scr-seg">' +
           ((c && c.accounts) || []).map((a) => '<button data-acct="' + a.id + '" class="' + (a.id === (c.account || "p") ? "on" : "") + '"' + (a.signed_in ? "" : " disabled") +
             ' title="' + (a.signed_in ? "Charge the Armarium to " + esc(a.name) : esc(a.name) + " isn't signed in on the Mac yet") + '">' + esc(a.name.replace(/^Mr\. /, "")) + "</button>").join("") + "</div></div>" +
           '<div class="scr-pref"><div class="scr-pref-l">Model</div><div class="scr-seg">' +
-          [["sonnet", "Sonnet"], ["opus", "Opus"]].map(([k, l]) => '<button data-cmodel="' + k + '" class="' + (k === ((c && c.claude_model) || "sonnet") ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
+          [["sonnet", "Sonnet"], ["opus", "Opus"], ["local", "Local AI"]].map(([k, l]) => '<button data-cmodel="' + k + '" class="' + (k === ((c && c.claude_model) || "sonnet") ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
           '<div class="scr-pref"><div class="scr-pref-l">Effort</div><div class="scr-seg">' +
           EFFORTS.map(([k, l]) => '<button data-effort="' + k + '" class="' + (k === cur ? "on" : "") + '">' + l + "</button>").join("") + "</div></div>" +
-          '<p class="scr-hint">Higher effort thinks longer and reads more before answering, and uses more of your Claude limit.</p>');
+          '<p class="scr-hint">Higher effort thinks longer and reads more before answering, and uses more of your Claude limit. ' +
+          "<b>Local AI</b> runs on your Mac for free, for when Claude's limits run out: slower and plainer, with the same library (account and effort don't apply).</p>");
         $("#scrSheet").dataset.kind = "models";
         return;
       }
@@ -1610,6 +1688,13 @@ body.scr-kb #scrBar{display:none}
 .scr-thread{max-width:740px;margin:0 auto;padding:10px 4px 20px}
 .scr-proj{display:flex;gap:8px;align-items:center;color:var(--ink-faint);font-size:.85rem;margin:4px 0 10px}
 .scr-proj select{flex:1;padding:6px 8px;border-radius:10px;border:1px solid var(--gold-line);background:var(--panel);color:var(--ink)}
+.lib-hit{padding:11px 4px;border-bottom:1px solid var(--gold-line);cursor:pointer}
+.lib-w{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.lib-t{font-family:Georgia,serif;margin:2px 0}.lib-t .d,.lib-pass h3 .d{font-size:.78rem;color:var(--ink-faint);font-family:-apple-system,sans-serif}
+.lib-s{font-size:.86rem;color:var(--ink-soft);line-height:1.4}
+.lib-pass h3{font-family:Georgia,serif;font-size:1.05rem;margin:.2rem 0 .7rem}.lib-pass p{font-family:Georgia,serif;line-height:1.55;margin:0 0 .8rem}
+.lib-act{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 28px}.lib-act button{border:1px solid var(--gold-line);background:none;color:inherit;border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+.lib-act .scr-illum{width:1.2em;height:1.2em;vertical-align:-.25em}
 .scr-empty{text-align:center;color:var(--ink-faint);margin-top:16vh}
 .scr-empty .scr-illum{width:84px;height:84px;margin:0 auto 12px}
 .scr-turn{margin:0 0 26px}

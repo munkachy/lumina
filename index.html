@@ -759,7 +759,7 @@ const LuminaCore = (function () {
   }
   function parseApiContent(content){
     const out = [];
-    const re = /\[(\d+)\]/g;
+    const re = /\[(\d+)(?:[-–]\d+)?\]/g;   /* "[5-8]": a translation that joins verses (GNT) */
     let m, prev = null;
     while ((m = re.exec(content)) !== null){
       if (prev) out.push({ n: prev.n, t: content.slice(prev.end, m.index) });
@@ -779,7 +779,11 @@ const LuminaCore = (function () {
     if (!verses.length) return null;
     const ch = { v: verses.map(x => x.t) };
     if (plan.n) ch.n = plan.n.slice(0, ch.v.length);
-    if (drbLen === ch.v.length + 1) ch.o = 1;
+    else if (verses.some((x, j) => x.n !== j + 1)){   /* joined or missing verses: keep each verse's own number */
+      ch.n = verses.map(x => x.n);
+      ch.d = verses.map(x => Math.max(0, Math.min(drbLen - 1, x.n - 1)));
+    }
+    if (!ch.d && drbLen === ch.v.length + 1) ch.o = 1;
     return ch;
   }
 
@@ -2449,7 +2453,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=60"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=61"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
