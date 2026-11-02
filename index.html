@@ -155,6 +155,7 @@
 .prayers .pr-lit i{color:var(--ink-soft)}
 .prayers .pr-lit li.pr-litp{padding-left:0; text-indent:0; margin:.35rem 0 .5rem}
 .prayers .pr-lit .pr-litp b{font-weight:600}
+.prayers .pr-yr{cursor:pointer; margin:.25rem 0} .prayers .pr-yr.on{color:var(--gold)}
 .prayers .pr-today{text-align:center; font-style:italic; color:var(--ink-soft); margin:-.2rem 0 .8rem}
 .prayers .pr-bishop{font:inherit; color:var(--gold); background:none; border:none; border-bottom:1px dotted var(--gold-line);
   padding:0; cursor:pointer; text-indent:0}
@@ -587,7 +588,7 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="btn ib" id="btnTimer" title="Timer"><span class="ic" id="btnTimerIc">⏱</span><span class="lb" id="btnTimerLb">Timer</span></button>
     <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><img class="illum" src="icon-s.png" alt=""></span><span class="lb">Scriptorium</span></button>
     <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
-    <button class="btn ib" id="btnPrayers" title="Daily prayers: the Society and the Auxilium Christianorum"><span class="ic">✙</span><span class="lb">Prayers</span></button>
+    <button class="btn ib" id="btnPrayers" title="Daily prayers: the Society, the Auxilium Christianorum and the Pope's intentions"><span class="ic">✙</span><span class="lb">Prayers</span></button>
     <button class="btn ib" id="btnReadings" title="Daily Mass readings"><span class="ic">✠</span><span class="lb">Daily</span></button>
     <button class="btn ib" id="btnPlan" title="Mind map"><span class="ic">🧠</span><span class="lb">Mind</span></button>
   </div>
@@ -1586,30 +1587,73 @@ const LuminaCore = (function () {
     else { state.bishop = st.bishop; save(); showToast("The Archdiocese of " + SOCIETY_SEE + " is now led by " + st.bishop + (st.since ? " (since " + st.since + ")" : "")); }
     if (cur && cur.kind === "prayers") rerenderInPlace();
   }
+  /* The Pope's monthly prayer intentions (the Pope's Worldwide Prayer Network), public, so not in the encrypted file.
+     Add each new year's list when it is published (usually at Christmas). */
+  const POPE_INTENTIONS = {
+    2026: { pope: "Pope Leo XIV", list: [
+      ["For prayer with the word of God", "Let us pray that praying with the word of God be nourishment for our lives and a source of hope in our communities, helping us to build a more fraternal and missionary Church."],
+      ["For children with incurable diseases", "Let us pray that children suffering from incurable diseases and their families receive the necessary medical care and support, never losing strength and hope."],
+      ["For disarmament and peace", "Let us pray that nations move toward effective disarmament, particularly nuclear disarmament, and that world leaders choose the path of dialogue and diplomacy instead of violence."],
+      ["For priests in crisis", "Let us pray for priests going through moments of crisis in their vocation, that they may find the accompaniment they need and that communities may support them with understanding and prayer."],
+      ["That everyone might have food", "Let us pray that everyone, from large producers to small consumers, be committed to avoid wasting food and to ensure that everyone has access to quality food."],
+      ["For the values of sports", "Let us pray that sports be an instrument of peace, encounter, and dialogue among cultures and nations, and that they promote values such as respect, solidarity, and personal growth."],
+      ["For respect for human life", "Let us pray for the respect and protection of human life in all its stages, recognizing it as a gift from God."],
+      ["For evangelization in the city", "Let us pray that in large cities often marked by anonymity and loneliness we find new ways to proclaim the Gospel, discovering creative paths to build community."],
+      ["For the care of water", "Let us pray for a just and sustainable management of water, a vital resource, so that everyone may have equal access to it."],
+      ["For mental health ministry", "Let us pray that mental health ministry be established throughout the Church, helping to overcome the stigma and discrimination of persons with mental illnesses."],
+      ["For the proper use of wealth", "Let us pray for the proper use of wealth, that not succumbing to the temptation of selfishness, it may always be put at the service of the common good and solidarity of those who have less."],
+      ["For single-parent families", "Let us pray for families experiencing the absence of a mother or father, that they may find support and accompaniment in the Church, and help and strength in the faith during difficult times."]
+    ]}
+  };
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const POPE_OFFERING = "O Jesus, through the Immaculate Heart of Mary, I offer Thee my prayers, works, joys and sufferings of this day, " +
+    "for all the intentions of Thy Sacred Heart, in union with the Holy Sacrifice of the Mass throughout the world, in reparation for my sins, " +
+    "for the intentions of all our associates, and in particular for the intention of the Holy Father this month. Amen.";
+  function popeSet(month){
+    const now = new Date(), years = Object.keys(POPE_INTENTIONS).map(Number);
+    const year = POPE_INTENTIONS[now.getFullYear()] ? now.getFullYear() : Math.max(...years), Y = POPE_INTENTIONS[year];
+    if (month == null) month = year === now.getFullYear() ? now.getMonth() : 0;
+    const [title, text] = Y.list[month];
+    return { id: "pope", name: "Pope", title: "The Holy Father's Intentions",
+      month, year, months: Y.list.map((x, i) => i),
+      sections: [
+        { h: MONTHS[month] + " " + year + " · " + title, b: [text] },
+        { h: "Morning Offering", b: [POPE_OFFERING] },
+        { h: "For the Holy Father's intentions", b: ["Our Father · Hail Mary · Glory Be"] },
+        { h: "The whole year", b: [], year: Y.list.map(([t, x], i) => ({ i, t, x })) }
+      ],
+      credit: Y.pope + "'s monthly intentions for " + year + ", entrusted to the Pope's Worldwide Prayer Network" +
+        (year !== now.getFullYear() ? " · this year's list isn't in Lumina yet" : "") };
+  }
   function renderPrayers(setId, day){
     view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">Opening the prayers…</p></div>';
-    loadPrayers().then(() => {
-      const sets = window.LUMINA_PRAYERS.sets;
+    const pope = (setId || state.lastPrayers) === "pope";
+    (pope ? loadPrayers().catch(() => null) : loadPrayers()).then(() => {
+      const sets = [...((window.LUMINA_PRAYERS && window.LUMINA_PRAYERS.sets) || []).filter(s => s.id !== "pope"), popeSet(setId === "pope" ? day : null)];
       const set = sets.find(s => s.id === (setId || state.lastPrayers)) || sets[0];
       const today = new Date().getDay();
       if (day == null) day = today;
       state.lastPrayers = set.id; save();
-      cur = { kind:"prayers", set: set.id, day };
+      cur = { kind:"prayers", set: set.id, day: set.id === "pope" ? set.month : day };
       record(cur);
       let html = '<div class="view prayers"><div class="crumb"><button class="btn" id="backMore">← Back</button></div>' +
         '<div class="tabrow">' + sets.map(s => '<button class="btn small' + (s.id === set.id ? ' on' : '') + '" data-set="' + s.id + '">' + esc(s.name) + '</button>').join("") + '</div>' +
         '<div class="ch-head"><h2 class="ch-title">' + esc(set.title) + '</h2></div>';
-      if (set.sections.some(x => x.day != null))
+      if (set.months)   /* the Pope's: a month row, like the Auxilium's days */
+        html += '<div class="tabrow">' + set.months.map(i => '<button class="btn small' + (i === set.month ? ' on' : '') + '" data-month="' + i + '">' + MONTHS[i].slice(0, 3) + '</button>').join("") + '</div>';
+      else if (set.sections.some(x => x.day != null))
         html += '<div class="tabrow">' + DAYS.map((d, i) => '<button class="btn small' + (i === day ? ' on' : '') + '" data-day="' + i + '">' + d.slice(0, 3) + '</button>').join("") + '</div>' +
           (day !== today ? '<p class="pr-today">Showing ' + DAYS[day] + "'s prayer · today is " + DAYS[today] + '</p>' : '');
       set.sections.filter(x => x.day == null || x.day === day).forEach(x => {
-        html += '<div class="pr-sec">' + (x.h ? '<h3 class="pr-h">' + esc(x.h) + '</h3>' : '') + x.b.map(prayerBlock).join("") + '</div>';
+        html += '<div class="pr-sec">' + (x.h ? '<h3 class="pr-h">' + esc(x.h) + '</h3>' : '') + x.b.map(prayerBlock).join("") +
+          (x.year ? x.year.map(y => '<p class="pr-p pr-yr' + (y.i === set.month ? ' on' : '') + '" data-month="' + y.i + '"><b>' + MONTHS[y.i] + '</b> · ' + esc(y.t) + '</p>').join("") : '') + '</div>';
       });
       if (set.credit) html += '<p class="pr-credit">' + esc(set.credit) + '</p>';
       view.innerHTML = html + '</div>';
       $("backMore").onclick = () => navBack();
       view.querySelectorAll("[data-set]").forEach(b => b.onclick = () => renderPrayers(b.dataset.set));
       view.querySelectorAll("[data-day]").forEach(b => b.onclick = () => renderPrayers(set.id, +b.dataset.day));
+      view.querySelectorAll("[data-month]").forEach(b => b.onclick = () => renderPrayers("pope", +b.dataset.month));
       view.querySelectorAll(".pr-bishop").forEach(b => b.onclick = () => checkBishop(b));
       scrollTo(0, 0);
     }).catch(() => { view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">The prayers stay locked until you enter your Scriptorium password.</p></div>'; });
