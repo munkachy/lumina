@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 67;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 68;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -266,7 +266,8 @@
       // one button per member: tap to write to them only; they stay chosen until tapped again (none chosen: all)
       row.innerHTML = '<span class="ch-to">' + '<button class="ch-tob' + (ch.sel.length ? "" : " on") + '" data-act="chall">All</button>' +
         ch.members.map((m) => '<button class="ch-tob' + (ch.sel.includes(m.id) ? " on" : "") + '" data-act="chto" data-id="' + m.id + '" style="--c:' + m.color + '">' +
-          esc(m.name.replace(/^Mr\. /, "")) + "</button>").join("") + "</span>" +
+          esc(m.name.replace(/^Mr\. /, "")) + "</button>").join("") +
+        '<button class="ch-tob ch-sess" data-act="chsess" title="New session, or an earlier one">◷ ' + esc(chThreadLabel(true)) + " ▾</button></span>" +
         '<span class="grow"></span>' +
         '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
         '<button class="scr-ib" data-act="size" title="' + ($("#scrCompose").classList.contains("full") ? "Smaller" : "Full screen") + '">' +
@@ -351,8 +352,9 @@
       const id = t.dataset.id;
       ch.sel = act === "chall" ? [] : ch.sel.includes(id) ? ch.sel.filter((x) => x !== id) : [...ch.sel, id];
       try { localStorage.setItem("scr-chapter-to", JSON.stringify(ch.sel)); } catch (e) {}
-      composerRow();
+      renderChapter();   // one member chosen: his own session with it; otherwise the room's
     }
+    else if (act === "chsess") chapterSessions();
     else if (act === "chstop") { if (confirm("Stop everyone in the Chapter?")) chapterOp({ op: "stop" }); }
   }
 
@@ -842,6 +844,47 @@
     ch.older = ch.older === undefined || !older.length ? !!c.older : ch.older;
     ch.since = (c.messages || []).reduce((n, m) => Math.max(n, m.id), ch.since);
     ch.members = c.members || ch.members; ch.busy = !!c.busy;
+    if (c.room_thread) ch.room_thread = c.room_thread;
+    if (c.threads) ch.threads = c.threads;
+  }
+  /* Sessions: the room's, shared by everyone ("room:N"), and his own with one member ("w:N"), chosen by picking only
+     that member. A new session starts afresh; an earlier one picks up where it was. */
+  const thOf = (m) => (m.meta && m.meta.thread) || "room:1";
+  function chThread() {
+    if (ch.sel.length === 1) { const m = ch.members.find((x) => x.id === ch.sel[0]); return ch.sel[0] + ":" + ((m && m.thread) || 1); }
+    return "room:" + (ch.room_thread || 1);
+  }
+  function chThreadLabel(short) {
+    const [scope, n] = chThread().split(":"), m = ch.members.find((x) => x.id === scope);
+    if (scope === "room") return short ? "Session " + n : "Everyone · session " + n;
+    const nm = m ? m.name.replace(/^Mr\. /, "") : scope;
+    return short ? nm + " " + n : "Just you and " + (m ? m.name : scope) + " · session " + n;
+  }
+  function chapterSessions() {
+    const t = chThread(), [scope, n] = t.split(":"), m = ch.members.find((x) => x.id === scope);
+    const who = scope === "room" ? "everyone" : m ? m.name : scope;
+    const when = (x) => new Date(x * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    const list = ((ch.threads || {})[scope] || []);
+    sheet("<h3>Sessions with " + esc(who) + '</h3><p class="scr-hint">' + (scope === "room"
+        ? "A new session starts everyone afresh, together: none of them carries the old conversation. An earlier one picks up where it was."
+        : "Only " + esc(who) + " reads your own sessions, and it hands nothing on. A new one starts it afresh; an earlier one picks up where it was.") + "</p>" +
+      '<div class="ch-btns"><button class="scr-primary" id="chNewSess">＋ New session with ' + esc(who) + "</button></div>" +
+      (list.length ? list.map((e) => '<div class="scr-conv' + (String(e.n) === n ? " on" : "") + '" data-chth="' + e.n + '"><span class="t">' + e.n + " · " +
+        esc(e.title || "(no messages yet)") + '</span><span class="d">' + when(e.last) + " · " + e.count + "</span></div>").join("")
+        : '<p class="scr-hint">No earlier sessions.</p>'));
+    $("#chNewSess").onclick = async () => {
+      closeSheet();
+      const c = await chapterOp({ op: "newthread", scope });
+      if (c) renderChapter();
+    };
+    $(".scr-sheet-card").onclick = async (e) => {
+      const row = e.target.closest("[data-chth]"); if (!row) return;
+      closeSheet();
+      if (scope === "room") ch.room_thread = +row.dataset.chth; else if (m) m.thread = +row.dataset.chth;
+      renderChapter();
+      await chapterOp({ op: "thread", scope, n: +row.dataset.chth });
+      chapterOp({ op: "get", thread_msgs: scope + ":" + row.dataset.chth });
+    };
   }
   async function chapterRead() {
     clearTimeout(ch.timer);
@@ -876,19 +919,23 @@
     let st = null;
     try { st = await request({ kind: "chapter", since: ch.since, ...req }, true); } catch (e) {}
     const c = st && st.chapter;
-    if (c && req.before) {   // earlier messages, put in front
-      ch.messages = [...(c.messages || []).filter((m) => !ch.messages.some((x) => x.id === m.id)), ...ch.messages];
-      ch.older = !!c.older && (c.messages || []).length > 0;
-    } else if (c) { ch.members = c.members || ch.members; ch.busy = !!c.busy; }
+    if (c && (req.before || req.thread_msgs)) {   // earlier messages, or one session's: merged in order
+      ch.messages = [...ch.messages.filter((x) => x.id), ...(c.messages || []).filter((m) => !ch.messages.some((x) => x.id === m.id))]
+        .sort((a, b) => a.id - b.id).concat(ch.messages.filter((x) => !x.id));
+      (ch.olderBy = ch.olderBy || {})[req.thread_msgs || chThread()] = !!c.older && (c.messages || []).length > 0;
+      if (!req.thread_msgs) ch.older = ch.olderBy[chThread()];
+    }
+    if (c) { ch.members = c.members || ch.members; ch.busy = !!c.busy; if (c.room_thread) ch.room_thread = c.room_thread; if (c.threads) ch.threads = c.threads; }
     if (tab === "chapter" && !mindMode) renderChapter();
     chLog.etag = ""; setTimeout(chapterRead, 400);
     return c;
   }
   function chapterSay(text) {
     ch.active = Date.now(); if (ch.asleep) chapterWake();
-    if (ch.sel.length && !/(^|\s)@\w/.test(text)) text = ch.sel.map((id) => "@" + id).join(" ") + " " + text;
-    ch.messages.push({ id: 0, who: "you", kind: "user", text, meta: {} }); renderChapter();
-    chapterOp({ op: "say", text });
+    const thread = chThread();
+    if (ch.sel.length > 1 && !/(^|\s)@\w/.test(text)) text = ch.sel.map((id) => "@" + id).join(" ") + " " + text;
+    ch.messages.push({ id: 0, who: "you", kind: "user", text, meta: { thread } }); renderChapter();
+    chapterOp({ op: "say", text, thread });
   }
   /* an account's limits as Claude Code reports them: the 5-hour period and the week, with when each resets */
   function chLimits(m, long) {
@@ -968,17 +1015,22 @@
     const chips = ch.members.map((m) => {
       const [dot, word] = CH_STATE[m.state] || ["○", m.state];
       const pct = m.cap ? Math.round(100 * ((m.used && m.used.cost) || 0) / m.cap) : 0;
-      const full = m.context && m.context.window ? Math.round(100 * m.context.used / m.context.window) : null;
+      const cx = (ch.sel.length === 1 && ch.sel[0] === m.id ? m.own_context : m.room_context) || m.context || {};
+      const full = cx.window ? Math.round(100 * cx.used / cx.window) : null;
       return '<button class="ch-chip st-' + m.state + '" data-chm="' + m.id + '" style="--c:' + m.color + '"><b>' + dot + " " + esc(m.name) + "</b>" +
         chLimits(m, false) + "<span>" + (m.doing ? esc(m.doing) : esc(word) + (m.state === "limit" && m.rest_until ? " · back " + esc(m.rest_until) : " · " + pct + "% today" + (full != null ? " · session " + full + "%" : ""))) + "</span></button>";
     }).join("");
-    const msgs = ch.messages.map((m) => {
+    const thread = chThread();
+    const shown = ch.messages.filter((m) => thOf(m) === thread);
+    const known = ((ch.threads || {})[thread.split(":")[0]] || []).find((e) => e.n === +thread.split(":")[1]);
+    if (!shown.length && known && known.count && !(ch.fetched = ch.fetched || {})[thread]) { ch.fetched[thread] = 1; chapterOp({ op: "get", thread_msgs: thread }); }
+    const msgs = shown.map((m) => {
       if (m.who === "you") return '<div class="scr-turn"><div class="scr-u">' + esc(m.text) + "</div></div>";
       if (m.who === "room") {
         const mem = m.meta && m.meta.member, offer = m.meta && m.meta.offer;
         const btns = (offer ? ch.members.filter((o) => o.id !== mem).map((o) => '<button data-chgive="' + o.id + '" data-text="' + esc(offer) + '">Give to ' + esc(o.name) + "</button>").join("") : "") +
           (mem && names[mem] && names[mem].state !== "working" ? '<button data-chwake="' + mem + '">Wake ' + esc(names[mem].name) + "</button>" : "") +
-          (m.meta && m.meta.fresh && mem ? '<button data-chfresh="' + mem + '">Fresh session</button>' : "");
+          (m.meta && m.meta.fresh && mem ? '<button data-chfresh="' + mem + '" data-thread="' + esc(m.meta.fresh_thread || "") + '">Fresh session</button>' : "");
         return '<div class="ch-card">⚠︎ ' + esc(m.text) + (btns ? '<div class="ch-btns">' + btns + "</div>" : "") + "</div>";
       }
       const mem = names[m.who] || { name: m.who, color: "#888" };
@@ -990,8 +1042,12 @@
     view.innerHTML = '<div class="ch-members">' + chips + "</div>" +
       (ch.asleep ? '<div class="ch-card ch-sleep">☾ The Chapter is resting: nobody has written for half an hour, so this device stopped checking. ' +
         'Nothing is lost.<div class="ch-btns"><button class="scr-primary" data-chwakeup="1">Wake the room</button></div></div>' : "") +
-      '<div class="scr-thread" id="scrThread">' + (ch.older ? '<div class="ch-btns" style="justify-content:center"><button data-chold="1">Earlier messages</button></div>' : "") + (msgs || '<div class="scr-empty"><p>The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. ' +
-        "Write to everyone, or start with @p, @w or @r for one of them.</p></div>") + "</div>";
+      '<div class="ch-sesshead"><button data-chsess="1">◷ ' + esc(chThreadLabel(false)) + " ▾</button></div>" +
+      '<div class="scr-thread" id="scrThread">' + ((ch.olderBy && thread in ch.olderBy ? ch.olderBy[thread] : ch.older) ? '<div class="ch-btns" style="justify-content:center"><button data-chold="1">Earlier messages</button></div>' : "") +
+      (msgs || '<div class="scr-empty"><p>' + (thread.startsWith("room:")
+        ? "The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. Write to everyone, or pick one member below for your own session with them."
+        : "Your own session with " + esc((ch.members.find((x) => x.id === thread.split(":")[0]) || {}).name || "this member") + ": only they read it. " +
+          "◷ starts a new one or goes back to an earlier one. Tap All to return to the room.") + "</p></div>") + "</div>";
     view.onclick = chapterClick;
     composerRow();
     window.scrollTo(0, document.documentElement.scrollHeight);
@@ -1000,11 +1056,12 @@
   function chapterClick(e) {
     const t = e.target.closest("button"); if (!t) return;
     if (t.dataset.chwakeup) chapterWake();
-    else if (t.dataset.chold) { t.disabled = true; const first = ch.messages.find((m) => m.id); if (first) chapterOp({ op: "get", before: first.id }); }
+    else if (t.dataset.chsess) chapterSessions();
+    else if (t.dataset.chold) { t.disabled = true; const th = chThread(), first = ch.messages.find((m) => m.id && thOf(m) === th); if (first) chapterOp({ op: "get", before: first.id, thread_msgs: th }); }
     else if (t.dataset.chok) { t.disabled = true; chapterOp({ op: "approve", msg: +t.dataset.chok }); }
     else if (t.dataset.chchange) { const box = $("#scrText"); box.value = "@" + t.dataset.chchange + " Change the plan: "; box.focus(); }
     else if (t.dataset.chgive) chapterSay("@" + t.dataset.chgive + " " + t.dataset.text);
-    else if (t.dataset.chfresh) { t.disabled = true; chapterOp({ op: "fresh", id: t.dataset.chfresh }); }
+    else if (t.dataset.chfresh) { t.disabled = true; chapterOp({ op: "fresh", id: t.dataset.chfresh, thread: t.dataset.thread || "" }); }
     else if (t.dataset.chwake) chapterOp({ op: "member", id: t.dataset.chwake, changes: { state: "working" } });
     else if (t.dataset.chm) chapterMember(t.dataset.chm);
   }
@@ -1025,7 +1082,7 @@
       (m.via === "app" ? "" : '<p class="scr-hint">Session: ' + (m.context && m.context.window ? Math.round(100 * m.context.used / m.context.window) + "% full" : "new") +
         ' · <a href="#" id="chFresh">Start a fresh session</a> (it writes notes for the new one, which carry over)</p>'));
     const cl = $("#chLim"); if (cl) cl.onclick = (e) => { e.preventDefault(); cl.textContent = "Checking…"; chapterOp({ op: "limits", id }).then(() => chapterMember(id)); };
-    const fr = $("#chFresh"); if (fr) fr.onclick = (e) => { e.preventDefault(); closeSheet(); chapterOp({ op: "fresh", id }); };
+    const fr = $("#chFresh"); if (fr) fr.onclick = (e) => { e.preventDefault(); closeSheet(); chapterOp({ op: "fresh", id, thread: chThread().startsWith(id + ":") ? chThread() : "" }); };
     $("#scrSheet").onclick = (e) => {
       if (e.target.id === "scrSheet") return closeSheet();
       const b = e.target.closest("[data-chset]"); if (!b) return;
@@ -1620,6 +1677,9 @@ body.scr-kb #scrBar{display:none}
 .ch-card{border:1px dashed var(--gold-line);border-radius:10px;padding:8px 10px;margin:10px 0;font-size:.88rem;color:var(--ink-soft)}
 .ch-to{display:flex;gap:4px;flex-wrap:wrap}
 .ch-tob{border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink-soft);border-radius:999px;padding:4px 10px;font:inherit;font-size:.78rem;cursor:pointer}
+.ch-sesshead{display:flex;justify-content:center;margin:4px 0 2px}
+.ch-sesshead button{border:1px solid var(--gold-line);background:var(--panel2);color:var(--gold);border-radius:999px;padding:4px 12px;font:inherit;font-size:.8rem;cursor:pointer}
+.ch-tob.ch-sess{border-style:dashed;color:var(--gold)}
 .ch-tob.on{background:var(--c, var(--gold));border-color:var(--c, var(--gold));color:#fff;font-weight:600}
 .ch-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:flex-start}
 .ch-btns button{flex:0 0 auto;width:auto;height:auto;min-width:0;margin:0;border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
