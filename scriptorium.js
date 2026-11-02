@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 68;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 69;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -263,10 +263,10 @@
       return;
     }
     if (tab === "chapter") {
-      // one button per member: tap to write to them only; they stay chosen until tapped again (none chosen: all)
-      row.innerHTML = '<span class="ch-to">' + '<button class="ch-tob' + (ch.sel.length ? "" : " on") + '" data-act="chall">All</button>' +
-        ch.members.map((m) => '<button class="ch-tob' + (ch.sel.includes(m.id) ? " on" : "") + '" data-act="chto" data-id="' + m.id + '" style="--c:' + m.color + '">' +
-          esc(m.name.replace(/^Mr\. /, "")) + "</button>").join("") +
+      // one button that cycles who you're writing to: All, then each member in turn (one member: your own session with them)
+      const who = ch.sel.length === 1 ? ch.members.find((m) => m.id === ch.sel[0]) : null;
+      row.innerHTML = '<span class="ch-to">' + '<button class="ch-tob on ch-cycle" data-act="chcycle" title="Tap to change who you\'re writing to"' +
+          (who ? ' style="--c:' + who.color + '"' : "") + ">⟳ " + (who ? esc(who.name.replace(/^Mr\. /, "")) : ch.sel.length > 1 ? ch.sel.length + " members" : "All") + "</button>" +
         '<button class="ch-tob ch-sess" data-act="chsess" title="New session, or an earlier one">◷ ' + esc(chThreadLabel(true)) + " ▾</button></span>" +
         '<span class="grow"></span>' +
         '<button class="scr-ib ' + (voice ? "rec" : "") + '" data-act="mic" title="Speak">' + (voice ? "■" : "🎙") + "</button>" +
@@ -348,9 +348,10 @@
     else if (act === "models") openModels();
     else if (act === "convs") { leaveMind(); openConvs(); }
     else if (act === "libwork") { lib.work = (lib.work + 1) % LIB_WORKS.length; composerRow(); if (lib.q) librarySearch(lib.q); }
-    else if (act === "chto" || act === "chall") {
-      const id = t.dataset.id;
-      ch.sel = act === "chall" ? [] : ch.sel.includes(id) ? ch.sel.filter((x) => x !== id) : [...ch.sel, id];
+    else if (act === "chcycle") {
+      // All → each member in turn → All
+      const ids = ch.members.map((m) => m.id), i = ch.sel.length === 1 ? ids.indexOf(ch.sel[0]) : -1;
+      ch.sel = i + 1 < ids.length ? [ids[i + 1]] : [];
       try { localStorage.setItem("scr-chapter-to", JSON.stringify(ch.sel)); } catch (e) {}
       renderChapter();   // one member chosen: his own session with it; otherwise the room's
     }
@@ -1045,9 +1046,9 @@
       '<div class="ch-sesshead"><button data-chsess="1">◷ ' + esc(chThreadLabel(false)) + " ▾</button></div>" +
       '<div class="scr-thread" id="scrThread">' + ((ch.olderBy && thread in ch.olderBy ? ch.olderBy[thread] : ch.older) ? '<div class="ch-btns" style="justify-content:center"><button data-chold="1">Earlier messages</button></div>' : "") +
       (msgs || '<div class="scr-empty"><p>' + (thread.startsWith("room:")
-        ? "The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. Write to everyone, or pick one member below for your own session with them."
+        ? "The Chapter: one room with Mr. Personal, Mr. Work and Mr. Rachael. Write to everyone, or tap ⟳ below to pick one member for your own session with them."
         : "Your own session with " + esc((ch.members.find((x) => x.id === thread.split(":")[0]) || {}).name || "this member") + ": only they read it. " +
-          "◷ starts a new one or goes back to an earlier one. Tap All to return to the room.") + "</p></div>") + "</div>";
+          "◷ starts a new one or goes back to an earlier one. Tap ⟳ until it says All to return to the room.") + "</p></div>") + "</div>";
     view.onclick = chapterClick;
     composerRow();
     window.scrollTo(0, document.documentElement.scrollHeight);
@@ -1681,6 +1682,7 @@ body.scr-kb #scrBar{display:none}
 .ch-sesshead button{border:1px solid var(--gold-line);background:var(--panel2);color:var(--gold);border-radius:999px;padding:4px 12px;font:inherit;font-size:.8rem;cursor:pointer}
 .ch-tob.ch-sess{border-style:dashed;color:var(--gold)}
 .ch-tob.on{background:var(--c, var(--gold));border-color:var(--c, var(--gold));color:#fff;font-weight:600}
+.ch-tob.ch-cycle{min-width:5.5em}
 .ch-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:flex-start}
 .ch-btns button{flex:0 0 auto;width:auto;height:auto;min-width:0;margin:0;border:1px solid var(--gold-line);background:var(--panel2);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
 .ch-btns button.scr-primary{background:var(--gold);color:#fff;border-color:var(--gold)}
