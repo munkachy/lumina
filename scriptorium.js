@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 65;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 66;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -1902,6 +1902,8 @@ details[open]>summary .chev{transform:rotate(45deg)}
     request({ kind: "mode", mode: next }, true); if (S) S.mode = next;
   }
   window.Scriptorium = { open, ask, dictate, leave: leaveChrome, where: () => (mindMode ? "mind" : tab),
+    spot: () => ({ tab: mindMode ? "mind" : tab, lib: tab === "library" && !mindMode && lib.reading && lib.reading.length === 1 ? lib.reading[0].id : null }),
+    libraryRead: (id) => libraryRead(id),
     newConversation: () => { leaveMind(); newConversation(); }, chats: () => { leaveMind(); openConvs(); }, prefs: openPrefs,
     cycleMode, modeName: () => (S && S.mode) || "normal", md: (src) => md(src || "", []), data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
 })();

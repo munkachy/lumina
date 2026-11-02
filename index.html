@@ -1657,8 +1657,10 @@ const LuminaCore = (function () {
   function renderPrayers(setId, day){
     view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">Opening the prayers…</p></div>';
     const pope = (setId || state.lastPrayers) === "pope";
-    (pope ? loadPrayers().catch(() => null) : loadPrayers()).then(() => {
-      const sets = [...((window.LUMINA_PRAYERS && window.LUMINA_PRAYERS.sets) || []).filter(s => s.id !== "pope"), popeSet(setId === "pope" ? day : null)];
+    /* the Pope's intentions are public: they show at once, without waiting for the password the others need */
+    (pope ? Promise.resolve() : loadPrayers()).then(() => {
+      const locked = [{ id:"smsm", name:"Society", sections:[] }, { id:"aux", name:"Auxilium", sections:[] }];
+      const sets = [...((window.LUMINA_PRAYERS && window.LUMINA_PRAYERS.sets) || locked).filter(s => s.id !== "pope"), popeSet(setId === "pope" ? day : null)];
       const set = sets.find(s => s.id === (setId || state.lastPrayers)) || sets[0];
       const today = new Date().getDay();
       if (day == null) day = today;
@@ -2526,7 +2528,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=65"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=66"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2696,7 +2698,7 @@ const LuminaCore = (function () {
   }
   /* verse preview with the highlighted portion marked */
   function hlVersePreview(h){
-    if (h.tx === "psalter") return '<mark class="hl ' + h.color + '">' + esc(h.t || "") + "</mark>";
+    if (h.tx === "psalter" || h.tx === "any") return '<mark class="hl ' + h.color + '">' + esc(h.t || "") + "</mark>";
     const text = hlVerseText(h);
     if (!text) return h.t ? esc(h.t) : "";
     let s = h.s, e = h.e;
@@ -2776,6 +2778,7 @@ const LuminaCore = (function () {
       const h = state.hls.find(x => x.id === el.dataset.go);
       if (!h) return;
       if (h.tx === "psalter") psalterGo(h);
+      else if (h.tx === "any") anyGo(h);
       else if (h.tx === "ccc" || h.book === "ccc"){
         loadCcc().then(() => { state.corpus = "ccc"; txSel.value = "ccc"; save(); applyMode(); renderCccPara(h.i); });
       } else if (h.tx === "doc"){
@@ -2836,10 +2839,11 @@ const LuminaCore = (function () {
   function armAutoHl(){ clearTimeout(window._selT); window._selT = setTimeout(autoHighlight, 900); }
   document.addEventListener("selectionchange", armAutoHl);
   function autoHighlight(){
-    if (!selCtx || selTouching) return;
+    if (selTouching) return;
     const sel = getSelection();
     if (!sel || sel.isCollapsed || !sel.rangeCount) return;
     const range = sel.getRangeAt(0), touched = [];
+    if (!selCtx || !selCtx.list.some(item => document.contains(item.el) && range.intersectsNode(item.el))) return anyHighlight(sel, range);
     selCtx.list.forEach(item => {
       if (!range.intersectsNode(item.el)) return;
       const off = offsetsWithin(item.el, range);
@@ -2855,6 +2859,70 @@ const LuminaCore = (function () {
     save(); sel.removeAllRanges();
     rerenderInPlace();
     showToast("Highlighted — tap it to change or remove");
+  }
+  /* ---------- highlights anywhere else: prayers, the daily page, Armarium, the Library, the mind map, the Chapter…
+     A paragraph is keyed by a hash of its words (tx "any"), so its highlight comes back wherever those words are
+     shown again; each remembers where it was made (where), to go back to it from Favorites › Highlights. ---------- */
+  const ANY_BLOCKS = "p, li, h1, h2, h3, h4, h5, blockquote, pre, td, th, dd, dt, summary, figcaption, .lib-s, .lib-t, .scr-u, .pr-p, .ch-plan";
+  const anyBlocks = () => [...view.querySelectorAll(ANY_BLOCKS)].filter(el => !el.querySelector(ANY_BLOCKS) &&
+    !el.closest("button, textarea, input, select, [contenteditable], .crumb, .tabrow") && el.textContent.trim());
+  function anyWhere(el){
+    let label;
+    if (document.body.classList.contains("scr-on") && window.Scriptorium){
+      const sp = window.Scriptorium.spot();
+      label = ({ armarium:"Armarium", library:"Library", chapter:"Chapter", mind:"Mind map", mail:"Mail", faith:"Journal" })[sp.tab] || "Scriptorium";
+      var desc = { kind:"scr", tab: sp.tab, lib: sp.lib || null };
+    } else {
+      const k = cur && cur.kind;
+      label = k === "prayers" ? "Prayers · " + ({ smsm:"Society", aux:"Auxilium", pope:"Pope's intentions" })[cur.set] || "Prayers"
+            : k === "readings" ? "Daily · " + cur.date : /^(favs|favList|chapFavs|chapFavList|hls)$/.test(k || "") ? "Favorites"
+            : k === "search" ? "Search" : "Lumina";
+      var desc = cur ? JSON.parse(JSON.stringify(cur)) : null;
+    }
+    const heads = [...view.querySelectorAll("h1, h2, h3, h4, summary, .pr-h")].filter(h => h !== el && !h.contains(el) &&
+      (h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING));
+    const head = heads.length ? heads[heads.length - 1].textContent.replace(/\s+/g, " ").trim().slice(0, 70) : "";
+    return { label: label + (head && !label.includes(head) ? " · " + head : ""), desc };
+  }
+  function anyHighlight(sel, range){
+    const touched = [];
+    anyBlocks().forEach(el => {
+      if (!range.intersectsNode(el)) return;
+      const off = offsetsWithin(el, range);
+      if (off && off.e > off.s) touched.push({ el, i: psHash(el.textContent), ...off });
+    });
+    const fresh = touched.filter(t => t.el.textContent.slice(t.s, t.e).trim() && !C.rangesOverlap(hlsFor("any", "any", 0, t.i), t.s, t.e));
+    if (!fresh.length) return;
+    const g = uid(), where = anyWhere(fresh[0].el);
+    fresh.forEach(t => state.hls.push({ id: uid(), g, tx: "any", book: "any", c: 0, i: t.i, s: t.s, e: t.e,
+      color: "gold", note: "", added: Date.now(), t: t.el.textContent.slice(t.s, t.e), where }));
+    save(); sel.removeAllRanges(); anyMarks();
+    showToast("Highlighted — tap it to change or add a note");
+  }
+  let anyBusy = false, anyT = null;
+  function anyMarks(){
+    anyBusy = true;
+    try {
+      view.querySelectorAll("mark.anyhl").forEach(m => { const p = m.parentNode; while (m.firstChild) p.insertBefore(m.firstChild, m); p.removeChild(m); p.normalize(); });
+      const mine = state.hls.filter(h => h.tx === "any");
+      if (!mine.length) return;
+      const byKey = new Map();
+      mine.forEach(h => { if (!byKey.has(h.i)) byKey.set(h.i, []); byKey.get(h.i).push(h); });
+      anyBlocks().forEach(el => {
+        const hs = byKey.get(psHash(el.textContent)); if (!hs) return;
+        hs.slice().sort((a, b) => b.s - a.s).forEach(h => psWrap(document, el, h, "hl anyhl"));
+      });
+    } finally { setTimeout(() => { anyBusy = false; }, 0); }
+  }
+  new MutationObserver(() => { if (anyBusy) return; clearTimeout(anyT); anyT = setTimeout(anyMarks, 250); })
+    .observe(view, { childList: true, subtree: true, characterData: true });
+  function anyGo(h){   /* back to where it was made, and to the words */
+    const d = h.where && h.where.desc;
+    const find = (n) => { const m = view.querySelector('mark[data-hl="' + h.id + '"]');
+      if (m) m.scrollIntoView({ block: "center", behavior: "smooth" }); else if (n < 12) setTimeout(() => find(n + 1), 400); };
+    if (!d) return showToast("Where this was made isn't known");
+    if (d.kind === "scr") openScr(d.tab).then(() => { if (d.lib && window.Scriptorium) window.Scriptorium.libraryRead(d.lib); setTimeout(() => find(0), 600); });
+    else { dispatch(d); setTimeout(() => find(0), 500); }
   }
   function maybeShowHlPop(){
     if (!selCtx) return;
@@ -2938,6 +3006,7 @@ const LuminaCore = (function () {
   }
   function hlCiteOf(h){
     if (h.tx === "psalter") return (h.where && h.where.label) || "Psalter";
+    if (h.tx === "any") return (h.where && h.where.label) || "Lumina";
     if (h.tx === "ccc" || h.book === "ccc") return "CCC ¶ " + h.i;
     if (h.tx === "doc") return docCite(h.book, h.i);
     const b = C.bookIdxById(h.book);
@@ -2969,7 +3038,7 @@ const LuminaCore = (function () {
       const words = group.map(x => (x.t || "").trim()).filter(Boolean).join(" ");
       const h0 = group[0], hz = group[group.length - 1];
       let cite = hlCiteOf(h0);
-      if (hz !== h0 && h0.tx !== "psalter"){            /* a highlight across verses: John 1:14–15 */
+      if (hz !== h0 && h0.tx !== "psalter" && h0.tx !== "any"){            /* a highlight across verses: John 1:14–15 */
         const bi = C.bookIdxById(hz.book);
         const end = bi >= 0 && D.books[bi].ch[hz.c] ? C.vnum(D.books[bi].ch[hz.c], hz.i) : hz.i;
         cite += hz.c === h0.c || h0.tx === "doc" || h0.tx === "ccc" ? "–" + end : "–" + (hz.c + 1) + ":" + end;
@@ -2984,7 +3053,7 @@ const LuminaCore = (function () {
       const thought = note.value.trim();
       if (!thought) return showToast("Write or speak your thought first");
       group.forEach(x => { x.color = color; x.note = thought; });
-      save(); back.remove(); rerenderInPlace(); psalterMarks();
+      save(); back.remove(); rerenderInPlace(); psalterMarks(); anyMarks();
       const q = quoted();
       showToast("Sending to your Journal…");
       const text = "On “" + q.words + "” (" + q.cite + "):\n\n" + thought;
@@ -3019,12 +3088,12 @@ const LuminaCore = (function () {
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
-      save(); back.remove(); showToast("Highlight removed"); rerenderInPlace(); psalterMarks();
+      save(); back.remove(); showToast("Highlight removed"); rerenderInPlace(); psalterMarks(); anyMarks();
     };
     back.querySelector("#ehSave").onclick = () => {
       const note = back.querySelector("#ehNote").value.trim();
       group.forEach(x => { x.color = color; x.note = note; });
-      save(); back.remove(); rerenderInPlace(); psalterMarks();
+      save(); back.remove(); rerenderInPlace(); psalterMarks(); anyMarks();
     };
   }
   view.addEventListener("click", e => {
@@ -4272,6 +4341,7 @@ const LuminaCore = (function () {
   const realScrollTo = window.scrollTo, realScrollIntoView = Element.prototype.scrollIntoView;
   let holdFinish = null;
   function rerenderInPlace(){
+    if (document.body.classList.contains("scr-on") || (cur && cur.kind === "scr")) return anyMarks();   /* Scriptorium draws itself */
     if (holdFinish) holdFinish();
     const y = scrollY, st = realScrollTo, si = realScrollIntoView;
     const put = () => st.call(window, { top: y, behavior: "instant" });
@@ -4492,7 +4562,7 @@ const LuminaCore = (function () {
       });
     } finally { setTimeout(() => { psHlBusy = false; }, 0); }
   }
-  function psWrap(d, el, h){
+  function psWrap(d, el, h, cls){
     let pos = 0;
     const w = d.createTreeWalker(el, NodeFilter.SHOW_TEXT), parts = [];
     let n;
@@ -4504,7 +4574,7 @@ const LuminaCore = (function () {
     parts.forEach(([node, x, y]) => {
       if (y <= x) return;
       const r = d.createRange(); r.setStart(node, x); r.setEnd(node, y);
-      const m = d.createElement("mark"); m.className = "lhl " + h.color + (h.note ? " noted" : ""); m.dataset.hl = h.id;
+      const m = d.createElement("mark"); m.className = (cls || "lhl") + " " + h.color + (h.note ? " noted" : ""); m.dataset.hl = h.id;
       try { r.surroundContents(m); } catch(e){}
     });
   }
