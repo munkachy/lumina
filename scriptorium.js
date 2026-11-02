@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 66;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 67;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -247,6 +247,7 @@
         visualViewport.addEventListener("resize", fit); visualViewport.addEventListener("scroll", fit); fit();
       }
     }
+    if (!mindMode) box.style.display = "";   // back from the mind map (by any button): the message box returns
     composerRow();
   }
 
