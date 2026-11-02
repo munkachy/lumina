@@ -89,10 +89,23 @@
   letter-spacing:.15em; font-size:.7rem; color:#9999cc}
 
 /* ---------- icon toolbar: two rows of five, big buttons ---------- */
-.actions.main-bar{display:grid; grid-template-columns:repeat(5, 1fr); gap:.4rem}
+.actions.main-bar{display:grid; grid-template-columns:repeat(6, 1fr); gap:.4rem}
+.actions.main-bar .navpair{display:grid; grid-template-columns:1fr 1fr; padding:0 !important; gap:0; overflow:hidden}
+.actions.main-bar .navpair button{all:unset; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem; cursor:pointer; padding:.6rem 0; color:inherit}
+.actions.main-bar .navpair button + button{border-left:1px solid var(--border-soft)}
+.actions.main-bar .navpair button:disabled{opacity:.35; cursor:default}
+.actions.main-bar .navpair .lb{font-size:.8rem !important}
+.actions.main-bar .btn.ib.here{border-color:var(--gold-line); color:var(--gold); background:var(--panel2)}
+.actions.main-bar .ic{position:relative; display:inline-flex; align-items:center; justify-content:center; min-height:2rem}
+.actions.main-bar .illum{width:2rem; height:2rem; vertical-align:0}
+.mac-dot,.upd-dot{position:absolute; right:-6px; top:-2px; width:9px; height:9px; border-radius:50%; border:2px solid var(--bg); display:none}
+.mac-dot.on{display:block; background:#2e8b57} .upd-dot.on{display:block; background:var(--gold)}
+.more-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:.5rem; margin:.6rem 0 .2rem}
+.more-grid .btn{display:flex; flex-direction:column; align-items:center; gap:.2rem; padding:.7rem .2rem; font-size:.85rem}
+.more-grid .btn b{font-size:1.5rem; font-weight:400; line-height:1.1}
 .actions.main-bar .btn.ib{max-width:none; min-width:0; padding:.7rem 0; gap:.25rem}
-.actions.main-bar .btn.ib .ic{font-size:2.3rem}
-.actions.main-bar .btn.ib .lb{font-size:1.15rem}
+.actions.main-bar .btn.ib .ic{font-size:2rem}
+.actions.main-bar .btn.ib .lb{font-size:.95rem}
 .btn.ib{
   display:flex; flex-direction:column; align-items:center; gap:.1rem;
   padding:.35rem .55rem; min-width:3.2rem; letter-spacing:.03em;
@@ -108,10 +121,14 @@
 @media(max-width:699px){
   .actions.main-bar{gap:.3rem}
   .actions.main-bar .btn.ib{padding:.6rem 0; font-size:1rem}
-  .actions.main-bar .btn.ib .lb{font-size:1.1rem; letter-spacing:.02em}
+  .actions.main-bar{gap:.25rem}
+  .actions.main-bar .btn.ib{padding:.5rem 0}
+  .actions.main-bar .btn.ib .ic{font-size:1.7rem}
+  .actions.main-bar .illum{width:1.75rem; height:1.75rem}
+  .actions.main-bar .btn.ib .lb{font-size:.78rem; letter-spacing:0}
   @media(max-width:380px){ .btn.ib .lb{letter-spacing:0} }
   :root[data-theme="lcars"] .actions.main-bar .btn.ib{padding:.5rem .15rem}
-  :root[data-theme="lcars"] .btn.ib .lb{font-size:1.1rem; letter-spacing:0}
+  :root[data-theme="lcars"] .btn.ib .lb{font-size:.8rem; letter-spacing:0}
   :root[data-theme="lcars"] .actions.main-bar .btn.ib{overflow:hidden}
 }
 
@@ -547,7 +564,13 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
 .loading-card{text-align:center; font-style:italic; color:var(--ink-faint); padding:2.5rem 1rem}
 noscript{display:block; text-align:center; color:var(--rubric); margin:2rem 0}
 /* Scriptorium mode: Lumina's own controls step aside (scriptorium.js adds body.scr-on) */
-body.scr-on .wrap > :not(#view), body.scr-on > :not(.wrap):not(.toast):not([id^="scr"]):not(script):not(style) { display: none !important; }
+body.scr-on .wrap > :not(#view):not(.main-bar), body.scr-on > :not(.wrap):not(.toast):not(.modal-back):not([id^="scr"]):not(script):not(style) { display: none !important; }
+/* the one bar stays at the bottom in Scriptorium too (on wide screens as well), and steps aside for the keyboard */
+body.scr-on .actions.main-bar{position:fixed; left:0; right:0; bottom:0; z-index:50; margin:0;
+  padding:.6rem .5rem calc(.6rem + max(env(safe-area-inset-bottom), 1.4rem));
+  background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-top:1px solid var(--border-soft)}
+@media (min-width:700px){ body.scr-on .actions.main-bar{padding-left:calc(50% - 380px); padding-right:calc(50% - 380px)} }
+body.scr-kb .actions.main-bar{display:none !important}
 body.scr-on .wrap { padding-top: 0; }
 .ccc-notes { font-size: .82rem; color: var(--ink-soft); border-top: 1px solid var(--gold-line); margin: .4rem 0 .8rem; padding: .5rem 0 0 1.6rem; line-height: 1.45; }
 .ccc-notes li::marker { color: var(--gold); font-weight: 600; }
@@ -581,16 +604,22 @@ body.scr-on .wrap { padding-top: 0; }
   </div>
 
   <div class="actions main-bar">
-    <button class="btn ib" id="navBack" title="Back"><span class="ic">‹</span><span class="lb">Back</span></button>
-    <button class="btn ib" id="navFwd" title="Forward"><span class="ic">›</span><span class="lb">Fwd</span></button>
+    <!-- one bar for Lumina and Scriptorium: reading on top, study below (two rows of six) -->
+    <div class="btn ib navpair"><button id="navBack" title="Back"><span class="ic">‹</span><span class="lb">Back</span></button><button id="navFwd" title="Forward"><span class="ic">›</span><span class="lb">Fwd</span></button></div>
     <button class="btn ib primary" id="btnRandomVerse" title="Random verse"><span class="ic">✧</span><span class="lb" id="lbVerse">Verse</span></button>
-    <button class="btn ib" id="btnPsalter" title="The Monastic Psalter (Saint Bernard Abbey)"><span class="ic">♫</span><span class="lb">Psalter</span></button>
     <button class="btn ib" id="btnTimer" title="Timer"><span class="ic" id="btnTimerIc">⏱</span><span class="lb" id="btnTimerLb">Timer</span></button>
-    <button class="btn ib" id="btnScriptorium" title="Scriptorium"><span class="ic"><img class="illum" src="icon-s.png" alt=""></span><span class="lb">Scriptorium</span></button>
-    <button class="btn ib" id="btnListen" title="Read aloud"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
-    <button class="btn ib" id="btnPrayers" title="Daily prayers: the Society, the Auxilium Christianorum and the Pope's intentions"><span class="ic">✙</span><span class="lb">Prayers</span></button>
+    <button class="btn ib" id="btnPsalter" title="The Monastic Psalter (Saint Bernard Abbey)"><span class="ic">♫</span><span class="lb">Psalter</span></button>
     <button class="btn ib" id="btnReadings" title="Daily Mass readings"><span class="ic">✠</span><span class="lb">Daily</span></button>
+    <button class="btn ib" id="btnPrayers" title="Daily prayers: the Society, the Auxilium Christianorum and the Pope's intentions"><span class="ic">✙</span><span class="lb">Prayers</span></button>
+    <button class="btn ib" id="btnArmarium" title="Armarium: Claude with the Church's library"><span class="ic"><img class="illum" src="icon-a.png" alt=""><i class="mac-dot"></i></span><span class="lb">Armarium</span></button>
+    <button class="btn ib" id="btnLibrary" title="Library: the Fathers, St Thomas, the Catena, the Rule"><span class="ic"><img class="illum" src="icon-lib.png" alt=""></span><span class="lb">Library</span></button>
+    <button class="btn ib" id="btnChapter" title="The Chapter room"><span class="ic">⛪</span><span class="lb">Chapter</span></button>
     <button class="btn ib" id="btnPlan" title="Mind map"><span class="ic">🧠</span><span class="lb">Mind</span></button>
+    <button class="btn ib" id="btnFavsBar" title="Favorites"><span class="ic">♥</span><span class="lb">Favorites</span></button>
+    <button class="btn ib" id="btnMore" title="More"><span class="ic">☰<i class="upd-dot"></i></span><span class="lb">More</span></button>
+    <!-- kept for the code that drives them; reached from More -->
+    <button class="btn ib" id="btnScriptorium" style="display:none"><span class="ic"></span><span class="lb">Scriptorium</span></button>
+    <button class="btn ib" id="btnListen" style="display:none"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
   </div>
 
   <main id="view" aria-live="polite"></main>
@@ -2497,7 +2526,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=64"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=65"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2986,7 +3015,7 @@ const LuminaCore = (function () {
       }
     };
     const openJ = back.querySelector("#ehOpenJ");
-    if (openJ) openJ.onclick = e => { e.preventDefault(); back.remove(); $("btnScriptorium").click(); };
+    if (openJ) openJ.onclick = e => { e.preventDefault(); back.remove(); $("btnArmarium").click(); };
     back.querySelector("#ehDel").onclick = () => {
       const ids = new Set(group.map(x => x.id));
       state.hls = state.hls.filter(x => !ids.has(x.id));
@@ -4188,12 +4217,14 @@ const LuminaCore = (function () {
     if (nav.stack.length > 120) nav.stack.shift();
     nav.idx = nav.stack.length - 1;
     updateNavButtons();
+    setTimeout(markHere, 0);
   }
   function updateNavButtons(){
     $("navBack").disabled = nav.idx <= 0;
     $("navFwd").disabled = nav.idx >= nav.stack.length - 1;
   }
   function dispatch(desc){
+    if (desc && desc.kind !== "scr" && document.body.classList.contains("scr-on") && window.Scriptorium) window.Scriptorium.leave();
     if (!desc) return begin();
     switch (desc.kind){
       case "verse": return renderVerse(desc.b, desc.c, desc.i, { keepScroll:true });
@@ -4218,6 +4249,7 @@ const LuminaCore = (function () {
       case "planDay": return renderPlanDay(desc.planId, desc.day);
       case "tree": if (desc.t) state.treeKind = desc.t; return renderTree({ restore:true });
       case "scene": return renderScene(desc.id, desc.k);
+      case "scr": cur = desc; return openScriptorium(desc.tab);
       default: return begin();
     }
   }
@@ -4596,8 +4628,69 @@ const LuminaCore = (function () {
   $("btnFavs").onclick = renderFavorites;
   $("btnPrayers").onclick = () => renderPrayers();
   $("btnReadings").onclick = () => renderReadings();
-  $("btnPlan").onclick = () => openScriptorium("mind");   // the reading plan's button now opens the mind map
-  $("btnScriptorium").onclick = openScriptorium;
+  /* Scriptorium's places, on the one bar: each is a step in Back/Forward like any page */
+  function openScr(t){ cur = { kind:"scr", tab:t }; record(cur); return openScriptorium(t); }
+  $("btnArmarium").onclick = () => openScr("armarium");
+  $("btnLibrary").onclick = () => openScr("library");
+  $("btnChapter").onclick = () => openScr("chapter");
+  $("btnPlan").onclick = () => openScr("mind");
+  $("btnFavsBar").onclick = renderFavorites;
+  $("btnMore").onclick = openMore;
+  $("btnScriptorium").onclick = () => openScr("armarium");
+  /* any bar button that goes to a Lumina page leaves Scriptorium first (no reload: Lumina draws over it) */
+  const SCR_BTNS = ["btnArmarium", "btnLibrary", "btnChapter", "btnPlan", "btnMore", "btnTimer"];
+  document.querySelector(".actions.main-bar").addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (b && document.body.classList.contains("scr-on") && !SCR_BTNS.includes(b.id)) leaveScr(b.id === "btnPsalter");
+  }, true);
+  /* out of Scriptorium; with redraw, the Lumina page he was on comes back under it (the Psalter opens over the page) */
+  function leaveScr(redraw){
+    if (!window.Scriptorium || !document.body.classList.contains("scr-on")) return;
+    window.Scriptorium.leave();
+    if (!redraw) return;
+    let k = nav.idx; while (k >= 0 && nav.stack[k] && nav.stack[k].kind === "scr") k--;
+    nav.suppress = true;
+    try { k >= 0 ? dispatch(nav.stack[k]) : begin(); } finally { nav.suppress = false; }
+  }
+  document.querySelector(".actions.main-bar").addEventListener("click", () => setTimeout(markHere, 30));
+  /* the button for where he is lights up */
+  function markHere(){
+    let id = null;
+    if (document.body.classList.contains("scr-on") && window.Scriptorium){
+      id = ({ armarium:"btnArmarium", library:"btnLibrary", chapter:"btnChapter", mind:"btnPlan" })[window.Scriptorium.where()] || null;
+    } else if (psalterOn()) id = "btnPsalter";
+    else if (cur) id = ({ prayers:"btnPrayers", readings:"btnReadings", favs:"btnFavsBar", favList:"btnFavsBar", chapFavs:"btnFavsBar",
+                         chapFavList:"btnFavsBar", hls:"btnFavsBar" })[cur.kind] || null;
+    document.querySelectorAll(".actions.main-bar .btn.ib").forEach(b => b.classList.toggle("here", b.id === id));
+  }
+  window.LuminaBar = { mark: markHere };
+  /* ☰ More: the rest, used less often */
+  function openMore(){
+    const scr = () => window.Scriptorium, on = () => document.body.classList.contains("scr-on");
+    const modeNow = (scr() && scr().modeName && scr().modeName()) || "";
+    const item = (id, ic, lb) => '<button class="btn" data-more="' + id + '"><b>' + ic + '</b>' + lb + '</button>';
+    const back = modal('<h3>More</h3><div class="more-grid">' +
+      item("new", "＋", "New chat") + item("chats", "☰", "Chats") + item("mail", "✉", "Mail") +
+      item("search", "🔍", "Search") + item("listen", "▶", "Listen") + item("theme", "☾", "Theme") +
+      item("text", "Aa", "Text &amp; voice") + item("mode", ({ eco:"🌿", normal:"◐", turbo:"⚡" })[modeNow] || "◐", modeNow ? modeNow[0].toUpperCase() + modeNow.slice(1) + " mode" : "Eco · Turbo") +
+      item("update", "⟳", "Updates") + '</div>');
+    back.querySelector(".more-grid").onclick = async e => {
+      const b = e.target.closest("[data-more]"); if (!b) return;
+      const k = b.dataset.more;
+      back.remove();
+      const inScr = async (t, fn) => { if (!on() || (t && scr().where() !== t)) await openScr(t || "armarium"); if (fn && scr()) fn(scr()); };
+      if (k === "new") return inScr("armarium", s => s.newConversation());
+      if (k === "chats") return inScr(null, s => s.chats());
+      if (k === "mail") return openScr("mail");
+      if (k === "text") return inScr(null, s => s.prefs());
+      if (k === "mode") return inScr(null, s => { s.cycleMode(); showToast(s.modeName()[0].toUpperCase() + s.modeName().slice(1) + " mode"); });
+      if (k === "update") { const u = $("scrBuildTop"); if (u) u.click(); return; }
+      if (k !== "search") leaveScr(true); else leaveScr(false);
+      if (k === "search") return renderSearch();
+      if (k === "listen") return $("btnListen").click();
+      if (k === "theme") return $("themeBtn").click();
+    };
+  }
   /* Scriptorium (scriptorium.js) loads on first use, and opens Catechism and Douay citations here. */
   function openScriptorium(mode){
     const go = () => window.Scriptorium.open(view, typeof mode === "string" ? mode : undefined);

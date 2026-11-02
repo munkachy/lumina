@@ -10,7 +10,7 @@
   "use strict";
   const API = "https://api.github.com";
   const VAULT = "lumina.scriptorium.vault";
-  const BUILD = 64;   // shown in the toolbar; bump with the ?v= in index.html
+  const BUILD = 65;   // shown in the toolbar; bump with the ?v= in index.html
   const PREFS = "lumina.scriptorium.prefs";
   const MARK = (k) => "<!--scriptorium:" + k + "-->";
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -117,6 +117,7 @@
   async function open(v, mode) {
     view = v;
     mindMode = mode === "mind";
+    if (mode && mode !== "mind") { tab = mode; web = false; }
     injectStyle();
     document.body.classList.add("scr-on");
     applyPrefs();
@@ -129,7 +130,9 @@
 
   function leaveChrome() {
     stopSpeaking();
-    document.body.classList.remove("scr-on");
+    document.body.classList.remove("scr-on", "scr-kb");
+    if (view) view.onclick = null;   // Lumina draws here next; Scriptorium's clicks must not follow
+    mindMode = false;
     ["scrBar", "scrCompose", "scrNewPill", "scrSheet"].forEach((id) => { const el = document.getElementById(id); if (el) el.remove(); });
   }
   function backToLumina() { leaveChrome(); location.reload(); }   // Lumina reopens where you were reading
@@ -212,29 +215,18 @@
   const MODE_IC = { eco: "🌿", normal: "◐", turbo: "⚡" };
 
   function chrome(show) {
-    let bar = document.getElementById("scrBar"), box = document.getElementById("scrCompose");
-    if (!show) { if (bar) bar.remove(); if (box) box.remove(); return; }
-    if (!bar) {
-      bar = document.createElement("div"); bar.id = "scrBar"; document.body.appendChild(bar);
-      bar.onclick = toolbarClick;
-    }
-    // Lumina's big bottom bar, two rows of five; "Lumina" sits where Lumina's own bar has "Scriptorium"
-    const b = (attrs, ic, lb, on) => '<button class="btn ib' + (on ? " on" : "") + '" ' + attrs + '><span class="ic">' + ic + '</span><span class="lb">' + lb + "</span></button>";
-    const mode = (S && S.mode) || "normal";
-    bar.className = "actions main-bar";
-    bar.innerHTML =
-      Object.entries(TABS).map(([k, [ic, l]]) => b('data-tab="' + k + '"', ic, l, k === tab)).join("") +
-      b('data-act="mind" title="Mind map"', "🧠", "Mind", mindMode) +
-      b('data-act="convs" title="Past conversations"', "☰", "Chats") +
-      b('data-act="lumina" title="Back to Lumina"', illum("L") + '<i class="scr-dot' + (S && S.connected ? " on" : "") + '" title="' + (S && S.connected ? "Mac connected" : "Reaching your Mac…") + '"></i>', "Lumina") +
-      b('data-act="new" title="New conversation"', "＋", "New") +
-      b('data-act="mode" title="Eco, Normal or Turbo"', MODE_IC[mode] || "◐", (MODES.find((m) => m[0] === mode) || MODES[1])[1]) +
-      b('data-act="prefs" title="Text, voice and updates"', "Aa" + (newerBuild ? '<i class="scr-dot upd"></i>' : ""), "Text") +
-      b('data-act="theme" title="Light / dark"', "☾", "Theme");
-    if (!bar.dataset.measured) {   // the message box and panels sit on top of the bar
+    let box = document.getElementById("scrCompose");
+    const old = document.getElementById("scrBar"); if (old) old.remove();   // the one bar is Lumina's now
+    if (!show) { if (box) box.remove(); return; }
+    const bar = document.querySelector(".actions.main-bar");
+    if (bar && !bar.dataset.measured) {   // the message box and panels sit on top of the bar
       bar.dataset.measured = "1";
-      new ResizeObserver(() => document.documentElement.style.setProperty("--scr-bbar-h", bar.offsetHeight + "px")).observe(bar);
+      new ResizeObserver(() => document.documentElement.style.setProperty("--scr-bbar-h", (document.body.classList.contains("scr-on") ? bar.offsetHeight : 0) + "px")).observe(bar);
     }
+    if (bar) document.documentElement.style.setProperty("--scr-bbar-h", bar.offsetHeight + "px");
+    const dot = document.querySelector("#btnArmarium .mac-dot"); if (dot) { dot.classList.toggle("on", !!(S && S.connected)); dot.title = S && S.connected ? "Mac connected" : "Reaching your Mac…"; }
+    const ud = document.querySelector("#btnMore .upd-dot"); if (ud) ud.classList.toggle("on", !!newerBuild);
+    if (window.LuminaBar) window.LuminaBar.mark();
     if (!box) {
       box = document.createElement("div"); box.id = "scrCompose"; box.className = "normal"; document.body.appendChild(box);
       box.innerHTML = '<div class="scr-cbox"><textarea id="scrText" rows="3" placeholder="Message Scriptorium…"></textarea><div class="scr-crow"></div></div>';
@@ -283,6 +275,7 @@
     }
     row.innerHTML =
       '<button class="scr-chip" data-act="models" title="Choose the model">' + esc(modelName(tab)) + " ▾</button>" +
+      '<button class="scr-chip" data-act="convs" title="Past conversations">☰ Chats</button>' +
       '<span class="grow"></span>' +
       (tab === "armarium" ? '<button class="scr-ib scr-entry ' + (entryMode ? "on" : "") + '" data-act="entry" title="' +
         (entryMode ? "✎ Entry is on: your message is written up as a Journal entry. Tap to talk with Armarium instead." : "✎ Entry is off: you're talking with Armarium. Tap to write notes up as entries.") + '">✎</button>' : "") +
@@ -351,6 +344,7 @@
     else if (act === "mic") voice ? stopVoice() : startVoice();
     else if (act === "mind") { mindMode = true; renderMind(); }
     else if (act === "models") openModels();
+    else if (act === "convs") { leaveMind(); openConvs(); }
     else if (act === "libwork") { lib.work = (lib.work + 1) % LIB_WORKS.length; composerRow(); if (lib.q) librarySearch(lib.q); }
     else if (act === "chto" || act === "chall") {
       const id = t.dataset.id;
@@ -1903,5 +1897,11 @@ details[open]>summary .chev{transform:rotate(45deg)}
     if (!(await quietOpen())) throw new Error("Scriptorium is locked on this device");
     return request(req, true);
   }
-  window.Scriptorium = { open, ask, dictate, md: (src) => md(src || "", []), data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
+  function cycleMode() {   // Eco → Normal → Turbo
+    const i = MODES.findIndex((m) => m[0] === ((S && S.mode) || "normal")), next = MODES[(i + 1) % MODES.length][0];
+    request({ kind: "mode", mode: next }, true); if (S) S.mode = next;
+  }
+  window.Scriptorium = { open, ask, dictate, leave: leaveChrome, where: () => (mindMode ? "mind" : tab),
+    newConversation: () => { leaveMind(); newConversation(); }, chats: () => { leaveMind(); openConvs(); }, prefs: openPrefs,
+    cycleMode, modeName: () => (S && S.mode) || "normal", md: (src) => md(src || "", []), data: { ready: quietOpen, load: loadData, store: storeData, remove: removeData } };
 })();
