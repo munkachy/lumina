@@ -579,6 +579,8 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
 .rem-swatches{display:flex; gap:.35rem; flex-wrap:wrap; justify-content:flex-end}
 .rem-swatches button{width:1.7rem; height:1.7rem; border-radius:50%; border:2px solid var(--border); background:var(--panel); color:var(--ink-faint); cursor:pointer; padding:0; font-size:.85rem}
 .rem-swatches button.on{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--ink)}
+.rem-preview{max-height:45vh; overflow:auto; margin:.3rem 0} .rem-preview div{padding:.2rem 0; border-bottom:1px dotted var(--gold-line)}
+.rem-preview i{color:var(--ink-faint); font-size:.85em}
 .rem-hint{font-size:.8rem; color:var(--ink-faint); font-style:italic; margin:.4rem 0}
 .modal textarea{width:100%; box-sizing:border-box; font:inherit; padding:.5rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--ink); margin-top:.4rem}
 /* phones: at the very bottom, under the buttons (in the room the bar leaves above the iPhone's home bar) */
@@ -2560,7 +2562,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=71"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=72"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -4316,7 +4318,14 @@ const LuminaCore = (function () {
   const remDay = (d = new Date()) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   if (!Array.isArray(state.reminders)) state.reminders = [];
   let remFilter = null, remShowDone = false;
-  const remIsDone = r => r.repeat === "daily" ? r.doneOn === remDay() : !!r.done;
+  /* every month: date is the next time it is due; checking it moves date on a month (doneOn shows it checked for the rest of today) */
+  const remIsDone = r => r.repeat === "daily" || r.repeat === "monthly" ? r.doneOn === remDay() : !!r.done;
+  function remMonthOn(day, n, mday){
+    const [y, m] = day.split("-").map(Number), t = new Date(y, m - 1 + n, 1);
+    const last = new Date(t.getFullYear(), t.getMonth() + 1, 0).getDate();
+    t.setDate(Math.min(mday || +day.slice(8), last)); return remDay(t);
+  }
+  const remOrd = n => n + (n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "nd" : n % 10 === 3 && n !== 13 ? "rd" : "th");
   /* when it is due, as a time on the clock (null: no date) */
   function remDueAt(r){
     const day = r.repeat === "daily" ? remDay() : r.date;
@@ -4333,15 +4342,19 @@ const LuminaCore = (function () {
   function remWhen(r){
     const t = r.time ? new Date(2000, 0, 1, ...r.time.split(":").map(Number)).toLocaleTimeString([], { hour:"numeric", minute:"2-digit" }) : "";
     if (r.repeat === "daily"){ const s = remStreak(r); return "Every day" + (t ? " · " + t : "") + (s > 1 ? " · " + s + " days running" : ""); }
-    if (!r.date) return "";
+    if (!r.date) return r.repeat === "monthly" ? "Every month" : "";
+    if (r.repeat === "monthly" && r.doneOn === remDay()) return "Done today · next " + new Date(...r.date.split("-").map((v, i) => i === 1 ? v - 1 : +v)).toLocaleDateString([], { month:"short", day:"numeric" });
     const today = remDay(), tm = new Date(); tm.setDate(tm.getDate() + 1);
     const [y, m, d] = r.date.split("-").map(Number), dt = new Date(y, m - 1, d);
     const day = r.date === today ? "Today" : r.date === remDay(tm) ? "Tomorrow"
       : dt.toLocaleDateString([], { weekday:"short", month:"short", day:"numeric", year: y === tm.getFullYear() ? undefined : "numeric" });
-    return day + (t ? " · " + t : "");
+    return day + (t ? " · " + t : "") + (r.repeat === "monthly" ? " · every month on the " + remOrd(r.mday || +r.date.slice(8)) : "");
   }
   /* the bar's badge: the every-day reminders still to do today */
-  function remCount(){ return state.reminders.filter(r => r.repeat === "daily" && !remIsDone(r)).length; }
+  function remCount(){
+    const end = new Date().setHours(23, 59, 59, 999);
+    return state.reminders.filter(r => !remIsDone(r) && (r.repeat === "daily" || r.repeat === "monthly" && remDueAt(r) !== null && remDueAt(r) <= end)).length;
+  }
   function remBadge(){
     const b = $("remBadge"); if (!b) return;
     const n = remCount(); b.textContent = n > 99 ? "99+" : n; b.classList.toggle("on", n > 0);
@@ -4352,6 +4365,11 @@ const LuminaCore = (function () {
       const t = remDay(), log = new Set(r.log || []);
       if (r.doneOn === t){ r.doneOn = null; log.delete(t); } else { r.doneOn = t; log.add(t); }
       r.log = [...log].sort().slice(-90);
+    } else if (r.repeat === "monthly"){
+      const t = remDay(), d = r.date || t;
+      if (r.doneOn === t){ r.doneOn = null; r.date = remMonthOn(d, -1, r.mday); }
+      else { r.doneOn = t; r.date = remMonthOn(d, 1, r.mday); }
+      remAlerted(r.id, null);
     } else { r.done = !r.done; r.doneAt = r.done ? Date.now() : null; }
     save(); remBadge();
   }
@@ -4368,9 +4386,9 @@ const LuminaCore = (function () {
     cur = { kind:"rem" }; record(cur);
     const all = state.reminders.filter(r => !remFilter || (remFilter === "today" ? remDueAt(r) !== null && remDueAt(r) <= new Date().setHours(23, 59, 59, 999) : r.color === remFilter));
     const byDue = (a, b) => (remDueAt(a) ?? Infinity) - (remDueAt(b) ?? Infinity) || (a.created || 0) - (b.created || 0);
-    const pinned = all.filter(r => r.pinned && !remIsDone(r)).sort((a, b) => (a.pinnedAt || 0) - (b.pinnedAt || 0));
+    const pinned = all.filter(r => r.pinned && (!remIsDone(r) || r.repeat === "monthly")).sort((a, b) => (a.pinnedAt || 0) - (b.pinnedAt || 0));
     const daily = all.filter(r => !r.pinned && r.repeat === "daily").sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
-    const once = all.filter(r => !r.pinned && r.repeat !== "daily" && !r.done).sort(byDue);
+    const once = all.filter(r => !r.pinned && r.repeat !== "daily" && !r.done).sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
     const done = all.filter(r => r.repeat !== "daily" && r.done).sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0));
     const pinnedDaily = all.filter(r => r.pinned && r.repeat === "daily" && remIsDone(r));   /* checked for today: back in its place until tomorrow */
     const chip = (k, lb, hex) => '<button class="btn small rem-chip' + (remFilter === k ? " on" : "") + '" data-f="' + (k || "") + '">' +
@@ -4426,7 +4444,7 @@ const LuminaCore = (function () {
       '<textarea id="reN" rows="2" placeholder="Notes">' + esc(r.notes || "") + '</textarea>' +
       '<div class="rem-field"><span>Color</span>' + sw + '</div>' +
       '<label class="rem-field"><span>Pin to the top</span><input type="checkbox" id="reP"' + (r.pinned ? " checked" : "") + '></label>' +
-      '<div class="rem-field"><span>Repeat</span><select id="reR"><option value="">Once</option><option value="daily"' + (r.repeat === "daily" ? " selected" : "") + '>Every day</option></select></div>' +
+      '<div class="rem-field"><span>Repeat</span><select id="reR"><option value="">Once</option><option value="daily"' + (r.repeat === "daily" ? " selected" : "") + '>Every day</option><option value="monthly"' + (r.repeat === "monthly" ? " selected" : "") + '>Every month</option></select></div>' +
       '<div class="rem-field" id="reDateRow"><span>Date</span><input type="date" id="reD" value="' + (r.date || "") + '"></div>' +
       '<div class="rem-field"><span>Time</span><input type="time" id="reH" value="' + (r.time || "") + '"></div>' +
       '<p class="rem-hint">At the time, Lumina chimes if it is open. For an alert with the phone locked, keep the reminder in iPhone Reminders too.</p>' +
@@ -4447,7 +4465,8 @@ const LuminaCore = (function () {
       const wasPinned = !!o.pinned;
       Object.assign(o, { title: t, notes: q("#reN").value.trim(), color, pinned: q("#reP").checked,
         repeat: q("#reR").value || null, time: q("#reH").value || null });
-      o.date = o.repeat === "daily" ? null : (q("#reD").value || (o.time ? remDay() : null));
+      o.date = o.repeat === "daily" ? null : (q("#reD").value || (o.time || o.repeat === "monthly" ? remDay() : null));
+      o.mday = o.repeat === "monthly" ? +o.date.slice(8) : null;
       if (o.pinned && !wasPinned) o.pinnedAt = Date.now();
       if (!id) state.reminders.push(o);
       remAlerted(o.id, null);                                  /* a new time rings again */
@@ -4523,6 +4542,34 @@ const LuminaCore = (function () {
     });
     remBadge();
   }
+  /* a link that brings reminders in: …/lumina/#rem=<base64url of a JSON list>. The list is in the link only (Lumina's
+     code is public); asked once, then the link is cleared. Titles already here are skipped. */
+  function remFromLink(){
+    const m = location.hash.match(/^#rem=([A-Za-z0-9_-]+)/); if (!m) return;
+    history.replaceState(null, "", location.pathname + location.search);
+    let list; try {
+      const bin = atob(m[1].replace(/-/g, "+").replace(/_/g, "/"));
+      list = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+    } catch(e){ return showToast("That reminders link is damaged"); }
+    const have = new Set(state.reminders.map(r => r.title.trim().toLowerCase()));
+    const add = (Array.isArray(list) ? list : []).filter(it => it && it.title && !have.has(it.title.trim().toLowerCase()));
+    if (!add.length) return showToast("Those reminders are already here");
+    const back = modal('<h3>Add ' + add.length + ' Reminder' + (add.length === 1 ? "" : "s") + '?</h3><div class="rem-preview">' +
+      add.map(it => '<div>' + esc(it.title) + ' <i>' + (it.repeat === "daily" ? "every day" : it.repeat === "monthly" ? "every month" : "") + '</i></div>').join("") +
+      '</div><div class="rowbtns"><button class="btn" id="rlNo">Cancel</button><button class="btn primary" id="rlGo">Add them</button></div>');
+    back.querySelector("#rlNo").onclick = () => back.remove();
+    back.querySelector("#rlGo").onclick = () => {
+      const now = Date.now();
+      add.forEach((it, i) => {
+        const r = Object.assign({ id: uid(), created: now + i, color: null }, it);
+        if (r.doneOn && r.repeat === "daily") r.log = [r.doneOn];
+        if (r.repeat === "monthly" && r.date) r.mday = r.mday || +r.date.slice(8);
+        state.reminders.push(r);
+      });
+      save(); back.remove(); renderReminders(); showToast(add.length + " added");
+    };
+  }
+  setTimeout(remFromLink, 800);
   setInterval(remTick, 30000);
   setTimeout(remTick, 2000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden){ remTick(); if (cur && cur.kind === "rem") renderReminders(); } });
