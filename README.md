@@ -35,7 +35,7 @@ is the licensed way to display these copyrighted translations.
 - **🔔 Reminders** — on the bottom bar where Library was (Library is now under ☰ More). Type a reminder and Add, or **…**
   for the full sheet: notes, a **color** (red, orange, yellow, green, blue, purple; the chips at the top show one color at a
   time, or Today), **☆ pin** (pinned reminders stay at the top of the list), **Every day** (checked off for today, back
-  tomorrow, with the days running counted) or **Once** with a date and time. The badge counts what is due today or late;
+  tomorrow, with the days running counted) or **Once** with a date and time. The badge counts the every-day reminders still to do today;
   at a reminder's time Lumina chimes if it is open (a web page can't ring with the phone locked). **⇩ Import** reads
   Google Tasks (Google Takeout's `Tasks.json`) or a pasted list, one a line (`daily:` makes it every day), skipping ones
   already there. Reminders travel in the encrypted sync, item by item, like favorites.
