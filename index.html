@@ -579,6 +579,12 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
 .rem-swatches{display:flex; gap:.35rem; flex-wrap:wrap; justify-content:flex-end}
 .rem-swatches button{width:1.7rem; height:1.7rem; border-radius:50%; border:2px solid var(--border); background:var(--panel); color:var(--ink-faint); cursor:pointer; padding:0; font-size:.85rem}
 .rem-swatches button.on{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--ink)}
+body.rem-on header, body.rem-on .wrap > .controls, body.rem-on footer{display:none}
+body.rem-on .view.rem{padding-top:.4rem}
+.rem-foot{margin-top:.8rem}
+.rem-sync{text-align:center; font-size:.8rem; font-style:italic; color:var(--ink-faint); margin:.3rem 0 .6rem}
+.rem-sync .btn{font-style:normal; margin-left:.3rem}
+.rem-chips{margin-top:.2rem}
 .rem-preview{max-height:45vh; overflow:auto; margin:.3rem 0} .rem-preview div{padding:.2rem 0; border-bottom:1px dotted var(--gold-line)}
 .rem-preview i{color:var(--ink-faint); font-size:.85em}
 .rem-hint{font-size:.8rem; color:var(--ink-faint); font-style:italic; margin:.4rem 0}
@@ -2562,7 +2568,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=72"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=73"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2591,6 +2597,7 @@ const LuminaCore = (function () {
           else if (!SYNC_LOCAL_ONLY.includes(k) && merged[k] !== undefined) state[k] = merged[k];
         });
         lastSynced = J(syncedPart()); lastSyncedObj = JSON.parse(lastSynced); save();
+        if (cur && cur.kind === "rem" && document.activeElement !== $("remNew")) try { nav.suppress = true; renderReminders(); } catch(e){} finally { nav.suppress = false; }
         if (J(merged.theme) !== J(local.theme)) try { applyTheme(); } catch(e){}
         if (J(merged.font) !== J(local.font)) try { applyFont(); } catch(e){}
       }
@@ -2608,6 +2615,7 @@ const LuminaCore = (function () {
       if (manual) showToast(syncNote);
     } finally {
       syncing = false; firstSync = false;
+      const rs = document.querySelector(".rem-sync"); if (rs) try { rs.innerHTML = remSyncLine(); const b = $("remSyncNow"); if (b) b.onclick = () => syncNow(true); } catch(e){}
       const st = document.getElementById("syncState"); if (st) st.textContent = syncNote;
       if (syncAgain){ syncAgain = false; scheduleSync(); }
     }
@@ -4393,12 +4401,12 @@ const LuminaCore = (function () {
     const pinnedDaily = all.filter(r => r.pinned && r.repeat === "daily" && remIsDone(r));   /* checked for today: back in its place until tomorrow */
     const chip = (k, lb, hex) => '<button class="btn small rem-chip' + (remFilter === k ? " on" : "") + '" data-f="' + (k || "") + '">' +
       (hex ? '<i style="background:' + hex + '"></i>' : "") + lb + '</button>';
-    let html = '<div class="view rem"><div class="crumb"><button class="btn" id="remBack">← Back</button> ' +
-      '<button class="btn small" id="remImport">⇩ Import</button></div>' +
-      '<div class="ch-head"><h2 class="ch-title">Reminders</h2></div>' +
-      '<form class="rem-add" id="remAdd"><input type="text" id="remNew" placeholder="New reminder" autocomplete="off" enterkeyhint="done">' +
+    let html = '<div class="view rem">';
+    const tools = '<form class="rem-add" id="remAdd"><input type="text" id="remNew" placeholder="New reminder" autocomplete="off" enterkeyhint="done">' +
       '<button class="btn primary" type="submit">Add</button><button class="btn" type="button" id="remMore" title="Add with a date, color, every day…">…</button></form>' +
-      '<div class="rem-chips">' + chip(null, "All") + chip("today", "Today") + REM_COLORS.map(([k, h]) => chip(k, "", h)).join("") + '</div>';
+      '<div class="rem-chips">' + chip(null, "All") + chip("today", "Today") + REM_COLORS.map(([k, h]) => chip(k, "", h)).join("") + '</div>' +
+      '<div class="crumb rem-foot"><button class="btn" id="remBack">← Back</button> <button class="btn small" id="remImport">⇩ Import</button></div>' +
+      '<div class="rem-sync">' + remSyncLine() + '</div>';
     const sec = (title, list) => list.length ? '<div class="rem-sec">' + title + '</div>' + list.map(remRow).join("") : "";
     html += sec("★ Pinned", pinned) + sec("Every day", daily.concat(pinnedDaily)) + sec(daily.length || pinned.length ? "Reminders" : "", once);
     if (!pinned.length && !daily.length && !once.length && !pinnedDaily.length)
@@ -4407,7 +4415,8 @@ const LuminaCore = (function () {
       html += '<button class="rem-sec rem-donehead" id="remDoneTog">' + (remShowDone ? "▾" : "▸") + ' Completed (' + done.length + ')</button>';
       if (remShowDone) html += done.map(remRow).join("") + '<div class="rem-clear"><button class="btn small danger" id="remClear">Clear completed</button></div>';
     }
-    view.innerHTML = html + '</div>';
+    view.innerHTML = html + tools + '</div>';
+    if ($("remSyncNow")) $("remSyncNow").onclick = () => { syncNow(true).then(() => { const e = view.querySelector(".rem-sync"); if (e) e.innerHTML = remSyncLine(); }); };
     $("remBack").onclick = () => navBack();
     $("remImport").onclick = remImportSheet;
     $("remMore").onclick = () => remEdit(null, $("remNew").value.trim());
@@ -4432,6 +4441,15 @@ const LuminaCore = (function () {
     };
     remBadge();
   }
+  /* where the reminders are kept: says plainly when they are only on this device */
+  function remSyncLine(){
+    if (!localStorage.getItem("lumina.scriptorium.vault"))
+      return "Saved on this device only. To have them everywhere, open Lumina from your Home Screen and set up Scriptorium (☰ More), which syncs them.";
+    if (state.syncOff) return "Saved on this device. GitHub sync is off (Favorites › Back up &amp; export).";
+    return esc(syncNote || "Saved here; syncing to your other devices…") + ' <button class="btn small" id="remSyncNow">Sync now</button>';
+  }
+  /* the Reminders page shows only the list and its own buttons: Lumina's title, Book/Focus row and footer step aside */
+  new MutationObserver(() => document.body.classList.toggle("rem-on", !!view.querySelector(":scope > .view.rem"))).observe(view, { childList: true });
   /* the sheet for one reminder (new when id is null) */
   function remEdit(id, title){
     const r = id ? state.reminders.find(x => x.id === id) : { title: title || "", color: null, pinned: false, repeat: null, date: null, time: null, notes: "" };
@@ -4497,15 +4515,15 @@ const LuminaCore = (function () {
         have.add(k); n++;
         state.reminders.push(Object.assign({ id: uid(), created: Date.now() + n, color: null }, it));
       });
-      save(); back.remove(); remBadge(); renderReminders();
+      save(); back.remove(); remBadge(); renderReminders(); syncNow();
       showToast(n + " imported" + (skip ? " · " + skip + " already here" : ""));
     };
     q("#riCancel").onclick = () => back.remove();
-    q("#riPaste").onclick = () => add(q("#riText").value.split(/\r?\n/).map(l => {
+    q("#riPaste").onclick = () => { const v = q("#riText").value; if (/#rem=/.test(v)){ back.remove(); return remFromLink(v); } add(v.split(/\r?\n/).map(l => {
       l = l.replace(/^\s*(?:[-*•◦○●]|\[[ xX]?\]|\d+[.)])\s*/, "").trim();
       const daily = /^daily:\s*/i.test(l);
       return daily ? { title: l.replace(/^daily:\s*/i, ""), repeat: "daily" } : { title: l };
-    }));
+    })); };
     q("#riFile").onchange = async e => {
       const f = e.target.files[0]; if (!f) return;
       let data; try { data = JSON.parse(await f.text()); } catch(err){ return showToast("That isn't a Tasks.json file"); }
@@ -4544,9 +4562,9 @@ const LuminaCore = (function () {
   }
   /* a link that brings reminders in: …/lumina/#rem=<base64url of a JSON list>. The list is in the link only (Lumina's
      code is public); asked once, then the link is cleared. Titles already here are skipped. */
-  function remFromLink(){
-    const m = location.hash.match(/^#rem=([A-Za-z0-9_-]+)/); if (!m) return;
-    history.replaceState(null, "", location.pathname + location.search);
+  function remFromLink(text){
+    const m = (text || location.hash).match(/#rem=([A-Za-z0-9_-]+)/); if (!m) return;
+    if (!text) history.replaceState(null, "", location.pathname + location.search);
     let list; try {
       const bin = atob(m[1].replace(/-/g, "+").replace(/_/g, "/"));
       list = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
@@ -4566,7 +4584,7 @@ const LuminaCore = (function () {
         if (r.repeat === "monthly" && r.date) r.mday = r.mday || +r.date.slice(8);
         state.reminders.push(r);
       });
-      save(); back.remove(); renderReminders(); showToast(add.length + " added");
+      save(); back.remove(); renderReminders(); showToast(add.length + " added"); syncNow();
     };
   }
   setTimeout(remFromLink, 800);
