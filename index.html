@@ -2573,7 +2573,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=74"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=75"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -4399,27 +4399,28 @@ const LuminaCore = (function () {
     cur = { kind:"rem" }; record(cur);
     const all = state.reminders.filter(r => !remFilter || (remFilter === "today" ? remDueAt(r) !== null && remDueAt(r) <= new Date().setHours(23, 59, 59, 999) : r.color === remFilter));
     const byDue = (a, b) => (remDueAt(a) ?? Infinity) - (remDueAt(b) ?? Infinity) || (a.created || 0) - (b.created || 0);
-    const pinned = all.filter(r => r.pinned && (!remIsDone(r) || r.repeat === "monthly")).sort((a, b) => (a.pinnedAt || 0) - (b.pinnedAt || 0));
-    const daily = all.filter(r => !r.pinned && r.repeat === "daily").sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
-    const once = all.filter(r => !r.pinned && r.repeat !== "daily" && !r.done).sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
+    const nDone = all.filter(remIsDone).length;
+    const vis = r => remShowDone || !remIsDone(r);
+    const pinned = all.filter(r => vis(r) && r.pinned && (!remIsDone(r) || r.repeat === "monthly")).sort((a, b) => (a.pinnedAt || 0) - (b.pinnedAt || 0));
+    const daily = all.filter(r => vis(r) && !r.pinned && r.repeat === "daily").sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
+    const once = all.filter(r => vis(r) && !r.pinned && r.repeat !== "daily" && !r.done).sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
     const done = all.filter(r => r.repeat !== "daily" && r.done).sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0));
-    const pinnedDaily = all.filter(r => r.pinned && r.repeat === "daily" && remIsDone(r));   /* checked for today: back in its place until tomorrow */
+    const pinnedDaily = all.filter(r => vis(r) && r.pinned && r.repeat === "daily" && remIsDone(r));   /* checked for today: back in its place until tomorrow */
     const chip = (k, lb, hex) => '<button class="btn small rem-chip' + (remFilter === k ? " on" : "") + '" data-f="' + (k || "") + '">' +
       (hex ? '<i style="background:' + hex + '"></i>' : "") + lb + '</button>';
     let html = '<div class="view rem">';
     const tools = '<form class="rem-add" id="remAdd"><input type="text" id="remNew" placeholder="New reminder" autocomplete="off" enterkeyhint="done">' +
       '<button class="btn primary" type="submit">Add</button><button class="btn" type="button" id="remMore" title="Add with a date, color, every day…">…</button></form>' +
       '<div class="rem-chips">' + chip(null, "All") + chip("today", "Today") + REM_COLORS.map(([k, h]) => chip(k, "", h)).join("") + '</div>' +
-      '<div class="crumb rem-foot"><button class="btn" id="remBack">← Back</button> <button class="btn small" id="remImport">⇩ Import</button></div>' +
+      '<div class="crumb rem-foot"><button class="btn" id="remBack">← Back</button> <button class="btn small" id="remImport">⇩ Import</button>' +
+      (nDone ? ' <button class="btn small" id="remDoneTog">' + (remShowDone ? "Hide completed" : "Show completed (" + nDone + ")") + '</button>' : "") + '</div>' +
       '<div class="rem-sync">' + remSyncLine() + '</div>';
     const sec = (title, list) => list.length ? '<div class="rem-sec">' + title + '</div>' + list.map(remRow).join("") : "";
     html += sec("★ Pinned", pinned) + sec("Every day", daily.concat(pinnedDaily)) + sec(daily.length || pinned.length ? "Reminders" : "", once);
     if (!pinned.length && !daily.length && !once.length && !pinnedDaily.length)
-      html += '<p class="rem-empty">' + (remFilter ? "Nothing here." : "No reminders yet. Type one above, or ⇩ Import your Google Tasks.") + '</p>';
-    if (done.length){
-      html += '<button class="rem-sec rem-donehead" id="remDoneTog">' + (remShowDone ? "▾" : "▸") + ' Completed (' + done.length + ')</button>';
-      if (remShowDone) html += done.map(remRow).join("") + '<div class="rem-clear"><button class="btn small danger" id="remClear">Clear completed</button></div>';
-    }
+      html += '<p class="rem-empty">' + (nDone && !remShowDone ? "All done. ✓" : remFilter ? "Nothing here." : "No reminders yet. Type one above, or ⇩ Import your Google Tasks.") + '</p>';
+    if (done.length && remShowDone)
+      html += '<div class="rem-sec">Completed</div>' + done.map(remRow).join("") + '<div class="rem-clear"><button class="btn small danger" id="remClear">Clear completed</button></div>';
     view.innerHTML = html + tools + '</div>';
     if ($("remSyncNow")) $("remSyncNow").onclick = () => { syncNow(true).then(() => { const e = view.querySelector(".rem-sync"); if (e) e.innerHTML = remSyncLine(); }); };
     $("remBack").onclick = () => navBack();
