@@ -558,6 +558,11 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
 .rem-sec{display:block; width:100%; text-align:left; background:none; border:none; color:var(--gold); font:inherit; font-variant:small-caps;
   letter-spacing:.1em; margin:1rem 0 .3rem; padding:0}
 .rem-donehead{cursor:pointer}
+/* A− A+ for the Reminders and Intentions lists (their own size, state.listFont, apart from the Bible's) */
+.rem-sec:has(.ls-adj){display:flex; align-items:center; min-height:1.6rem}
+.ls-adj{margin-left:auto; display:inline-flex; gap:.25rem; font-variant:normal; letter-spacing:0}
+.ls-adj button{font:600 .8rem/1 system-ui,sans-serif; padding:.25rem .45rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--ink-soft); cursor:pointer}
+.ch-head .ls-adj{vertical-align:middle; margin-left:.5rem}
 .rem-row{display:flex; align-items:center; gap:.65rem; background:var(--panel); border:1px solid var(--border-soft); border-left:.45rem solid var(--rc, var(--border-soft));
   border-radius:.5rem; padding:.55rem .6rem; margin:.3rem 0; cursor:pointer}
 .rem-row.pinned{background:var(--panel2); border-color:var(--gold-line); border-left-color:var(--rc, var(--gold-line))}
@@ -571,8 +576,8 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
 .rem-row.done .rem-dot{background:var(--rc, var(--ink-faint))}
 .rem-row.done .rem-title{text-decoration:line-through; color:var(--ink-faint)}
 .rem-main{flex:1; min-width:0; padding-left:.5rem}
-.rem-title{color:var(--ink); font-size:calc(1.02rem * var(--ts, 1)); overflow-wrap:anywhere}
-.rem-sub{color:var(--ink-faint); font-size:.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.rem-title{color:var(--ink); font-size:calc(1.02rem * var(--ts, 1) * var(--ls, 1)); overflow-wrap:anywhere}
+.rem-sub{color:var(--ink-faint); font-size:calc(.85rem * var(--ls, 1)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .rem-sub.late{color:var(--rubric)}
 .rem-pin{flex:none; border:none; background:none; color:var(--ink-faint); font-size:1.25rem; cursor:pointer; padding:.2rem}
 .rem-pin.on{color:var(--gold)}
@@ -1394,6 +1399,12 @@ const LuminaCore = (function () {
     document.documentElement.style.fontSize = (16 * FMIN) + "px";
     document.documentElement.style.setProperty("--ts", ((state.font || 1) / FMIN).toFixed(3));
   }
+  const LMIN = 0.8, LMAX = 1.8, LSTEP = 0.1;
+  function applyListFont(){ document.documentElement.style.setProperty("--ls", (state.listFont || 1).toFixed(2)); }
+  applyListFont();
+  const lsAdj = '<span class="ls-adj"><button type="button" data-ls="-1" title="Smaller text">A−</button><button type="button" data-ls="1" title="Larger text">A+</button></span>';
+  function lsWire(){ view.querySelectorAll("[data-ls]").forEach(b => b.onclick = e => { e.stopPropagation();
+    state.listFont = Math.min(LMAX, Math.max(LMIN, +((state.listFont || 1) + LSTEP * +b.dataset.ls).toFixed(2))); save(); applyListFont(); }); }
   $("fontMinus").onclick = () => { state.font = Math.max(FMIN, +(state.font - FSTEP).toFixed(3)); save(); applyFont(); };
   $("fontPlus").onclick  = () => { state.font = Math.min(FMAX, +(state.font + FSTEP).toFixed(3)); save(); applyFont(); };
 
@@ -2579,7 +2590,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=80"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=81"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -2611,6 +2622,7 @@ const LuminaCore = (function () {
         if (cur && cur.kind === "rem" && document.activeElement !== $("remNew")) try { nav.suppress = true; renderReminders(); } catch(e){} finally { nav.suppress = false; }
         if (J(merged.theme) !== J(local.theme)) try { applyTheme(); } catch(e){}
         if (J(merged.font) !== J(local.font)) try { applyFont(); } catch(e){}
+        if (J(merged.listFont) !== J(local.listFont)) try { applyListFont(); } catch(e){}
       }
       await syncGrail(scr, merged);
       if (!remote || J(merged) !== J(remote)) await scr.data.store(merged);
@@ -4422,8 +4434,10 @@ const LuminaCore = (function () {
       '<div class="crumb rem-foot"><button class="btn" id="remBack">← Back</button> <button class="btn small" id="remImport">⇩ Import</button>' +
       (nDone ? ' <button class="btn small" id="remDoneTog">' + (remShowDone ? "Hide completed" : "Show completed (" + nDone + ")") + '</button>' : "") + '</div>' +
       '<div class="rem-sync">' + remSyncLine() + '</div>';
-    const sec = (title, list) => list.length ? '<div class="rem-sec">' + title + '</div>' + list.map(remRow).join("") : "";
-    html += sec("★ Pinned", pinned) + sec("Every day", daily.concat(pinnedDaily)) + sec(daily.length || pinned.length ? "Reminders" : "", once);
+    const dailyAll = daily.concat(pinnedDaily);   /* A− A+ beside "Every day", or the first heading when there is none */
+    const adjAt = dailyAll.length ? "daily" : pinned.length ? "pinned" : "once";
+    const sec = (title, list, k) => list.length ? '<div class="rem-sec">' + title + (k === adjAt ? lsAdj : "") + '</div>' + list.map(remRow).join("") : "";
+    html += sec("★ Pinned", pinned, "pinned") + sec("Every day", dailyAll, "daily") + sec(daily.length || pinned.length ? "Reminders" : "", once, "once");
     if (!pinned.length && !daily.length && !once.length && !pinnedDaily.length)
       html += '<p class="rem-empty">' + (nDone && !remShowDone ? "All done. ✓" : remFilter ? "Nothing here." : "No reminders yet. Type one above, or ⇩ Import your Google Tasks.") + '</p>';
     if (done.length && remShowDone)
@@ -4440,6 +4454,7 @@ const LuminaCore = (function () {
         date: remFilter === "today" ? remDay() : null });
       save(); remBadge(); renderReminders(); $("remNew").focus();
     };
+    lsWire();
     view.querySelectorAll(".rem-chip").forEach(b => b.onclick = () => { remFilter = b.dataset.f || null; renderReminders(); });
     view.querySelectorAll("[data-chk]").forEach(b => b.onclick = e => { e.stopPropagation(); primeSound(); remToggle(b.dataset.chk); renderReminders(); });
     view.querySelectorAll("[data-pin]").forEach(b => b.onclick = e => {
@@ -4651,7 +4666,7 @@ const LuminaCore = (function () {
       (hex ? '<i style="background:' + hex + '"></i>' : "All") + '</button>';
     let html = '<div class="view prayers rem intent"><div class="tabrow">' +
       sets.map(([id, nm]) => '<button class="btn small' + (id === "intent" ? " on" : "") + '" data-set="' + id + '">' + esc(nm) + '</button>').join("") + '</div>' +
-      '<div class="ch-head"><h2 class="ch-title">Prayer Intentions</h2></div>';
+      '<div class="ch-head"><h2 class="ch-title">Prayer Intentions' + lsAdj + '</h2></div>';
     if (pinned.length) html += '<div class="rem-sec">★ Pinned</div>' + pinned.map(intRow).join("");
     if (rest.length) html += (pinned.length ? '<div class="rem-sec">Intentions</div>' : "") + rest.map(intRow).join("");
     if (!open.length) html += '<p class="rem-empty">' + (nDone ? "Every intention is marked answered." : intFilter ? "Nothing here." : "No intentions yet. Add one below.") + '</p>';
@@ -4662,7 +4677,7 @@ const LuminaCore = (function () {
       '<div class="crumb rem-foot"><button class="btn" id="intBack">← Back</button>' +
       (nDone ? ' <button class="btn small" id="intDoneTog">' + (intShowDone ? "Hide answered" : "Show answered (" + nDone + ")") + '</button>' : "") + '</div></div>';
     view.innerHTML = html;
-    $("intBack").onclick = () => navBack();
+    $("intBack").onclick = () => navBack(); lsWire();
     view.querySelectorAll("[data-set]").forEach(b => b.onclick = () => b.dataset.set === "intent" ? renderIntentions() : (state.lastPrayers = b.dataset.set, renderPrayers(b.dataset.set)));
     view.querySelectorAll("[data-if]").forEach(b => b.onclick = () => { intFilter = b.dataset.if || null; renderIntentions(); });
     $("intAdd").onsubmit = e => {
