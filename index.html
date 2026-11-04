@@ -2578,7 +2578,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=78"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=79"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -4616,6 +4616,13 @@ const LuminaCore = (function () {
   /* ---------- ✙ Prayers › Intentions: your own list of prayer intentions, kept like the Reminders ----------
      state.intentions (synced item by item): { id, title, notes, color, pinned, pinnedAt, done (answered / finished), doneAt, created } */
   if (!Array.isArray(state.intentions)) state.intentions = [];
+  if (state.reminders.some(r => r.kind === "intent")){   /* a link opened before build 78 put intentions among the reminders */
+    const have = new Set(state.intentions.map(r => r.title.trim().toLowerCase()));
+    state.reminders.filter(r => r.kind === "intent").forEach(r => { const o = Object.assign({}, r); delete o.kind;
+      ["repeat", "date", "time", "doneOn", "log"].forEach(k => delete o[k]);
+      if (!have.has(o.title.trim().toLowerCase())) state.intentions.push(o); });
+    state.reminders = state.reminders.filter(r => r.kind !== "intent"); save();
+  }
   let intShowDone = false, intFilter = null;
   function intRow(r){
     const hex = remHex(r.color);

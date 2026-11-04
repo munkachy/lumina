@@ -217,6 +217,11 @@
   function chrome(show) {
     let box = document.getElementById("scrCompose");
     const old = document.getElementById("scrBar"); if (old) old.remove();   // the one bar is Lumina's now
+    /* the dots on Lumina's bar are kept current from anywhere; the message box only while Scriptorium is open
+       (the update check calls this in the background, and used to put the box over Lumina's own pages) */
+    const dot0 = document.querySelector("#btnArmarium .mac-dot"); if (dot0) dot0.classList.toggle("on", !!(S && S.connected));
+    const ud0 = document.querySelector("#btnMore .upd-dot"); if (ud0) ud0.classList.toggle("on", !!newerBuild);
+    if (!document.body.classList.contains("scr-on")) show = false;
     if (!show) { if (box) box.remove(); return; }
     const bar = document.querySelector(".actions.main-bar");
     if (bar && !bar.dataset.measured) {   // the message box and panels sit on top of the bar
