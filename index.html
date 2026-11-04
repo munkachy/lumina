@@ -1609,11 +1609,12 @@ const LuminaCore = (function () {
   const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   /* A litany, condensed so there is less to scroll: lines with the same answer become one
      paragraph with the answer given once at the end, and lines that also open with the same
-     words ("Blood of Christ, …") say them once: "Blood of Christ… only-begotten Son of the
-     Eternal Father. …incarnate Word of God." Short runs (one or two lines) stay as they were. */
+     words ("Blood of Christ, …") say them once, each phrase its own sentence: "Blood of Christ
+     Only-begotten Son of the Eternal Father. Incarnate Word of God." Short runs (one or two lines) stay as they were. */
   const litKey = r => (r || "").toLowerCase().replace(/[^a-z ]/g, "").trim();
   const litHead = c => { const m = c.match(/^([^,]+),\s*(.+)$/); return m ? [m[1].trim(), m[2]] : [null, c]; };
-  const litTrim = t => t.trim().replace(/[,;:.]+$/, "");
+  const litTrim = t => t.trim().replace(/[,;:.…]+$/, "");
+  const litCap = t => t.charAt(0).toUpperCase() + t.slice(1);
   function litanyBlock(lines){
     const rows = lines.map(l => { const [call, resp] = l.split("|"); return { call: call.trim(), resp: (resp || "").trim() }; });
     const out = [];
@@ -1630,11 +1631,11 @@ const LuminaCore = (function () {
         let m = k + 1;
         if (head) while (m < run.length && litHead(run[m].call)[0] === head) m++;
         if (m - k >= 2){
-          parts.push('<b>' + esc(head) + '</b>… ' + run.slice(k, m).map(r => esc(litTrim(litHead(r.call)[1]))).join(". …") + ".");
-        } else parts.push(esc(litTrim(run[k].call)) + ".");
+          parts.push('<b>' + esc(head) + '</b> ' + run.slice(k, m).map(r => esc(litCap(litTrim(litHead(r.call)[1]))) + ".").join(" "));
+        } else parts.push(esc(litCap(litTrim(run[k].call))) + ".");
         k = m;
       }
-      out.push('<li class="pr-litp">' + parts.join(" ") + ' <i>' + esc(litTrim(run[0].resp)) + '.</i></li>');
+      out.push('<li class="pr-litp">' + parts.join(" ") + ' <i>' + esc(litCap(litTrim(run[0].resp))) + '.</i></li>');
       i = j;
     }
     return '<ul class="pr-lit">' + out.join("") + '</ul>';
