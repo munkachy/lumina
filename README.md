@@ -39,6 +39,9 @@ is the licensed way to display these copyrighted translations.
   at a reminder's time Lumina chimes if it is open (a web page can't ring with the phone locked). **⇩ Import** reads
   Google Tasks (Google Takeout's `Tasks.json`) or a pasted list, one a line (`daily:` makes it every day), skipping ones
   already there. Reminders travel in the encrypted sync, item by item, like favorites.
+- **✙ Prayers › Intentions** — the last tab under Prayers (no password needed): your own prayer intentions, kept like the
+  Reminders. Add one at the bottom (or **…** for notes), give it a color, ☆ pin it to the top; tap the circle when it is
+  answered or finished, and it is put away (Show answered brings them back). Synced item by item.
 - **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
   wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
   minutes left. At the end: a chime, or a chime and then a sentence you write, said in your

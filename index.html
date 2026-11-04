@@ -1700,7 +1700,10 @@ const LuminaCore = (function () {
         (year !== now.getFullYear() ? " · this year's list isn't in Lumina yet" : "") };
   }
   function renderPrayers(setId, day){
-    view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">Opening the prayers…</p></div>';
+    if ((setId || state.lastPrayers) === "intent") return renderIntentions();   /* his own list: no password needed */
+    const toIntent = '<div class="tabrow"><button class="btn small" data-set="intent">Intentions</button></div>';   /* his own list opens without the password */
+    view.innerHTML = '<div class="view">' + toIntent + '<p style="text-align:center;font-style:italic">Opening the prayers…</p></div>';
+    view.querySelector("[data-set=intent]").onclick = () => renderIntentions();
     const pope = (setId || state.lastPrayers) === "pope";
     /* the Pope's intentions are public: they show at once, without waiting for the password the others need */
     (pope ? Promise.resolve() : loadPrayers()).then(() => {
@@ -1713,7 +1716,8 @@ const LuminaCore = (function () {
       cur = { kind:"prayers", set: set.id, day: set.id === "pope" ? set.month : day };
       record(cur);
       let html = '<div class="view prayers"><div class="crumb"><button class="btn" id="backMore">← Back</button></div>' +
-        '<div class="tabrow">' + sets.map(s => '<button class="btn small' + (s.id === set.id ? ' on' : '') + '" data-set="' + s.id + '">' + esc(s.name) + '</button>').join("") + '</div>' +
+        '<div class="tabrow">' + sets.map(s => '<button class="btn small' + (s.id === set.id ? ' on' : '') + '" data-set="' + s.id + '">' + esc(s.name) + '</button>').join("") +
+        '<button class="btn small" data-set="intent">Intentions</button></div>' +
         '<div class="ch-head"><h2 class="ch-title">' + esc(set.title) + '</h2></div>';
       if (set.months)   /* the Pope's: a month row, like the Auxilium's days */
         html += '<div class="tabrow">' + set.months.map(i => '<button class="btn small' + (i === set.month ? ' on' : '') + '" data-month="' + i + '">' + MONTHS[i].slice(0, 3) + '</button>').join("") + '</div>';
@@ -1732,7 +1736,8 @@ const LuminaCore = (function () {
       view.querySelectorAll("[data-month]").forEach(b => b.onclick = () => renderPrayers("pope", +b.dataset.month));
       view.querySelectorAll(".pr-bishop").forEach(b => b.onclick = () => checkBishop(b));
       scrollTo(0, 0);
-    }).catch(() => { view.innerHTML = '<div class="view"><p style="text-align:center;font-style:italic">The prayers stay locked until you enter your Scriptorium password.</p></div>'; });
+    }).catch(() => { view.innerHTML = '<div class="view">' + toIntent + '<p style="text-align:center;font-style:italic">The prayers stay locked until you enter your Scriptorium password.</p></div>';
+      view.querySelector("[data-set=intent]").onclick = () => renderIntentions(); });
   }
 
   function renderFavorites(){
@@ -2510,7 +2515,7 @@ const LuminaCore = (function () {
      Scriptorium password), so they survive a lost phone or a cleared browser and match on every
      device. The copy on this device is the working copy: Lumina saves to it at once, then sends
      the changes a few seconds later, and fetches anything new when it opens or comes back. */
-  const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls", "reminders"];
+  const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls", "reminders", "intentions"];
   const SYNC_BASE = "lumina.sync.base";
   const syncOn = () => !!localStorage.getItem("lumina.scriptorium.vault") && state.syncOff !== true;
   /* everything Lumina keeps is synced, except what belongs to this one device: a timer that is
@@ -2573,7 +2578,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=76"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=77"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -4598,6 +4603,100 @@ const LuminaCore = (function () {
   setTimeout(remTick, 2000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden){ remTick(); if (cur && cur.kind === "rem") renderReminders(); } });
 
+
+  /* ---------- ✙ Prayers › Intentions: his own list of prayer intentions, kept like the Reminders ----------
+     state.intentions (synced item by item): { id, title, notes, color, pinned, pinnedAt, done (answered / finished), doneAt, created } */
+  if (!Array.isArray(state.intentions)) state.intentions = [];
+  let intShowDone = false, intFilter = null;
+  function intRow(r){
+    const hex = remHex(r.color);
+    const since = new Date(r.created || Date.now()).toLocaleDateString([], { month:"short", day:"numeric", year: new Date(r.created || Date.now()).getFullYear() === new Date().getFullYear() ? undefined : "numeric" });
+    const sub = [r.done ? "Answered · " + new Date(r.doneAt || Date.now()).toLocaleDateString([], { month:"short", day:"numeric" }) : "Since " + since,
+      r.notes ? r.notes.split("\n")[0] : ""].filter(Boolean).join(" · ");
+    return '<div class="rem-row' + (r.done ? " done" : "") + (r.pinned ? " pinned" : "") + '" data-int="' + r.id + '"' + (hex ? ' style="--rc:' + hex + '"' : "") + '>' +
+      '<button class="rem-check" data-ichk="' + r.id + '" title="' + (r.done ? "Back on the list" : "Answered / finished") + '"><span class="rem-dot">' + (r.done ? "✓" : "") + '</span></button>' +
+      '<div class="rem-main"><div class="rem-title">' + esc(r.title) + '</div><div class="rem-sub">' + esc(sub) + '</div></div>' +
+      '<button class="rem-pin' + (r.pinned ? " on" : "") + '" data-ipin="' + r.id + '" title="' + (r.pinned ? "Unpin" : "Pin to the top") + '">' + (r.pinned ? "★" : "☆") + '</button></div>';
+  }
+  function renderIntentions(){
+    state.lastPrayers = "intent"; save();
+    cur = { kind:"prayers", set:"intent" }; record(cur);
+    const sets = ((window.LUMINA_PRAYERS && window.LUMINA_PRAYERS.sets) || [{ id:"smsm", name:"Society" }, { id:"aux", name:"Auxilium" }])
+      .filter(x => x.id !== "pope").map(x => [x.id, x.name]).concat([["pope", "Pope"], ["intent", "Intentions"]]);
+    const all = state.intentions.filter(r => !intFilter || r.color === intFilter);
+    const nDone = all.filter(r => r.done).length;
+    const open = all.filter(r => !r.done).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (a.pinned ? (a.pinnedAt || 0) - (b.pinnedAt || 0) : (b.created || 0) - (a.created || 0)));
+    const done = all.filter(r => r.done).sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0));
+    const pinned = open.filter(r => r.pinned), rest = open.filter(r => !r.pinned);
+    const chip = (k, hex) => '<button class="btn small rem-chip' + (intFilter === k ? " on" : "") + '" data-if="' + (k || "") + '">' +
+      (hex ? '<i style="background:' + hex + '"></i>' : "All") + '</button>';
+    let html = '<div class="view prayers rem intent"><div class="tabrow">' +
+      sets.map(([id, nm]) => '<button class="btn small' + (id === "intent" ? " on" : "") + '" data-set="' + id + '">' + esc(nm) + '</button>').join("") + '</div>' +
+      '<div class="ch-head"><h2 class="ch-title">Prayer Intentions</h2></div>';
+    if (pinned.length) html += '<div class="rem-sec">★ Pinned</div>' + pinned.map(intRow).join("");
+    if (rest.length) html += (pinned.length ? '<div class="rem-sec">Intentions</div>' : "") + rest.map(intRow).join("");
+    if (!open.length) html += '<p class="rem-empty">' + (nDone ? "Every intention is marked answered." : intFilter ? "Nothing here." : "No intentions yet. Add one below.") + '</p>';
+    if (intShowDone && done.length) html += '<div class="rem-sec">Answered</div>' + done.map(intRow).join("");
+    html += '<form class="rem-add" id="intAdd"><input type="text" id="intNew" placeholder="New intention" autocomplete="off" enterkeyhint="done">' +
+      '<button class="btn primary" type="submit">Add</button><button class="btn" type="button" id="intMore" title="Add with notes or a color">…</button></form>' +
+      '<div class="rem-chips">' + chip(null) + REM_COLORS.map(([k, h]) => chip(k, h)).join("") + '</div>' +
+      '<div class="crumb rem-foot"><button class="btn" id="intBack">← Back</button>' +
+      (nDone ? ' <button class="btn small" id="intDoneTog">' + (intShowDone ? "Hide answered" : "Show answered (" + nDone + ")") + '</button>' : "") + '</div></div>';
+    view.innerHTML = html;
+    $("intBack").onclick = () => navBack();
+    view.querySelectorAll("[data-set]").forEach(b => b.onclick = () => b.dataset.set === "intent" ? renderIntentions() : (state.lastPrayers = b.dataset.set, renderPrayers(b.dataset.set)));
+    view.querySelectorAll("[data-if]").forEach(b => b.onclick = () => { intFilter = b.dataset.if || null; renderIntentions(); });
+    $("intAdd").onsubmit = e => {
+      e.preventDefault();
+      const t = $("intNew").value.trim(); if (!t) return;
+      state.intentions.push({ id: uid(), title: t, color: intFilter, created: Date.now() });
+      save(); renderIntentions(); $("intNew").focus();
+    };
+    $("intMore").onclick = () => intEdit(null, $("intNew").value.trim());
+    if ($("intDoneTog")) $("intDoneTog").onclick = () => { intShowDone = !intShowDone; renderIntentions(); };
+    view.querySelectorAll("[data-ichk]").forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      const r = state.intentions.find(x => x.id === b.dataset.ichk); r.done = !r.done; r.doneAt = r.done ? Date.now() : null;
+      save(); renderIntentions();
+    });
+    view.querySelectorAll("[data-ipin]").forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      const r = state.intentions.find(x => x.id === b.dataset.ipin); r.pinned = !r.pinned; r.pinnedAt = r.pinned ? Date.now() : null;
+      save(); renderIntentions();
+    });
+    view.querySelectorAll("[data-int]").forEach(el => el.onclick = () => intEdit(el.dataset.int));
+  }
+  function intEdit(id, title){
+    const r = id ? state.intentions.find(x => x.id === id) : { title: title || "", notes: "", color: intFilter, pinned: false };
+    if (!r) return;
+    let color = r.color || null;
+    const back = modal('<h3>' + (id ? "Intention" : "New Intention") + '</h3>' +
+      '<input type="text" id="ieT" placeholder="For whom, for what" value="' + esc(r.title).replace(/"/g, "&quot;") + '">' +
+      '<textarea id="ieN" rows="3" placeholder="Notes">' + esc(r.notes || "") + '</textarea>' +
+      '<div class="rem-field"><span>Color</span><div class="rem-swatches"><button type="button" data-c="" class="' + (!color ? "on" : "") + '" title="No color">∅</button>' +
+      REM_COLORS.map(([k, h]) => '<button type="button" data-c="' + k + '" class="' + (color === k ? "on" : "") + '" style="background:' + h + '" title="' + k + '"></button>').join("") + '</div></div>' +
+      '<label class="rem-field"><span>Pin to the top</span><input type="checkbox" id="ieP"' + (r.pinned ? " checked" : "") + '></label>' +
+      (id ? '<label class="rem-field"><span>Answered</span><input type="checkbox" id="ieD"' + (r.done ? " checked" : "") + '></label>' : "") +
+      '<div class="rowbtns">' + (id ? '<button class="btn danger" id="ieDel">Delete</button>' : "") +
+      '<button class="btn" id="ieCancel">Cancel</button><button class="btn primary" id="ieSave">Save</button></div>');
+    const q = s => back.querySelector(s);
+    q(".rem-swatches").onclick = e => {
+      const b = e.target.closest("[data-c]"); if (!b) return;
+      color = b.dataset.c || null; back.querySelectorAll(".rem-swatches button").forEach(x => x.classList.toggle("on", x === b));
+    };
+    q("#ieCancel").onclick = () => back.remove();
+    if (id) q("#ieDel").onclick = () => { state.intentions = state.intentions.filter(x => x.id !== id); save(); back.remove(); renderIntentions(); };
+    q("#ieSave").onclick = () => {
+      const t = q("#ieT").value.trim(); if (!t) return showToast("Write the intention");
+      const o = id ? r : { id: uid(), created: Date.now() }, wasPinned = !!o.pinned;
+      Object.assign(o, { title: t, notes: q("#ieN").value.trim(), color, pinned: q("#ieP").checked });
+      if (o.pinned && !wasPinned) o.pinnedAt = Date.now();
+      if (id){ const d = q("#ieD").checked; if (d !== !!o.done){ o.done = d; o.doneAt = d ? Date.now() : null; } }
+      else state.intentions.push(o);
+      save(); back.remove(); renderIntentions();
+    };
+    if (!id) q("#ieT").focus();
+  }
   /* ---------- universal history + dispatch ---------- */
   const nav = { stack: [], idx: -1, suppress: false };
   function record(desc){
