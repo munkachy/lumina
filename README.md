@@ -32,6 +32,13 @@ is the licensed way to display these copyrighted translations.
   (Today · Week · Day · Hour, the 📅 ordo, the day bar). Its theme follows Lumina's (parchment → Cloister,
   dark → Habit, LCARS → Stained glass), and its theme buttons change Lumina's. Everything it keeps on the device (the unlock key,
   notes, marks, choices) travels in Lumina's encrypted sync, so other devices arrive unlocked.
+- **🔔 Reminders** — on the bottom bar where Library was (Library is now under ☰ More). Type a reminder and Add, or **…**
+  for the full sheet: notes, a **color** (red, orange, yellow, green, blue, purple; the chips at the top show one color at a
+  time, or Today), **☆ pin** (pinned reminders stay at the top of the list), **Every day** (checked off for today, back
+  tomorrow, with the days running counted) or **Once** with a date and time. The badge counts what is due today or late;
+  at a reminder's time Lumina chimes if it is open (a web page can't ring with the phone locked). **⇩ Import** reads
+  Google Tasks (Google Takeout's `Tasks.json`) or a pasted list, one a line (`daily:` makes it every day), skipping ones
+  already there. Reminders travel in the encrypted sync, item by item, like favorites.
 - **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
   wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
   minutes left. At the end: a chime, or a chime and then a sentence you write, said in your

@@ -546,6 +546,41 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
   color:var(--ink-faint); background:color-mix(in srgb, var(--bg) 80%, transparent); border:1px solid var(--border-soft);
   border-radius:999px; padding:.3rem .55rem; cursor:pointer}
 #scrBuildTop.new{color:#fff; background:var(--gold); border-color:var(--gold)}
+/* 🔔 Reminders */
+.rem-badge{position:absolute; right:-10px; top:-4px; min-width:1.1rem; height:1.1rem; padding:0 .25rem; border-radius:.6rem; display:none;
+  background:var(--rubric); color:#fff; font:600 .7rem/1.1rem system-ui,sans-serif; font-style:normal; text-align:center}
+.rem-badge.on{display:block}
+.rem-add{display:flex; gap:.4rem; margin:.4rem 0 .6rem}
+.rem-add input{flex:1; min-width:0; font:inherit; font-size:1.05rem; padding:.55rem .7rem; border:1px solid var(--border); border-radius:.5rem; background:var(--panel); color:var(--ink)}
+.rem-chips{display:flex; gap:.35rem; flex-wrap:wrap; justify-content:center; margin-bottom:.4rem}
+.rem-chip i{display:inline-block; width:.95rem; height:.95rem; border-radius:50%; vertical-align:-.15rem}
+.rem-chip.on{border-color:var(--gold-line); color:var(--gold); font-weight:600; box-shadow:0 0 0 2px var(--gold-line)}
+.rem-sec{display:block; width:100%; text-align:left; background:none; border:none; color:var(--gold); font:inherit; font-variant:small-caps;
+  letter-spacing:.1em; margin:1rem 0 .3rem; padding:0}
+.rem-donehead{cursor:pointer}
+.rem-row{display:flex; align-items:center; gap:.65rem; background:var(--panel); border:1px solid var(--border-soft); border-left:.45rem solid var(--rc, var(--border-soft));
+  border-radius:.5rem; padding:.55rem .6rem; margin:.3rem 0; cursor:pointer}
+.rem-row.pinned{background:var(--panel2); border-color:var(--gold-line); border-left-color:var(--rc, var(--gold-line))}
+.rem-check{flex:none; width:1.6rem; height:1.6rem; border-radius:50%; border:2px solid var(--rc, var(--ink-faint)); background:none; color:#fff;
+  font-size:.95rem; line-height:1; cursor:pointer; padding:0}
+.rem-row.done .rem-check{background:var(--rc, var(--ink-faint))}
+.rem-row.done .rem-title{text-decoration:line-through; color:var(--ink-faint)}
+.rem-main{flex:1; min-width:0}
+.rem-title{color:var(--ink); font-size:calc(1.02rem * var(--ts, 1)); overflow-wrap:anywhere}
+.rem-sub{color:var(--ink-faint); font-size:.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.rem-sub.late{color:var(--rubric)}
+.rem-pin{flex:none; border:none; background:none; color:var(--ink-faint); font-size:1.25rem; cursor:pointer; padding:.2rem}
+.rem-pin.on{color:var(--gold)}
+.rem-empty{text-align:center; font-style:italic; color:var(--ink-faint); margin:1.5rem 0}
+.rem-clear{text-align:center; margin:.6rem 0}
+.rem-field{display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin:.55rem 0}
+.rem-field select,.rem-field input[type=date],.rem-field input[type=time]{font:inherit; padding:.3rem .4rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--ink)}
+.rem-field input[type=checkbox]{width:1.3rem; height:1.3rem}
+.rem-swatches{display:flex; gap:.35rem; flex-wrap:wrap; justify-content:flex-end}
+.rem-swatches button{width:1.7rem; height:1.7rem; border-radius:50%; border:2px solid var(--border); background:var(--panel); color:var(--ink-faint); cursor:pointer; padding:0; font-size:.85rem}
+.rem-swatches button.on{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--ink)}
+.rem-hint{font-size:.8rem; color:var(--ink-faint); font-style:italic; margin:.4rem 0}
+.modal textarea{width:100%; box-sizing:border-box; font:inherit; padding:.5rem; border:1px solid var(--border); border-radius:.4rem; background:var(--panel); color:var(--ink); margin-top:.4rem}
 /* phones: at the very bottom, under the buttons (in the room the bar leaves above the iPhone's home bar) */
 @media(max-width:699px){
   #scrBuildTop{top:auto; right:auto; left:50%; transform:translateX(-50%); bottom:max(.15rem, calc(env(safe-area-inset-bottom) - 1.3rem));
@@ -608,12 +643,13 @@ body.scr-on .wrap { padding-top: 0; }
     <button class="btn ib" id="btnReadings" title="Daily Mass readings"><span class="ic">✠</span><span class="lb">Daily</span></button>
     <button class="btn ib" id="btnPrayers" title="Daily prayers: the Society, the Auxilium Christianorum and the Pope's intentions"><span class="ic">✙</span><span class="lb">Prayers</span></button>
     <button class="btn ib" id="btnArmarium" title="Armarium: Claude with the Church's library"><span class="ic"><img class="illum" src="icon-a.png" alt=""><i class="mac-dot"></i></span><span class="lb">Armarium</span></button>
-    <button class="btn ib" id="btnLibrary" title="Library: the Fathers, St Thomas, the Catena, the Rule"><span class="ic"><img class="illum" src="icon-lib.png" alt=""></span><span class="lb">Library</span></button>
+    <button class="btn ib" id="btnReminders" title="Reminders"><span class="ic">🔔<i class="rem-badge" id="remBadge"></i></span><span class="lb">Reminders</span></button>
     <button class="btn ib" id="btnChapter" title="The Chapter room"><span class="ic">⛪</span><span class="lb">Chapter</span></button>
     <button class="btn ib" id="btnPlan" title="Mind map"><span class="ic">🧠</span><span class="lb">Mind</span></button>
     <button class="btn ib" id="btnFavsBar" title="Favorites"><span class="ic">♥</span><span class="lb">Favorites</span></button>
     <button class="btn ib" id="btnMore" title="More"><span class="ic">☰<i class="upd-dot"></i></span><span class="lb">More</span></button>
     <!-- kept for the code that drives them; reached from More -->
+    <button class="btn ib" id="btnLibrary" style="display:none"><span class="ic"></span><span class="lb">Library</span></button>
     <button class="btn ib" id="btnScriptorium" style="display:none"><span class="ic"></span><span class="lb">Scriptorium</span></button>
     <button class="btn ib" id="btnListen" style="display:none"><span class="ic" id="btnListenIc">▶</span><span class="lb" id="btnListenLb">Listen</span></button>
   </div>
@@ -2461,7 +2497,7 @@ const LuminaCore = (function () {
      Scriptorium password), so they survive a lost phone or a cleared browser and match on every
      device. The copy on this device is the working copy: Lumina saves to it at once, then sends
      the changes a few seconds later, and fetches anything new when it opens or comes back. */
-  const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls"];
+  const SYNC_LISTS = ["favLists", "favs", "chapLists", "chapFavs", "hls", "reminders"];
   const SYNC_BASE = "lumina.sync.base";
   const syncOn = () => !!localStorage.getItem("lumina.scriptorium.vault") && state.syncOff !== true;
   /* everything Lumina keeps is synced, except what belongs to this one device: a timer that is
@@ -2524,7 +2560,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=69"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=70"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -4271,6 +4307,228 @@ const LuminaCore = (function () {
     }).catch(() => showToast("Could not load the scene"));
   }
 
+  /* ---------- 🔔 Reminders: one-off and every-day, color-coded, pinned ones stay on top ----------
+     Kept in state.reminders (synced item by item, like favorites). A reminder:
+     { id, title, notes, color, pinned, pinnedAt, repeat: null|"daily", date: "YYYY-MM-DD"|null, time: "HH:MM"|null,
+       done (one-off), doneAt, doneOn (every-day: the last day it was checked), log: [days checked], list, created } */
+  const REM_COLORS = [["red","#d0453a"],["orange","#e08a2a"],["yellow","#d4b42a"],["green","#4f9a5a"],["blue","#3f7fc4"],["purple","#8e5bb5"]];
+  const remHex = c => (REM_COLORS.find(x => x[0] === c) || [])[1] || "";
+  const remDay = (d = new Date()) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  if (!Array.isArray(state.reminders)) state.reminders = [];
+  let remFilter = null, remShowDone = false;
+  const remIsDone = r => r.repeat === "daily" ? r.doneOn === remDay() : !!r.done;
+  /* when it is due, as a time on the clock (null: no date) */
+  function remDueAt(r){
+    const day = r.repeat === "daily" ? remDay() : r.date;
+    if (!day) return null;
+    const [y, m, d] = day.split("-").map(Number), [hh, mm] = (r.time || "23:59").split(":").map(Number);
+    return new Date(y, m - 1, d, hh, mm).getTime();
+  }
+  function remStreak(r){
+    const log = new Set(r.log || []); let n = 0; const d = new Date();
+    if (!log.has(remDay(d))) d.setDate(d.getDate() - 1);     /* today not yet done: the streak so far still counts */
+    while (log.has(remDay(d))){ n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  function remWhen(r){
+    const t = r.time ? new Date(2000, 0, 1, ...r.time.split(":").map(Number)).toLocaleTimeString([], { hour:"numeric", minute:"2-digit" }) : "";
+    if (r.repeat === "daily"){ const s = remStreak(r); return "Every day" + (t ? " · " + t : "") + (s > 1 ? " · " + s + " days running" : ""); }
+    if (!r.date) return "";
+    const today = remDay(), tm = new Date(); tm.setDate(tm.getDate() + 1);
+    const [y, m, d] = r.date.split("-").map(Number), dt = new Date(y, m - 1, d);
+    const day = r.date === today ? "Today" : r.date === remDay(tm) ? "Tomorrow"
+      : dt.toLocaleDateString([], { weekday:"short", month:"short", day:"numeric", year: y === tm.getFullYear() ? undefined : "numeric" });
+    return day + (t ? " · " + t : "");
+  }
+  function remCount(){
+    const now = Date.now(), end = new Date(); end.setHours(23, 59, 59, 999);
+    return state.reminders.filter(r => !remIsDone(r) && remDueAt(r) !== null && remDueAt(r) <= end.getTime()).length;
+  }
+  function remBadge(){
+    const b = $("remBadge"); if (!b) return;
+    const n = remCount(); b.textContent = n > 99 ? "99+" : n; b.classList.toggle("on", n > 0);
+  }
+  function remToggle(id){
+    const r = state.reminders.find(x => x.id === id); if (!r) return;
+    if (r.repeat === "daily"){
+      const t = remDay(), log = new Set(r.log || []);
+      if (r.doneOn === t){ r.doneOn = null; log.delete(t); } else { r.doneOn = t; log.add(t); }
+      r.log = [...log].sort().slice(-90);
+    } else { r.done = !r.done; r.doneAt = r.done ? Date.now() : null; }
+    save(); remBadge();
+  }
+  function remRow(r){
+    const hex = remHex(r.color), done = remIsDone(r), due = remDueAt(r), late = !done && due !== null && due < Date.now();
+    const sub = [remWhen(r), r.list && r.list !== "My Tasks" ? r.list : "", r.notes ? r.notes.split("\n")[0] : ""].filter(Boolean).join(" · ");
+    return '<div class="rem-row' + (done ? " done" : "") + (r.pinned ? " pinned" : "") + '" data-rem="' + r.id + '"' + (hex ? ' style="--rc:' + hex + '"' : "") + '>' +
+      '<button class="rem-check" data-chk="' + r.id + '" title="' + (done ? "Mark not done" : "Done") + '">' + (done ? "✓" : "") + '</button>' +
+      '<div class="rem-main"><div class="rem-title">' + esc(r.title) + '</div>' +
+      (sub ? '<div class="rem-sub' + (late ? " late" : "") + '">' + esc(sub) + '</div>' : "") + '</div>' +
+      '<button class="rem-pin' + (r.pinned ? " on" : "") + '" data-pin="' + r.id + '" title="' + (r.pinned ? "Unpin" : "Pin to the top") + '">' + (r.pinned ? "★" : "☆") + '</button></div>';
+  }
+  function renderReminders(){
+    cur = { kind:"rem" }; record(cur);
+    const all = state.reminders.filter(r => !remFilter || (remFilter === "today" ? remDueAt(r) !== null && remDueAt(r) <= new Date().setHours(23, 59, 59, 999) : r.color === remFilter));
+    const byDue = (a, b) => (remDueAt(a) ?? Infinity) - (remDueAt(b) ?? Infinity) || (a.created || 0) - (b.created || 0);
+    const pinned = all.filter(r => r.pinned && !remIsDone(r)).sort((a, b) => (a.pinnedAt || 0) - (b.pinnedAt || 0));
+    const daily = all.filter(r => !r.pinned && r.repeat === "daily").sort((a, b) => remIsDone(a) - remIsDone(b) || byDue(a, b));
+    const once = all.filter(r => !r.pinned && r.repeat !== "daily" && !r.done).sort(byDue);
+    const done = all.filter(r => r.repeat !== "daily" && r.done).sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0));
+    const pinnedDaily = all.filter(r => r.pinned && r.repeat === "daily" && remIsDone(r));   /* checked for today: back in its place until tomorrow */
+    const chip = (k, lb, hex) => '<button class="btn small rem-chip' + (remFilter === k ? " on" : "") + '" data-f="' + (k || "") + '">' +
+      (hex ? '<i style="background:' + hex + '"></i>' : "") + lb + '</button>';
+    let html = '<div class="view rem"><div class="crumb"><button class="btn" id="remBack">← Back</button> ' +
+      '<button class="btn small" id="remImport">⇩ Import</button></div>' +
+      '<div class="ch-head"><h2 class="ch-title">Reminders</h2></div>' +
+      '<form class="rem-add" id="remAdd"><input type="text" id="remNew" placeholder="New reminder" autocomplete="off" enterkeyhint="done">' +
+      '<button class="btn primary" type="submit">Add</button><button class="btn" type="button" id="remMore" title="Add with a date, color, every day…">…</button></form>' +
+      '<div class="rem-chips">' + chip(null, "All") + chip("today", "Today") + REM_COLORS.map(([k, h]) => chip(k, "", h)).join("") + '</div>';
+    const sec = (title, list) => list.length ? '<div class="rem-sec">' + title + '</div>' + list.map(remRow).join("") : "";
+    html += sec("★ Pinned", pinned) + sec("Every day", daily.concat(pinnedDaily)) + sec(daily.length || pinned.length ? "Reminders" : "", once);
+    if (!pinned.length && !daily.length && !once.length && !pinnedDaily.length)
+      html += '<p class="rem-empty">' + (remFilter ? "Nothing here." : "No reminders yet. Type one above, or ⇩ Import your Google Tasks.") + '</p>';
+    if (done.length){
+      html += '<button class="rem-sec rem-donehead" id="remDoneTog">' + (remShowDone ? "▾" : "▸") + ' Completed (' + done.length + ')</button>';
+      if (remShowDone) html += done.map(remRow).join("") + '<div class="rem-clear"><button class="btn small danger" id="remClear">Clear completed</button></div>';
+    }
+    view.innerHTML = html + '</div>';
+    $("remBack").onclick = () => navBack();
+    $("remImport").onclick = remImportSheet;
+    $("remMore").onclick = () => remEdit(null, $("remNew").value.trim());
+    $("remAdd").onsubmit = e => {
+      e.preventDefault();
+      const t = $("remNew").value.trim(); if (!t) return;
+      state.reminders.push({ id: uid(), title: t, color: ["today", null].includes(remFilter) ? null : remFilter, created: Date.now(),
+        date: remFilter === "today" ? remDay() : null });
+      save(); remBadge(); renderReminders(); $("remNew").focus();
+    };
+    view.querySelectorAll(".rem-chip").forEach(b => b.onclick = () => { remFilter = b.dataset.f || null; renderReminders(); });
+    view.querySelectorAll("[data-chk]").forEach(b => b.onclick = e => { e.stopPropagation(); primeSound(); remToggle(b.dataset.chk); renderReminders(); });
+    view.querySelectorAll("[data-pin]").forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      const r = state.reminders.find(x => x.id === b.dataset.pin); r.pinned = !r.pinned; r.pinnedAt = r.pinned ? Date.now() : null;
+      save(); renderReminders();
+    });
+    view.querySelectorAll("[data-rem]").forEach(el => el.onclick = () => remEdit(el.dataset.rem));
+    if ($("remDoneTog")) $("remDoneTog").onclick = () => { remShowDone = !remShowDone; renderReminders(); };
+    if ($("remClear")) $("remClear").onclick = () => {
+      state.reminders = state.reminders.filter(r => !(r.repeat !== "daily" && r.done)); save(); renderReminders();
+    };
+    remBadge();
+  }
+  /* the sheet for one reminder (new when id is null) */
+  function remEdit(id, title){
+    const r = id ? state.reminders.find(x => x.id === id) : { title: title || "", color: null, pinned: false, repeat: null, date: null, time: null, notes: "" };
+    if (!r) return;
+    let color = r.color || null;
+    const sw = '<div class="rem-swatches"><button type="button" data-c="" class="' + (!color ? "on" : "") + '" title="No color">∅</button>' +
+      REM_COLORS.map(([k, h]) => '<button type="button" data-c="' + k + '" class="' + (color === k ? "on" : "") + '" style="background:' + h + '" title="' + k + '"></button>').join("") + '</div>';
+    const back = modal('<h3>' + (id ? "Reminder" : "New Reminder") + '</h3>' +
+      '<input type="text" id="reT" placeholder="Title" value="' + esc(r.title).replace(/"/g, "&quot;") + '">' +
+      '<textarea id="reN" rows="2" placeholder="Notes">' + esc(r.notes || "") + '</textarea>' +
+      '<div class="rem-field"><span>Color</span>' + sw + '</div>' +
+      '<label class="rem-field"><span>Pin to the top</span><input type="checkbox" id="reP"' + (r.pinned ? " checked" : "") + '></label>' +
+      '<div class="rem-field"><span>Repeat</span><select id="reR"><option value="">Once</option><option value="daily"' + (r.repeat === "daily" ? " selected" : "") + '>Every day</option></select></div>' +
+      '<div class="rem-field" id="reDateRow"><span>Date</span><input type="date" id="reD" value="' + (r.date || "") + '"></div>' +
+      '<div class="rem-field"><span>Time</span><input type="time" id="reH" value="' + (r.time || "") + '"></div>' +
+      '<p class="rem-hint">At the time, Lumina chimes if it is open. For an alert with the phone locked, keep the reminder in iPhone Reminders too.</p>' +
+      '<div class="rowbtns">' + (id ? '<button class="btn danger" id="reDel">Delete</button>' : "") +
+      '<button class="btn" id="reCancel">Cancel</button><button class="btn primary" id="reSave">Save</button></div>');
+    const q = s => back.querySelector(s);
+    const dateRow = () => q("#reDateRow").style.display = q("#reR").value === "daily" ? "none" : "";
+    dateRow(); q("#reR").onchange = dateRow;
+    q(".rem-swatches").onclick = e => {
+      const b = e.target.closest("[data-c]"); if (!b) return;
+      color = b.dataset.c || null; back.querySelectorAll(".rem-swatches button").forEach(x => x.classList.toggle("on", x === b));
+    };
+    q("#reCancel").onclick = () => back.remove();
+    if (id) q("#reDel").onclick = () => { state.reminders = state.reminders.filter(x => x.id !== id); save(); back.remove(); remBadge(); renderReminders(); };
+    q("#reSave").onclick = () => {
+      const t = q("#reT").value.trim(); if (!t) return showToast("Give it a title");
+      const o = id ? r : { id: uid(), created: Date.now() };
+      const wasPinned = !!o.pinned;
+      Object.assign(o, { title: t, notes: q("#reN").value.trim(), color, pinned: q("#reP").checked,
+        repeat: q("#reR").value || null, time: q("#reH").value || null });
+      o.date = o.repeat === "daily" ? null : (q("#reD").value || (o.time ? remDay() : null));
+      if (o.pinned && !wasPinned) o.pinnedAt = Date.now();
+      if (!id) state.reminders.push(o);
+      remAlerted(o.id, null);                                  /* a new time rings again */
+      save(); back.remove(); remBadge(); renderReminders();
+    };
+    if (!id) q("#reT").focus();
+  }
+  /* ⇩ Import: Google Tasks (Google Takeout's Tasks.json), or a pasted list, one reminder a line */
+  function remImportSheet(){
+    const back = modal('<h3>Import Reminders</h3>' +
+      '<p><b>Google Tasks.</b> At <a href="https://takeout.google.com" target="_blank" rel="noopener">takeout.google.com</a>: ' +
+      '<i>Deselect all</i>, tick <i>Tasks</i>, <i>Next step</i>, <i>Create export</i>. Open the zip Google sends and choose <i>Tasks.json</i> here. ' +
+      '(Google leaves out which tasks repeat: set those to <i>Every day</i> after importing.)</p>' +
+      '<label class="rem-field"><span>Include completed tasks</span><input type="checkbox" id="riDone"></label>' +
+      '<div class="rowbtns"><label class="btn primary">Choose Tasks.json<input type="file" id="riFile" accept=".json,application/json" hidden></label></div>' +
+      '<p style="margin-top:1rem"><b>Or paste a list</b>, one reminder a line. From iPhone Reminders: a Shortcut with <i>Find Reminders</i> ' +
+      '(Is Not Completed) then <i>Copy to Clipboard</i> copies them all as lines; on a Mac, select all in Reminders and copy. ' +
+      'Start a line with <code>daily:</code> to make it every day.</p>' +
+      '<textarea id="riText" rows="6" placeholder="Call Mom&#10;daily: Rosary&#10;Renew library books"></textarea>' +
+      '<div class="rowbtns"><button class="btn" id="riCancel">Cancel</button><button class="btn primary" id="riPaste">Add these</button></div>');
+    const q = s => back.querySelector(s);
+    const have = new Set(state.reminders.filter(r => !remIsDone(r)).map(r => r.title.trim().toLowerCase()));
+    const add = items => {
+      let n = 0, skip = 0;
+      items.forEach(it => {
+        const k = it.title.trim().toLowerCase(); if (!k) return;
+        if (have.has(k)){ skip++; return; }
+        have.add(k); n++;
+        state.reminders.push(Object.assign({ id: uid(), created: Date.now() + n, color: null }, it));
+      });
+      save(); back.remove(); remBadge(); renderReminders();
+      showToast(n + " imported" + (skip ? " · " + skip + " already here" : ""));
+    };
+    q("#riCancel").onclick = () => back.remove();
+    q("#riPaste").onclick = () => add(q("#riText").value.split(/\r?\n/).map(l => {
+      l = l.replace(/^\s*(?:[-*•◦○●]|\[[ xX]?\]|\d+[.)])\s*/, "").trim();
+      const daily = /^daily:\s*/i.test(l);
+      return daily ? { title: l.replace(/^daily:\s*/i, ""), repeat: "daily" } : { title: l };
+    }));
+    q("#riFile").onchange = async e => {
+      const f = e.target.files[0]; if (!f) return;
+      let data; try { data = JSON.parse(await f.text()); } catch(err){ return showToast("That isn't a Tasks.json file"); }
+      const withDone = q("#riDone").checked, out = [];
+      const lists = Array.isArray(data) ? data : data.items || [];
+      lists.forEach(l => (l.items || []).forEach(t => {
+        if (!t || !t.title || t.deleted || t.hidden && !withDone) return;
+        const isDone = t.status === "completed"; if (isDone && !withDone) return;
+        out.push({ title: t.title, notes: t.notes || "", list: l.title || "", date: t.due ? t.due.slice(0, 10) : null,
+          done: isDone, doneAt: isDone ? Date.parse(t.completed) || Date.now() : null });
+      }));
+      if (!out.length) return showToast("No tasks found in that file");
+      add(out);
+    };
+  }
+  /* the chime at a reminder's time, while Lumina is open (each one once a day, on this device) */
+  const REM_ALERTED = "lumina.rem.alerted";
+  function remAlerted(id, day){
+    let m = {}; try { m = JSON.parse(localStorage.getItem(REM_ALERTED) || "{}"); } catch(e){}
+    if (day === undefined) return m[id];
+    if (day === null) delete m[id]; else m[id] = day;
+    try { localStorage.setItem(REM_ALERTED, JSON.stringify(m)); } catch(e){}
+  }
+  function remTick(){
+    const now = Date.now(), today = remDay();
+    state.reminders.forEach(r => {
+      if (!r.time || remIsDone(r)) return;
+      const at = remDueAt(r);
+      if (at === null || at > now || now - at > 6 * 3600e3 || remAlerted(r.id) === today) return;
+      remAlerted(r.id, today);
+      showToast("🔔 " + r.title);
+      if (navigator.vibrate) try { navigator.vibrate([200, 100, 200]); } catch(e){}
+      chime.currentTime = 0; chime.play().catch(() => {});
+    });
+    remBadge();
+  }
+  setInterval(remTick, 30000);
+  setTimeout(remTick, 2000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden){ remTick(); if (cur && cur.kind === "rem") renderReminders(); } });
+
   /* ---------- universal history + dispatch ---------- */
   const nav = { stack: [], idx: -1, suppress: false };
   function record(desc){
@@ -4303,6 +4561,7 @@ const LuminaCore = (function () {
       case "doc": return renderDoc(desc.id, desc.n, { restore:true });
       case "docPara": return renderDocPara(desc.id, desc.n, { keepScroll:true });
       case "favs": return renderFavorites();
+      case "rem": return renderReminders();
       case "prayers": return renderPrayers(desc.set, desc.day);
       case "favList": return renderFavList(desc.listId);
       case "chapFavs": return renderChapFavorites();
@@ -4637,6 +4896,7 @@ const LuminaCore = (function () {
   $("btnChapter").onclick = () => openScr("chapter");
   $("btnPlan").onclick = () => openScr("mind");
   $("btnFavsBar").onclick = renderFavorites;
+  $("btnReminders").onclick = () => renderReminders();
   $("btnMore").onclick = openMore;
   $("btnScriptorium").onclick = () => openScr("armarium");
   /* any bar button that goes to a Lumina page leaves Scriptorium first (no reload: Lumina draws over it) */
@@ -4662,7 +4922,7 @@ const LuminaCore = (function () {
       id = ({ armarium:"btnArmarium", library:"btnLibrary", chapter:"btnChapter", mind:"btnPlan" })[window.Scriptorium.where()] || null;
     } else if (psalterOn()) id = "btnPsalter";
     else if (cur) id = ({ prayers:"btnPrayers", readings:"btnReadings", favs:"btnFavsBar", favList:"btnFavsBar", chapFavs:"btnFavsBar",
-                         chapFavList:"btnFavsBar", hls:"btnFavsBar" })[cur.kind] || null;
+                         chapFavList:"btnFavsBar", hls:"btnFavsBar", rem:"btnReminders" })[cur.kind] || null;
     document.querySelectorAll(".actions.main-bar .btn.ib").forEach(b => b.classList.toggle("here", b.id === id));
   }
   window.LuminaBar = { mark: markHere };
@@ -4673,7 +4933,7 @@ const LuminaCore = (function () {
     const item = (id, ic, lb) => '<button class="btn" data-more="' + id + '"><b>' + ic + '</b>' + lb + '</button>';
     const back = modal('<h3>More</h3><div class="more-grid">' +
       item("new", "＋", "New chat") + item("chats", "☰", "Chats") + item("mail", "✉", "Mail") +
-      item("search", "🔍", "Search") + item("listen", "▶", "Listen") + item("theme", "☾", "Theme") +
+      item("library", "📚", "Library") + item("search", "🔍", "Search") + item("listen", "▶", "Listen") + item("theme", "☾", "Theme") +
       item("text", "Aa", "Text &amp; voice") + item("mode", ({ eco:"🌿", normal:"◐", turbo:"⚡" })[modeNow] || "◐", modeNow ? modeNow[0].toUpperCase() + modeNow.slice(1) + " mode" : "Eco · Turbo") +
       item("update", "⟳", "Updates") + '</div>');
     back.querySelector(".more-grid").onclick = async e => {
@@ -4684,6 +4944,7 @@ const LuminaCore = (function () {
       if (k === "new") return inScr("armarium", s => s.newConversation());
       if (k === "chats") return inScr(null, s => s.chats());
       if (k === "mail") return openScr("mail");
+      if (k === "library") return openScr("library");
       if (k === "text") return inScr(null, s => s.prefs());
       if (k === "mode") return inScr(null, s => { s.cycleMode(); showToast(s.modeName()[0].toUpperCase() + s.modeName().slice(1) + " mode"); });
       if (k === "update") { const u = $("scrBuildTop"); if (u) u.click(); return; }
