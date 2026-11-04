@@ -558,6 +558,8 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
 .rem-sec{display:block; width:100%; text-align:left; background:none; border:none; color:var(--gold); font:inherit; font-variant:small-caps;
   letter-spacing:.1em; margin:1rem 0 .3rem; padding:0}
 .rem-donehead{cursor:pointer}
+.rem-row.just{animation:intJust 1.6s ease-out}
+@keyframes intJust{from{box-shadow:0 0 0 3px var(--gold-line)}to{box-shadow:none}}
 /* A− A+ for the Reminders and Intentions lists (their own size, state.listFont, apart from the Bible's) */
 .rem-sec:has(.ls-adj){display:flex; align-items:center; min-height:1.6rem}
 .ls-adj{margin-left:auto; display:inline-flex; gap:.25rem; font-variant:normal; letter-spacing:0}
@@ -575,6 +577,7 @@ footer{text-align:center; color:var(--ink-faint); font-style:italic;
   font-size:1rem; line-height:1; display:flex; align-items:center; justify-content:center}
 .rem-row.done .rem-dot{background:var(--rc, var(--ink-faint))}
 .rem-row.done .rem-title{text-decoration:line-through; color:var(--ink-faint)}
+.rem-row.prayed .rem-dot{background:var(--rc, var(--gold)); border-color:var(--rc, var(--gold))}
 .rem-main{flex:1; min-width:0; padding-left:.5rem}
 .rem-title{color:var(--ink); font-size:calc(1.02rem * var(--ts, 1) * var(--ls, 1)); overflow-wrap:anywhere}
 .rem-sub{color:var(--ink-faint); font-size:calc(.85rem * var(--ls, 1)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
@@ -2590,7 +2593,7 @@ const LuminaCore = (function () {
     if (window.Scriptorium) return Promise.resolve(window.Scriptorium);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "scriptorium.js?v=82"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
+      s.src = "scriptorium.js?v=83"; s.onload = () => resolve(window.Scriptorium); s.onerror = reject;
       document.body.appendChild(s);
     });
   }
@@ -4642,24 +4645,43 @@ const LuminaCore = (function () {
   }
   remMoveIntents();
   let intShowDone = false, intFilter = null;
+  /* Checking an intention means "I prayed for this": it records when (prayedAt, and how many times), and the intention
+     goes to the bottom of the list, so the list cycles: the one prayed for longest ago is always at the top. Intentions
+     never leave the list this way; "Answered" (in the editor) is the only way to set one aside. */
+  const intDay = t => { const d = new Date(t), n = new Date(), y = new Date(Date.now() - 864e5);
+    const tm = d.toLocaleTimeString([], { hour:"numeric", minute:"2-digit" });
+    if (d.toDateString() === n.toDateString()) return "today, " + tm;
+    if (d.toDateString() === y.toDateString()) return "yesterday, " + tm;
+    return d.toLocaleDateString([], { weekday: n - d < 6 * 864e5 ? "short" : undefined, month:"short", day:"numeric", year: d.getFullYear() === n.getFullYear() ? undefined : "numeric" }); };
+  const intToday = r => r.prayedAt && new Date(r.prayedAt).toDateString() === new Date().toDateString();
   function intRow(r){
-    const hex = remHex(r.color);
+    const hex = remHex(r.color), today = !r.done && intToday(r);
     const since = new Date(r.created || Date.now()).toLocaleDateString([], { month:"short", day:"numeric", year: new Date(r.created || Date.now()).getFullYear() === new Date().getFullYear() ? undefined : "numeric" });
-    const sub = [r.done ? "Answered · " + new Date(r.doneAt || Date.now()).toLocaleDateString([], { month:"short", day:"numeric" }) : "Since " + since,
+    const sub = [r.done ? "Answered · " + new Date(r.doneAt || Date.now()).toLocaleDateString([], { month:"short", day:"numeric" })
+        : r.prayedAt ? "Last prayed " + intDay(r.prayedAt) + (r.prayedN > 1 ? " · " + r.prayedN + " times" : "") : "Not yet prayed for · since " + since,
       r.notes ? r.notes.split("\n")[0] : ""].filter(Boolean).join(" · ");
-    return '<div class="rem-row' + (r.done ? " done" : "") + (r.pinned ? " pinned" : "") + '" data-int="' + r.id + '"' + (hex ? ' style="--rc:' + hex + '"' : "") + '>' +
-      '<button class="rem-check" data-ichk="' + r.id + '" title="' + (r.done ? "Back on the list" : "Answered / finished") + '"><span class="rem-dot">' + (r.done ? "✓" : "") + '</span></button>' +
+    return '<div class="rem-row' + (r.done ? " done" : today ? " prayed" : "") + (r.pinned ? " pinned" : "") + (r.id === intJust ? " just" : "") + '" data-int="' + r.id + '"' + (hex ? ' style="--rc:' + hex + '"' : "") + '>' +
+      '<button class="rem-check" data-ichk="' + r.id + '" title="' + (r.done ? "Back on the list" : "I prayed for this") + '"><span class="rem-dot">' + (r.done || today ? "✓" : "") + '</span></button>' +
       '<div class="rem-main"><div class="rem-title">' + esc(r.title) + '</div><div class="rem-sub">' + esc(sub) + '</div></div>' +
       '<button class="rem-pin' + (r.pinned ? " on" : "") + '" data-ipin="' + r.id + '" title="' + (r.pinned ? "Unpin" : "Pin to the top") + '">' + (r.pinned ? "★" : "☆") + '</button></div>';
   }
+  let intJust = null;
+  /* once: intentions checked off under the old way ("answered") come back, as prayed for on that day */
+  function intMigrate(){
+    if (state.intCycle) return;
+    state.intentions.forEach(r => { if (r.done){ r.prayedAt = r.doneAt || Date.now(); r.prayedN = 1; r.done = false; r.doneAt = null; } });
+    state.intCycle = 1; save();
+  }
   function renderIntentions(){
-    state.lastPrayers = "intent"; save();
+    state.lastPrayers = "intent"; intMigrate(); save();
     cur = { kind:"prayers", set:"intent" }; record(cur);
     const sets = ((window.LUMINA_PRAYERS && window.LUMINA_PRAYERS.sets) || [{ id:"smsm", name:"Society" }, { id:"aux", name:"Auxilium" }])
       .filter(x => x.id !== "pope").map(x => [x.id, x.name]).concat([["pope", "Pope"], ["intent", "Intentions"]]);
     const all = state.intentions.filter(r => !intFilter || r.color === intFilter);
     const nDone = all.filter(r => r.done).length;
-    const open = all.filter(r => !r.done).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (a.pinned ? (a.pinnedAt || 0) - (b.pinnedAt || 0) : (b.created || 0) - (a.created || 0)));
+    /* not yet prayed for (newest first), then the one prayed for longest ago … the one just prayed for, last */
+    const cyc = (a, b) => (a.prayedAt ? 1 : 0) - (b.prayedAt ? 1 : 0) || (a.prayedAt ? a.prayedAt - b.prayedAt : (b.created || 0) - (a.created || 0));
+    const open = all.filter(r => !r.done).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (a.pinned ? (a.pinnedAt || 0) - (b.pinnedAt || 0) : cyc(a, b)));
     const done = all.filter(r => r.done).sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0));
     const pinned = open.filter(r => r.pinned), rest = open.filter(r => !r.pinned);
     const chip = (k, hex) => '<button class="btn small rem-chip' + (intFilter === k ? " on" : "") + '" data-if="' + (k || "") + '">' +
@@ -4690,8 +4712,10 @@ const LuminaCore = (function () {
     if ($("intDoneTog")) $("intDoneTog").onclick = () => { intShowDone = !intShowDone; renderIntentions(); };
     view.querySelectorAll("[data-ichk]").forEach(b => b.onclick = e => {
       e.stopPropagation();
-      const r = state.intentions.find(x => x.id === b.dataset.ichk); r.done = !r.done; r.doneAt = r.done ? Date.now() : null;
-      save(); renderIntentions();
+      const r = state.intentions.find(x => x.id === b.dataset.ichk);
+      if (r.done){ r.done = false; r.doneAt = null; }                     /* an answered one, back on the list */
+      else { r.prayedAt = Date.now(); r.prayedN = (r.prayedN || 0) + 1; intJust = r.id; showToast(r.pinned ? "Prayed ✓" : "Prayed ✓ · moved to the end"); }
+      const y = scrollY; save(); renderIntentions(); scrollTo(0, y); setTimeout(() => { intJust = null; }, 50);
     });
     view.querySelectorAll("[data-ipin]").forEach(b => b.onclick = e => {
       e.stopPropagation();
