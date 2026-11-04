@@ -32,7 +32,7 @@ is the licensed way to display these copyrighted translations.
   (Today · Week · Day · Hour, the 📅 ordo, the day bar). Its theme follows Lumina's (parchment → Cloister,
   dark → Habit, LCARS → Stained glass), and its theme buttons change Lumina's. Everything it keeps on the device (the unlock key,
   notes, marks, choices) travels in Lumina's encrypted sync, so other devices arrive unlocked.
-- **🔔 Reminders** — on the bottom bar where Library was (Library is now under ☰ More). The page is the list itself (Lumina's title and the Book/Focus row step aside); below it, the add box and color chips, then Back · Import · Show completed (completed reminders, including repeating ones checked today, are hidden until shown) and where the reminders are saved (this device only, or synced, with Sync now). Type a reminder and Add, or **…**
+- **🔔 Reminders** — Lumina opens on them, every time it starts (← Back goes to where you were reading). On the bottom bar where Library was (Library is now under ☰ More). **A− A+** beside Every day sets the list's text size (shared with Intentions, apart from the Bible's). The page is the list itself (Lumina's title and the Book/Focus row step aside); below it, the add box and color chips, then Back · Import · Show completed (completed reminders, including repeating ones checked today, are hidden until shown) and where the reminders are saved (this device only, or synced, with Sync now). Type a reminder and Add, or **…**
   for the full sheet: notes, a **color** (red, orange, yellow, green, blue, purple; the chips at the top show one color at a
   time, or Today), **☆ pin** (pinned reminders stay at the top of the list), **Every day** (checked off for today, back
   tomorrow, with the days running counted), **Every month** (on the same day of the month; checking it moves it to next month) or **Once** with a date and time. The badge counts the repeating reminders still to do today (every-day ones, and monthly ones due or late); a link ending `#rem=` + a base64url JSON list adds reminders after asking (the list lives only in the link; in the Home Screen app, paste the link into ⇩ Import);
@@ -40,8 +40,11 @@ is the licensed way to display these copyrighted translations.
   Google Tasks (Google Takeout's `Tasks.json`) or a pasted list, one a line (`daily:` makes it every day), skipping ones
   already there. Reminders travel in the encrypted sync, item by item, like favorites.
 - **✙ Prayers › Intentions** — the last tab under Prayers (no password needed): your own prayer intentions, kept like the
-  Reminders. Add one at the bottom (or **…** for notes), give it a color, ☆ pin it to the top; tap the circle when it is
-  answered or finished, and it is put away (Show answered brings them back). Synced item by item.
+  Reminders. Add one at the bottom (or **…** for notes), give it a color, ☆ pin it to the top. Tap the circle when you
+  have prayed for it: it shows when (Last prayed today, 7:15 AM · 12 times) and goes to the bottom, so the list cycles,
+  the one prayed for longest ago always on top (new ones, not yet prayed for, first; pinned ones stay put). Intentions
+  never leave the list; to set one aside, tick **Answered** in its sheet (Show answered brings them back). **A− A+**
+  beside the title sets the text size. Synced item by item.
 - **⏱ Timer** — beside 🔍. 40 minutes by default (or 10–60, or any number). It keeps counting
   wherever you go in Lumina, and even if Lumina is closed and reopened; the button shows the
   minutes left. At the end: a chime, or a chime and then a sentence you write, said in your
